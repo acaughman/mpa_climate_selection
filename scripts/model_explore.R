@@ -1,12 +1,13 @@
 library(ggplot2)
 library(tidyverse)
-## This is the version of the model with a single grid, and no migration, which was used for simulations for Skipjack Tuna and Dogfish
-## In this version, fishing pressue is displaced rather than removed by reserves
+
+## This is the version of the model with a single grid, and no migration
+## In this version, fishing pressure is displaced rather than removed by reserves
 
 ############################################################################
 ## Parameters:
 
-NUM.reps <- 1 # The number of replicate simuulations to run
+NUM.reps <- 1 # The number of replicate simulations to run
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 0 # The number of generations with the reserve installed
@@ -26,64 +27,10 @@ sb <- 0.37 # survival proportion for babies
 # MAKE THIS A FUNCTION OF A SEA SURFACE TEMP EVENTUALLY  #
 M.AA <- 1 # natural mortality for AA                     #
 s.AA <- exp(-M.AA) # survival proportion for AA genotype #
-M.aa <- 1 # natural mortality for aa                   #
-s <- exp(-M.aa) # survival proportion for aa genotype #
+M.aa <- 1 # natural mortality for aa                     #
+s <- exp(-M.aa) # survival proportion for aa genotype    #
 ##########################################################
-sst.change1 = seq(0, 50, .14)
-x = seq(0, 5, .1)
-sst.change2 = 2*sin(10*x) + (0.18)
 
-SST.AA1 = 25
-SST.AA2 = 25
-SST.aa1 = 25
-SST.aa2 = 25
-
-L = 5
-K = 1
-
-M.AA1 <- 1
-M.AA2 <- 1
-M.aa1 <- 1
-M.aa2 <- 1
-
-s.AA1 = vector(mode = "numeric", 50)
-s.AA2 = vector(mode = "numeric", 50)
-s.aa1 = vector(mode = "numeric", 50)
-s.aa2 = vector(mode = "numeric", 50)
-
-for (i in 1:50) {
-  M.AA1 = -0.0152 - (0.279 * log10(L)) + (0.6543 * log10(K)) + (0.4634 * log10(SST.AA1))
-  M.AA1 = 10^M.AA1
-  s.AA1[i] = exp(-M.AA1)
-  M.aa1 = -0.0152 - (0.279 * log10(L)) + (0.6543 * log10(K)) + (0.4634 * log10(SST.aa1))
-  M.aa1 = 10^M.aa1 * .95
-  s.aa1[i] = exp(-M.aa1)
-  SST.AA1 = SST.AA1 + sst.change1[i]
-  SST.aa1 = SST.aa1 + sst.change1[i]
-  
-  M.AA2 = -0.0152 - (0.279 * log10(L)) + (0.6543 * log10(K)) + (0.4634 * log10(SST.AA2))
-  M.AA2 =  10^M.AA2
-  s.AA2[i] = exp(-M.AA2)
-  M.aa2 = -0.0152 - (0.279 * log10(L)) + (0.6543 * log10(K)) + (0.4634 * log10(SST.AA2))
-  M.aa2 = 10^M.aa2 * .95
-  s.aa2[i] = exp(-M.aa2)
-  SST.AA2 = SST.AA2 + sst.change2[i]
-  SST.aa2 = SST.aa2 + sst.change2[i]
-}
-
-df = as.data.frame(s.AA1)
-df$s.aa1 = s.aa1
-df$s.AA2 = s.AA2
-df$s.aa2 = s.aa2
-
-df = df %>% 
-  mutate(time = seq(1, 50, 1))
-
-ggplot(df) +
-  geom_path(aes(x = time, y = s.AA1), color = "red") +
-  geom_path(aes(x = time, y = s.aa1), color = "blue") +
-  geom_path(aes(x = time, y = s.AA2), color = "green") +
-  geom_path(aes(x = time, y = s.aa2), color = "purple")
 
 dd <- 0.0005 # density dependendence of baby survival 
 fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
