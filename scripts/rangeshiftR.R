@@ -8,10 +8,6 @@ library(latticeExtra)
 library(viridis)
 library(grid)
 library(gridExtra)
-library(SDMTools)
-library(NLMR)
-library(landscapetools)
-library(purrr)
 
 # relative path from working directory:
 dirpath = "Tutorial_04/"
