@@ -28,7 +28,7 @@ land <- ArtificialLandscape(propSuit = 0.3,
 
 #simulation parameters
 sim_0 <- Simulation(Simulation = 1,
-                    Replicates = 20,
+                    Replicates = 5,
                     Years = 1300,
                     Gradient = 1,
                     GradSteep = 0.02,
