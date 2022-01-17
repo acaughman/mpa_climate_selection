@@ -7,6 +7,7 @@ library(rasterVis)
 library(latticeExtra)
 library(viridis)
 library(grid)
+library(tidyverse)
 library(gridExtra)
 
 # relative path from working directory:
@@ -28,7 +29,7 @@ land <- ArtificialLandscape(propSuit = 0.3,
 
 #simulation parameters
 sim_0 <- Simulation(Simulation = 1,
-                    Replicates = 5,
+                    Replicates = 6,
                     Years = 1300,
                     Gradient = 1,
                     GradSteep = 0.02,
@@ -80,20 +81,13 @@ RunRS(s, dirpath)
 # Simulation Plots --------------------------------------------------------
 
 # load 'traits by rows' output file
-trait_ts <- read.table(paste0(dirpath,"Outputs/Batch1_Sim1_Land1_TraitsXrow.txt"), header = T)
-# plot the time series for the replicate chosen above:
-trait_ts_07 <- subset.data.frame(trait_ts, Rep==7)
+trait_ts <- read.table(paste0(dirpath,"Outputs/Batch1_Sim1_Land1_TraitsXrow.txt"), header = T) %>% 
+  as.data.frame() %>% 
+  mutate(Rep = as.factor(Rep)) %>% 
+  filter(Year > 400 & Year < 900) %>% 
+  mutate(Year = as.factor(Year))
 
-plot(NULL, type = "n", ylab = "Mean dispersal distance [m]", xlab = "y coordinate", xlim=c(0, 500), ylim=c(150,450), main = "Trait time-series (Replicate 7)")
-years <-  c(500, 650, 800, 1200)
-cols <- hcl.colors(length(years), palette = "Dark 3", alpha = 1, rev = FALSE)
-leg.txt <- c()
-for(i in 1:length(years)) {
-  trait_ts_07_yr <- subset.data.frame(trait_ts_07, Year==years[i])
-  polygon(c(trait_ts_07_yr$y,rev(trait_ts_07_yr$y)),
-          c((trait_ts_07_yr$mean_distI+trait_ts_07_yr$std_distI), rev(pmax(0,trait_ts_07_yr$mean_distI-trait_ts_07_yr$std_distI))),
-          border=NA, col='grey80')
-  lines(trait_ts_07_yr$y, trait_ts_07_yr$mean_distI, type = "l", lwd = 1, col = cols[i])
-  leg.txt <- c(leg.txt, paste("Year", years[i]))
-}
-legend("bottomright", leg.txt, col = cols, lwd = 1.5)
+ggplot(trait_ts, aes(y, mean_distI, color = Year)) + theme_bw() +
+  geom_point() +
+  facet_grid(~Rep)
+
