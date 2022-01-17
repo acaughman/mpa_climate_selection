@@ -1,19 +1,12 @@
-library(ggplot2)
-library(tidyverse)
-
-## This is the version of the model with a single grid, and no migration
-## In this version, fishing pressure is displaced rather than removed by reserves
-
-############################################################################
 ## Parameters:
 
-NUM.reps <- 1 # The number of replicate simulations to run
+NUM.reps <- 1 # The number of replicate simuulations to run
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 0 # The number of generations with the reserve installed
 
-NS.patches <- 20 # the number of patches on the north-south axis
-EW.patches <- 20 # the number of patches on the east-west axis
+NS.patches <- 4 # the number of patches on the north-south axis
+EW.patches <- 8 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles
 ## View the "world" coordinates:
 #view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
@@ -22,16 +15,7 @@ patch.size <- 100 # the width and height of each grid cell in nautical miles
 init.a <- 0.1 # The initial frequency of the low movement allele
 
 sb <- 0.37 # survival proportion for babies
-
-##########################################################
-# MAKE THIS A FUNCTION OF A SEA SURFACE TEMP EVENTUALLY  #
-M.AA <- 1 # natural mortality for AA                     #
-s.AA <- exp(-M.AA) # survival proportion for AA genotype #
-M.aa <- 1 # natural mortality for aa                     #
-s <- exp(-M.aa) # survival proportion for aa genotype    #
-##########################################################
-
-
+s <- 0.37 # survival proportion
 dd <- 0.0005 # density dependendence of baby survival 
 fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
