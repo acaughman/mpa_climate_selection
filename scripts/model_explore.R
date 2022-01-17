@@ -1,3 +1,11 @@
+library(here)
+library(tidyverse)
+library(ggplot2)
+
+
+# Mee Simulation ----------------------------------------------------------
+
+
 ## Parameters:
 
 NUM.reps <- 1 # The number of replicate simuulations to run
@@ -361,7 +369,7 @@ move <- function(pop) {
 
 ############################################################################
 ## THE SIMULATION ##########################################################
-
+set.seed(42)
 reps <- NUM.reps
 
 pre.fishing.gens <- NUM.gens.pre.fishing
@@ -372,7 +380,7 @@ gens <- pre.fishing.gens+pre.reserve.gens+post.reserve.gens
 output.array <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
 
 for(rep in 1:reps) {
-  print(rep)
+  #print(rep)
   pop <- init()
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
@@ -387,4 +395,74 @@ for(rep in 1:reps) {
   }
 }
 
-save.image(file='/Users/jonmee/Desktop/Skip_Dog_disp_image.RData') #specify output file path here
+#save.image(file= here("outputs" ,"disp_image.RData")) #specify output file path here
+
+
+# Allie Explore -----------------------------------------------------------
+
+
+#output array is lat, lon, age, sex, genotype, generations, rep
+output_df = data.frame() #create dataframe to hold results
+
+for(a in 1:reps) {
+  world_sub <- array(0, c(NS.patches, EW.patches))
+  for(b in 1:gens) {
+    for(c in 1:NUM.genotypes) {
+      for(d in 1:NUM.sexes) {
+        for(e in 1:NUM.age.classes) {
+          world_sub = output.array[,,e,d,c,b,a] %>% 
+            as.data.frame()
+          world_sub$rep = paste0(a)
+          world_sub$generation = paste0(b)
+          world_sub$genotype = paste0(c)
+          world_sub$sex = paste0(d)
+          world_sub$age = paste0(e)
+          world_sub$lat = c(1:4)
+          output_df = bind_rows(output_df, world_sub)
+        }
+      }
+    }
+  }
+}
+
+output_df = output_df %>% 
+  pivot_longer(V1:V8,
+               names_to = "lon",
+               values_to = "pop") %>% 
+  mutate(lon = case_when(
+    lon == "V1" ~ 1,
+    lon == "V2" ~ 2,
+    lon == "V3" ~ 3,
+    lon == "V4" ~ 4,
+    lon == "V5" ~ 5,
+    lon == "V6" ~ 6,
+    lon == "V7" ~ 7,
+    lon == "V8" ~ 8
+  )) %>% 
+  mutate(genotype = case_when(
+    genotype == 1 ~ "AA",
+    genotype == 2 ~ "Aa",
+    genotype == 3 ~ "aa"
+  )) %>% 
+  mutate(genotype = as.factor(genotype))
+
+
+geno_sum = output_df %>% 
+  group_by(lat, lon, rep, generation,genotype) %>% 
+  summarise(geno_pop_sum = sum(pop)) 
+
+pop_sum = output_df %>% 
+  group_by(lat, lon, rep, generation) %>% 
+  summarise(pop_sum = sum(pop))
+
+
+output_sum = full_join(geno_sum, pop_sum) %>%
+  mutate(freq = geno_pop_sum/pop_sum)
+
+
+AA_freq = output_sum %>% 
+  filter(genotype == "AA")
+Aa_freq = output_sum %>% 
+  filter(genotype == "Aa")
+aa_freq = output_sum %>% 
+  filter(genotype == "aa")
