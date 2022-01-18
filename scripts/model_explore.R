@@ -451,6 +451,7 @@ output_df = output_df %>%
 
 #write_csv(output_df, here("intermediate_data" , "test1.csv"))
 
+
 #Summarize pop size and frequency by genotype
 geno_sum = output_df %>% 
   group_by(lat, lon, rep, generation,genotype) %>% 
@@ -465,6 +466,7 @@ output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum) 
 
 #write_csv(output_sum, here("intermediate_data" , "freq_test1.csv"))
+
 
 plot_sum = output_sum %>% 
   filter(generation %in% c(75, 100, 125)) %>% 
