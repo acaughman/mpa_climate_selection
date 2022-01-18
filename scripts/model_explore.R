@@ -30,8 +30,8 @@ fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 reserves.at <- c(34,35,36,44,45,46,54,55,56) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
-bold.mover.distance <- 800 # Individuals with AA genotype move this distance on average every year, in nautical miles
-lazy.mover.distance <- 600 # Individuals with aa genotype move this distance on average every year, in nautical miles
+bold.mover.distance <- 80 # Individuals with AA genotype move this distance on average every year, in nautical miles
+lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 
