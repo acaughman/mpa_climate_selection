@@ -29,7 +29,7 @@ maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age
 fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
-reserves.at <- c(34,35,36,44,45,46,54,55,56) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(44,45,54,55) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 bold.mover.distance <- 80 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
 Dominance.coefficient <- 0.5 # Dominance coefficient
@@ -469,7 +469,7 @@ output_sum = full_join(geno_sum, pop_sum) %>%
 
 
 plot_sum = output_sum %>% 
-  filter(generation %in% c(75, 100, 125)) %>% 
+  filter(generation %in% c(50, 75, 100, 125)) %>% 
   mutate(generation = as.numeric(generation))
 
 plot_sum$generation = fct_reorder(plot_sum$generation, max)
@@ -483,3 +483,7 @@ p2 = ggplot(plot_sum, aes(lon, lat, color = geno_pop_sum, fill = geno_pop_sum)) 
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size")
 
 p2 / p1
+
+plot = p2/p1
+
+ggsave(plot, file = "test_fig.png",path = here("outputs"))
