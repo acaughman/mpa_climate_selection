@@ -10,7 +10,7 @@ library(patchwork)
 NUM.reps <- 1 # The number of replicate simuulations to run
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 0 # The number of generations with the reserve installed
+NUM.gens.post.reserve <- 50 # The number of generations with the reserve installed
 
 NS.patches <- 10 # the number of patches on the north-south axis
 EW.patches <- 10 # the number of patches on the east-west axis
@@ -467,7 +467,7 @@ output_sum = full_join(geno_sum, pop_sum) %>%
 #write_csv(output_sum, here("intermediate_data" , "freq_test1.csv"))
 
 plot_sum = output_sum %>% 
-  filter(generation %in% c(100, 125, 150)) %>% 
+  filter(generation %in% c(75, 100, 125)) %>% 
   mutate(generation = as.numeric(generation))
 
 plot_sum$generation = fct_reorder(plot_sum$generation, max)
