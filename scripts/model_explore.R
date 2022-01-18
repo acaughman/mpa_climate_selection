@@ -12,8 +12,8 @@ NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 50 # The number of generations with the reserve installed
 
-NS.patches <- 10 # the number of patches on the north-south axis
-EW.patches <- 10 # the number of patches on the east-west axis
+NS.patches <- 30 # the number of patches on the north-south axis
+EW.patches <- 30 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
@@ -486,4 +486,4 @@ p2 / p1
 
 plot = p2/p1
 
-ggsave(plot, file = "test_fig.png",path = here("outputs"))
+#ggsave(plot, file = "test_fig.png",path = here("outputs"))
