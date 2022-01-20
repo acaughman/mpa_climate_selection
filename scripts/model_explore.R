@@ -6,8 +6,8 @@ library(tidyverse)
 ## Parameters:
 
 NUM.reps <- 1 # The number of replicate simulations to run
-NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
+NUM.gens.pre.fishing <- 50 # The number of generations before any fishery
+NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 
 NS.patches <- 10 # the number of patches on the north-south axis
@@ -27,13 +27,13 @@ maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age
 fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
-buffer.fished <- .5
+buffer.fished <- 0.5
 reserves.at <- c(45,46,55,56) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 bold.mover.distance <- 90 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
-buffer.at <- c(34,44,54,64,35,65,36,66,37,47,57,67)
+buffer.at <- c()
 
 ############################################################################
 ## Create the world
@@ -279,10 +279,11 @@ fishing <- function(pop,gen) {
 ## This function determines fishing mortality within each buffer grid cell.
 
 
+
 buffer_fishing <- function(pop,gen) {
   if(gen > pre.reserve.gens+pre.fishing.gens) {
     buffer.area <- sum(buffer.patches)/(NS.patches*EW.patches)
-    buffer.fishing <- buffer.fished*1/(buffer.area)
+    buffer.fishing <- buffer.fished*1/(1-buffer.area)
     each.patch.pop <- array(0,c(NS.patches,EW.patches))
     for(i in 2:NUM.age.classes) {
       for(j in 1:NUM.sexes) {
@@ -299,14 +300,14 @@ buffer_fishing <- function(pop,gen) {
       }
     }
     mean.per.patch.pop <- mean(each.patch.pop,na.rm=TRUE)
-    ff <- mean.per.patch.pop*(1/buffer.fishing-1)
+    ffb <- mean.per.patch.pop*(1/buffer.fishing-1)
     if(mean.per.patch.pop > 0) {
       for(lat in 1:NS.patches) {
         for(lon in 1:EW.patches) {
           if(buffer.patches[lat,lon] == 1) {
             patch.pop <- sum(pop[lat,lon,c(2,3),,])
             if(patch.pop > 0) {
-              fb <- patch.pop/(ff+patch.pop)
+              fb <- patch.pop/(ffb+patch.pop)
               for(i in 2:NUM.age.classes) {
                 for(j in 1:NUM.sexes) {
                   for(k in 1:NUM.genotypes) {
@@ -514,7 +515,7 @@ output_df = output_df %>%
   mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon))
 
-write_csv(output_df, here("intermediate_data" , "test.csv"))
+#write_csv(output_df, here("intermediate_data" , "buffer_test.csv"))
 
 
 #Summarize pop size and frequency by genotype
@@ -530,5 +531,5 @@ pop_sum = output_df %>%
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum) 
 
-write_csv(output_sum, here("intermediate_data" , "test_freq.csv"))
+#write_csv(output_sum, here("intermediate_data" , "buffer_test_freq.csv"))
 
