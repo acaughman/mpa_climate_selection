@@ -515,7 +515,7 @@ output_df = output_df %>%
   mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon))
 
-#write_csv(output_df, here("intermediate_data" , "buffer_test.csv"))
+#write_csv(output_df, here("intermediate_data" , "test.csv"))
 
 
 #Summarize pop size and frequency by genotype
@@ -531,5 +531,5 @@ pop_sum = output_df %>%
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum) 
 
-#write_csv(output_sum, here("intermediate_data" , "buffer_test_freq.csv"))
+#write_csv(output_sum, here("intermediate_data" , "test_freq.csv"))
 

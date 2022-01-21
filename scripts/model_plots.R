@@ -221,15 +221,15 @@ plot5 = p1 + p2
 
 # No MPA ------------------------------------------------------------------
 
-# pop1 = ggplot(no_MPA, aes(lon, lat, color = freq, fill = freq)) +
-#   geom_tile() + facet_grid(genotype~generation) + 
-#   labs(x = "Longitude", y = "Latitude", fill = "Genotype Frequency", color = "Genotype Frequency") 
-# 
-# freq1 = ggplot(no_MPA, aes(lon, lat, color = geno_pop_sum, fill = geno_pop_sum)) +
-#   geom_tile() + facet_grid(genotype~generation) + 
-#   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size")
-# 
-# p1 = (pop1 / freq1) 
+pop1 = ggplot(no_MPA, aes(lon, lat, color = freq, fill = freq)) +
+  geom_tile() + facet_grid(genotype~generation) +
+  labs(x = "Longitude", y = "Latitude", fill = "Genotype Frequency", color = "Genotype Frequency")
+
+freq1 = ggplot(no_MPA, aes(lon, lat, color = geno_pop_sum, fill = geno_pop_sum)) +
+  geom_tile() + facet_grid(genotype~generation) +
+  labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size")
+
+p1 = (pop1 / freq1)
 
 # ggplot(no_MPA, aes(freq)) + 
 #   geom_histogram(bins = 15) +
