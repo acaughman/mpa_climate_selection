@@ -57,6 +57,11 @@ no_F = read_csv(here("intermediate_data", "no_F_freq.csv")) %>%
   filter(generation %in% c(50, 100, 125, 150, 175, 200)) %>% 
   mutate(generation = as.numeric(generation))
 
+buffer = read_csv(here("intermediate_data", "buffer_test_freq.csv")) %>%
+  mutate(generation = as.numeric(generation)) %>% 
+  filter(generation %in% c(50, 100, 125, 150, 175, 200)) %>% 
+  mutate(generation = as.numeric(generation))
+
 
 # Plots 2x2 MPA different Fishing Pressure -------------------------------------------------------------------
 
@@ -216,15 +221,15 @@ plot5 = p1 + p2
 
 # No MPA ------------------------------------------------------------------
 
-# pop1 = ggplot(no_MPA, aes(lon, lat, color = freq, fill = freq)) +
-#   geom_tile() + facet_grid(genotype~generation) + 
-#   labs(x = "Longitude", y = "Latitude", fill = "Genotype Frequency", color = "Genotype Frequency") 
-# 
-# freq1 = ggplot(no_MPA, aes(lon, lat, color = geno_pop_sum, fill = geno_pop_sum)) +
-#   geom_tile() + facet_grid(genotype~generation) + 
-#   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size")
-# 
-# p1 = (pop1 / freq1) 
+pop1 = ggplot(no_MPA, aes(lon, lat, color = freq, fill = freq)) +
+  geom_tile() + facet_grid(genotype~generation) +
+  labs(x = "Longitude", y = "Latitude", fill = "Genotype Frequency", color = "Genotype Frequency")
+
+freq1 = ggplot(no_MPA, aes(lon, lat, color = geno_pop_sum, fill = geno_pop_sum)) +
+  geom_tile() + facet_grid(genotype~generation) +
+  labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size")
+
+p1 = (pop1 / freq1)
 
 # ggplot(no_MPA, aes(freq)) + 
 #   geom_histogram(bins = 15) +
@@ -247,3 +252,15 @@ freq1 = ggplot(no_F, aes(lon, lat, color = geno_pop_sum, fill = geno_pop_sum)) +
 
 p1 = pop1 / freq1
 
+
+# With Buffer -------------------------------------------------------------
+
+pop1 = ggplot(buffer, aes(lon, lat, color = freq, fill = freq)) +
+  geom_tile() + facet_grid(genotype~generation) +
+  labs(x = "Longitude", y = "Latitude", fill = "Genotype Frequency", color = "Genotype Frequency")
+
+freq1 = ggplot(buffer, aes(lon, lat, color = geno_pop_sum, fill = geno_pop_sum)) +
+  geom_tile() + facet_grid(genotype~generation) +
+  labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size")
+
+p1 = pop1 / freq1
