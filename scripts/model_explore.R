@@ -10,8 +10,8 @@ NUM.gens.pre.fishing <- 50 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 
-NS.patches <- 10 # the number of patches on the north-south axis
-EW.patches <- 10 # the number of patches on the east-west axis
+NS.patches <- 8 # the number of patches on the north-south axis
+EW.patches <- 8 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
@@ -24,11 +24,11 @@ s <- 0.37 # survival proportion
 dd <- 0.0005 # density dependence of baby survival 
 fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished.factor <- 0.8
-#fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
+fished.factor <- 0.5
+#fished <- fished.factor*(1-s) # Fishing mortality: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0.5
-reserves.at <- c(45,46,55,56) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(28,36,29,37) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 bold.mover.distance <- 90 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
 Dominance.coefficient <- 0.5 # Dominance coefficient
@@ -48,10 +48,10 @@ world <- array(0, c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.geno
 ## This populates the world.
 
 init <- function() {
-  init.AA <- round(200*(1-init.a)^2)
-  init.Aa <- round(200*2*(init.a)*(1-init.a))
-  init.aa <- round(200*(init.a)^2)
-  pop <- world
+  init.AA <<- round(200*(1-init.a)^2)
+  init.Aa <<- round(200*2*(init.a)*(1-init.a))
+  init.aa <<- round(200*(init.a)^2)
+  pop <<- world
   for(lat in 1:NS.patches) {
     for(lon in 1:EW.patches) {
       for(i in 1:NUM.age.classes) {
@@ -357,7 +357,7 @@ move <- function(pop) {
               #my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
               #theta <- vapply(theta, my.uniroot, numeric(1))
               # convert direction and distance into a distance in the x-direction (longitude)
-              x <- cos(theta)*dist
+              x <<- cos(theta)*dist
               # bounce off edges (assume fish start in centre of cell)
               for(m in 1:length(x)) {
                 miss_x.edges <- FALSE
@@ -379,7 +379,7 @@ move <- function(pop) {
                 }
               }
               # convert direction and distance into a distance in the y-direction (latitude)
-              y <- sin(theta)*dist
+              y <<- sin(theta)*dist
               # bounce off edges (assume fish start in centre of cell)
               for(m in 1:length(y)) {
                 miss_y.edges <- FALSE
@@ -491,7 +491,7 @@ for(a in 1:reps) {
 
 # Wrangle dataframe into plottable format
 output_df = output_df %>% 
-  pivot_longer(V1:V10,
+  pivot_longer(V1:V8,
                names_to = "lon",
                values_to = "pop") %>% 
   mutate(lon = case_when(
@@ -502,9 +502,7 @@ output_df = output_df %>%
     lon == "V5" ~ 5,
     lon == "V6" ~ 6,
     lon == "V7" ~ 7,
-    lon == "V8" ~ 8,
-    lon == "V9" ~ 9,
-    lon == "V10" ~ 10
+    lon == "V8" ~ 8
   )) %>% 
   mutate(genotype = case_when(
     genotype == 1 ~ "AA",
@@ -533,3 +531,5 @@ output_sum = full_join(geno_sum, pop_sum) %>%
 
 #write_csv(output_sum, here("intermediate_data" , "test_freq.csv"))
 
+# filter(generation %in% c(50, 100, 125, 150, 175, 200)) %>% 
+#   mutate(generation = as.numeric(generation))
