@@ -29,11 +29,11 @@ s <- 0.37 # survival proportion
 dd <- 0.0005 # density dependence of baby survival 
 fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished.factor <- 0.5
+fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(70,102,134,166,71,103,135,167) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(102,134,103,135) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
 bold.mover.distance <- 80 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
@@ -111,7 +111,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  start_SST = opt.temp + NW.patches*.1
+  start_SST = opt.temp + NW.patches*.1 #+ 3 UNCOMMENT FOR T High
 
   for (i in 1:years) {
     SST = start_SST
@@ -125,7 +125,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR LOW VARIABLE MEAN SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = opt.temp + NW.patches*.1
+  # start_SST = opt.temp + NW.patches*.1 #+ 3 UNCOMMENT FOR T High
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -139,7 +139,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR ENSO VARIABLE MEAN SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = opt.temp + NW.patches*.1
+  # start_SST = opt.temp + NW.patches*.1 #+ 3 UNCOMMENT FOR T High
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -564,7 +564,7 @@ pop_sum = output_df %>%
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum) 
 
-#write_csv(output_sum, here("test_output", "4x45F.csv"))
+#write_csv(output_sum, here("test_output", "2x28FConstantThigh.csv"))
 
 
 plot_sum = output_sum %>% 
@@ -589,4 +589,4 @@ p2 / p1
 
 plot = p2 / p1
 
-#ggsave(plot, file=paste0("4x45F.pdf"), path = here("figs"))
+#ggsave(plot, file=paste0("2x28FConstantThigh.pdf"), path = here("figs"))
