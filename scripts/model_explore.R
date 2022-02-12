@@ -97,12 +97,11 @@ where.buffer <- function(buffer.at) {
 }
 buffer.patches <- where.buffer(buffer.at)
 
-
 ############################################################################
 ## This function sets up the Sea surface temperature grid
 
 init_SST <- function() {
-  SST.patches <- array(28, c(NS.patches, EW.patches))
+  SST.patches <- array(28, c(NS.patches, EW.patches, NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve))
   return(SST.patches)
 }
 
@@ -191,7 +190,7 @@ recruit <- function(pop) {
   recruit.array <- world
   for(lat in 1:NS.patches) {
     for(lon in 1:EW.patches) {
-      SST = SST.patches[lat, lon]
+      SST = SST.patches[lat, lon, t]
       for(i in 1:NUM.age.classes) {
         if(i == 1) {
           # Some babies survive and recruit to juvenile age class
