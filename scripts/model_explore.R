@@ -10,8 +10,8 @@ NUM.gens.pre.fishing <- 50 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 
-NS.patches <- 10 # the number of patches on the north-south axis
-EW.patches <- 10 # the number of patches on the east-west axis
+NS.patches <- 8 # the number of patches on the north-south axis
+EW.patches <- 8 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in meters (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
@@ -28,12 +28,12 @@ fished.factor <- 0.5
 #fished <- fished.factor*(1-s) # Fishing mortality: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- .2
-reserves.at <- c(46,56,47,57) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(21,29,22,30) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 bold.mover.distance <- 90 # Individuals with AA genotype move this distance on average every year, in meters
 lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in meters
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
-buffer.at <- c(35,45,55,65,66,67,36,37,38,48,58,68)
+buffer.at <- c()
 
 ############################################################################
 ## Create the world
@@ -96,9 +96,9 @@ buffer.patches <- where.buffer(buffer.at)
 
 
 ############################################################################
-## This function creates a SST layer based the same size as the world
+## This function sets up the Sea surface temperature grid
 
-init.SST <- function() {
+init_SST <- function() {
   SST.patches <- array(25, c(NS.patches, EW.patches))
   return(SST.patches)
 }
@@ -441,6 +441,7 @@ for(rep in 1:reps) {
     pop <- recruit(pop)
     if(t > pre.fishing.gens) {
       gen <- t
+      pop <- fishing(pop,gen)
     }
     pop <- move(pop)
     print(t)
@@ -514,9 +515,16 @@ pop_sum = output_df %>%
 
 
 output_sum = full_join(geno_sum, pop_sum) %>%
-  mutate(freq = geno_pop_sum/pop_sum) 
+  mutate(freq = geno_pop_sum/pop_sum) %>% 
+  filter(generation %in% c(50, 100, 125, 150, 175, 200)) %>%
+  mutate(generation = as.numeric(generation))
 
 #write_csv(output_sum, here("intermediate_data" , "test_freq.csv"))
 
-# filter(generation %in% c(50, 100, 125, 150, 175, 200)) %>% 
-#   mutate(generation = as.numeric(generation))
+ggplot(output_sum, aes(lon, lat, color = freq, fill = freq)) +
+  geom_tile() + facet_grid(genotype~generation) + 
+  labs(x = "Longitude", y = "Latitude", fill = "Genotype Frequency", color = "Genotype Frequency") 
+
+ggplot(output_sum, aes(lon, lat, color = geno_pop_sum, fill = geno_pop_sum)) +
+  geom_tile() + facet_grid(genotype~generation) + 
+  labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size")
