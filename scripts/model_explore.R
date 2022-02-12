@@ -33,7 +33,7 @@ fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(90,122,91,123) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(102,134,103,135) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
 bold.mover.distance <- 80 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
@@ -111,7 +111,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSTANT SHIFT SST
   SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  start_SST = 25
+  start_SST = 28
 
   for (i in 1:years) {
     SST = start_SST
@@ -542,8 +542,6 @@ output_df = output_df %>%
   mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon))
 
-#write_csv(output_df, here("test_output" , "2x28F.csv"))
-
 
 #Summarize pop size and frequency by genotype
 geno_sum = output_df %>% 
@@ -558,7 +556,7 @@ pop_sum = output_df %>%
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum) 
 
-#write_csv(output_sum, here("test_output", "4x48F.csv"))
+#write_csv(output_sum, here("test_output", "2x28FUniformThigh.csv"))
 
 
 plot_sum = output_sum %>% 
@@ -583,4 +581,4 @@ p2 / p1
 
 plot = p2 / p1
 
-#ggsave(plot, file=paste0("4x48F.pdf"), path = here("figs"))
+#ggsave(plot, file=paste0("2x28FUniformThigh.pdf"), path = here("figs"))
