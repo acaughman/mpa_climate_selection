@@ -4,6 +4,8 @@
 
 ##### MPA Size and Fishing Pressure
 
+COMPLETED
+
 1. 2x2 .5 fishing no buffer
 2. 2x2 .8 fishing no buffer
 3. 2x2 .2 fishing no buffer
