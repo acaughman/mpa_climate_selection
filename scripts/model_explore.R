@@ -1,6 +1,7 @@
 library(here)
 library(tidyverse)
 library(patchwork)
+library(beepr)
 
 # Mee Simulation ----------------------------------------------------------
 
@@ -11,8 +12,8 @@ NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 75 # The number of generations with the reserve installed
 
-NS.patches <- 20 # the number of patches on the north-south axis
-EW.patches <- 20 # the number of patches on the east-west axis
+NS.patches <- 16 # the number of patches on the north-south axis
+EW.patches <- 16 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
@@ -25,11 +26,11 @@ s <- 0.37 # survival proportion
 dd <- 0.0005 # density dependence of baby survival 
 fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished.factor <- 0.8
+fished.factor <- 0.2
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(193,213,194,214) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(117,133,118,134) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
 bold.mover.distance <- 80 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
@@ -446,6 +447,8 @@ for(rep in 1:reps) {
   }
 }
 
+beep(5)
+
 
 # Allie Explore -----------------------------------------------------------
 
@@ -475,7 +478,7 @@ for(a in 1:reps) {
 
 # Wrangle dataframe into plottable format
 output_df = output_df %>% 
-  pivot_longer(V1:V10,
+  pivot_longer(V1:V16,
                names_to = "lon",
                values_to = "pop") %>% 
   mutate(lon = case_when(
@@ -490,7 +493,11 @@ output_df = output_df %>%
     lon == "V9" ~ 9,
     lon == "V10" ~ 10,
     lon == "V11" ~ 11,
-    lon == "V12" ~ 12
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16
   )) %>% 
   mutate(genotype = case_when(
     genotype == 1 ~ "AA",
@@ -517,7 +524,7 @@ pop_sum = output_df %>%
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum) 
 
-#write_csv(output_sum, here("test_output", "2x28F.csv"))
+#write_csv(output_sum, here("test_output", "2x22F.csv"))
 
 
 plot_sum = output_sum %>% 
@@ -540,5 +547,4 @@ p2 / p1
 
 plot = p2 / p1
 
-ggsave(plot, file=paste0("2x28F.png"), 
-       path = here("figs"))
+#ggsave(plot, file=paste0("2x22F.pdf"), path = here("figs"))
