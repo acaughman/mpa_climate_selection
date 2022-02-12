@@ -1,4 +1,3 @@
-
 library(here)
 library(tidyverse)
 library(patchwork)
@@ -29,7 +28,9 @@ maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age
 fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
-reserves.at <- c(34,35,36,44,45,46,54,55,56) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
+reserves.at <- c(34,35,36,44,45,46) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+buffer.at <- c()
 bold.mover.distance <- 80 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
 Dominance.coefficient <- 0.5 # Dominance coefficient
@@ -162,6 +163,7 @@ survival <- function(num) {
   s <- sb # general survival rate for babies
   dd <- dd # density dependendence of survival
   result <- s/(1 + dd * num)
+  return(result)
 }
 
 ############################################################################
