@@ -168,7 +168,7 @@ calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
 
 survival_b <- function(num, SST) {
   s = calc_temp_mortality(SST, opt.temp, temp.range, sb)
-  dd <- dd # density dependendence of survival
+  dd <- dd # density dependence of survival
   result <- s/(1 + dd * num)
   return(result)
 }
