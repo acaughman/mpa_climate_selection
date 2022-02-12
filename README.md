@@ -17,7 +17,25 @@ MPA size fixed at 2x2
 
 ### Scenarios to Test Post-climate
 
-##### MPA Size and Fishing Pressure
+##### MPA Size and Fishing Pressure with climate variability
+
+1. Uniform Climate Increase starting at T.opt
+
+3. 3x3 .5 fishing no buffer
+4. 3x3 .8 fishing no buffer
+5. 4x4 .5 fishing no buffer
+6. 4x4 .8 fishing no buffer
+
+2. Uniform Climate Increase starting at T.opt + 3
+
+1. 2x2 .5 fishing no buffer
+3. 3x3 .5 fishing no buffer
+4. 3x3 .8 fishing no buffer
+5. 4x4 .5 fishing no buffer
+6. 4x4 .8 fishing no buffer
+
+
+3. Random Generation about mean (small variation) each year with increasing mean at t.opt
 
 1. 2x2 .5 fishing no buffer
 2. 2x2 .8 fishing no buffer
@@ -26,13 +44,34 @@ MPA size fixed at 2x2
 5. 4x4 .5 fishing no buffer
 6. 4x4 .8 fishing no buffer
 
-##### Climate Variability
+4. Random Generation about mean (small variation) each year with increasing mean at t.opt + 3
 
-Pick reasonable MPA and fishing pressure based on previous tests
+1. 2x2 .5 fishing no buffer
+2. 2x2 .8 fishing no buffer
+3. 3x3 .5 fishing no buffer
+4. 3x3 .8 fishing no buffer
+5. 4x4 .5 fishing no buffer
+6. 4x4 .8 fishing no buffer
 
-1. Uniform Climate Increase
-2. Random Generation about mean (small variation) each year with increasing mean
-3. Random Generation about mean (ENSO variation) each year with increasing mean
+
+5. Random Generation about mean (ENSO variation) each year with increasing mean at t.opt
+
+1. 2x2 .5 fishing no buffer
+2. 2x2 .8 fishing no buffer
+3. 3x3 .5 fishing no buffer
+4. 3x3 .8 fishing no buffer
+5. 4x4 .5 fishing no buffer
+6. 4x4 .8 fishing no buffer
+
+
+6. Random Generation about mean (ENSO variation) each year with increasing mean at t.opt + 3
+
+1. 2x2 .5 fishing no buffer
+2. 2x2 .8 fishing no buffer
+3. 3x3 .5 fishing no buffer
+4. 3x3 .8 fishing no buffer
+5. 4x4 .5 fishing no buffer
+6. 4x4 .8 fishing no buffer
 
 ### COMPLETED
 
@@ -45,3 +84,17 @@ Pick reasonable MPA and fishing pressure based on previous tests
 4. 3x3 .8 fishing no buffer
 5. 4x4 .5 fishing no buffer
 6. 4x4 .8 fishing no buffer
+
+
+### Scenarios to Test Post-climate
+
+##### MPA Size and Fishing Pressure with climate variability
+
+1. Uniform Climate Increase starting at T.opt
+
+1. 2x2 .5 fishing no buffer
+2. 2x2 .8 fishing no buffer
+
+2. Uniform Climate Increase starting at T.opt + 3
+
+2. 2x2 .8 fishing no buffer
