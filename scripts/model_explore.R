@@ -516,3 +516,4 @@ p2 = ggplot(plot_sum, aes(lon, lat, color = geno_pop_sum, fill = geno_pop_sum)) 
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size")
 
 p2 / p1
+
