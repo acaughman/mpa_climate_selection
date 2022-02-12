@@ -15,13 +15,15 @@ temp.range = 10 # thermal performance range, w
 
 calc_mortality <- function(SST, opt.temp, temp.range) {
   nat.m = 1 - exp((-(SST - opt.temp)^2)/(temp.range^2)) # temperature based mortality function from Walsworth et al.
-  return(nat.m)
+  return(1 - nat.m)
 }
+
+m = calc_mortality(25, 20, 10)
 
 
 # Simulate Mortality Rates Function -----------------------------------------------
 
-simulate_mortaility <- function(SST, opt.temp, temp.range) {
+simulate_mortality <- function(SST, opt.temp, temp.range) {
   results = matrix(NaN, nrow = length(SST), ncol = 1) #empty matrix to hold results
   
   
@@ -29,16 +31,15 @@ simulate_mortaility <- function(SST, opt.temp, temp.range) {
     for (j in 1:length(opt.temp)) {
       
       mort = calc_mortality(SST[i], opt.temp, temp.range)
-      results[i][j] = 1 - exp(-mort)
+      results[i][j] = mort
     }
   }
   
   results_plot = as.data.frame(results) %>% 
-    rename(mortality = V1) %>% 
+    rename(survival = V1) %>%
     mutate(survival.prop = case_when(
-      exp(-mortality) > exp(-.37) ~ exp(-.37),
-      exp(-mortality) < exp(-.37) ~ exp(-mortality)
-    ))
+      survival > .37 ~ .37,
+      survival < .37 ~ survival))
   
   results_plot$SST = SST
   results_plot$opt.temp = opt.temp
@@ -54,7 +55,7 @@ simulate_mortaility <- function(SST, opt.temp, temp.range) {
 simulation_results = data.frame()
 
 for (k in 1:length(opt.temp)) {
-  sub_result = simulate_mortaility(SST, opt.temp[k], temp.range)
+  sub_result = simulate_mortality(SST, opt.temp[k], temp.range)
   simulation_results = bind_rows(sub_result, simulation_results)
 }
 
