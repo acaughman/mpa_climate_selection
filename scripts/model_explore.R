@@ -10,14 +10,14 @@ NUM.gens.pre.fishing <- 50 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 
-NS.patches <- 8 # the number of patches on the north-south axis
-EW.patches <- 8 # the number of patches on the east-west axis
-patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
+NS.patches <- 10 # the number of patches on the north-south axis
+EW.patches <- 10 # the number of patches on the east-west axis
+patch.size <- 100 # the width and height of each grid cell in meters (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
 view.world
 
-init.a <- 0.1 # The initial frequency of the low movement allele
+init.a <- 0.3 # The initial frequency of the low movement allele
 
 sb <- 0.37 # survival proportion for babies
 s <- 0.37 # survival proportion
@@ -27,13 +27,13 @@ maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age
 fished.factor <- 0.5
 #fished <- fished.factor*(1-s) # Fishing mortality: the proportion of adults that get fished per year
 fished <- fished.factor
-buffer.fished <- 0.5
-reserves.at <- c(28,36,29,37) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
-bold.mover.distance <- 90 # Individuals with AA genotype move this distance on average every year, in nautical miles
-lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
+buffer.fished <- .2
+reserves.at <- c(46,56,47,57) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+bold.mover.distance <- 90 # Individuals with AA genotype move this distance on average every year, in meters
+lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in meters
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
-buffer.at <- c()
+buffer.at <- c(35,45,55,65,66,67,36,37,38,48,58,68)
 
 ############################################################################
 ## Create the world
@@ -94,6 +94,16 @@ where.buffer <- function(buffer.at) {
 }
 buffer.patches <- where.buffer(buffer.at)
 
+
+############################################################################
+## This function creates a SST layer based the same size as the world
+
+init.SST <- function() {
+  SST.patches <- array(25, c(NS.patches, EW.patches))
+  return(SST.patches)
+}
+
+
 ############################################################################
 ## This function causes adults to reproduce in spawning areas
 
@@ -136,6 +146,14 @@ spawn <- function(pop) {
     }
   }
   return(pop)
+}
+
+############################################################################
+## This function calculates temperature based mortality based on sea surface temperature, temperature range and optimal temperature of species
+
+calc_mortality <- function(SST, opt.temp, temp.range) {
+  nat.m = 1 - exp((-(SST - opt.temp)^2)/(temp.range^2)) # temperature based mortality function from Walsworth et al.
+  return(nat.m)
 }
 
 ############################################################################
@@ -233,8 +251,9 @@ fishing <- function(pop,gen) {
     }
   }
   if(gen > pre.reserve.gens+pre.fishing.gens) {
-    reserve.area <- sum(reserve.patches)/(NS.patches*EW.patches) + sum(buffer.patches)/(NS.patches*EW.patches)
-    fished.adj <- fished*1/(1-reserve.area)
+    reserve.area <- sum(reserve.patches)/(NS.patches*EW.patches)
+    buffer.area <- sum(buffer.patches)/(NS.patches*EW.patches)
+    fished.adj <- (fished - (buffer.fished*buffer.area))*1/(1-(reserve.area + buffer.area))
     each.patch.pop <- array(0,c(NS.patches,EW.patches))
     for(i in 2:NUM.age.classes) {
       for(j in 1:NUM.sexes) {
@@ -271,47 +290,19 @@ fishing <- function(pop,gen) {
         }
       }
     }
-  }
-  return(pop)
-}
-
-############################################################################
-## This function determines fishing mortality within each buffer grid cell.
-
-
-
-buffer_fishing <- function(pop,gen) {
-  if(gen > pre.reserve.gens+pre.fishing.gens) {
-    buffer.area <- sum(buffer.patches)/(NS.patches*EW.patches)
-    buffer.fishing <- buffer.fished*1/(1-buffer.area)
-    each.patch.pop <- array(0,c(NS.patches,EW.patches))
-    for(i in 2:NUM.age.classes) {
-      for(j in 1:NUM.sexes) {
-        for(k in 1:NUM.genotypes) {
-          each.patch.pop[,] <- each.patch.pop[,] + pop[,,i,j,k]
-        }
-      }
-    }
-    for(lat in 1:NS.patches) {
-      for(lon in 1:EW.patches) {
-        if(buffer.patches[lat,lon] != 1) {
-          each.patch.pop[lat,lon] <- NaN
-        }
-      }
-    }
     mean.per.patch.pop <- mean(each.patch.pop,na.rm=TRUE)
-    ffb <- mean.per.patch.pop*(1/buffer.fishing-1)
+    ff <- mean.per.patch.pop*(1/buffer.fished-1)
     if(mean.per.patch.pop > 0) {
       for(lat in 1:NS.patches) {
         for(lon in 1:EW.patches) {
           if(buffer.patches[lat,lon] == 1) {
             patch.pop <- sum(pop[lat,lon,c(2,3),,])
             if(patch.pop > 0) {
-              fb <- patch.pop/(ffb+patch.pop)
+              f <- patch.pop/(ff+patch.pop)
               for(i in 2:NUM.age.classes) {
                 for(j in 1:NUM.sexes) {
                   for(k in 1:NUM.genotypes) {
-                    pop[lat,lon,i,j,k] <- rbinom(1,pop[lat,lon,i,j,k],(1-fb))
+                    pop[lat,lon,i,j,k] <- rbinom(1,pop[lat,lon,i,j,k],(1-f))
                   }
                 }
               }
@@ -450,10 +441,6 @@ for(rep in 1:reps) {
     pop <- recruit(pop)
     if(t > pre.fishing.gens) {
       gen <- t
-      pop <- fishing(pop,gen)
-      if(length(buffer.at > 0)) {
-        pop <- buffer_fishing(pop,gen)
-      }
     }
     pop <- move(pop)
     print(t)
