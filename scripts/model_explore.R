@@ -101,7 +101,7 @@ buffer.patches <- where.buffer(buffer.at)
 ## This function sets up the Sea surface temperature grid
 
 init_SST <- function() {
-  SST.patches <- array(28, c(NS.patches, EW.patches, NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve))
+  SST.patches <- array(25, c(NS.patches, EW.patches, NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve))
   return(SST.patches)
 }
 
