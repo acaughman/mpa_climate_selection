@@ -6,19 +6,19 @@ library(patchwork)
 
 ## Parameters:
 
-NUM.reps <- 1 # The number of replicate simuulations to run
+NUM.reps <- 1 # The number of replicate simulations to run
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 50 # The number of generations with the reserve installed
 
-NS.patches <- 10 # the number of patches on the north-south axis
-EW.patches <- 10 # the number of patches on the east-west axis
+NS.patches <- 12 # the number of patches on the north-south axis
+EW.patches <- 12 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
 view.world
 
-init.a <- 0.1 # The initial frequency of the low movement allele
+init.a <- 0.3 # The initial frequency of the low movement allele
 
 sb <- 0.37 # survival proportion for babies
 s <- 0.37 # survival proportion
@@ -28,13 +28,15 @@ maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age
 fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
-buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(34,35,36,44,45,46) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
+reserves.at <- c(66,53,65,77,54,78,55,67,79) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
 bold.mover.distance <- 80 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
+opt.temp = 25 #optimal temperature of species
+temp.range = 8 #thermal breath of species
 
 ############################################################################
 ## Create the world
@@ -82,7 +84,7 @@ where.reserves <- function(reserves.at) {
 reserve.patches <- where.reserves(reserves.at)
 
 ############################################################################
-## This function creates an array to tell the simulation the reserve locations
+## This function creates an array to tell the simulation the buffer/fishing the line locations
 
 where.buffer <- function(buffer.at) {
   buffer.patches <- array(0, c(NS.patches, EW.patches))
@@ -95,12 +97,11 @@ where.buffer <- function(buffer.at) {
 }
 buffer.patches <- where.buffer(buffer.at)
 
-
 ############################################################################
 ## This function sets up the Sea surface temperature grid
 
 init_SST <- function() {
-  SST.patches <- array(25, c(NS.patches, EW.patches))
+  SST.patches <- array(25, c(NS.patches, EW.patches, NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve))
   return(SST.patches)
 }
 
@@ -151,18 +152,32 @@ spawn <- function(pop) {
 ############################################################################
 ## This function calculates temperature based mortality based on sea surface temperature, temperature range and optimal temperature of species
 
-calc_mortality <- function(SST, opt.temp, temp.range) {
-  nat.m = 1 - exp((-(SST - opt.temp)^2)/(temp.range^2)) # temperature based mortality function from Walsworth et al.
+calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
+  m = 1 - exp((-(SST - opt.temp)^2)/(temp.range^2)) # temperature based mortality function from Walsworth et al.
+  m = 1 - m
+  if(m > s) {
+    nat.m = s
+  } else if (m < s) {
+    nat.m = m
+  }
   return(nat.m)
 }
 
 ############################################################################
 ## This function determines density dependent survival proportion for babies
 
-survival <- function(num) {
-  s <- sb # general survival rate for babies
-  dd <- dd # density dependendence of survival
+survival_b <- function(num, SST) {
+  s = calc_temp_mortality(SST, opt.temp, temp.range, sb)
+  dd <- dd # density dependence of survival
   result <- s/(1 + dd * num)
+  return(result)
+}
+
+############################################################################
+## This function determines density dependent survival proportion for juveniles and adults
+
+survival <- function(SST) {
+  result = calc_temp_mortality(SST, opt.temp, temp.range, s)
   return(result)
 }
 
@@ -175,10 +190,12 @@ recruit <- function(pop) {
   recruit.array <- world
   for(lat in 1:NS.patches) {
     for(lon in 1:EW.patches) {
+      SST = SST.patches[lat, lon, t]
       for(i in 1:NUM.age.classes) {
         if(i == 1) {
           # Some babies survive and recruit to juvenile age class
-          s1 <- survival(sum(pop[lat,lon,i,,]))
+          s1 <- survival_b(sum(pop[lat,lon,i,,]), SST)
+          s <- survival(SST)
           for(j in 1:NUM.sexes) {
             for(k in 1:NUM.genotypes) {
               if(pop[lat,lon,i,j,k] > 0) {
@@ -253,7 +270,8 @@ fishing <- function(pop,gen) {
   }
   if(gen > pre.reserve.gens+pre.fishing.gens) {
     reserve.area <- sum(reserve.patches)/(NS.patches*EW.patches)
-    fished.adj <- fished*1/(1-reserve.area)
+    buffer.area <- sum(buffer.patches)/(NS.patches*EW.patches)
+    fished.adj <- (fished - (buffer.area*buffer.fished)) * 1/(1-(reserve.area + buffer.area))
     each.patch.pop <- array(0,c(NS.patches,EW.patches))
     for(i in 2:NUM.age.classes) {
       for(j in 1:NUM.sexes) {
@@ -274,7 +292,7 @@ fishing <- function(pop,gen) {
     if(mean.per.patch.pop > 0) {
       for(lat in 1:NS.patches) {
         for(lon in 1:EW.patches) {
-          if(reserve.patches[lat,lon] == 0) {
+          if(reserve.patches[lat,lon] == 0 && buffer.patches == 0) {
             patch.pop <- sum(pop[lat,lon,c(2,3),,])
             if(patch.pop > 0) {
               f <- patch.pop/(ff+patch.pop)
@@ -414,6 +432,7 @@ output.array <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, N
 for(rep in 1:reps) {
   #print(rep)
   pop <- init()
+  SST.patches <- init_SST()
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
@@ -426,8 +445,6 @@ for(rep in 1:reps) {
     print(t)
   }
 }
-
-#save.image(file= here("outputs" ,"disp_image.RData")) #specify output file path here
 
 
 # Allie Explore -----------------------------------------------------------
@@ -471,7 +488,9 @@ output_df = output_df %>%
     lon == "V7" ~ 7,
     lon == "V8" ~ 8,
     lon == "V9" ~ 9,
-    lon == "V10" ~ 10
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12
   )) %>% 
   mutate(genotype = case_when(
     genotype == 1 ~ "AA",
@@ -505,15 +524,17 @@ plot_sum = output_sum %>%
   filter(generation %in% c(75, 100, 125)) %>% 
   mutate(generation = as.numeric(generation))
 
-plot_sum$generation = fct_reorder(plot_sum$generation, max)
-
 p1 = ggplot(plot_sum, aes(lon, lat, color = freq, fill = freq)) +
-  geom_tile() + facet_grid(genotype~generation) + 
-  labs(x = "Longitude", y = "Latitude", fill = "Genotype Frequency", color = "Genotype Frequency") 
+  geom_tile() + 
+  facet_grid(genotype~generation) + 
+  labs(x = "Longitude", y = "Latitude", fill = "Genotype Frequency", color = "Genotype Frequency") +
+  theme_bw()
 
 p2 = ggplot(plot_sum, aes(lon, lat, color = geno_pop_sum, fill = geno_pop_sum)) +
-  geom_tile() + facet_grid(genotype~generation) + 
-  labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size")
+  geom_tile() + 
+  facet_grid(genotype~generation) + 
+  labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size") +
+  theme_bw()
 
 p2 / p1
 
