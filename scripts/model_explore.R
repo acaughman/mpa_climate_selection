@@ -14,7 +14,7 @@ NS.patches <- 8 # the number of patches on the north-south axis
 EW.patches <- 8 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in meters (COULD BE METERS?)
 ## View the "world" coordinates:
-view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
+view.world <- array(seq(0,NS.patches*EW.patches),c(NS.patches,EW.patches))
 view.world
 
 init.a <- 0.1 # The initial frequency of the low movement allele
@@ -480,7 +480,9 @@ output_df = output_df %>%
   mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon))
 
+
 #write_csv(output_df, here("intermediate_data" , "test.csv"))
+
 
 
 #Summarize pop size and frequency by genotype
@@ -498,7 +500,9 @@ output_sum = full_join(geno_sum, pop_sum) %>%
   filter(generation %in% c(5, 25, 50, 75, 100)) %>%
   mutate(generation = as.numeric(generation))
 
+
 #write_csv(output_sum, here("intermediate_data" , "test_freq.csv"))
+
 
 ggplot(output_sum, aes(lon, lat, color = freq, fill = freq)) +
   geom_tile() + facet_grid(genotype~generation) + 
