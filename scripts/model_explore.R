@@ -1,8 +1,6 @@
-<<<<<<< HEAD
-=======
+
 library(here)
 library(tidyverse)
-library(ggplot2)
 library(patchwork)
 
 # Mee Simulation ----------------------------------------------------------
@@ -83,6 +81,29 @@ where.reserves <- function(reserves.at) {
 reserve.patches <- where.reserves(reserves.at)
 
 ############################################################################
+## This function creates an array to tell the simulation the reserve locations
+
+where.buffer <- function(buffer.at) {
+  buffer.patches <- array(0, c(NS.patches, EW.patches))
+  for(i in 1:length(buffer.at)) {
+    x <- ((buffer.at[i]-1) %/% NS.patches) + 1
+    y <- ((buffer.at[i]-1) %% NS.patches) + 1
+    buffer.patches[y,x] <- 1
+  }
+  return(buffer.patches)
+}
+buffer.patches <- where.buffer(buffer.at)
+
+
+############################################################################
+## This function sets up the Sea surface temperature grid
+
+init_SST <- function() {
+  SST.patches <- array(25, c(NS.patches, EW.patches))
+  return(SST.patches)
+}
+
+############################################################################
 ## This function causes adults to reproduce in spawning areas
 
 spawn <- function(pop) {
@@ -124,6 +145,14 @@ spawn <- function(pop) {
     }
   }
   return(pop)
+}
+
+############################################################################
+## This function calculates temperature based mortality based on sea surface temperature, temperature range and optimal temperature of species
+
+calc_mortality <- function(SST, opt.temp, temp.range) {
+  nat.m = 1 - exp((-(SST - opt.temp)^2)/(temp.range^2)) # temperature based mortality function from Walsworth et al.
+  return(nat.m)
 }
 
 ############################################################################
@@ -485,4 +514,3 @@ p2 = ggplot(plot_sum, aes(lon, lat, color = geno_pop_sum, fill = geno_pop_sum)) 
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size")
 
 p2 / p1
->>>>>>> parent of 44fb9ee (add outputs)
