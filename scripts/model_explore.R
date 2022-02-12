@@ -11,6 +11,7 @@ NUM.reps <- 1 # The number of replicate simulations to run
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 75 # The number of generations with the reserve installed
+years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 16 # the number of patches on the north-south axis
 EW.patches <- 16 # the number of patches on the east-west axis
@@ -26,11 +27,11 @@ s <- 0.37 # survival proportion
 dd <- 0.0005 # density dependence of baby survival 
 fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished.factor <- 0.2
+fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(117,133,118,134) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(101,117,133,149,102,118,134,150,103,119,135,151,104,120,136,152) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
 bold.mover.distance <- 80 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
@@ -101,9 +102,47 @@ buffer.patches <- where.buffer(buffer.at)
 ############################################################################
 ## This function sets up the Sea surface temperature grid
 
-init_SST <- function() {
-  SST.patches <- array(25, c(NS.patches, EW.patches, NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve))
+init_SST <- function(years) {
+  
+  ### UNCOMMENT FOR CONSISTENT SST
+  SST.patches <- array(25, c(NS.patches, EW.patches, years))
+  
+  ### UNCOMMENT FOR CONSTANT SHIFT SST
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = 28
+  
+  # for (i in 1:years) { 
+  #   SST = start_SST
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST + .125
+  #   }
+  #   start_SST = start_SST + .018
+  # }
+  # 
+  
+  ### UNCOMMENT FOR VARIABLE SST
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # mean_SST = 28
+  # for (i in 1:years) { 
+  #   SST = mean_SST
+  #   for (lat in 1:NS.patches) {
+  #     for(lon in 1:EW.patches) {
+  #       SST = rnorm(1, mean = mean_SST, sd = 0.125)
+  #       SST.patches[lat,lon,i] = SST
+  #     }
+  #   }
+  #   mean_SST = mean_SST + .018
+  # }
+  
+  
+  ### UNCOMMENT FOR ENSO SST
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # mean_SST = 28
+  
+  
   return(SST.patches)
+  
 }
 
 ############################################################################
@@ -433,7 +472,7 @@ output.array <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, N
 for(rep in 1:reps) {
   #print(rep)
   pop <- init()
-  SST.patches <- init_SST()
+  SST.patches <- init_SST(gens)
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
@@ -524,7 +563,7 @@ pop_sum = output_df %>%
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum) 
 
-#write_csv(output_sum, here("test_output", "2x22F.csv"))
+#write_csv(output_sum, here("test_output", "4x48F.csv"))
 
 
 plot_sum = output_sum %>% 
@@ -547,4 +586,4 @@ p2 / p1
 
 plot = p2 / p1
 
-#ggsave(plot, file=paste0("2x22F.pdf"), path = here("figs"))
+#ggsave(plot, file=paste0("4x48F.pdf"), path = here("figs"))
