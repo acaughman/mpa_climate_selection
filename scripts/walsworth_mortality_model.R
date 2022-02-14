@@ -4,11 +4,11 @@ library(tidyverse)
 
 # Model Parameter set up --------------------------------------------------
 
-SST = seq(0, 35) #sea surface temperatures to model
+SST = seq(0, 50) #sea surface temperatures to model
 
-opt.temp = seq(14,30, by = 2) # optimal temperature ranges
+opt.temp = 25 # optimal temperature ranges
 
-temp.range = 10 # thermal performance range, w
+temp.range = 5 # thermal performance range, w
 
 
 # Mortality Function ------------------------------------------------------
@@ -17,8 +17,6 @@ calc_mortality <- function(SST, opt.temp, temp.range) {
   nat.m = 1 - exp((-(SST - opt.temp)^2)/(temp.range^2)) # temperature based mortality function from Walsworth et al.
   return(1 - nat.m)
 }
-
-m = calc_mortality(25, 20, 10)
 
 
 # Simulate Mortality Rates Function -----------------------------------------------

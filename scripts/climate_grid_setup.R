@@ -1,19 +1,22 @@
 library(tidyverse)
 
-years = 15
-NS.patches = 32
+years = 200
+NS.patches = 120
 EW.patches = 8
 
 SST.patches <- array(0, c(NS.patches, EW.patches, years))
-start_SST = 28 + 32*.1
+start_SST = 25 + NS.patches*.05
 
 for (i in 1:years) {
   SST = start_SST
+  if (SST > 35) {
+    SST = 35
+  }
   for (lat in 1:NS.patches) {
     SST.patches[lat,,i] = SST
-    SST = SST - .1
+    SST = SST - .05
   }
-  start_SST = start_SST + rnorm(1, mean = 0.018, sd = 1)
+  start_SST = start_SST + 0.018
 }
 
 output_df = data.frame() #create dataframe to hold results
@@ -42,7 +45,8 @@ SSTdf = output_df %>%
     lon == "V7" ~ 7,
     lon == "V8" ~ 8
   )) %>% 
-  mutate(year = as.factor(year))
+  mutate(year = as.factor(year)) %>% 
+  filter(year %in% c(20,40,60,80,100,120,140,160, 180,200)) 
 
 ggplot(SSTdf, aes(lon, lat, fill = sst)) +
   geom_tile() +
