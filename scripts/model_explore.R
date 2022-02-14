@@ -36,8 +36,8 @@ fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 reserves.at <- c(102,134,103,135) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
-bold.mover.distance <- 120 # Individuals with AA genotype move this distance on average every year, in nautical miles
-lazy.mover.distance <- 60 # Individuals with aa genotype move this distance on average every year, in nautical miles
+bold.mover.distance <- 200 # Individuals with AA genotype move this distance on average every year, in nautical miles
+lazy.mover.distance <- 100 # Individuals with aa genotype move this distance on average every year, in nautical miles
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 opt.temp = 25 #optimal temperature of species
@@ -401,9 +401,9 @@ move <- function(pop) {
               # determine the direction of each move
               theta <- runif(pop[lat,lon,i,j,k],0,2*pi)
               # bias this movement in the north-south direction (along coasts) if this is a great white shark simulation (otherwise, comment out the next three lines):
-              #f.adj <- function(x, u) x-cos(x)*sin(x) - u
-              #my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
-              #theta <- vapply(theta, my.uniroot, numeric(1))
+              f.adj <- function(x, u) x-cos(x)*sin(x) - u
+              my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
+              theta <- vapply(theta, my.uniroot, numeric(1))
               # convert direction and distance into a distance in the x-direction (longitude)
               x <- cos(theta)*dist
               # bounce off edges (assume fish start in centre of cell)
