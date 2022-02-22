@@ -11,19 +11,19 @@ set.seed(42)
 
 NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
-NUM.gens.pre.fishing <- 150 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 0 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 0 # The number of generations with the reserve installed
+NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
+NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
+NUM.gens.post.reserve <- 125 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-NS.patches <- 120 # the number of patches on the north-south axis
+NS.patches <- 60 # the number of patches on the north-south axis
 EW.patches <- 8 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
 view.world
 
-init.a <- 0.5 # The initial frequency of the low movement allele
+init.a <- 0.3 # The initial frequency of the low movement allele
 
 sb <- 0.37 # survival proportion for babies
 s <- 0.37 # survival proportion
@@ -34,7 +34,7 @@ fished.factor <- 0.5
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(102,134,103,135) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(126,186,127, 187) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
 bold.mover.distance <- 200 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 100 # Individuals with aa genotype move this distance on average every year, in nautical miles
@@ -111,25 +111,8 @@ init_SST <- function(years) {
   # SST.patches <- array(25, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-  SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  start_SST = opt.temp + NS.patches*.05
-  
-  for (i in 1:years) {
-    SST = start_SST
-    if (SST > 35) {
-      SST = 35
-    }
-    for (lat in 1:NS.patches) {
-      SST.patches[lat,,i] = SST
-      SST = SST - .05
-    }
-    start_SST = start_SST + 0.018
-  }
-
-  
-  ### UNCOMMENT FOR LOW VARIABLE MEAN SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = opt.temp + NS.patches*.05
+  # start_SST = opt.temp + NS.patches*0.1
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -138,7 +121,24 @@ init_SST <- function(years) {
   #   }
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
-  #     SST = SST - .05
+  #     SST = SST - 0.1
+  #   }
+  #   start_SST = start_SST + 0.018
+  # }
+
+  
+  ### UNCOMMENT FOR LOW VARIABLE MEAN SST
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = opt.temp + NS.patches*0.1
+  # 
+  # for (i in 1:years) {
+  #   SST = start_SST
+  #   if (SST > 35) {
+  #     SST = 35
+  #   }
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST - 0.1
   #   }
   #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = 0.01)
   # }
@@ -146,7 +146,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR ENSO VARIABLE MEAN SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = opt.temp + NS.patches*.05
+  # start_SST = opt.temp + NS.patches*0.1
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -155,13 +155,14 @@ init_SST <- function(years) {
   #   }
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
-  #     SST = SST - .05
+  #     SST = SST - 0.1
   #   }
   #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = 0.1)
   # }
+  # #
   # 
+  return(SST.patches) ### DO NOT COMMENT OUT
   
-  return(SST.patches)
   
 }
 
@@ -574,11 +575,11 @@ pop_sum = output_df %>%
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum) 
 
-#write_csv(output_sum, here("test_output", "climate_test.csv"))
+write_csv(output_sum, here("test_output", "2x25F.csv"))
 
 
 plot_sum = output_sum %>% 
-  filter(generation %in% c(20,40,60,80,100,120,140,160,180,200)) %>% 
+  filter(generation %in% c(25,75,100,125,150)) %>% 
   mutate(generation = as.numeric(generation))
 
 p1 = ggplot(plot_sum, aes(lon, lat, fill = freq)) +
@@ -586,17 +587,18 @@ p1 = ggplot(plot_sum, aes(lon, lat, fill = freq)) +
   facet_grid(genotype~generation) + 
   labs(x = "Longitude", y = "Latitude", fill = "Genotype Frequency", color = "Genotype Frequency") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 0.4)
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 0.4)
 
 p2 = ggplot(plot_sum, aes(lon, lat, fill = geno_pop_sum)) +
   geom_tile() + 
   facet_grid(genotype~generation) + 
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 300)
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 300)
 
 p2 / p1
 
 plot = p2 / p1
 
-#ggsave(plot, file=paste0("2x28FConstantTopt.pdf"), path = here("figs"))
+ggsave(plot, file=paste0("2x25F.pdf"), path = here("figs"), height = 11, width = 8)
+
