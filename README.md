@@ -10,6 +10,9 @@
 4. 3x3 .8 fishing no buffer
 5. 4x4 .5 fishing no buffer
 6. 4x4 .8 fishing no buffer
+7. 2x2 .2 fishing no buffer
+8. 3x3 .2 fishing no buffer
+9. 4x4 .2 fishing no buffer
 
 ##### Buffers and Fishing the Line - on smaller code
 
@@ -26,7 +29,7 @@ MPA size fixed at 3x3
 
 ### Scenarios to Test Post-climate
 
-##### MPA Size and Fishing Pressure with climate variability
+##### MPA Size and Fishing Pressure with climate variability - pick most reasonable MPA size
 
 1. Uniform Climate Increase starting at T.opt
 
@@ -85,6 +88,16 @@ MPA size fixed at 3x3
 5. 4x4 .5 fishing no buffer
 6. 4x4 .8 fishing no buffer
 
+
+7. Random Generation of shocks each year 
+
+1. 2x2 .5 fishing no buffer
+2. 2x2 .8 fishing no buffer
+3. 3x3 .5 fishing no buffer
+4. 3x3 .8 fishing no buffer
+5. 4x4 .5 fishing no buffer
+6. 4x4 .8 fishing no buffer
+
 ### Determine most reasonable fishing pressure and MPA size and test on different MPA designs
 
 ###### MPA Scenarios
@@ -93,3 +106,4 @@ MPA size fixed at 3x3
 2. Single Large
 3. Network
 4. Dynamics
+5. Buffer zone outside MPA
