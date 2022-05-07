@@ -1,7 +1,5 @@
 library(pracma)
 
-## Spawn :(
-
 ##recruit
 
 calc_temp_mortality2 <- function(SST, opt.temp, temp.range, s) {
