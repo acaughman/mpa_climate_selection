@@ -17,8 +17,8 @@ NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 75 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-NS.patches <- 120 # the number of patches on the north-south axis
-EW.patches <- 8 # the number of patches on the east-west axis
+NS.patches <- 8 #120 # the number of patches on the north-south axis
+EW.patches <- 8 #8 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
@@ -35,9 +35,9 @@ fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(486,606,726,
-                 487,607,727,
-                 488,608,728) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(28,36,29,37) #c(486,606,726,
+                 #487,607,727,
+                 #488,608,728) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
 bold.mover.distance <- 100 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 50 # Individuals with aa genotype move this distance on average every year, in nautical miles
@@ -180,33 +180,40 @@ spawn <- function(pop) {
   
   fec <- fecundity
   
-  num.males <- sum(pop[,,3,2,])/ (NS.patches * EW.patches)
-  
-  # All females produce the same mean number of eggs
-  NUM.A.eggs <- rpois(NS.patches * EW.patches,fec*pop[,,3,1,1] + fec*pop[,,3,1,2]/2)
-  NUM.a.eggs <- rpois(NS.patches * EW.patches,fec*pop[,,3,1,3] + fec*pop[,,3,1,2]/2)
-  # Males produce sperm in proportion to their genotypes 
-  freq.A.sperm <- pop[,,3,2,1]/num.males + (pop[,,3,2,2]/num.males)/2
-  freq.a.sperm <- pop[,,3,2,3]/num.males + (pop[,,3,2,2]/num.males)/2
-  # Sperm fertilize eggs in proportion to sperm genotype frequencies
-  AA <- rbinom(NS.patches * EW.patches,NUM.A.eggs,freq.A.sperm)
-  aa <- rbinom(NS.patches * EW.patches,NUM.a.eggs,freq.a.sperm)
-  Aa <- NUM.A.eggs+NUM.a.eggs-AA-aa
-  # Divide zygotes 50:50 among the sexes
-  AA.f <- rbinom(NS.patches * EW.patches,AA,0.5)
-  AA.m <- AA-AA.f
-  Aa.f <- rbinom(NS.patches * EW.patches,Aa,0.5)
-  Aa.m <- Aa-Aa.f
-  aa.f <- rbinom(NS.patches * EW.patches,aa,0.5)
-  aa.m <- aa-aa.f
-  # Female babies
-  pop[,,1,1,1] <- pop[,,1,1,1] + Reshape(AA.f, NS.patches, EW.patches)
-  pop[,,1,1,2] <- pop[,,1,1,2] + Reshape(Aa.f, NS.patches, EW.patches)
-  pop[,,1,1,3] <- pop[,,1,1,3] + Reshape(aa.f, NS.patches, EW.patches)
-  # Male babies
-  pop[,,1,2,1] <- pop[,,1,2,1] + Reshape(AA.m, NS.patches, EW.patches)
-  pop[,,1,2,2] <- pop[,,1,2,2] + Reshape(Aa.m, NS.patches, EW.patches)
-  pop[,,1,2,3] <- pop[,,1,2,3] + Reshape(aa.m, NS.patches, EW.patches)
+  for(lat in 1:NS.patches) {
+    for(lon in 1:EW.patches) {
+      num.females <- sum(pop[lat,lon,3,1,])
+      num.males <- sum(pop[lat,lon,3,2,])
+      # Spawning only occurs if there is at least one males and one females in the patch
+      if(num.females > 0 && num.males > 0) {
+        # All females produce the same mean number of eggs
+        NUM.A.eggs <- rpois(1,fec*pop[lat,lon,3,1,1] + fec*pop[lat,lon,3,1,2]/2)
+        NUM.a.eggs <- rpois(1,fec*pop[lat,lon,3,1,3] + fec*pop[lat,lon,3,1,2]/2)
+        # Males produce sperm in proportion to their genotypes 
+        freq.A.sperm <- pop[lat,lon,3,2,1]/num.males + (pop[lat,lon,3,2,2]/num.males)/2
+        freq.a.sperm <- pop[lat,lon,3,2,3]/num.males + (pop[lat,lon,3,2,2]/num.males)/2
+        # Sperm fertilize eggs in proportion to sperm genotype frequencies
+        AA <- rbinom(1,NUM.A.eggs,freq.A.sperm)
+        aa <- rbinom(1,NUM.a.eggs,freq.a.sperm)
+        Aa <- NUM.A.eggs+NUM.a.eggs-AA-aa
+        # Divide zygotes 50:50 among the sexes
+        AA.f <- rbinom(1,AA,0.5)
+        AA.m <- AA-AA.f
+        Aa.f <- rbinom(1,Aa,0.5)
+        Aa.m <- Aa-Aa.f
+        aa.f <- rbinom(1,aa,0.5)
+        aa.m <- aa-aa.f
+        # Female babies
+        pop[lat,lon,1,1,1] <- pop[lat,lon,1,1,1] + AA.f
+        pop[lat,lon,1,1,2] <- pop[lat,lon,1,1,2] + Aa.f
+        pop[lat,lon,1,1,3] <- pop[lat,lon,1,1,3] + aa.f
+        # Male babies
+        pop[lat,lon,1,2,1] <- pop[lat,lon,1,2,1] + AA.m
+        pop[lat,lon,1,2,2] <- pop[lat,lon,1,2,2] + Aa.m
+        pop[lat,lon,1,2,3] <- pop[lat,lon,1,2,3] + aa.m
+      }
+    }
+  }
   return(pop)
 }
 
@@ -513,7 +520,7 @@ for(rep in 1:reps) {
 end_time <- Sys.time()
 end_time - start_time
 
-beep(5)
+beepr::beep(5)
 
 
 # Allie Explore -----------------------------------------------------------
@@ -578,7 +585,7 @@ pop_sum = output_df %>%
 
 
 output_sum = full_join(geno_sum, pop_sum) %>%
-  mutate(freq = geno_pop_sum/pop_sum) 
+  mutate(freq = geno_pop_sum/pop_sum)
 
 write_csv(output_sum, here("output", "3x3NoClimate8F.csv"))
 

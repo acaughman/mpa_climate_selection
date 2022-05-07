@@ -1,5 +1,41 @@
 library(pracma)
 
+## Spawn
+
+spawn <- function(pop) {
+  
+  fec <- fecundity
+  
+  num.males <- sum(pop[,,3,2,])/ (NS.patches * EW.patches)
+  
+  # All females produce the same mean number of eggs
+  NUM.A.eggs <- rpois(NS.patches * EW.patches,fec*pop[,,3,1,1] + fec*pop[,,3,1,2]/2)
+  NUM.a.eggs <- rpois(NS.patches * EW.patches,fec*pop[,,3,1,3] + fec*pop[,,3,1,2]/2)
+  # Males produce sperm in proportion to their genotypes 
+  freq.A.sperm <- pop[,,3,2,1]/num.males + (pop[,,3,2,2]/num.males)/2
+  freq.a.sperm <- pop[,,3,2,3]/num.males + (pop[,,3,2,2]/num.males)/2
+  # Sperm fertilize eggs in proportion to sperm genotype frequencies
+  AA <- rbinom(NS.patches * EW.patches,NUM.A.eggs,freq.A.sperm)
+  aa <- rbinom(NS.patches * EW.patches,NUM.a.eggs,freq.a.sperm)
+  Aa <- NUM.A.eggs+NUM.a.eggs-AA-aa
+  # Divide zygotes 50:50 among the sexes
+  AA.f <- rbinom(NS.patches * EW.patches,AA,0.5)
+  AA.m <- AA-AA.f
+  Aa.f <- rbinom(NS.patches * EW.patches,Aa,0.5)
+  Aa.m <- Aa-Aa.f
+  aa.f <- rbinom(NS.patches * EW.patches,aa,0.5)
+  aa.m <- aa-aa.f
+  # Female babies
+  pop[,,1,1,1] <- pop[,,1,1,1] + Reshape(AA.f, NS.patches, EW.patches)
+  pop[,,1,1,2] <- pop[,,1,1,2] + Reshape(Aa.f, NS.patches, EW.patches)
+  pop[,,1,1,3] <- pop[,,1,1,3] + Reshape(aa.f, NS.patches, EW.patches)
+  # Male babies
+  pop[,,1,2,1] <- pop[,,1,2,1] + Reshape(AA.m, NS.patches, EW.patches)
+  pop[,,1,2,2] <- pop[,,1,2,2] + Reshape(Aa.m, NS.patches, EW.patches)
+  pop[,,1,2,3] <- pop[,,1,2,3] + Reshape(aa.m, NS.patches, EW.patches)
+  return(pop)
+}
+
 ##recruit
 
 calc_temp_mortality2 <- function(SST, opt.temp, temp.range, s) {
