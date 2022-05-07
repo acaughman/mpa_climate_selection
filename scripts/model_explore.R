@@ -1,6 +1,7 @@
 library(here)
 library(tidyverse)
 library(patchwork)
+library(pracma)
 library(beepr)
 
 set.seed(42)
@@ -17,7 +18,7 @@ NUM.gens.post.reserve <- 75 # The number of generations with the reserve install
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 120 # the number of patches on the north-south axis
-EW.patches <- 10 # the number of patches on the east-west axis
+EW.patches <- 8 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
@@ -34,9 +35,9 @@ fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(456,576,696,
-                 457,577,697,
-                 578,578,698) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(486,606,726,
+                 487,607,727,
+                 488,608,728) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
 bold.mover.distance <- 100 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 50 # Individuals with aa genotype move this distance on average every year, in nautical miles
@@ -62,15 +63,11 @@ init <- function() {
   init.Aa <- round(200*2*(init.a)*(1-init.a))
   init.aa <- round(200*(init.a)^2)
   pop <- world
-  for(lat in 1:NS.patches) {
-    for(lon in 1:EW.patches) {
-      for(i in 1:NUM.age.classes) {
-        for(j in 1:NUM.sexes) {
-          pop[lat,lon,i,j,1] <- init.AA
-          pop[lat,lon,i,j,2] <- init.Aa
-          pop[lat,lon,i,j,3] <- init.aa
-        }
-      }
+  for(i in 1:NUM.age.classes) {
+    for(j in 1:NUM.sexes) {
+      pop[,,i,j,1] <- init.AA
+      pop[,,i,j,2] <- init.Aa
+      pop[,,i,j,3] <- init.aa
     }
   }
   return(pop)
@@ -127,24 +124,6 @@ init_SST <- function(years) {
   #   }
   #   start_SST = start_SST + 0.018
   # }
-
-  
-  ### UNCOMMENT FOR LOW VARIABLE MEAN SST
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = opt.temp + NS.patches*0.1
-  # 
-  # for (i in 1:years) {
-  #   SST = start_SST
-  #   if (SST > 35) {
-  #     SST = 35
-  #   }
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.1
-  #   }
-  #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = 0.01)
-  # }
-  
   
   ### UNCOMMENT FOR ENSO VARIABLE MEAN SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
@@ -161,6 +140,34 @@ init_SST <- function(years) {
   #   }
   #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = 0.1)
   # }
+  
+  ### UNCOMMENT FOR SHOCK SST CHANGES
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = opt.temp + NS.patches*0.1
+  # 
+  # for (i in 1:years) {
+  #   #print(num_years)
+  #   if (num_years == 0) {
+  #     heat_prob = runif(1, 0, 1)
+  #     if (heat_prob > 0.8) {
+  #       num_years <<- floor(runif(1, 1, 4))
+  #       intensity <<- runif(1, 1, 3)
+  #       SST = start_SST + intensity
+  #     } else {
+  #       num_years <<- 0
+  #       SST = start_SST
+  #     }
+  #   } else if (num_years != 0) {
+  #     num_years = num_years - 1
+  #     SST = start_SST + intensity
+  #   }
+  #   print(SST)
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST - 0.1
+  #   }
+  #   start_SST = start_SST + 0.018
+  # }
 
   return(SST.patches) ### DO NOT COMMENT OUT
 }
@@ -168,44 +175,38 @@ init_SST <- function(years) {
 ############################################################################
 ## This function causes adults to reproduce in spawning areas
 
+
 spawn <- function(pop) {
   
   fec <- fecundity
   
-  for(lat in 1:NS.patches) {
-    for(lon in 1:EW.patches) {
-      num.females <- sum(pop[lat,lon,3,1,])
-      num.males <- sum(pop[lat,lon,3,2,])
-      # Spawning only occurs if there is at least one males and one females in the patch
-      if(num.females > 0 && num.males > 0) {
-        # All females produce the same mean number of eggs
-        NUM.A.eggs <- rpois(1,fec*pop[lat,lon,3,1,1] + fec*pop[lat,lon,3,1,2]/2)
-        NUM.a.eggs <- rpois(1,fec*pop[lat,lon,3,1,3] + fec*pop[lat,lon,3,1,2]/2)
-        # Males produce sperm in proportion to their genotypes 
-        freq.A.sperm <- pop[lat,lon,3,2,1]/num.males + (pop[lat,lon,3,2,2]/num.males)/2
-        freq.a.sperm <- pop[lat,lon,3,2,3]/num.males + (pop[lat,lon,3,2,2]/num.males)/2
-        # Sperm fertilize eggs in proportion to sperm genotype frequencies
-        AA <- rbinom(1,NUM.A.eggs,freq.A.sperm)
-        aa <- rbinom(1,NUM.a.eggs,freq.a.sperm)
-        Aa <- NUM.A.eggs+NUM.a.eggs-AA-aa
-        # Divide zygotes 50:50 among the sexes
-        AA.f <- rbinom(1,AA,0.5)
-        AA.m <- AA-AA.f
-        Aa.f <- rbinom(1,Aa,0.5)
-        Aa.m <- Aa-Aa.f
-        aa.f <- rbinom(1,aa,0.5)
-        aa.m <- aa-aa.f
-        # Female babies
-        pop[lat,lon,1,1,1] <- pop[lat,lon,1,1,1] + AA.f
-        pop[lat,lon,1,1,2] <- pop[lat,lon,1,1,2] + Aa.f
-        pop[lat,lon,1,1,3] <- pop[lat,lon,1,1,3] + aa.f
-        # Male babies
-        pop[lat,lon,1,2,1] <- pop[lat,lon,1,2,1] + AA.m
-        pop[lat,lon,1,2,2] <- pop[lat,lon,1,2,2] + Aa.m
-        pop[lat,lon,1,2,3] <- pop[lat,lon,1,2,3] + aa.m
-      }
-    }
-  }
+  num.males <- sum(pop[,,3,2,])/ (NS.patches * EW.patches)
+  
+  # All females produce the same mean number of eggs
+  NUM.A.eggs <- rpois(NS.patches * EW.patches,fec*pop[,,3,1,1] + fec*pop[,,3,1,2]/2)
+  NUM.a.eggs <- rpois(NS.patches * EW.patches,fec*pop[,,3,1,3] + fec*pop[,,3,1,2]/2)
+  # Males produce sperm in proportion to their genotypes 
+  freq.A.sperm <- pop[,,3,2,1]/num.males + (pop[,,3,2,2]/num.males)/2
+  freq.a.sperm <- pop[,,3,2,3]/num.males + (pop[,,3,2,2]/num.males)/2
+  # Sperm fertilize eggs in proportion to sperm genotype frequencies
+  AA <- rbinom(NS.patches * EW.patches,NUM.A.eggs,freq.A.sperm)
+  aa <- rbinom(NS.patches * EW.patches,NUM.a.eggs,freq.a.sperm)
+  Aa <- NUM.A.eggs+NUM.a.eggs-AA-aa
+  # Divide zygotes 50:50 among the sexes
+  AA.f <- rbinom(NS.patches * EW.patches,AA,0.5)
+  AA.m <- AA-AA.f
+  Aa.f <- rbinom(NS.patches * EW.patches,Aa,0.5)
+  Aa.m <- Aa-Aa.f
+  aa.f <- rbinom(NS.patches * EW.patches,aa,0.5)
+  aa.m <- aa-aa.f
+  # Female babies
+  pop[,,1,1,1] <- pop[,,1,1,1] + Reshape(AA.f, NS.patches, EW.patches)
+  pop[,,1,1,2] <- pop[,,1,1,2] + Reshape(Aa.f, NS.patches, EW.patches)
+  pop[,,1,1,3] <- pop[,,1,1,3] + Reshape(aa.f, NS.patches, EW.patches)
+  # Male babies
+  pop[,,1,2,1] <- pop[,,1,2,1] + Reshape(AA.m, NS.patches, EW.patches)
+  pop[,,1,2,2] <- pop[,,1,2,2] + Reshape(Aa.m, NS.patches, EW.patches)
+  pop[,,1,2,3] <- pop[,,1,2,3] + Reshape(aa.m, NS.patches, EW.patches)
   return(pop)
 }
 
