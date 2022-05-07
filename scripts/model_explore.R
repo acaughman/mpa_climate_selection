@@ -490,6 +490,8 @@ gens <- pre.fishing.gens+pre.reserve.gens+post.reserve.gens
 
 output.array <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
 
+start_time <- Sys.time()
+
 for(rep in 1:reps) {
   #print(rep)
   pop <- init()
@@ -507,6 +509,9 @@ for(rep in 1:reps) {
     print(t)
   }
 }
+
+end_time <- Sys.time()
+end_time - start_time
 
 beep(5)
 
