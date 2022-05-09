@@ -5,6 +5,7 @@ library(pracma)
 library(beepr)
 
 set.seed(42)
+options(warn=-1)
 
 # Mee Simulation ----------------------------------------------------------
 
@@ -186,7 +187,7 @@ spawn <- function(pop) {
   NUM.A.eggs <- Reshape(rpois(NS.patches * EW.patches,fec*pop[,,3,1,1] + fec*pop[,,3,1,2]/2), NS.patches, EW.patches)
   NUM.a.eggs <- Reshape(rpois(NS.patches * EW.patches,fec*pop[,,3,1,3] + fec*pop[,,3,1,2]/2), NS.patches, EW.patches)
   # Males produce sperm in proportion to their genotypes 
-  freq.A.sperm <<- ifelse(pop[,,3,2,1]==0,0,pop[,,3,2,1]/num.males) + ifelse(pop[,,3,2,2]==0,0,(pop[,,3,2,2]/num.males)/2)
+  freq.A.sperm <- ifelse(pop[,,3,2,1]==0,0,pop[,,3,2,1]/num.males) + ifelse(pop[,,3,2,2]==0,0,(pop[,,3,2,2]/num.males)/2)
   freq.a.sperm <- ifelse(pop[,,3,2,3]==0,0,pop[,,3,2,1]/num.males) + ifelse(pop[,,3,2,2]==0,0,(pop[,,3,2,2]/num.males)/2)
   # Sperm fertilize eggs in proportion to sperm genotype frequencies
   AA <<- Reshape(rbinom(NS.patches * EW.patches,NUM.A.eggs,freq.A.sperm), NS.patches, EW.patches)
@@ -307,20 +308,12 @@ fishing <- function(pop,gen) {
     }
     mean.per.patch.pop <- mean(each.patch.pop)
     ff <- mean.per.patch.pop*(1/fished-1)
-    if(mean.per.patch.pop > 0) {
-      for(lat in 1:NS.patches) {
-        for(lon in 1:EW.patches) {
-          patch.pop <- sum(pop[lat,lon,c(2,3),,])
-          if(patch.pop > 0) {
-            f <- patch.pop/(ff+patch.pop)
-            for(i in 2:NUM.age.classes) {
-              for(j in 1:NUM.sexes) {
-                for(k in 1:NUM.genotypes) {
-                  pop[lat,lon,i,j,k] <- rbinom(1,pop[lat,lon,i,j,k],(1-f))
-                }
-              }
-            }
-          }
+    patch.pop <- rowSums(pop[,,c(2,3),,], dims = 2)
+    f <- patch.pop/(ff+patch.pop)
+    for(i in 2:NUM.age.classes) {
+      for(j in 1:NUM.sexes) {
+        for(k in 1:NUM.genotypes) {
+          pop[,,i,j,k] <- Reshape(rbinom(NS.patches * EW.patches,pop[,,i,j,k],(1-f)), NS.patches, EW.patches)
         }
       }
     }
@@ -346,22 +339,20 @@ fishing <- function(pop,gen) {
     }
     mean.per.patch.pop <- mean(each.patch.pop,na.rm=TRUE)
     ff <- mean.per.patch.pop*(1/fished.adj-1)
-    if(mean.per.patch.pop > 0) {
-      for(lat in 1:NS.patches) {
-        for(lon in 1:EW.patches) {
-          if(reserve.patches[lat,lon] == 0 && buffer.patches == 0) {
-            patch.pop <- sum(pop[lat,lon,c(2,3),,])
-            if(patch.pop > 0) {
-              f <- patch.pop/(ff+patch.pop)
-              for(i in 2:NUM.age.classes) {
-                for(j in 1:NUM.sexes) {
-                  for(k in 1:NUM.genotypes) {
-                    pop[lat,lon,i,j,k] <- rbinom(1,pop[lat,lon,i,j,k],(1-f))
-                  }
-                }
-              }
-            }
-          }
+    patch.pop <- rowSums(pop[,,c(2,3),,], dims=2)
+    for(lat in 1:NS.patches) {
+      for(lon in 1:EW.patches) {
+        if(reserve.patches[lat,lon] == 1) {
+          patch.pop[lat,lon] <- NaN
+        }
+      }
+    }
+    f <- patch.pop/(ff+patch.pop)
+    for(i in 2:NUM.age.classes) {
+      for(j in 1:NUM.sexes) {
+        for(k in 1:NUM.genotypes) {
+          fished.array = Reshape(rbinom(NS.patches * EW.patches,pop[,,i,j,k],(1-f)), NS.patches, EW.patches)
+          pop[,,i,j,k] <- ifelse(is.na(fished.array[,]),pop[,,i,j,k],fished.array[,])
         }
       }
     }
