@@ -476,6 +476,7 @@ for(rep in 1:reps) {
   }
   gc() #clear memory
 }
+gc()
 
 end_time <- Sys.time()
 end_time - start_time
