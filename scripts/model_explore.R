@@ -218,15 +218,7 @@ calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
   nat.m = array(0, c(nrow(SST), ncol(SST)))
   m = 1 - exp((-(SST[,] - opt.temp)^2)/(temp.range^2)) # temperature based mortality function from Walsworth et al.
   m = 1 - m
-  for (i in 1:nrow(m)) {
-    for (j in 1:ncol(m)) {
-      if(m[i,j] > s) {
-        nat.m[i,j] = s
-      } else if (m[i,j] < s) {
-        nat.m[i,j] = m[i,j]
-      }
-    }
-  }
+  nat.m = ifelse(m > s, s, m)
   return(nat.m)
 }
 
@@ -330,23 +322,11 @@ fishing <- function(pop,gen) {
         }
       }
     }
-    for(lat in 1:NS.patches) {
-      for(lon in 1:EW.patches) {
-        if(reserve.patches[lat,lon] == 1) {
-          each.patch.pop[lat,lon] <- NaN
-        }
-      }
-    }
+    each.patch.pop = ifelse(reserve.patches == 1, NaN, each.patch.pop)
     mean.per.patch.pop <- mean(each.patch.pop,na.rm=TRUE)
     ff <- mean.per.patch.pop*(1/fished.adj-1)
     patch.pop <- rowSums(pop[,,c(2,3),,], dims=2)
-    for(lat in 1:NS.patches) {
-      for(lon in 1:EW.patches) {
-        if(reserve.patches[lat,lon] == 1) {
-          patch.pop[lat,lon] <- NaN
-        }
-      }
-    }
+    patch.pop = ifelse(reserve.patches == 1, NaN, patch.pop)
     f <- patch.pop/(ff+patch.pop)
     for(i in 2:NUM.age.classes) {
       for(j in 1:NUM.sexes) {
@@ -494,6 +474,7 @@ for(rep in 1:reps) {
     pop <- move(pop)
     print(t)
   }
+  gc() #clear memory
 }
 
 end_time <- Sys.time()
