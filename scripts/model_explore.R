@@ -13,13 +13,13 @@ options(warn=-1)
 
 NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
-NUM.gens.pre.fishing <- 5 #25 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 10 # 50 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 15 # 75 # The number of generations with the reserve installed
+NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
+NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
+NUM.gens.post.reserve <- 75 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-NS.patches <- 8 #120 # the number of patches on the north-south axis
-EW.patches <- 8 #8 # the number of patches on the east-west axis
+NS.patches <- 120 # the number of patches on the north-south axis
+EW.patches <- 10 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
@@ -36,9 +36,9 @@ fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(28,36,29,37) #c(486,606,726,
-                 #487,607,727,
-                 #488,608,728) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(487,607,727,
+                 488,608,728,
+                 489,609,729) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
 bold.mover.distance <- 100 # Individuals with AA genotype move this distance on average every year, in nautical miles
 lazy.mover.distance <- 50 # Individuals with aa genotype move this distance on average every year, in nautical miles
@@ -541,7 +541,9 @@ output_df = output_df %>%
     lon == "V5" ~ 5,
     lon == "V6" ~ 6,
     lon == "V7" ~ 7,
-    lon == "V8" ~ 8
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10
   )) %>% 
   mutate(genotype = case_when(
     genotype == 1 ~ "AA",
