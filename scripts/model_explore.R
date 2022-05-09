@@ -64,13 +64,9 @@ init <- function() {
   init.Aa <- round(200*2*(init.a)*(1-init.a))
   init.aa <- round(200*(init.a)^2)
   pop <- world
-  for(i in 1:NUM.age.classes) {
-    for(j in 1:NUM.sexes) {
-      pop[,,i,j,1] <- init.AA
-      pop[,,i,j,2] <- init.Aa
-      pop[,,i,j,3] <- init.aa
-    }
-  }
+  pop[,,,,1] <- init.AA
+  pop[,,,,2] <- init.Aa
+  pop[,,,,3] <- init.aa
   return(pop)
 }
 
