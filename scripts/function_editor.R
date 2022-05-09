@@ -105,16 +105,48 @@ move2 <- function(pop) {
   return(pop+move.array)
 }
 
-pop = init()
-pop2 = init()
-SST.patches = init_SST(years = 84)
-pop = spawn(pop)
-pop2 = spawn(pop2)
-pop = fishing(pop,20) 
-pop2 = fishing(pop2, 20)
-pop = move(pop) 
-pop2 = move2(pop2)
-pop
-pop2
-pop - pop2
+pre.fishing.gens <- 5
+pre.reserve.gens <- 10
+post.reserve.gens <- 15
+gens <- pre.fishing.gens+pre.reserve.gens+post.reserve.gens
+
+for(rep in 1:reps) {
+  #print(rep)
+  pop <- init()
+  SST.patches <- init_SST(gens)
+  for(t in 1:gens) {
+    #print(SST.patches[,,t])
+    output.array[,,,,,t,rep] <- pop
+    pop <- spawn(pop)
+    pop <- recruit(pop)
+    if(t > pre.fishing.gens) {
+      gen <- t
+      pop <- fishing(pop,gen)
+    }
+    pop <- move(pop)
+    print(t)
+  }
+}
+
+for(rep in 1:reps) {
+  #print(rep)
+  pop2 <- init()
+  SST.patches <- init_SST(gens)
+  for(t in 1:gens) {
+    #print(SST.patches[,,t])
+    output.array[,,,,,t,rep] <- pop2
+    pop <- spawn(pop2)
+    pop <- recruit(pop2)
+    if(t > pre.fishing.gens) {
+      gen <- t
+      pop2 <- fishing(pop,gen)
+    }
+    pop2 <- move2(pop2)
+    print(t)
+  }
+}
+# pop
+# pop2
+# pop - pop2
 mean(pop - pop2)
+
