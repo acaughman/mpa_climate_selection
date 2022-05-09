@@ -135,11 +135,11 @@ for(rep in 1:reps) {
   for(t in 1:gens) {
     #print(SST.patches[,,t])
     output.array[,,,,,t,rep] <- pop2
-    pop <- spawn(pop2)
-    pop <- recruit(pop2)
+    pop2 <- spawn(pop2)
+    pop2 <- recruit(pop2)
     if(t > pre.fishing.gens) {
       gen <- t
-      pop2 <- fishing(pop,gen)
+      pop2 <- fishing(pop2,gen)
     }
     pop2 <- move2(pop2)
     print(t)
