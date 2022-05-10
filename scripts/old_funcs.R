@@ -1,0 +1,195 @@
+seed = 42
+addTaskCallback(function(...) {set.seed(seed);TRUE})
+
+
+calc_temp_mortality2 <- function(SST, opt.temp, temp.range, s) {
+  m = 1 - exp((-(SST - opt.temp)^2)/(temp.range^2)) # temperature based mortality function from Walsworth et al.
+  m = 1 - m
+  if(m > s) {
+    nat.m = s
+  } else if (m < s) {
+    nat.m = m
+  }
+  return(nat.m)
+}
+
+############################################################################
+## This function determines density dependent survival proportion for babies
+
+survival_b2 <- function(num, SST) {
+  s = calc_temp_mortality2(SST, opt.temp, temp.range, sb)
+  dd <- dd # density dependence of survival
+  result <- s/(1 + dd * num)
+  return(result)
+}
+
+############################################################################
+## This function determines density dependent survival proportion for juveniles and adults
+
+survival2 <- function(SST) {
+  result = calc_temp_mortality2(SST, opt.temp, temp.range, s)
+  return(result)
+}
+
+recruit2 <- function(pop) {
+  recruit.array <- world
+  for(lat in 1:NS.patches) {
+    for(lon in 1:EW.patches) {
+      SST = SST.patches[lat, lon, t]
+      for(i in 1:NUM.age.classes) {
+        if(i == 1) {
+          # Some babies survive and recruit to juvenile age class
+          s1 <- survival_b2(sum(pop[lat,lon,i,,]), SST)
+          s <- survival2(SST)
+          for(j in 1:NUM.sexes) {
+            for(k in 1:NUM.genotypes) {
+              if(pop[lat,lon,i,j,k] > 0) {
+                recruit.array[lat,lon,i+1,j,k] <- recruit.array[lat,lon,i+1,j,k] + rbinom(1,pop[lat,lon,i,j,k],s1)
+              }
+            }
+          }
+        }
+        if(i == 2) {
+          # Some juveniles survive
+          for(j in 1:NUM.sexes) {
+            for(k in 1:NUM.genotypes) {
+              if(pop[lat,lon,i,j,k] > 0) {
+                juvies.surviving <- rbinom(1,pop[lat,lon,i,j,k],s)
+                # Some juveniles recruit to adult age class
+                juvies.recruiting <- rbinom(1,juvies.surviving,p)
+                recruit.array[lat,lon,i+1,j,k] <- recruit.array[lat,lon,i+1,j,k] + juvies.recruiting
+                # The rest of the juveniles remain in the juvenile age class
+                recruit.array[lat,lon,i,j,k] <- recruit.array[lat,lon,i,j,k] + juvies.surviving-juvies.recruiting
+              }
+            }
+          }
+        }
+        if(i == 3) {
+          # Some adults survive
+          for(j in 1:NUM.sexes) {
+            for(k in 1:NUM.genotypes) {
+              if(pop[lat,lon,i,j,k] > 0) {
+                recruit.array[lat,lon,i,j,k] <- recruit.array[lat,lon,i,j,k] + rbinom(1,pop[lat,lon,i,j,k],s)
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return(recruit.array)
+}
+
+fishing2 <- function(pop,gen) {
+  if(gen <= pre.reserve.gens+pre.fishing.gens) {
+    each.patch.pop <- array(0,c(NS.patches,EW.patches))
+    for(i in 2:NUM.age.classes) {
+      for(j in 1:NUM.sexes) {
+        for(k in 1:NUM.genotypes) {
+          each.patch.pop[,] <- each.patch.pop[,] + pop[,,i,j,k]
+        }
+      }
+    }
+    mean.per.patch.pop <- mean(each.patch.pop)
+    ff <- mean.per.patch.pop*(1/fished-1)
+    if(mean.per.patch.pop > 0) {
+      for(lat in 1:NS.patches) {
+        for(lon in 1:EW.patches) {
+          patch.pop <- sum(pop[lat,lon,c(2,3),,])
+          if(patch.pop > 0) {
+            f <- patch.pop/(ff+patch.pop)
+            for(i in 2:NUM.age.classes) {
+              for(j in 1:NUM.sexes) {
+                for(k in 1:NUM.genotypes) {
+                  pop[lat,lon,i,j,k] <- rbinom(1,pop[lat,lon,i,j,k],(1-f))
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if(gen > pre.reserve.gens+pre.fishing.gens) {
+    reserve.area <- sum(reserve.patches)/(NS.patches*EW.patches)
+    fished.adj <- fished*1/(1-reserve.area)
+    each.patch.pop <- array(0,c(NS.patches,EW.patches))
+    for(i in 2:NUM.age.classes) {
+      for(j in 1:NUM.sexes) {
+        for(k in 1:NUM.genotypes) {
+          each.patch.pop[,] <- each.patch.pop[,] + pop[,,i,j,k]
+        }
+      }
+    }
+    for(lat in 1:NS.patches) {
+      for(lon in 1:EW.patches) {
+        if(reserve.patches[lat,lon] == 1) {
+          each.patch.pop[lat,lon] <- NaN
+        }
+      }
+    }
+    mean.per.patch.pop <- mean(each.patch.pop,na.rm=TRUE)
+    ff <- mean.per.patch.pop*(1/fished.adj-1)
+    if(mean.per.patch.pop > 0) {
+      for(lat in 1:NS.patches) {
+        for(lon in 1:EW.patches) {
+          if(reserve.patches[lat,lon] == 0) {
+            patch.pop <- sum(pop[lat,lon,c(2,3),,])
+            if(patch.pop > 0) {
+              f <- patch.pop/(ff+patch.pop)
+              for(i in 2:NUM.age.classes) {
+                for(j in 1:NUM.sexes) {
+                  for(k in 1:NUM.genotypes) {
+                    pop[lat,lon,i,j,k] <- rbinom(1,pop[lat,lon,i,j,k],(1-f))
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return(pop)
+}
+
+spawn2 <- function(pop) {
+  
+  fec <- fecundity
+
+  for(lat in 1:NS.patches) {
+    for(lon in 1:EW.patches) {
+      num.females <- sum(pop[lat,lon,3,1,])
+      num.males <- sum(pop[lat,lon,3,2,])
+      # Spawning only occurs if there is at least one males and one females in the patch
+      if(num.females > 0 && num.males > 0) {
+        # All females produce the same mean number of eggs
+        NUM.A.eggs <- rpois(1,fec*pop[lat,lon,3,1,1] + fec*pop[lat,lon,3,1,2]/2)
+        NUM.a.eggs <- rpois(1,fec*pop[lat,lon,3,1,3] + fec*pop[lat,lon,3,1,2]/2)
+        # Males produce sperm in proportion to their genotypes 
+        freq.A.sperm <- pop[lat,lon,3,2,1]/num.males + (pop[lat,lon,3,2,2]/num.males)/2
+        freq.a.sperm <- pop[lat,lon,3,2,3]/num.males + (pop[lat,lon,3,2,2]/num.males)/2
+        # Sperm fertilize eggs in proportion to sperm genotype frequencies
+        AA <- rbinom(1,NUM.A.eggs,freq.A.sperm)
+        aa <- rbinom(1,NUM.a.eggs,freq.a.sperm)
+        Aa <- NUM.A.eggs+NUM.a.eggs-AA-aa
+        # Divide zygotes 50:50 among the sexes
+        AA.f <- rbinom(1,AA,0.5)
+        AA.m <- AA-AA.f
+        Aa.f <- rbinom(1,Aa,0.5)
+        Aa.m <- Aa-Aa.f
+        aa.f <- rbinom(1,aa,0.5)
+        aa.m <- aa-aa.f
+        # Female babies
+        pop[lat,lon,1,1,1] <- pop[lat,lon,1,1,1] + AA.f
+        pop[lat,lon,1,1,2] <- pop[lat,lon,1,1,2] + Aa.f
+        pop[lat,lon,1,1,3] <- pop[lat,lon,1,1,3] + aa.f
+        # Male babies
+        pop[lat,lon,1,2,1] <- pop[lat,lon,1,2,1] + AA.m
+        pop[lat,lon,1,2,2] <- pop[lat,lon,1,2,2] + Aa.m
+        pop[lat,lon,1,2,3] <- pop[lat,lon,1,2,3] + aa.m
+      }
+    }
+  }
+  return(pop)
+}
