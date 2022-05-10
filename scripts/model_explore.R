@@ -2,11 +2,9 @@ library(here)
 library(tidyverse)
 library(patchwork)
 library(pracma)
-library(reticulate)
 library(beepr)
 
-seed=42
-addTaskCallback(function(...) {set.seed(seed);TRUE})
+addTaskCallback(function(...) {set.seed(42);TRUE})
 options(warn=-1)
 
 # Mee Simulation ----------------------------------------------------------
@@ -21,7 +19,7 @@ NUM.gens.post.reserve <- 75 # The number of generations with the reserve install
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 120 # the number of patches on the north-south axis
-EW.patches <- 10 # the number of patches on the east-west axis
+EW.patches <- 20 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
@@ -38,9 +36,9 @@ fished.factor <- 0.8
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(487,607,727,
-                 488,608,728,
-                 489,609,729) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(970,1090,1210,
+                 971,1091,1211,
+                 972,1092,1212) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
 bold.mover.distance <- 200 # Individuals with AA genotype move this distance on average every year
 lazy.mover.distance <- 100 # Individuals with aa genotype move this distance on average every year
@@ -501,7 +499,7 @@ for(a in 1:reps) {
 
 # Wrangle dataframe into plottable format
 output_df = output_df %>% 
-  pivot_longer(V1:V8,
+  pivot_longer(V1:V20,
                names_to = "lon",
                values_to = "pop") %>% 
   mutate(lon = case_when(
@@ -514,7 +512,17 @@ output_df = output_df %>%
     lon == "V7" ~ 7,
     lon == "V8" ~ 8,
     lon == "V9" ~ 9,
-    lon == "V10" ~ 10
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
   )) %>% 
   mutate(genotype = case_when(
     genotype == 1 ~ "AA",
@@ -522,6 +530,17 @@ output_df = output_df %>%
     genotype == 3 ~ "aa"
   )) %>% 
   mutate(genotype = as.factor(genotype)) %>% 
+  mutate(sex = case_when(
+    sex == 1 ~ "female",
+    sex == 2 ~ "male"
+  )) %>% 
+  mutate(sex = as.factor(sex)) %>%
+  mutate(age = case_when(
+    age == 1 ~ "baby",
+    age == 2 ~ "juvenile",
+    age == 3 ~ "adult"
+  )) %>% 
+  mutate(age = as.factor(age)) %>%
   mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon))
 
