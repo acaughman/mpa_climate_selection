@@ -2,9 +2,11 @@ library(here)
 library(tidyverse)
 library(patchwork)
 library(pracma)
+library(reticulate)
 library(beepr)
 
-set.seed(42)
+seed=42
+addTaskCallback(function(...) {set.seed(seed);TRUE})
 options(warn=-1)
 
 # Mee Simulation ----------------------------------------------------------
@@ -147,11 +149,11 @@ init_SST <- function(years) {
   #   if (num_years == 0) {
   #     heat_prob = runif(1, 0, 1)
   #     if (heat_prob > 0.8) {
-  #       num_years <<- floor(runif(1, 1, 4))
-  #       intensity <<- runif(1, 1, 3)
+  #       num_years <- floor(runif(1, 1, 4))
+  #       intensity <- runif(1, 1, 3)
   #       SST = start_SST + intensity
   #     } else {
-  #       num_years <<- 0
+  #       num_years <- 0
   #       SST = start_SST
   #     }
   #   } else if (num_years != 0) {
@@ -177,18 +179,18 @@ spawn <- function(pop) {
   
   fec <- fecundity
   
-  num.males <<- rowSums(pop[,,3,2,], dims = 2)
+  num.males <- rowSums(pop[,,3,2,], dims = 2)
   
   # All females produce the same mean number of eggs
   NUM.A.eggs <- Reshape(rpois(NS.patches * EW.patches,fec*pop[,,3,1,1] + fec*pop[,,3,1,2]/2), NS.patches, EW.patches)
   NUM.a.eggs <- Reshape(rpois(NS.patches * EW.patches,fec*pop[,,3,1,3] + fec*pop[,,3,1,2]/2), NS.patches, EW.patches)
   # Males produce sperm in proportion to their genotypes 
   freq.A.sperm <- ifelse(pop[,,3,2,1]==0,0,pop[,,3,2,1]/num.males) + ifelse(pop[,,3,2,2]==0,0,(pop[,,3,2,2]/num.males)/2)
-  freq.a.sperm <- ifelse(pop[,,3,2,3]==0,0,pop[,,3,2,1]/num.males) + ifelse(pop[,,3,2,2]==0,0,(pop[,,3,2,2]/num.males)/2)
+  freq.a.sperm <- ifelse(pop[,,3,2,3]==0,0,pop[,,3,2,3]/num.males) + ifelse(pop[,,3,2,2]==0,0,(pop[,,3,2,2]/num.males)/2)
   # Sperm fertilize eggs in proportion to sperm genotype frequencies
-  AA <<- Reshape(rbinom(NS.patches * EW.patches,NUM.A.eggs,freq.A.sperm), NS.patches, EW.patches)
-  aa <- Reshape(rbinom(NS.patches * EW.patches,NUM.a.eggs,freq.a.sperm), NS.patches, EW.patches)
-  Aa <<- NUM.A.eggs+NUM.a.eggs-AA-aa
+  AA <- rbinom(NS.patches * EW.patches,NUM.A.eggs,freq.A.sperm)
+  aa <- rbinom(NS.patches * EW.patches,NUM.a.eggs,freq.a.sperm)
+  Aa <- NUM.A.eggs+NUM.a.eggs-AA-aa
   # Divide zygotes 50:50 among the sexes
   AA.f <- rbinom(NS.patches * EW.patches,AA,0.5)
   AA.m <- AA-AA.f
@@ -244,38 +246,30 @@ p <- 1/(maturity.age)
 recruit <- function(pop) {
   recruit.array <- world
   SST = SST.patches[,, t]
-  for(i in 1:NUM.age.classes) {
-    if(i == 1) {
-      # Some babies survive and recruit to juvenile age class
-      s1 <- survival_b(rowSums(pop[,,i,,], dim = 2), SST)
-      s <- survival(SST)
-      for(j in 1:NUM.sexes) {
-        for(k in 1:NUM.genotypes) {
-          recruit.array[,,i+1,j,k] <- recruit.array[,,i+1,j,k] + Reshape(rbinom(NS.patches * EW.patches,pop[,,i,j,k],s1), NS.patches, EW.patches)
-        }
-      }
-    } 
-    if(i == 2) {
-      # Some juveniles survive
-      for(j in 1:NUM.sexes) {
-        for(k in 1:NUM.genotypes) {
-          juvies.surviving <<- Reshape(rbinom(NS.patches * EW.patches,pop[,,i,j,k],s), NS.patches, EW.patches)
-          # Some juveniles recruit to adult age class
-          juvies.recruiting <<- Reshape(rbinom(NS.patches * EW.patches,juvies.surviving,p), NS.patches, EW.patches)
-          juvies.staying <<- juvies.surviving-juvies.recruiting
-          recruit.array[,,i+1,j,k] <- recruit.array[,,i+1,j,k] + juvies.recruiting
-          # The rest of the juveniles remain in the juvenile age class
-          recruit.array[,,i,j,k] <- recruit.array[,,i,j,k] + juvies.staying
-        }
-      }
+  # Some babies survive and recruit to juvenile age class
+  s1 <- survival_b(rowSums(pop[,,1,,], dim = 2), SST)
+  s <- survival(SST)
+  for(j in 1:NUM.sexes) {
+    for(k in 1:NUM.genotypes) {
+      recruit.array[,,1+1,j,k] <- recruit.array[,,1+1,j,k] + Reshape(rbinom(NS.patches * EW.patches,pop[,,1,j,k],s1), NS.patches, EW.patches)
     }
-    if(i == 3) {
-      # Some adults survive
-      for(j in 1:NUM.sexes) {
-        for(k in 1:NUM.genotypes) {
-          recruit.array[,,i,j,k] <- recruit.array[,,i,j,k] + Reshape(rbinom(NS.patches * EW.patches,pop[,,i,j,k],s), NS.patches, EW.patches)
-        }
-      }
+  }
+  # Some juveniles survive
+  for(j in 1:NUM.sexes) {
+    for(k in 1:NUM.genotypes) {
+      juvies.surviving <- Reshape(rbinom(NS.patches * EW.patches,pop[,,2,j,k],s), NS.patches, EW.patches)
+      # Some juveniles recruit to adult age class
+      juvies.recruiting <- Reshape(rbinom(NS.patches * EW.patches,juvies.surviving,p), NS.patches, EW.patches)
+      juvies.staying <<- juvies.surviving-juvies.recruiting
+      recruit.array[,,2+1,j,k] <- recruit.array[,,2+1,j,k] + juvies.recruiting
+      # The rest of the juveniles remain in the juvenile age class
+      recruit.array[,,2,j,k] <- recruit.array[,,2,j,k] + juvies.staying
+    }
+  }
+  # Some adults survive
+  for(j in 1:NUM.sexes) {
+    for(k in 1:NUM.genotypes) {
+      recruit.array[,,3,j,k] <- recruit.array[,,3,j,k] + Reshape(rbinom(NS.patches * EW.patches,pop[,,3,j,k],s), NS.patches, EW.patches)
     }
   }
   return(recruit.array)

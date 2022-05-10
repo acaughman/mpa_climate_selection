@@ -235,38 +235,30 @@ p <- 1/(maturity.age)
 recruit <- function(pop) {
   recruit.array <- world
   SST = SST.patches[,, t]
-  for(i in 1:NUM.age.classes) {
-    if(i == 1) {
-      # Some babies survive and recruit to juvenile age class
-      s1 <- survival_b(rowSums(pop[,,i,,], dim = 2), SST)
-      s <- survival(SST)
-      for(j in 1:NUM.sexes) {
-        for(k in 1:NUM.genotypes) {
-          recruit.array[,,i+1,j,k] <- recruit.array[,,i+1,j,k] + Reshape(rbinom(NS.patches * EW.patches,pop[,,i,j,k],s1), NS.patches, EW.patches)
-        }
-      }
-    } 
-    if(i == 2) {
-      # Some juveniles survive
-      for(j in 1:NUM.sexes) {
-        for(k in 1:NUM.genotypes) {
-          juvies.surviving <- Reshape(rbinom(NS.patches * EW.patches,pop[,,i,j,k],s), NS.patches, EW.patches)
-          # Some juveniles recruit to adult age class
-          juvies.recruiting <- Reshape(rbinom(NS.patches * EW.patches,juvies.surviving,p), NS.patches, EW.patches)
-          juvies.staying <<- juvies.surviving-juvies.recruiting
-          recruit.array[,,i+1,j,k] <- recruit.array[,,i+1,j,k] + juvies.recruiting
-          # The rest of the juveniles remain in the juvenile age class
-          recruit.array[,,i,j,k] <- recruit.array[,,i,j,k] + juvies.staying
-        }
-      }
+  # Some babies survive and recruit to juvenile age class
+  s1 <- survival_b(rowSums(pop[,,1,,], dim = 2), SST)
+  s <- survival(SST)
+  for(j in 1:NUM.sexes) {
+    for(k in 1:NUM.genotypes) {
+      recruit.array[,,1+1,j,k] <- recruit.array[,,1+1,j,k] + Reshape(rbinom(NS.patches * EW.patches,pop[,,1,j,k],s1), NS.patches, EW.patches)
     }
-    if(i == 3) {
-      # Some adults survive
-      for(j in 1:NUM.sexes) {
-        for(k in 1:NUM.genotypes) {
-          recruit.array[,,i,j,k] <- recruit.array[,,i,j,k] + Reshape(rbinom(NS.patches * EW.patches,pop[,,i,j,k],s), NS.patches, EW.patches)
-        }
-      }
+  }
+  # Some juveniles survive
+  for(j in 1:NUM.sexes) {
+    for(k in 1:NUM.genotypes) {
+      juvies.surviving <- Reshape(rbinom(NS.patches * EW.patches,pop[,,2,j,k],s), NS.patches, EW.patches)
+      # Some juveniles recruit to adult age class
+      juvies.recruiting <- Reshape(rbinom(NS.patches * EW.patches,juvies.surviving,p), NS.patches, EW.patches)
+      juvies.staying <<- juvies.surviving-juvies.recruiting
+      recruit.array[,,2+1,j,k] <- recruit.array[,,2+1,j,k] + juvies.recruiting
+      # The rest of the juveniles remain in the juvenile age class
+      recruit.array[,,2,j,k] <- recruit.array[,,2,j,k] + juvies.staying
+    }
+  }
+  # Some adults survive
+  for(j in 1:NUM.sexes) {
+    for(k in 1:NUM.genotypes) {
+      recruit.array[,,3,j,k] <- recruit.array[,,3,j,k] + Reshape(rbinom(NS.patches * EW.patches,pop[,,3,j,k],s), NS.patches, EW.patches)
     }
   }
   return(recruit.array)
