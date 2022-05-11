@@ -258,7 +258,7 @@ recruit <- function(pop) {
       juvies.surviving <- Reshape(rbinom(NS.patches * EW.patches,pop[,,2,j,k],s), NS.patches, EW.patches)
       # Some juveniles recruit to adult age class
       juvies.recruiting <- Reshape(rbinom(NS.patches * EW.patches,juvies.surviving,p), NS.patches, EW.patches)
-      juvies.staying <<- juvies.surviving-juvies.recruiting
+      juvies.staying <- juvies.surviving-juvies.recruiting
       recruit.array[,,2+1,j,k] <- recruit.array[,,2+1,j,k] + juvies.recruiting
       # The rest of the juveniles remain in the juvenile age class
       recruit.array[,,2,j,k] <- recruit.array[,,2,j,k] + juvies.staying
