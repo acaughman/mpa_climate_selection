@@ -1,20 +1,66 @@
 library(tidyverse)
 
-years = 200
-NS.patches = 120
-EW.patches = 8
+years = 150
+NS.patches = 100
+EW.patches = 20
+opt.temp = 25
 
+### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
+# SST.patches <- array(0, c(NS.patches, EW.patches, years))
+# start_SST = opt.temp + NS.patches*0.1
+# 
+# for (i in 1:years) {
+#   SST = start_SST
+#   if (SST > 35) {
+#     SST = 35
+#   }
+#   for (lat in 1:NS.patches) {
+#     SST.patches[lat,,i] = SST
+#     SST = SST - 0.1
+#   }
+#   start_SST = start_SST + 0.018
+# }
+
+### UNCOMMENT FOR ENSO VARIABLE MEAN SST
+# SST.patches <- array(0, c(NS.patches, EW.patches, years))
+# start_SST = opt.temp + NS.patches*0.1
+# 
+# for (i in 1:years) {
+#   SST = start_SST
+#   if (SST > 35) {
+#     SST = 35
+#   }
+#   for (lat in 1:NS.patches) {
+#     SST.patches[lat,,i] = SST
+#     SST = SST - 0.1
+#   }
+#   start_SST = start_SST + rnorm(1, mean = 0.018, sd = 0.1)
+# }
+
+### UNCOMMENT FOR SHOCK SST CHANGES
 SST.patches <- array(0, c(NS.patches, EW.patches, years))
-start_SST = 25 + NS.patches*.05
+start_SST = opt.temp + NS.patches*0.1
+num_years = 0
 
 for (i in 1:years) {
-  SST = start_SST
-  if (SST > 35) {
-    SST = 35
+  #print(num_years)
+  if (num_years == 0) {
+    heat_prob = runif(1, 0, 1)
+    if (heat_prob > 0.8) {
+      num_years <- floor(runif(1, 1, 4))
+      intensity <- runif(1, 1, 3)
+      SST = start_SST + intensity
+    } else {
+      num_years <- 0
+      SST = start_SST
+    }
+  } else if (num_years != 0) {
+    num_years = num_years - 1
+    SST = start_SST + intensity
   }
   for (lat in 1:NS.patches) {
     SST.patches[lat,,i] = SST
-    SST = SST - .05
+    SST = SST - 0.05
   }
   start_SST = start_SST + 0.018
 }
@@ -32,7 +78,7 @@ for(b in 1:years) {
 }
 
 SSTdf = output_df %>% 
-  pivot_longer(V1:V8,
+  pivot_longer(V1:V20,
                names_to = "lon",
                values_to = "sst") %>% 
   mutate(lon = case_when(
@@ -43,10 +89,22 @@ SSTdf = output_df %>%
     lon == "V5" ~ 5,
     lon == "V6" ~ 6,
     lon == "V7" ~ 7,
-    lon == "V8" ~ 8
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
   )) %>% 
   mutate(year = as.factor(year)) %>% 
-  filter(year %in% c(20,40,60,80,100,120,140,160, 180,200)) 
+  filter(year %in% c(20,40,60,80,100,120,140,150)) 
 
 ggplot(SSTdf, aes(lon, lat, fill = sst)) +
   geom_tile() +
