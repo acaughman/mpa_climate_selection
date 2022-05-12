@@ -1,9 +1,11 @@
 library(here)
 library(tidyverse)
 library(patchwork)
+library(pracma)
 library(beepr)
 
-set.seed(42)
+addTaskCallback(function(...) {set.seed(42);TRUE})
+options(warn=-1)
 
 # Mee Simulation ----------------------------------------------------------
 
@@ -12,12 +14,12 @@ set.seed(42)
 NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 75 # The number of generations with the reserve installed
+NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
+NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-NS.patches <- 8 # the number of patches on the north-south axis
-EW.patches <- 8 # the number of patches on the east-west axis
+NS.patches <- 100 # the number of patches on the north-south axis
+EW.patches <- 20 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
@@ -30,14 +32,16 @@ s <- 0.37 # survival proportion
 dd <- 0.0005 # density dependence of baby survival 
 fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished.factor <- 0.8
+fished.factor <- 0.5
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(28) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(810,910,1010,
+                 811,911,1011,
+                 812,912,1012) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
-bold.mover.distance <- 200 # Individuals with AA genotype move this distance on average every year, in nautical miles
-lazy.mover.distance <- 100 # Individuals with aa genotype move this distance on average every year, in nautical miles
+bold.mover.distance <- 200 # Individuals with AA genotype move this distance on average every year
+lazy.mover.distance <- 100 # Individuals with aa genotype move this distance on average every year
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 opt.temp = 25 #optimal temperature of species
@@ -60,17 +64,9 @@ init <- function() {
   init.Aa <- round(200*2*(init.a)*(1-init.a))
   init.aa <- round(200*(init.a)^2)
   pop <- world
-  for(lat in 1:NS.patches) {
-    for(lon in 1:EW.patches) {
-      for(i in 1:NUM.age.classes) {
-        for(j in 1:NUM.sexes) {
-          pop[lat,lon,i,j,1] <- init.AA
-          pop[lat,lon,i,j,2] <- init.Aa
-          pop[lat,lon,i,j,3] <- init.aa
-        }
-      }
-    }
-  }
+  pop[,,,,1] <- init.AA
+  pop[,,,,2] <- init.Aa
+  pop[,,,,3] <- init.aa
   return(pop)
 }
 
@@ -126,24 +122,6 @@ init_SST <- function(years) {
   #   start_SST = start_SST + 0.018
   # }
   
-  
-  ### UNCOMMENT FOR LOW VARIABLE MEAN SST
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = opt.temp + NS.patches*0.1
-  # 
-  # for (i in 1:years) {
-  #   SST = start_SST
-  #   if (SST > 35) {
-  #     SST = 35
-  #   }
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.1
-  #   }
-  #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = 0.01)
-  # }
-  
-  
   ### UNCOMMENT FOR ENSO VARIABLE MEAN SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
   # start_SST = opt.temp + NS.patches*0.1
@@ -160,50 +138,72 @@ init_SST <- function(years) {
   #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = 0.1)
   # }
   
+  ### UNCOMMENT FOR SHOCK SST CHANGES
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = opt.temp + NS.patches*0.1
+  # 
+  # for (i in 1:years) {
+  #   #print(num_years)
+  #   if (num_years == 0) {
+  #     heat_prob = runif(1, 0, 1)
+  #     if (heat_prob > 0.8) {
+  #       num_years <- floor(runif(1, 1, 4))
+  #       intensity <- runif(1, 1, 3)
+  #       SST = start_SST + intensity
+  #     } else {
+  #       num_years <- 0
+  #       SST = start_SST
+  #     }
+  #   } else if (num_years != 0) {
+  #     num_years = num_years - 1
+  #     SST = start_SST + intensity
+  #   }
+  #   print(SST)
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST - 0.1
+  #   }
+  #   start_SST = start_SST + 0.018
+  # }
+  
   return(SST.patches) ### DO NOT COMMENT OUT
 }
 
 ############################################################################
 ## This function causes adults to reproduce in spawning areas
 
+
 spawn <- function(pop) {
   
   fec <- fecundity
   
-  for(lat in 1:NS.patches) {
-    for(lon in 1:EW.patches) {
-      num.females <- sum(pop[lat,lon,3,1,])
-      num.males <- sum(pop[lat,lon,3,2,])
-      # Spawning only occurs if there is at least one males and one females in the patch
-      if(num.females > 0 && num.males > 0) {
-        # All females produce the same mean number of eggs
-        NUM.A.eggs <- rpois(1,fec*pop[lat,lon,3,1,1] + fec*pop[lat,lon,3,1,2]/2)
-        NUM.a.eggs <- rpois(1,fec*pop[lat,lon,3,1,3] + fec*pop[lat,lon,3,1,2]/2)
-        # Males produce sperm in proportion to their genotypes 
-        freq.A.sperm <- pop[lat,lon,3,2,1]/num.males + (pop[lat,lon,3,2,2]/num.males)/2
-        freq.a.sperm <- pop[lat,lon,3,2,3]/num.males + (pop[lat,lon,3,2,2]/num.males)/2
-        # Sperm fertilize eggs in proportion to sperm genotype frequencies
-        AA <- rbinom(1,NUM.A.eggs,freq.A.sperm)
-        aa <- rbinom(1,NUM.a.eggs,freq.a.sperm)
-        Aa <- NUM.A.eggs+NUM.a.eggs-AA-aa
-        # Divide zygotes 50:50 among the sexes
-        AA.f <- rbinom(1,AA,0.5)
-        AA.m <- AA-AA.f
-        Aa.f <- rbinom(1,Aa,0.5)
-        Aa.m <- Aa-Aa.f
-        aa.f <- rbinom(1,aa,0.5)
-        aa.m <- aa-aa.f
-        # Female babies
-        pop[lat,lon,1,1,1] <- pop[lat,lon,1,1,1] + AA.f
-        pop[lat,lon,1,1,2] <- pop[lat,lon,1,1,2] + Aa.f
-        pop[lat,lon,1,1,3] <- pop[lat,lon,1,1,3] + aa.f
-        # Male babies
-        pop[lat,lon,1,2,1] <- pop[lat,lon,1,2,1] + AA.m
-        pop[lat,lon,1,2,2] <- pop[lat,lon,1,2,2] + Aa.m
-        pop[lat,lon,1,2,3] <- pop[lat,lon,1,2,3] + aa.m
-      }
-    }
-  }
+  num.males <- rowSums(pop[,,3,2,], dims = 2)
+  
+  # All females produce the same mean number of eggs
+  NUM.A.eggs <- Reshape(rpois(NS.patches * EW.patches,fec*pop[,,3,1,1] + fec*pop[,,3,1,2]/2), NS.patches, EW.patches)
+  NUM.a.eggs <- Reshape(rpois(NS.patches * EW.patches,fec*pop[,,3,1,3] + fec*pop[,,3,1,2]/2), NS.patches, EW.patches)
+  # Males produce sperm in proportion to their genotypes 
+  freq.A.sperm <- ifelse(pop[,,3,2,1]==0,0,pop[,,3,2,1]/num.males) + ifelse(pop[,,3,2,2]==0,0,(pop[,,3,2,2]/num.males)/2)
+  freq.a.sperm <- ifelse(pop[,,3,2,3]==0,0,pop[,,3,2,3]/num.males) + ifelse(pop[,,3,2,2]==0,0,(pop[,,3,2,2]/num.males)/2)
+  # Sperm fertilize eggs in proportion to sperm genotype frequencies
+  AA <- rbinom(NS.patches * EW.patches,NUM.A.eggs,freq.A.sperm)
+  aa <- rbinom(NS.patches * EW.patches,NUM.a.eggs,freq.a.sperm)
+  Aa <- NUM.A.eggs+NUM.a.eggs-AA-aa
+  # Divide zygotes 50:50 among the sexes
+  AA.f <- rbinom(NS.patches * EW.patches,AA,0.5)
+  AA.m <- AA-AA.f
+  Aa.f <- rbinom(NS.patches * EW.patches,Aa,0.5)
+  Aa.m <- Aa-Aa.f
+  aa.f <- rbinom(NS.patches * EW.patches,aa,0.5)
+  aa.m <- aa-aa.f
+  # Female babies
+  pop[,,1,1,1] <- pop[,,1,1,1] + Reshape(AA.f, NS.patches, EW.patches)
+  pop[,,1,1,2] <- pop[,,1,1,2] + Reshape(Aa.f, NS.patches, EW.patches)
+  pop[,,1,1,3] <- pop[,,1,1,3] + Reshape(aa.f, NS.patches, EW.patches)
+  # Male babies
+  pop[,,1,2,1] <- pop[,,1,2,1] + Reshape(AA.m, NS.patches, EW.patches)
+  pop[,,1,2,2] <- pop[,,1,2,2] + Reshape(Aa.m, NS.patches, EW.patches)
+  pop[,,1,2,3] <- pop[,,1,2,3] + Reshape(aa.m, NS.patches, EW.patches)
   return(pop)
 }
 
@@ -211,13 +211,10 @@ spawn <- function(pop) {
 ## This function calculates temperature based mortality based on sea surface temperature, temperature range and optimal temperature of species
 
 calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
-  m = 1 - exp((-(SST - opt.temp)^2)/(temp.range^2)) # temperature based mortality function from Walsworth et al.
+  nat.m = array(0, c(nrow(SST), ncol(SST)))
+  m = 1 - exp((-(SST[,] - opt.temp)^2)/(temp.range^2)) # temperature based mortality function from Walsworth et al.
   m = 1 - m
-  if(m > s) {
-    nat.m = s
-  } else if (m < s) {
-    nat.m = m
-  }
+  nat.m = ifelse(m > s, s, m)
   return(nat.m)
 }
 
@@ -246,48 +243,31 @@ p <- 1/(maturity.age)
 
 recruit <- function(pop) {
   recruit.array <- world
-  for(lat in 1:NS.patches) {
-    for(lon in 1:EW.patches) {
-      SST = SST.patches[lat, lon, t]
-      for(i in 1:NUM.age.classes) {
-        if(i == 1) {
-          # Some babies survive and recruit to juvenile age class
-          s1 <- survival_b(sum(pop[lat,lon,i,,]), SST)
-          s <- survival(SST)
-          for(j in 1:NUM.sexes) {
-            for(k in 1:NUM.genotypes) {
-              if(pop[lat,lon,i,j,k] > 0) {
-                recruit.array[lat,lon,i+1,j,k] <- recruit.array[lat,lon,i+1,j,k] + rbinom(1,pop[lat,lon,i,j,k],s1)
-              }
-            }
-          }
-        }
-        if(i == 2) {
-          # Some juveniles survive
-          for(j in 1:NUM.sexes) {
-            for(k in 1:NUM.genotypes) {
-              if(pop[lat,lon,i,j,k] > 0) {
-                juvies.surviving <- rbinom(1,pop[lat,lon,i,j,k],s)
-                # Some juveniles recruit to adult age class
-                juvies.recruiting <- rbinom(1,juvies.surviving,p)
-                recruit.array[lat,lon,i+1,j,k] <- recruit.array[lat,lon,i+1,j,k] + juvies.recruiting
-                # The rest of the juveniles remain in the juvenile age class
-                recruit.array[lat,lon,i,j,k] <- recruit.array[lat,lon,i,j,k] + juvies.surviving-juvies.recruiting
-              }
-            }
-          }
-        }
-        if(i == 3) {
-          # Some adults survive
-          for(j in 1:NUM.sexes) {
-            for(k in 1:NUM.genotypes) {
-              if(pop[lat,lon,i,j,k] > 0) {
-                recruit.array[lat,lon,i,j,k] <- recruit.array[lat,lon,i,j,k] + rbinom(1,pop[lat,lon,i,j,k],s)
-              }
-            }
-          }
-        }
-      }
+  SST = SST.patches[,, t]
+  # Some babies survive and recruit to juvenile age class
+  s1 <- survival_b(rowSums(pop[,,1,,], dim = 2), SST)
+  s <- survival(SST)
+  for(j in 1:NUM.sexes) {
+    for(k in 1:NUM.genotypes) {
+      recruit.array[,,1+1,j,k] <- recruit.array[,,1+1,j,k] + Reshape(rbinom(NS.patches * EW.patches,pop[,,1,j,k],s1), NS.patches, EW.patches)
+    }
+  }
+  # Some juveniles survive
+  for(j in 1:NUM.sexes) {
+    for(k in 1:NUM.genotypes) {
+      juvies.surviving <- Reshape(rbinom(NS.patches * EW.patches,pop[,,2,j,k],s), NS.patches, EW.patches)
+      # Some juveniles recruit to adult age class
+      juvies.recruiting <- Reshape(rbinom(NS.patches * EW.patches,juvies.surviving,p), NS.patches, EW.patches)
+      juvies.staying <- juvies.surviving-juvies.recruiting
+      recruit.array[,,2+1,j,k] <- recruit.array[,,2+1,j,k] + juvies.recruiting
+      # The rest of the juveniles remain in the juvenile age class
+      recruit.array[,,2,j,k] <- recruit.array[,,2,j,k] + juvies.staying
+    }
+  }
+  # Some adults survive
+  for(j in 1:NUM.sexes) {
+    for(k in 1:NUM.genotypes) {
+      recruit.array[,,3,j,k] <- recruit.array[,,3,j,k] + Reshape(rbinom(NS.patches * EW.patches,pop[,,3,j,k],s), NS.patches, EW.patches)
     }
   }
   return(recruit.array)
@@ -308,20 +288,12 @@ fishing <- function(pop,gen) {
     }
     mean.per.patch.pop <- mean(each.patch.pop)
     ff <- mean.per.patch.pop*(1/fished-1)
-    if(mean.per.patch.pop > 0) {
-      for(lat in 1:NS.patches) {
-        for(lon in 1:EW.patches) {
-          patch.pop <- sum(pop[lat,lon,c(2,3),,])
-          if(patch.pop > 0) {
-            f <- patch.pop/(ff+patch.pop)
-            for(i in 2:NUM.age.classes) {
-              for(j in 1:NUM.sexes) {
-                for(k in 1:NUM.genotypes) {
-                  pop[lat,lon,i,j,k] <- rbinom(1,pop[lat,lon,i,j,k],(1-f))
-                }
-              }
-            }
-          }
+    patch.pop <- rowSums(pop[,,c(2,3),,], dims = 2)
+    f <- patch.pop/(ff+patch.pop)
+    for(i in 2:NUM.age.classes) {
+      for(j in 1:NUM.sexes) {
+        for(k in 1:NUM.genotypes) {
+          pop[,,i,j,k] <- Reshape(rbinom(NS.patches * EW.patches,pop[,,i,j,k],(1-f)), NS.patches, EW.patches)
         }
       }
     }
@@ -338,31 +310,17 @@ fishing <- function(pop,gen) {
         }
       }
     }
-    for(lat in 1:NS.patches) {
-      for(lon in 1:EW.patches) {
-        if(reserve.patches[lat,lon] == 1) {
-          each.patch.pop[lat,lon] <- NaN
-        }
-      }
-    }
+    each.patch.pop = ifelse(reserve.patches == 1, NaN, each.patch.pop)
     mean.per.patch.pop <- mean(each.patch.pop,na.rm=TRUE)
     ff <- mean.per.patch.pop*(1/fished.adj-1)
-    if(mean.per.patch.pop > 0) {
-      for(lat in 1:NS.patches) {
-        for(lon in 1:EW.patches) {
-          if(reserve.patches[lat,lon] == 0 && buffer.patches == 0) {
-            patch.pop <- sum(pop[lat,lon,c(2,3),,])
-            if(patch.pop > 0) {
-              f <- patch.pop/(ff+patch.pop)
-              for(i in 2:NUM.age.classes) {
-                for(j in 1:NUM.sexes) {
-                  for(k in 1:NUM.genotypes) {
-                    pop[lat,lon,i,j,k] <- rbinom(1,pop[lat,lon,i,j,k],(1-f))
-                  }
-                }
-              }
-            }
-          }
+    patch.pop <- rowSums(pop[,,c(2,3),,], dims=2)
+    patch.pop = ifelse(reserve.patches == 1, NaN, patch.pop)
+    f <- patch.pop/(ff+patch.pop)
+    for(i in 2:NUM.age.classes) {
+      for(j in 1:NUM.sexes) {
+        for(k in 1:NUM.genotypes) {
+          fished.array = Reshape(rbinom(NS.patches * EW.patches,pop[,,i,j,k],(1-f)), NS.patches, EW.patches)
+          pop[,,i,j,k] <- ifelse(is.na(fished.array[,]),pop[,,i,j,k],fished.array[,])
         }
       }
     }
@@ -487,12 +445,13 @@ gens <- pre.fishing.gens+pre.reserve.gens+post.reserve.gens
 
 output.array <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
 
+start_time <- Sys.time()
+
 for(rep in 1:reps) {
   #print(rep)
   pop <- init()
   SST.patches <- init_SST(gens)
   for(t in 1:gens) {
-    #print(SST.patches[,,t])
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
     pop <- recruit(pop)
@@ -502,11 +461,16 @@ for(rep in 1:reps) {
     }
     pop <- move(pop)
     print(t)
+    # print(rowSums(pop[,,3,1,], dims = 2))
   }
+  gc() #clear memory
 }
+gc()
 
-beep(5)
+end_time <- Sys.time()
+end_time - start_time
 
+beepr::beep(5)
 
 # Allie Explore -----------------------------------------------------------
 
@@ -536,7 +500,7 @@ for(a in 1:reps) {
 
 # Wrangle dataframe into plottable format
 output_df = output_df %>% 
-  pivot_longer(V1:V8,
+  pivot_longer(V1:V20,
                names_to = "lon",
                values_to = "pop") %>% 
   mutate(lon = case_when(
@@ -547,7 +511,19 @@ output_df = output_df %>%
     lon == "V5" ~ 5,
     lon == "V6" ~ 6,
     lon == "V7" ~ 7,
-    lon == "V8" ~ 8
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
   )) %>% 
   mutate(genotype = case_when(
     genotype == 1 ~ "AA",
@@ -555,6 +531,17 @@ output_df = output_df %>%
     genotype == 3 ~ "aa"
   )) %>% 
   mutate(genotype = as.factor(genotype)) %>% 
+  mutate(sex = case_when(
+    sex == 1 ~ "female",
+    sex == 2 ~ "male"
+  )) %>% 
+  mutate(sex = as.factor(sex)) %>%
+  mutate(age = case_when(
+    age == 1 ~ "baby",
+    age == 2 ~ "juvenile",
+    age == 3 ~ "adult"
+  )) %>% 
+  mutate(age = as.factor(age)) %>%
   mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon))
 
@@ -570,9 +557,9 @@ pop_sum = output_df %>%
 
 
 output_sum = full_join(geno_sum, pop_sum) %>%
-  mutate(freq = geno_pop_sum/pop_sum) 
+  mutate(freq = geno_pop_sum/pop_sum)
 
-write_csv(output_sum, here("output", "3x3NoClimate8F.csv"))
+write_csv(output_sum, here("output", "3x3NoClimate5F.csv"))
 
 
 plot_sum = output_sum %>% 
@@ -597,5 +584,5 @@ p2 / p1
 
 plot = p2 / p1
 
-ggsave(plot, file=paste0("3x3NoClimate8F.pdf"), path = here("figs"), height = 11, width = 8)
+ggsave(plot, file=paste0("3x3NoClimate5F.pdf"), path = here("figs"), height = 11, width = 8)
 
