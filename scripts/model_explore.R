@@ -14,11 +14,11 @@ options(warn=-1)
 NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 75 # The number of generations with the reserve installed
+NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
+NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-NS.patches <- 120 # the number of patches on the north-south axis
+NS.patches <- 100 # the number of patches on the north-south axis
 EW.patches <- 20 # the number of patches on the east-west axis
 patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
@@ -36,9 +36,9 @@ fished.factor <- 0.5
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(970,1090,1210,
-                 971,1091,1211,
-                 972,1092,1212) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(810,910,1010,
+                 811,911,1011,
+                 812,912,1012) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
 bold.mover.distance <- 200 # Individuals with AA genotype move this distance on average every year
 lazy.mover.distance <- 100 # Individuals with aa genotype move this distance on average every year
@@ -165,7 +165,7 @@ init_SST <- function(years) {
   #   }
   #   start_SST = start_SST + 0.018
   # }
-
+  
   return(SST.patches) ### DO NOT COMMENT OUT
 }
 
@@ -461,6 +461,7 @@ for(rep in 1:reps) {
     }
     pop <- move(pop)
     print(t)
+    # print(rowSums(pop[,,3,1,], dims = 2))
   }
   gc() #clear memory
 }
@@ -558,7 +559,7 @@ pop_sum = output_df %>%
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum)
 
-write_csv(output_sum, here("output", "3x3NoClimate8F.csv"))
+write_csv(output_sum, here("output", "3x3NoClimate5F.csv"))
 
 
 plot_sum = output_sum %>% 
@@ -583,5 +584,5 @@ p2 / p1
 
 plot = p2 / p1
 
-ggsave(plot, file=paste0("3x3NoClimate8F.pdf"), path = here("figs"), height = 11, width = 8)
+ggsave(plot, file=paste0("3x3NoClimate5F.pdf"), path = here("figs"), height = 11, width = 8)
 
