@@ -561,6 +561,7 @@ output_sum = full_join(geno_sum, pop_sum) %>%
 
 write_csv(output_sum, here("output", "3x3NoClimate2F.csv"))
 
+# output_sum = read_csv(here("output", "3x3NoClimate8F.csv"))
 
 plot_sum = output_sum %>% 
   filter(generation %in% c(25,50,75,100,125,150)) %>% 
