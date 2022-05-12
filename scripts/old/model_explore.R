@@ -559,11 +559,11 @@ pop_sum = output_df %>%
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum)
 
-write_csv(output_sum, here("output", "3x3NoClimate5F.csv"))
+write_csv(output_sum, here("output", "3x3NoClimate2F.csv"))
 
 
 plot_sum = output_sum %>% 
-  filter(generation %in% c(25,75,100,125,150)) %>% 
+  filter(generation %in% c(25,50,75,100,125,150)) %>% 
   mutate(generation = as.numeric(generation))
 
 p1 = ggplot(plot_sum, aes(lon, lat, fill = freq)) +
@@ -584,5 +584,5 @@ p2 / p1
 
 plot = p2 / p1
 
-ggsave(plot, file=paste0("3x3NoClimate5F.pdf"), path = here("figs"), height = 11, width = 8)
+ggsave(plot, file=paste0("3x3NoClimate2F.pdf"), path = here("figs"), height = 11, width = 8)
 
