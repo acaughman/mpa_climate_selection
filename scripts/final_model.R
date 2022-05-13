@@ -32,7 +32,7 @@ s <- 0.37 # survival proportion
 dd <- 0.0005 # density dependence of baby survival 
 fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished.factor <- 0.8
+fished.factor <- 0.2
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
