@@ -454,12 +454,15 @@ fishing <- function(pop,gen) {
         }
       }
     }
-    each.patch.pop = ifelse(reserve.patches == 1, NaN, each.patch.pop)
+    each.patch.pop = ifelse(reserve.patches == 1 | buffer.patches == 1, NaN, each.patch.pop)
     mean.per.patch.pop <- mean(each.patch.pop,na.rm=TRUE)
     ff <- mean.per.patch.pop*(1/fished.adj-1)
     patch.pop <- rowSums(pop[,,c(2,3),,], dims=2)
-    patch.pop = ifelse(reserve.patches == 1, NaN, patch.pop)
+    patch.pop = ifelse(reserve.patches == 1 | buffer.patches == 1, NaN, patch.pop)
     f <- patch.pop/(ff+patch.pop)
+    if(buffer.fished != 0) {
+      f = ifelse(buffer.patches == 1, buffer.fished, f)
+    }
     for(i in 2:NUM.age.classes) {
       for(j in 1:NUM.sexes) {
         for(k in 1:NUM.genotypes) {
