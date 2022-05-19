@@ -567,7 +567,7 @@ write_csv(output_sum, here("output", "3x3NoClimate5F.csv"))
 # output_sum = read_csv(here("output", "3x3NoClimate8F.csv"))
 
 plot_sum = output_sum %>% 
-  filter(generation %in% c(25,50,75,100,125,150)) %>% 
+  filter(generation %in% c(50, 75, 100)) %>% 
   mutate(generation = as.numeric(generation))
 
 p1 = ggplot(plot_sum, aes(lon, lat, fill = freq)) +
