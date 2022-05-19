@@ -11,11 +11,11 @@ options(warn=-1)
 
 ## Parameters:
 
-NUM.reps <- 1 # The number of replicate simulations to run
+NUM.reps <- 10 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
+NUM.gens.post.reserve <- 50 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 100 # the number of patches on the north-south axis
@@ -32,7 +32,7 @@ s <- 0.37 # survival proportion
 dd <- 0.0005 # density dependence of baby survival 
 fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished.factor <- 0.2
+fished.factor <- 0.5
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
@@ -451,7 +451,7 @@ output.array <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, N
 start_time <- Sys.time()
 
 for(rep in 1:reps) {
-  #print(rep)
+  print(rep)
   pop <- init()
   SST.patches <- init_SST(gens)
   for(t in 1:gens) {
@@ -562,7 +562,7 @@ pop_sum = output_df %>%
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum)
 
-write_csv(output_sum, here("output", "3x3NoClimate2F.csv"))
+write_csv(output_sum, here("output", "3x3NoClimate5F.csv"))
 
 # output_sum = read_csv(here("output", "3x3NoClimate8F.csv"))
 
@@ -588,5 +588,5 @@ p2 / p1
 
 plot = p2 / p1
 
-ggsave(plot, file=paste0("3x3NoClimate2F.pdf"), path = here("figs"), height = 11, width = 8)
+ggsave(plot, file=paste0("3x3NoClimate5F.pdf"), path = here("figs"), height = 11, width = 8)
 
