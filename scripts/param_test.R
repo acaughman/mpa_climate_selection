@@ -11,11 +11,11 @@ options(warn=-1)
 
 ## Parameters:
 
-NUM.reps <- 10 # The number of replicate simulations to run
+NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
-NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 50 # The number of generations with the reserve installed
+NUM.gens.pre.fishing <- 15 # The number of generations before any fishery
+NUM.gens.pre.reserve <- 15 # The number of generations of fishing before reserves are installed
+NUM.gens.post.reserve <- 20 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 10 # the number of patches on the north-south axis
@@ -30,8 +30,8 @@ init.a <- 0.1 # The initial frequency of the low movement allele
 sb <- 0.37 # survival proportion for babies
 s <- 0.37 # survival proportion
 dd <- 0.0005 # density dependence of baby survival 
-fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
-maturity.age <- 1.5 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
+fecundity <- 1572 # The number of babies produced, on average, by each adult female each year.
+maturity.age <- 2.2 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished.factor <- 0.5
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
 fished <- fished.factor
@@ -43,7 +43,7 @@ lazy.mover.distance <- 600 # Individuals with aa genotype move this distance on 
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 opt.temp = 25 #optimal temperature of species
-temp.range = 5 #thermal breath of species
+temp.range = 4.5 #thermal breath of species
 
 ############################################################################
 ## Create the world
