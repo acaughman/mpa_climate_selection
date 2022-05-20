@@ -20,7 +20,7 @@ years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 10 # the number of patches on the north-south axis
 EW.patches <- 10 # the number of patches on the east-west axis
-patch.size <- 500 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
+patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
 view.world
@@ -30,7 +30,7 @@ init.a <- 0.1 # The initial frequency of the low movement allele
 sb <- 0.37 # survival proportion for babies
 s <- 0.37 # survival proportion
 dd <- 0.0005 # density dependence of baby survival 
-fecundity <- 1572 # The number of babies produced, on average, by each adult female each year.
+fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 2.2 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished.factor <- 0.5
 #fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
@@ -38,8 +38,8 @@ fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 reserves.at <- c(44,54,45,55) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
-bold.mover.distance <- 800 # Individuals with AA genotype move this distance on average every year
-lazy.mover.distance <- 600 # Individuals with aa genotype move this distance on average every year
+bold.mover.distance <- 200 # Individuals with AA genotype move this distance on average every year
+lazy.mover.distance <- 100 # Individuals with aa genotype move this distance on average every year
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 opt.temp = 25 #optimal temperature of species
@@ -58,9 +58,9 @@ world <- array(0, c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.geno
 ## This populates the world.
 
 init <- function() {
-  init.AA <- round(333*(1-init.a)^2)
-  init.Aa <- round(333*2*(init.a)*(1-init.a))
-  init.aa <- round(333*(init.a)^2)
+  init.AA <- round(200*(1-init.a)^2)
+  init.Aa <- round(200*2*(init.a)*(1-init.a))
+  init.aa <- round(200*(init.a)^2)
   pop <- world
   pop[,,,,1] <- init.AA
   pop[,,,,2] <- init.Aa
@@ -449,7 +449,7 @@ output.array <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, N
 start_time <- Sys.time()
 
 for(rep in 1:reps) {
-  print(rep)
+  #print(rep)
   pop <- init()
   SST.patches <- init_SST(gens)
   for(t in 1:gens) {
@@ -501,7 +501,7 @@ for(a in 1:reps) {
 
 # Wrangle dataframe into plottable format
 output_df = output_df %>% 
-  pivot_longer(V1:V20,
+  pivot_longer(V1:V10,
                names_to = "lon",
                values_to = "pop") %>% 
   mutate(lon = case_when(
@@ -514,17 +514,7 @@ output_df = output_df %>%
     lon == "V7" ~ 7,
     lon == "V8" ~ 8,
     lon == "V9" ~ 9,
-    lon == "V10" ~ 10,
-    lon == "V11" ~ 11,
-    lon == "V12" ~ 12,
-    lon == "V13" ~ 13,
-    lon == "V14" ~ 14,
-    lon == "V15" ~ 15,
-    lon == "V16" ~ 16,
-    lon == "V17" ~ 17,
-    lon == "V18" ~ 18,
-    lon == "V19" ~ 19,
-    lon == "V20" ~ 20
+    lon == "V10" ~ 10
   )) %>% 
   mutate(genotype = case_when(
     genotype == 1 ~ "AA",
@@ -565,7 +555,7 @@ write_csv(output_sum, here("output", "3x3NoClimate5F.csv"))
 # output_sum = read_csv(here("output", "3x3NoClimate8F.csv"))
 
 plot_sum = output_sum %>% 
-  filter(generation %in% c(50, 75, 100)) %>% 
+  filter(generation %in% c(30, 40, 50)) %>% 
   mutate(generation = as.numeric(generation))
 
 p1 = ggplot(plot_sum, aes(lon, lat, fill = freq)) +
