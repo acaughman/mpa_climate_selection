@@ -1,6 +1,4 @@
 library(here)
-library(tidyverse)
-library(patchwork)
 library(pracma)
 library(beepr)
 
