@@ -1,3 +1,4 @@
+library(tidyverse)
 library(here)
 library(pracma)
 library(beepr)
@@ -10,16 +11,16 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 10 # The number of replicate simulations to run
+NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
-NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
+NUM.gens.pre.fishing <- 50 # The number of generations before any fishery
+NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 50 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 100 # the number of patches on the north-south axis
 EW.patches <- 20 # the number of patches on the east-west axis
-patch.size <- 200 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
+patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
 view.world
@@ -39,7 +40,7 @@ reserves.at <- c(810,910,1010,
                  811,911,1011,
                  812,912,1012) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
-bold.mover.distance <- 600 # Individuals with AA genotype move this distance on average every year
+bold.mover.distance <- 500 # Individuals with AA genotype move this distance on average every year
 lazy.mover.distance <- 400 # Individuals with aa genotype move this distance on average every year
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
@@ -407,24 +408,22 @@ move <- function(pop) {
                 }
               }
               # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
-              x.round = round(x/patch.size)
-              y.round = round(y/patch.size)
-              xy = as.data.frame(cbind(x.round,y.round))
-              xy_sum = xy %>% 
-                group_by(x.round, y.round) %>% 
-                summarise(sum = n())
-              xy_pivot = xy_sum %>% 
-                ungroup() %>% 
-                pivot_wider(values_from = sum, names_from = x.round)
-              final_xy = xy_pivot %>% 
-                select(-y.round)
-              final_xy[is.na(final_xy)] <- 0
-              rownames(final_xy) = unique(xy_sum$y.round)
-              final_xy = as.data.frame(final_xy)
+              xy <- as.data.frame(cbind(x,y))
+              hx <- hist(xy$x, breaks = seq(round(min(x),-2)-patch.size/2,round(max(x),-2)+patch.size/2,patch.size), plot = FALSE)
+              xbreaks <- hx$breaks
+              xmids <- hx$mids
+              hy <- hist(xy$y, breaks = seq(round(min(y),-2)-patch.size/2,round(max(y),-2)+patch.size/2,patch.size), plot = FALSE)
+              ybreaks <- hy$breaks
+              ymids <- hy$mids
+              freq <-  as.data.frame(table(cut(xy[,2], ybreaks,labels=ymids),cut(xy[,1], xbreaks,labels=xmids)))
+              freq2D <- as.data.frame(array(0,c(length(ymids),length(xmids))))
+              names(freq2D) <- xmids/patch.size
+              row.names(freq2D) <- ymids/patch.size
+              freq2D[cbind(freq[,1], freq[,2])] <- freq[,3]
               # populate the move.array with movers (and stayers)
-              for(xx in 1:length(unique(xy_sum$x.round))) {
-                for(yy in 1:length(unique(xy_sum$y.round))) {
-                  move.array[lat+as.numeric(row.names(final_xy)[yy]),lon+as.numeric(names(final_xy)[xx]),i,j] <- move.array[lat+as.numeric(row.names(final_xy)[yy]),lon+as.numeric(names(final_xy)[xx]),i,j] + final_xy[yy,xx]
+              for(xx in 1:length(xmids)) {
+                for(yy in 1:length(ymids)) {
+                  move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] <- move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] + freq2D[yy,xx]
                 }
               }
             }
