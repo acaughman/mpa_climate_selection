@@ -91,11 +91,11 @@ write_csv(output_df, here("output", "3x3NoClimate6F.csv"))
 
 #Summarize pop size and frequency by genotype
 geno_sum = output_df %>% 
-  group_by(lat, lon, rep, generation,genotype) %>% 
+  group_by(lat, lon, generation,genotype) %>% 
   summarise(geno_pop_sum = sum(pop)) 
 
 pop_sum = output_df %>% 
-  group_by(lat, lon, rep, generation) %>% 
+  group_by(lat, lon, generation) %>% 
   summarise(pop_sum = sum(pop))
 
 
