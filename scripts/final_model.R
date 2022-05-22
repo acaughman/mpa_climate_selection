@@ -449,7 +449,7 @@ output.array <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, N
 start_time <- Sys.time()
 
 for(rep in 1:reps) {
-  #print(rep)
+  print(rep)
   pop <- init()
   SST.patches <- init_SST(gens)
   for(t in 1:gens) {
