@@ -3,65 +3,64 @@ library(tidyverse)
 addTaskCallback(function(...) {set.seed(42);TRUE})
 options(warn=-1)
 
-years = 100
+years = 150
 NS.patches = 100
 EW.patches = 20
 opt.temp = 25
 
+# 0.37      29
+# 0.2909605 30
+# 0.1690133 31
+# 0.0889436 32
+# 0.0424048 33
+# 0.0183156 34
+# 0.007167  35
+
 ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-SST.patches <- array(0, c(NS.patches, EW.patches, years))
-start_SST = opt.temp + NS.patches*0.1
-
-for (i in 1:years) {
-  SST = start_SST
-  for (lat in 1:NS.patches) {
-    SST.patches[lat,,i] = SST
-    SST = SST - 0.1
-  }
-  start_SST = start_SST + 0.018
-}
-
-### UNCOMMENT FOR ENSO VARIABLE MEAN SST
 # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-# start_SST = opt.temp + NS.patches*0.1
+# start_SST = (opt.temp + 4) + NS.patches*0.01
 # 
 # for (i in 1:years) {
 #   SST = start_SST
 #   for (lat in 1:NS.patches) {
 #     SST.patches[lat,,i] = SST
-#     SST = SST - 0.1
+#     SST = SST - 0.01
 #   }
-#   start_SST = start_SST + rnorm(1, mean = 0.018, sd = 1)
+#   start_SST = start_SST + 0.018
+# }
+
+### UNCOMMENT FOR ENSO VARIABLE MEAN SST
+# SST.patches <- array(0, c(NS.patches, EW.patches, years))
+# start_SST = (opt.temp + 4) + NS.patches*0.01
+# 
+# for (i in 1:years) {
+#   SST = start_SST
+#   for (lat in 1:NS.patches) {
+#     SST.patches[lat,,i] = SST
+#     SST = SST - 0.01
+#   }
+#   start_SST = start_SST + rnorm(1, mean = 0.018, sd = .5)
 # }
 
 ### UNCOMMENT FOR SHOCK SST CHANGES
 # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-# start_SST = opt.temp + NS.patches*0.1
-# num_years = 0
-# 
-# for (i in 1:years) {
-#   #print(num_years)
-#   if (num_years <= 1) {
-#     heat_prob = runif(1, 0, 1)
-#     print(heat_prob)
-#     if ((years < 50 & heat_prob < 0.05) | (years >= 50 & heat_prob < 0.25)) {
-#       num_years <- floor(runif(1, 1, 4))
-#       intensity <- runif(1, .5, ifelse(years < 50, 2, 3))
-#       SST = start_SST + intensity
-#     } else {
-#       num_years <- 0
-#       SST = start_SST
-#     }
-#   } else if (num_years > 1) {
-#     num_years = num_years - 1
-#     SST = start_SST + intensity
-#   }
-#   for (lat in 1:NS.patches) {
-#     SST.patches[lat,,i] = SST
-#     SST = SST - 0.05
-#   }
-#   start_SST = start_SST
-# }
+start_SST = (opt.temp + 4) + NS.patches*0.01
+
+for (i in 1:years) {
+  heat_prob = runif(1, 0, 1)
+  print(i)
+  print(heat_prob)
+  if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+    intensity <- runif(1, .5, ifelse(i < 75, 2, 4))
+    SST = start_SST + intensity
+  } else {
+    SST = start_SST
+  }
+  for (lat in 1:NS.patches) {
+    SST.patches[lat,,i] = SST
+    SST = SST - 0.01
+  }
+}
 
 output_df = data.frame() #create dataframe to hold results
 
@@ -111,10 +110,9 @@ ggplot(SSTdf, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 30) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 31) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
     strip.text.x = element_blank()
   )
-
