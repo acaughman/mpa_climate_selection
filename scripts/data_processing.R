@@ -9,9 +9,9 @@ EW.patches <- 20
 NUM.age.classes <- 3 #babies, juvenile, adult
 NUM.sexes <- 2 #female male
 NUM.genotypes <- 3 #AA,Aa,aa
-NUM.gens.pre.fishing <- 50 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 50 # The number of generations with the reserve installed
+NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
+NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
+NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 gens = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 load(file = here::here("data", "3x3NoClimate6F.rda"))
