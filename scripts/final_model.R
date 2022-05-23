@@ -125,8 +125,6 @@ init_SST <- function(years) {
   # 
   # for (i in 1:years) {
   #   heat_prob = runif(1, 0, 1)
-  #   print(i)
-  #   print(heat_prob)
   #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
   #     intensity <- runif(1, .5, ifelse(i < 75, 2, 4))
   #     SST = start_SST + intensity
