@@ -9,8 +9,8 @@ EW.patches <- 20
 NUM.age.classes <- 3 #babies, juvenile, adult
 NUM.sexes <- 2 #female male
 NUM.genotypes <- 3 #AA,Aa,aa
-NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
+NUM.gens.pre.fishing <- 50 # The number of generations before any fishery
+NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 50 # The number of generations with the reserve installed
 gens = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
@@ -87,7 +87,7 @@ output_df = output_df %>%
   mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon))
 
-write_csv(output_df, here("output", "3x3NoClimate6F.csv"))
+write_csv(output_df, here::here("output", "3x3NoClimate6F.csv"))
 
 #Summarize pop size and frequency by genotype
 geno_sum = output_df %>% 
@@ -107,7 +107,7 @@ write_csv(output_sum, here("output", "3x3NoClimate6F_sum.csv"))
 # output_sum = read_csv(here("output", "3x3NoClimate8F.csv"))
 
 plot_sum = output_sum %>% 
-  filter(generation %in% c(50, 75, 100)) %>% 
+  filter(generation %in% c(100, 125, 150)) %>% 
   mutate(generation = as.numeric(generation))
 
 p1 = ggplot(plot_sum, aes(lon, lat, fill = freq)) +
@@ -115,14 +115,14 @@ p1 = ggplot(plot_sum, aes(lon, lat, fill = freq)) +
   facet_grid(genotype~generation) + 
   labs(x = "Longitude", y = "Latitude", fill = "Genotype Frequency", color = "Genotype Frequency") +
   theme_bw() +
-  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 0.4)
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 0.5)
 
 p2 = ggplot(plot_sum, aes(lon, lat, fill = geno_pop_sum)) +
   geom_tile() + 
   facet_grid(genotype~generation) + 
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size") +
   theme_bw() +
-  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 300)
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 100)
 
 p2 / p1
 
