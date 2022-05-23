@@ -8,6 +8,14 @@ NS.patches = 100
 EW.patches = 20
 opt.temp = 25
 
+calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
+  nat.m = array(0, c(nrow(SST), ncol(SST)))
+  m = 1 - exp((-(SST[,] - opt.temp)^2)/(temp.range^2)) # temperature based mortality function from Walsworth et al.
+  m = 1 - m
+  nat.m = ifelse(m > s, s, m)
+  return(nat.m)
+}
+
 # 0.37      29
 # 0.2909605 30
 # 0.1690133 31
@@ -16,40 +24,40 @@ opt.temp = 25
 # 0.0183156 34
 # 0.007167  35
 
+
+
 ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-# SST.patches <- array(0, c(NS.patches, EW.patches, years))
-# start_SST = (opt.temp + 4) + NS.patches*0.01
-# 
-# for (i in 1:years) {
-#   SST = start_SST
-#   for (lat in 1:NS.patches) {
-#     SST.patches[lat,,i] = SST
-#     SST = SST - 0.01
-#   }
-#   start_SST = start_SST + 0.018
-# }
+SST.patches.mean <- array(0, c(NS.patches, EW.patches, years))
+start_SST = (opt.temp + 3.5) + NS.patches*0.01
+
+for (i in 1:years) {
+  SST = start_SST
+  for (lat in 1:NS.patches) {
+    SST.patches.mean[lat,,i] = SST
+    SST = SST - 0.01
+  }
+  start_SST = start_SST + 0.018
+}
 
 ### UNCOMMENT FOR ENSO VARIABLE MEAN SST
-# SST.patches <- array(0, c(NS.patches, EW.patches, years))
-# start_SST = (opt.temp + 4) + NS.patches*0.01
-# 
-# for (i in 1:years) {
-#   SST = start_SST
-#   for (lat in 1:NS.patches) {
-#     SST.patches[lat,,i] = SST
-#     SST = SST - 0.01
-#   }
-#   start_SST = start_SST + rnorm(1, mean = 0.018, sd = .5)
-# }
+SST.patches.enso <- array(0, c(NS.patches, EW.patches, years))
+start_SST = (opt.temp + 3.5) + NS.patches*0.01
+
+for (i in 1:years) {
+  SST = start_SST
+  for (lat in 1:NS.patches) {
+    SST.patches.enso[lat,,i] = SST
+    SST = SST - 0.01
+  }
+  start_SST = start_SST + rnorm(1, mean = 0.018, sd = .5)
+}
 
 ### UNCOMMENT FOR SHOCK SST CHANGES
-SST.patches <- array(0, c(NS.patches, EW.patches, years))
-start_SST = (opt.temp + 4) + NS.patches*0.01
+SST.patches.shock <- array(0, c(NS.patches, EW.patches, years))
+start_SST = (opt.temp + 3.5) + NS.patches*0.01
 
 for (i in 1:years) {
   heat_prob = runif(1, 0, 1)
-  print(i)
-  print(heat_prob)
   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
     intensity <- runif(1, .5, ifelse(i < 75, 2, 4))
     SST = start_SST + intensity
@@ -57,24 +65,29 @@ for (i in 1:years) {
     SST = start_SST
   }
   for (lat in 1:NS.patches) {
-    SST.patches[lat,,i] = SST
+    SST.patches.shock[lat,,i] = SST
     SST = SST - 0.01
   }
 }
 
-output_df = data.frame() #create dataframe to hold results
+output_df_mean = data.frame() #create dataframe to hold results
+output_df_enso = data.frame()
+output_df_shock = data.frame()
+
+
+# Mean --------------------------------------------------------------------
 
 for(b in 1:years) {
-  SSTdf = SST.patches[,,b] %>% 
+  SSTdf_mean = SST.patches.mean[,,b] %>% 
     as.data.frame() 
   
-  SSTdf$lat = c(1:NS.patches)
-  SSTdf$year = paste0(b)
+  SSTdf_mean$lat = c(1:NS.patches)
+  SSTdf_mean$year = paste0(b)
   
-  output_df = bind_rows(output_df, SSTdf)
+  output_df_mean = bind_rows(output_df_mean, SSTdf_mean)
 }
 
-SSTdf = output_df %>% 
+SSTdf_mean = output_df_mean %>% 
   pivot_longer(V1:V20,
                names_to = "lon",
                values_to = "sst") %>% 
@@ -101,18 +114,164 @@ SSTdf = output_df %>%
     lon == "V20" ~ 20
     )) %>% 
   mutate(year = as.numeric(year))
-  # filter(year %in% c(20,40,60,80,100,120,140,150)) %>% 
-  # 
 
-#SSTdf$year = factor(SSTdf$year, levels = c(20,40,60,80,100,120,140,150)) #reorder factor year
-
-ggplot(SSTdf, aes(lon, lat, fill = sst)) +
+mt = ggplot(SSTdf_mean, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 31) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 30.5) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
-    strip.text.x = element_blank()
-  )
+    strip.text.x = element_blank())
+
+SSTdf_mean = SSTdf_mean %>% 
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4.5^2)))) %>% 
+  mutate(survival = ifelse(mortality > 0.37, 0.37, mortality))
+
+mm = ggplot(SSTdf_mean, aes(lon, lat, fill = survival)) +
+  geom_tile() +
+  labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
+  theme_bw() +
+  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .2) +
+  facet_wrap(~year) + 
+  theme(
+    strip.background = element_blank(),
+    strip.text.x = element_blank())
+
+# ENSO --------------------------------------------------------------------
+
+for(b in 1:years) {
+  SSTdf_enso = SST.patches.enso[,,b] %>% 
+    as.data.frame() 
+  
+  SSTdf_enso$lat = c(1:NS.patches)
+  SSTdf_enso$year = paste0(b)
+  
+  output_df_enso = bind_rows(output_df_enso, SSTdf_enso)
+}
+
+SSTdf_enso = output_df_enso %>% 
+  pivot_longer(V1:V20,
+               names_to = "lon",
+               values_to = "sst") %>% 
+  mutate(lon = case_when(
+    lon == "V1" ~ 1,
+    lon == "V2" ~ 2,
+    lon == "V3" ~ 3,
+    lon == "V4" ~ 4,
+    lon == "V5" ~ 5,
+    lon == "V6" ~ 6,
+    lon == "V7" ~ 7,
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
+  )) %>% 
+  mutate(year = as.numeric(year))
+
+et = ggplot(SSTdf_enso, aes(lon, lat, fill = sst)) +
+  geom_tile() +
+  labs(x = "Longitude", y = "Latitude", fill = "SST") +
+  theme_bw() +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 30.5) +
+  facet_wrap(~year) + 
+  theme(
+    strip.background = element_blank(),
+    strip.text.x = element_blank())
+
+SSTdf_enso = SSTdf_enso %>% 
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4.5^2)))) %>% 
+  mutate(survival = ifelse(mortality > 0.37, 0.37, mortality))
+
+em = ggplot(SSTdf_enso, aes(lon, lat, fill = survival)) +
+  geom_tile() +
+  labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
+  theme_bw() +
+  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .2) +
+  facet_wrap(~year) + 
+  theme(
+    strip.background = element_blank(),
+    strip.text.x = element_blank())
+
+# shock -------------------------------------------------------------------
+
+for(b in 1:years) {
+  SSTdf_shock = SST.patches.shock[,,b] %>% 
+    as.data.frame() 
+  
+  SSTdf_shock$lat = c(1:NS.patches)
+  SSTdf_shock$year = paste0(b)
+  
+  output_df_shock = bind_rows(output_df_shock, SSTdf_shock)
+}
+
+SSTdf_shock = output_df_shock %>% 
+  pivot_longer(V1:V20,
+               names_to = "lon",
+               values_to = "sst") %>% 
+  mutate(lon = case_when(
+    lon == "V1" ~ 1,
+    lon == "V2" ~ 2,
+    lon == "V3" ~ 3,
+    lon == "V4" ~ 4,
+    lon == "V5" ~ 5,
+    lon == "V6" ~ 6,
+    lon == "V7" ~ 7,
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
+  )) %>% 
+  mutate(year = as.numeric(year))
+
+st = ggplot(SSTdf_shock, aes(lon, lat, fill = sst)) +
+  geom_tile() +
+  labs(x = "Longitude", y = "Latitude", fill = "SST") +
+  theme_bw() +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 30.5) +
+  facet_wrap(~year) + 
+  theme(
+    strip.background = element_blank(),
+    strip.text.x = element_blank())
+
+SSTdf_shock = SSTdf_shock %>% 
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4.5^2)))) %>% 
+  mutate(survival = ifelse(mortality > 0.37, 0.37, mortality))
+
+sm = ggplot(SSTdf_shock, aes(lon, lat, fill = survival)) +
+  geom_tile() +
+  labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
+  theme_bw() +
+  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .2) +
+  facet_wrap(~year) + 
+  theme(
+    strip.background = element_blank(),
+    strip.text.x = element_blank())
+
+mt 
+mm
+
+et
+em
+
+st
+sm
