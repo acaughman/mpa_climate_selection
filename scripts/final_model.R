@@ -11,7 +11,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 1 # The number of replicate simulations to run
+NUM.reps <- 10 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 50 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 50 # The number of generations of fishing before reserves are installed
@@ -25,7 +25,7 @@ patch.size <- 100 # the width and height of each grid cell in nautical miles (CO
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
 view.world
 
-init.a <- 0.1  # The initial frequency of the low movement allele
+init.a <- 0.3  # The initial frequency of the low movement allele
 
 sb <- 0.37 # survival proportion for babies
 s <- 0.37 # survival proportion
@@ -33,15 +33,15 @@ dd <- 0.0005 # density dependence of baby survival
 fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 2 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished.factor <- 0.6
-#fished <- fished.factor*(1-s) # Fishing mortalty: the proportion of adults that get fished per year
+#fished <- fished.factor*(1-s) # Fishing mortality: the proportion of adults that get fished per year
 fished <- fished.factor
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 reserves.at <- c(810,910,1010,
                  811,911,1011,
                  812,912,1012) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
-bold.mover.distance <- 500 # Individuals with AA genotype move this distance on average every year
-lazy.mover.distance <- 400 # Individuals with aa genotype move this distance on average every year
+bold.mover.distance <- 400 # Individuals with AA genotype move this distance on average every year
+lazy.mover.distance <- 300 # Individuals with aa genotype move this distance on average every year
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 opt.temp = 25 #optimal temperature of species
@@ -464,7 +464,6 @@ for(rep in 1:reps) {
     }
     pop <- move(pop)
     print(t)
-    # print(rowSums(pop[,,3,1,], dims = 2))
   }
   gc() #clear memory
 }
