@@ -267,11 +267,9 @@ sm = ggplot(SSTdf_shock, aes(lon, lat, fill = survival)) +
     strip.background = element_blank(),
     strip.text.x = element_blank())
 
-mt 
-mm
-
-et
-em
-
-st
-sm
+ggsave(mt, file=paste0("mean_temp.pdf"), path = here("figs", "climate"), height = 15, width = 10)
+ggsave(mm, file=paste0("mean_mortality.pdf"), path = here("figs", "climate"), height = 15, width = 10)
+ggsave(et, file=paste0("enso_temp.pdf"), path = here("figs", "climate"), height = 15, width = 10)
+ggsave(em, file=paste0("enso_mortality.pdf"), path = here("figs", "climate"), height = 15, width = 10)
+ggsave(st, file=paste0("shock_temp.pdf"), path = here("figs", "climate"), height = 15, width = 10)
+ggsave(sm, file=paste0("shock_mortality.pdf"), path = here("figs", "climate"), height = 15, width = 10)
