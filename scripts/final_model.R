@@ -104,66 +104,39 @@ buffer.patches <- where.buffer(buffer.at)
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  SST.patches <- array(25, c(NS.patches, EW.patches, years))
+  SST.patches <- array(opt.temp + 4, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = opt.temp + NS.patches*0.1
+  # start_SST = (opt.temp + 4) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   SST = start_SST
-  #   if (SST > 35) {
-  #     SST = 35
-  #   }
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.1
+  #     SST = SST - 0.01
   #   }
-  #   start_SST = start_SST + 0.018
-  # }
-  
-  ### UNCOMMENT FOR ENSO VARIABLE MEAN SST
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = opt.temp + NS.patches*0.1
-  # 
-  # for (i in 1:years) {
-  #   SST = start_SST
-  #   if (SST > 35) {
-  #     SST = 35
-  #   }
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.1
-  #   }
-  #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = 0.1)
+  #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = .5)
   # }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = opt.temp + NS.patches*0.1
+  # start_SST = (opt.temp + 4) + NS.patches*0.01
   # 
   # for (i in 1:years) {
-  #   #print(num_years)
-  #   if (num_years == 0) {
-  #     heat_prob = runif(1, 0, 1)
-  #     if (heat_prob > 0.8) {
-  #       num_years <- floor(runif(1, 1, 4))
-  #       intensity <- runif(1, 1, 3)
-  #       SST = start_SST + intensity
-  #     } else {
-  #       num_years <- 0
-  #       SST = start_SST
-  #     }
-  #   } else if (num_years != 0) {
-  #     num_years = num_years - 1
+  #   heat_prob = runif(1, 0, 1)
+  #   print(i)
+  #   print(heat_prob)
+  #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+  #     intensity <- runif(1, .5, ifelse(i < 75, 2, 4))
   #     SST = start_SST + intensity
+  #   } else {
+  #     SST = start_SST
   #   }
-  #   print(SST)
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.1
+  #     SST = SST - 0.01
   #   }
-  #   start_SST = start_SST + 0.018
   # }
   
   return(SST.patches) ### DO NOT COMMENT OUT
