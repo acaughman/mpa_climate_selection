@@ -43,7 +43,7 @@ opt.temp = 25
 # }
 
 ### UNCOMMENT FOR SHOCK SST CHANGES
-# SST.patches <- array(0, c(NS.patches, EW.patches, years))
+SST.patches <- array(0, c(NS.patches, EW.patches, years))
 start_SST = (opt.temp + 4) + NS.patches*0.01
 
 for (i in 1:years) {
