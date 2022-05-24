@@ -11,11 +11,11 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 10 # The number of replicate simulations to run
+NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
-NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
+NUM.gens.pre.fishing <- 0 # The number of generations before any fishery
+NUM.gens.pre.reserve <- 0 # The number of generations of fishing before reserves are installed
+NUM.gens.post.reserve <- 30 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 100 # the number of patches on the north-south axis
@@ -27,11 +27,11 @@ view.world
 
 init.a <- 0.3  # The initial frequency of the low movement allele
 
-sb <- 0.37 # survival proportion for babies
-s <- 0.37 # survival proportion
-dd <- 0.0005 # density dependence of baby survival 
-fecundity <- 1500 # The number of babies produced, on average, by each adult female each year.
-maturity.age <- 2 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
+sb <- 0.58 # survival proportion for babies
+s <- 0.58 # survival proportion
+dd <- 0.000005 # density dependence of baby survival 
+fecundity <- 180000 # The number of babies produced, on average, by each adult female each year.
+maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished.factor <- 0.6
 #fished <- fished.factor*(1-s) # Fishing mortality: the proportion of adults that get fished per year
 fished <- fished.factor
@@ -45,7 +45,7 @@ lazy.mover.distance <- 300 # Individuals with aa genotype move this distance on 
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 opt.temp = 25 #optimal temperature of species
-temp.range = 4.5 #thermal breath of species
+temp.range = 5 #thermal breath of species
 
 ############################################################################
 ## Create the world
@@ -60,9 +60,9 @@ world <- array(0, c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.geno
 ## This populates the world.
 
 init <- function() {
-  init.AA <- round(200*(1-init.a)^2)
-  init.Aa <- round(200*2*(init.a)*(1-init.a))
-  init.aa <- round(200*(init.a)^2)
+  init.AA <- round(50*(1-init.a)^2)
+  init.Aa <- round(50*2*(init.a)*(1-init.a))
+  init.aa <- round(50*(init.a)^2)
   pop <- world
   pop[,,,,1] <- init.AA
   pop[,,,,2] <- init.Aa
@@ -108,7 +108,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches.mean <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 3.5) + NS.patches*0.01
+  # start_SST = (opt.temp + 4) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -121,7 +121,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 3.5) + NS.patches*0.01
+  # start_SST = (opt.temp + 4) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -129,17 +129,17 @@ init_SST <- function(years) {
   #     SST.patches[lat,,i] = SST
   #     SST = SST - 0.01
   #   }
-  #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = .5)
+  #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = .25)
   # }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 3.5) + NS.patches*0.01
+  # start_SST = (opt.temp + 4) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   heat_prob = runif(1, 0, 1)
   #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-  #     intensity <- runif(1, .5, ifelse(i < 75, 2, 4))
+  #     intensity <- runif(1, .5, ifelse(i < 75, 2, 3))
   #     SST = start_SST + intensity
   #   } else {
   #     SST = start_SST
@@ -410,6 +410,27 @@ move <- function(pop) {
                   move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] <- move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] + freq2D[yy,xx]
                 }
               }
+              # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
+              # x.round = round(x/patch.size)
+              # y.round = round(y/patch.size)
+              # xy = as.data.frame(cbind(x.round,y.round))
+              # xy_sum = xy %>%
+              #   group_by(x.round, y.round) %>%
+              #   summarise(sum = n())
+              # xy_pivot = xy_sum %>%
+              #   ungroup() %>%
+              #   pivot_wider(values_from = sum, names_from = x.round)
+              # final_xy = xy_pivot %>%
+              #   select(-y.round)
+              # final_xy[is.na(final_xy)] <- 0
+              # final_xy = as.data.frame(final_xy)
+              # rownames(final_xy) = sort(unique(xy_sum$y.round))
+              # # populate the move.array with movers (and stayers)
+              # for(xx in 1:length(unique(xy_sum$x.round))) {
+              #   for(yy in 1:length(unique(xy_sum$y.round))) {
+              #     move.array[lat+as.numeric(row.names(final_xy)[yy]),lon+as.numeric(names(final_xy)[xx]),i,j,k] <- move.array[lat+as.numeric(row.names(final_xy)[yy]),lon+as.numeric(names(final_xy)[xx]),i,j,k] + final_xy[yy,xx]
+              #   }
+              # }
             }
           }
         }
