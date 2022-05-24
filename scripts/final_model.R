@@ -101,7 +101,7 @@ init_SST <- function(years) {
   #     SST.patches[lat,,i] = SST
   #     SST = SST - 0.01
   #   }
-  #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = .25)
+  #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = .2)
   # }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
