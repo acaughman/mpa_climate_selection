@@ -17,18 +17,18 @@ calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
 }
 
 # 0.37      29
-# 0.2909605 30
-# 0.1690133 31
-# 0.0889436 32
-# 0.0424048 33
-# 0.0183156 34
-# 0.007167  35
+# 0.3678794 30
+# 0.2369278 31
+# 0.1408584 32
+# 0.0773    33
+# 0.0391639 34
+# 0.0183156 35
 
 
 
 ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
 SST.patches.mean <- array(0, c(NS.patches, EW.patches, years))
-start_SST = (opt.temp + 3.5) + NS.patches*0.01
+start_SST = (opt.temp + 4) + NS.patches*0.01
 
 for (i in 1:years) {
   SST = start_SST
@@ -41,7 +41,7 @@ for (i in 1:years) {
 
 ### UNCOMMENT FOR ENSO VARIABLE MEAN SST
 SST.patches.enso <- array(0, c(NS.patches, EW.patches, years))
-start_SST = (opt.temp + 3.5) + NS.patches*0.01
+start_SST = (opt.temp + 4) + NS.patches*0.01
 
 for (i in 1:years) {
   SST = start_SST
@@ -54,7 +54,7 @@ for (i in 1:years) {
 
 ### UNCOMMENT FOR SHOCK SST CHANGES
 SST.patches.shock <- array(0, c(NS.patches, EW.patches, years))
-start_SST = (opt.temp + 3.5) + NS.patches*0.01
+start_SST = (opt.temp + 4) + NS.patches*0.01
 
 for (i in 1:years) {
   heat_prob = runif(1, 0, 1)

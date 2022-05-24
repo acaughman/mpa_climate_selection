@@ -8,7 +8,7 @@ SST = seq(0, 50) #sea surface temperatures to model
 
 opt.temp = 25 # optimal temperature ranges
 
-temp.range = 4.5 # thermal performance range, w
+temp.range = 5 # thermal performance range, w
 
 
 # Mortality Function ------------------------------------------------------
