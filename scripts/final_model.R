@@ -29,7 +29,7 @@ init.a <- 0.3  # The initial frequency of the low movement allele
 
 sb <- 0.58 # survival proportion for babies
 s <- 0.58 # survival proportion
-dd <- 0.005 # density dependence of baby survival 
+dd <- 0.0001 # density dependence of baby survival 
 fecundity <- 2000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.8
@@ -37,6 +37,7 @@ buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, hig
 reserves.at <- c(810,910,1010,
                  811,911,1011,
                  812,912,1012) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+dynamic.reserve = FALSE
 buffer.at <- c()
 bold.mover.distance <- 300 # Individuals with AA genotype move this distance on average every year
 lazy.mover.distance <- 200 # Individuals with aa genotype move this distance on average every year
@@ -68,33 +69,6 @@ init <- function() {
   return(pop)
 }
 
-############################################################################
-## This function creates an array to tell the simulation the reserve locations
-
-where.reserves <- function(reserves.at) {
-  reserve.patches <- array(0, c(NS.patches, EW.patches))
-  for(i in 1:length(reserves.at)) {
-    x <- ((reserves.at[i]-1) %/% NS.patches) + 1
-    y <- ((reserves.at[i]-1) %% NS.patches) + 1
-    reserve.patches[y,x] <- 1
-  }
-  return(reserve.patches)
-}
-reserve.patches <- where.reserves(reserves.at)
-
-############################################################################
-## This function creates an array to tell the simulation the buffer/fishing the line locations
-
-where.buffer <- function(buffer.at) {
-  buffer.patches <- array(0, c(NS.patches, EW.patches))
-  for(i in 1:length(buffer.at)) {
-    x <- ((buffer.at[i]-1) %/% NS.patches) + 1
-    y <- ((buffer.at[i]-1) %% NS.patches) + 1
-    buffer.patches[y,x] <- 1
-  }
-  return(buffer.patches)
-}
-buffer.patches <- where.buffer(buffer.at)
 
 ############################################################################
 ## This function sets up the Sea surface temperature grid
@@ -102,16 +76,16 @@ buffer.patches <- where.buffer(buffer.at)
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  SST.patches <- array(opt.temp + 3.5, c(NS.patches, EW.patches, years))
+  SST.patches <- array(opt.temp + 4, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-  # SST.patches.mean <- array(0, c(NS.patches, EW.patches, years))
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
   # start_SST = (opt.temp + 4) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   SST = start_SST
   #   for (lat in 1:NS.patches) {
-  #     SST.patches.mean[lat,,i] = SST
+  #     SST.patches[lat,,i] = SST
   #     SST = SST - 0.01
   #   }
   #   start_SST = start_SST + 0.018
@@ -129,7 +103,7 @@ init_SST <- function(years) {
   #   }
   #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = .25)
   # }
-
+  
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
   # start_SST = (opt.temp + 4) + NS.patches*0.01
@@ -150,6 +124,52 @@ init_SST <- function(years) {
   
   return(SST.patches) ### DO NOT COMMENT OUT
 }
+
+############################################################################
+## This function creates an array to tell the simulation the reserve locations
+
+where.reserves <- function(reserves.at) {
+  if (dynamic.reserve) {
+    reserve.patches <- array(0, c(NS.patches, EW.patches, years))
+    count = 1
+    for(j in 1:years) {
+      for(i in 1:length(reserves.at)) {
+        x <- ((reserves.at[i]-1) %/% NS.patches) + 1
+        y <- ((reserves.at[i]-1) %% NS.patches) + 1
+        if (count < 10) {
+          if (SST.patches[y,x,j] >= 31) {
+            reserves.at = reserves.at + 8
+            count = count + 1
+          }
+        }
+        reserve.patches[y,x,j] <- 1
+      }
+    }
+  } else {
+    reserve.patches <- array(0, c(NS.patches, EW.patches))
+    for(i in 1:length(reserves.at)) {
+      x <- ((reserves.at[i]-1) %/% NS.patches) + 1
+      y <- ((reserves.at[i]-1) %% NS.patches) + 1
+      reserve.patches[y,x] <- 1
+    }
+  }
+  return(reserve.patches)
+}
+reserve.patches <- where.reserves(reserves.at)
+
+############################################################################
+## This function creates an array to tell the simulation the buffer/fishing the line locations
+
+where.buffer <- function(buffer.at) {
+  buffer.patches <- array(0, c(NS.patches, EW.patches))
+  for(i in 1:length(buffer.at)) {
+    x <- ((buffer.at[i]-1) %/% NS.patches) + 1
+    y <- ((buffer.at[i]-1) %% NS.patches) + 1
+    buffer.patches[y,x] <- 1
+  }
+  return(buffer.patches)
+}
+buffer.patches <- where.buffer(buffer.at)
 
 ############################################################################
 ## This function causes adults to reproduce in spawning areas
