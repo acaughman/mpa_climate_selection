@@ -1,0 +1,971 @@
+species,M,,FecundityMax,tm,AgeMatMin,,species,TempPreferred,TempPref50,TempMin,TempMax,range,,species,FBname,homerange,habitat,measure
+Acanthurus coeruleus,1.49,0.225372656,NA,NA,NA,,Acanthopagrus schlegelii,17,17,NA,NA,,,Argentina sphyraena,Argentine,0.018988855,bathydemersal,km^2
+Acanthurus nigrofuscus,NA,,NA,2,NA,,Acanthurus nigrofuscus,NA,NA,24,28,4,,Cyttus traversi,King dory,0.01820937,bathydemersal,km^2
+Acanthurus nigrofuscus,NA,,NA,2,NA,,Alepes djedaba,27,27,NA,NA,,,Lophius budegassa,Blackbellied angler,0.014549885,bathydemersal,km^2
+Alosa pseudoharengus,NA,,NA,NA,4,,Alosa pseudoharengus,8,8,NA,NA,,,Lophius gastrophysus,Blackfin goosefish,0.014593806,bathydemersal,km^2
+Alosa pseudoharengus,NA,,NA,NA,2,,Argentina sphyraena,16,16,NA,NA,,,Plagiogeneion rubiginosum,Rubyfish,0.010402114,bathydemersal,km^2
+Alosa pseudoharengus,NA,,NA,NA,3,,Atheresthes evermanni,5,6,NA,NA,,,Pontinus kuhlii,Offshore rockfish,0.016549544,bathydemersal,km^2
+Alosa pseudoharengus,NA,,NA,NA,1,,Balistes capriscus,24,25,NA,NA,,,Argentina sphyraena,NA,0.018988855,bathydemersal,km^2
+Alosa pseudoharengus,NA,,NA,NA,2,,Bathyraja eatonii,-1,0,NA,NA,,,Cyttus traversi,NA,0.01820937,bathydemersal,km^2
+Alosa pseudoharengus,NA,,NA,3,NA,,Carangoides bajad,28,28,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Alosa pseudoharengus,NA,,NA,2,NA,,Carangoides fulvoguttatus,28,28,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Alosa pseudoharengus,NA,,NA,NA,2,,Carangoides malabaricus,27,27,NA,NA,,,Lophius gastrophysus,NA,0.014593806,bathydemersal,km^2
+Alosa pseudoharengus,NA,,360000,NA,NA,,Caranx crysos,24,25,NA,NA,,,Plagiogeneion rubiginosum,NA,0.010402114,bathydemersal,km^2
+Alosa pseudoharengus,NA,,360000,NA,NA,,Caranx ruber,23,25,NA,NA,,,Pontinus kuhlii,NA,0.016549544,bathydemersal,km^2
+Alosa pseudoharengus,NA,,456700,NA,NA,,Caulolatilus princeps,27,27,NA,NA,,,Argentina sphyraena,NA,0.018988855,bathydemersal,km^2
+Alosa pseudoharengus,NA,,660000,NA,NA,,Cyttus traversi,17,18,NA,NA,,,Cyttus traversi,NA,0.01820937,bathydemersal,km^2
+Alosa pseudoharengus,NA,,10011,NA,NA,,Dicentrarchus labrax,11,14,8,24,16,,Cyttus traversi,NA,0.01820937,bathydemersal,km^2
+Alosa pseudoharengus,NA,,22407,NA,NA,,Epinephelus marginatus,26,25,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Alosa pseudoharengus,0.7,0.496585304,NA,NA,NA,,Epinephelus striatus,26,27,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Argentina sphyraena,0.62,0.537944438,NA,NA,NA,,Epinephelus striatus,26,27,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Balistes capriscus,NA,,NA,1,NA,,Hoplostethus atlanticus,19,18,3,9,6,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Caranx crysos,NA,,1546000,NA,NA,,Ilisha elongata,23,23,NA,NA,,,Lophius gastrophysus,NA,0.014593806,bathydemersal,km^2
+Caranx ruber,NA,,NA,3,NA,,Kyphosus sectatrix,26,26,NA,NA,,,Plagiogeneion rubiginosum,NA,0.010402114,bathydemersal,km^2
+Caranx ruber,NA,,1000000,NA,NA,,Leiostomus xanthurus,22,23,NA,NA,,,Pontinus kuhlii,NA,0.016549544,bathydemersal,km^2
+Caranx ruber,1.4,0.246596964,NA,NA,NA,,Lepidorhynchus denticulatus,16,15,NA,NA,,,Cyttus traversi,NA,0.01820937,bathydemersal,km^2
+Cheilinus undulatus,NA,,NA,NA,5,,Lethrinus harak,28,28,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Cyttus traversi,NA,,NA,6.300000191,NA,,Lophius budegassa,25,25,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Cyttus traversi,NA,,NA,5.199999809,NA,,Mallotus villosus,3,3,NA,NA,,,Plagiogeneion rubiginosum,NA,0.010402114,bathydemersal,km^2
+Cyttus traversi,0.12,0.886920437,NA,6.3,NA,,Menticirrhus saxatilis,25,26,NA,NA,,,Pontinus kuhlii,NA,0.016549544,bathydemersal,km^2
+Cyttus traversi,0.12,0.886920437,NA,5.2,NA,,Micropogonias undulatus,25,26,NA,NA,,,Argentina sphyraena,NA,0.018988855,bathydemersal,km^2
+Dicentrarchus labrax,NA,,NA,4,NA,,Mycteroperca microlepis,24,26,NA,NA,,,Cyttus traversi,NA,0.01820937,bathydemersal,km^2
+Dicentrarchus labrax,NA,,NA,2,NA,,Mycteroperca phenax,22,23,NA,NA,,,Cyttus traversi,NA,0.01820937,bathydemersal,km^2
+Dicentrarchus labrax,NA,,NA,4,NA,,Opisthonema oglinum,25,26,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Dicentrarchus labrax,NA,,NA,2,NA,,Osmerus mordax,2,3,6,18.3,12.3,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Dicentrarchus labrax,NA,,NA,NA,3,,Otolithes ruber,27,28,26,29,3,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Dicentrarchus labrax,NA,,NA,NA,4,,Pagellus acarne,19,19,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Dicentrarchus labrax,NA,,NA,NA,5,,Parastromateus niger,27,28,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Dicentrarchus labrax,NA,,NA,NA,4,,Parophrys vetulus,9,10,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Dicentrarchus labrax,NA,,808581,NA,NA,,Patagonotothen ramsayi,9,10,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Dicentrarchus labrax,0.1,0.904837418,NA,NA,NA,,Pennahia argentata,25,24,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Dicentrarchus labrax,0.1,0.904837418,NA,NA,NA,,Pentanemus quinquarius,25,26,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Dicentrarchus labrax,0.11,0.895834135,NA,NA,NA,,Phycis phycis,20,20,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Epinephelus marginatus,NA,,NA,5,5,,Plectropomus leopardus,NA,NA,24,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Epinephelus marginatus,NA,,NA,NA,5,,Plectropomus leopardus,NA,NA,24,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Epinephelus marginatus,NA,,NA,6.300000191,5,,Plectropomus leopardus,NA,NA,24,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Epinephelus marginatus,NA,,NA,6.300000191,NA,,Pollachius pollachius,9,10,NA,NA,,,Lophius budegassa,NA,0.014549885,bathydemersal,km^2
+Epinephelus marginatus,NA,,NA,7,NA,,Pontinus kuhlii,27,27,NA,NA,,,Plagiogeneion rubiginosum,NA,0.010402114,bathydemersal,km^2
+Epinephelus marginatus,NA,,NA,12,NA,,Salilota australis,8,9,NA,NA,,,Pontinus kuhlii,NA,0.016549544,bathydemersal,km^2
+Epinephelus marginatus,NA,,7984835,NA,NA,,Sardina pilchardus,16,16,NA,NA,,,Pontinus kuhlii,NA,0.016549544,bathydemersal,km^2
+Epinephelus marginatus,0.1,0.904837418,NA,NA,NA,,Scomberoides commersonnianus,27,28,NA,NA,,,Pontinus kuhlii,NA,0.016549544,bathydemersal,km^2
+Epinephelus marginatus,0.05,0.951229425,NA,NA,NA,,Scomberoides lysan,28,28,26,29,3,,Pontinus kuhlii,NA,0.016549544,bathydemersal,km^2
+Epinephelus striatus,0.24,0.786627861,NA,NA,NA,,Scomberomorus tritor,24,24,NA,NA,,,Pontinus kuhlii,NA,0.016549544,bathydemersal,km^2
+Epinephelus striatus,0.24,0.786627861,NA,NA,NA,,Selene setapinnis,25,26,NA,NA,,,Pontinus kuhlii,NA,0.016549544,bathydemersal,km^2
+Haemulon sciurus,NA,,NA,2,NA,,Semicossyphus pulcher,23,22,NA,NA,,,Pontinus kuhlii,NA,0.016549544,bathydemersal,km^2
+Haemulon sciurus,NA,,NA,2,NA,,Stromateus fiatola,24,25,NA,NA,,,Hoplostethus atlanticus,Orange roughy,0.017285772,bathypelagic,km^2
+Haemulon sciurus,NA,,250000,NA,NA,,Tautogolabrus adspersus,7,7,NA,NA,,,Lepidorhynchus denticulatus,Thorntooth grenadier,0.022432058,bathypelagic,km^2
+Haemulon sciurus,NA,,250000,NA,NA,,Tenualosa ilisha,27,27,NA,NA,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Haemulon sciurus,0.9,0.40656966,NA,NA,NA,,Tenualosa toli,28,28,NA,NA,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Haemulon sciurus,0.9,0.40656966,NA,NA,NA,,Trachinotus blochii,28,28,NA,NA,,,Lepidorhynchus denticulatus,NA,0.022432058,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,NA,32,NA,,Trachinotus carolinus,23,25,NA,NA,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,NA,NA,20,,Trisopterus esmarkii,9,9,NA,NA,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,NA,NA,6,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,NA,NA,11,,,,,,,5,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,NA,NA,5,,,,,,,7.383333333,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,NA,NA,9,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,NA,34,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,NA,33,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,NA,27.5,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,90000,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,90000,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,90000,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,91260,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,84290,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,103570,NA,NA,,,,,,,,,Lepidorhynchus denticulatus,NA,0.022432058,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,184820,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,65530,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,350000,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Hoplostethus atlanticus,NA,,244578,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Ilisha elongata,NA,,NA,2,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Ilisha elongata,NA,,270900,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Ilisha elongata,NA,,NA,2,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Leiostomus xanthurus,1.1,0.332871084,NA,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Lethrinus harak,NA,,NA,NA,1,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Lethrinus harak,NA,,NA,1.5,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Lethrinus harak,1.107,0.330549122,NA,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Lethrinus harak,0.723,0.485294187,NA,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Lethrinus harak,0.717,0.488214705,NA,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Lethrinus harak,0.632,0.531527682,NA,NA,NA,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Lophius budegassa,NA,,NA,NA,4,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Lophius budegassa,NA,,NA,NA,9,,,,,,,,,Hoplostethus atlanticus,NA,0.017285772,bathypelagic,km^2
+Lophius budegassa,NA,,NA,NA,7,,,,,,,,,Otolithes ruber,Tigertooth croaker,0.015743009,benthopelagic,km^2
+Lophius budegassa,NA,,NA,NA,8,,,,,,,,,Pagellus acarne,Axillary seabream,0.010291201,benthopelagic,km^2
+Lophius budegassa,NA,,46320,NA,NA,,,,,,,,,Pennahia argentata,Silver croaker,0.018372,benthopelagic,km^2
+Lophius budegassa,NA,,398986,NA,NA,,,,,,,,,Patagonotothen ramsayi,Longtail southern cod,0.020587932,benthopelagic,km^2
+Lophius budegassa,NA,,NA,5,NA,,,,,,,,,Phycis phycis,Forkbeard,0.01602246,benthopelagic,km^2
+Mallotus villosus,NA,,NA,NA,2,,,,,,,,,Pollachius pollachius,Pollack,0.015540189,benthopelagic,km^2
+Mallotus villosus,NA,,NA,3,NA,,,,,,,,,Selene setapinnis,Atlantic moonfish,0.016886293,benthopelagic,km^2
+Mallotus villosus,NA,,NA,3,NA,,,,,,,,,Stromateus fiatola,Blue butterfish,0.019198279,benthopelagic,km^2
+Mallotus villosus,NA,,NA,2,NA,,,,,,,,,Trachinotus carolinus,Florida pompano,0.018846561,benthopelagic,km^2
+Mallotus villosus,NA,,NA,2,NA,,,,,,,,,Trisopterus esmarkii,Norway pout,0.017838463,benthopelagic,km^2
+Mallotus villosus,NA,,NA,2,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Mallotus villosus,NA,,NA,2,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Mallotus villosus,NA,,NA,2,NA,,,,,,,,,Pennahia argentata,NA,0.018372,benthopelagic,km^2
+Mallotus villosus,NA,,NA,NA,2,,,,,,,,,Patagonotothen ramsayi,NA,0.020587932,benthopelagic,km^2
+Mallotus villosus,NA,,NA,3,2,,,,,,,,,Phycis phycis,NA,0.01602246,benthopelagic,km^2
+Mallotus villosus,NA,,6670,NA,NA,,,,,,,,,Pollachius pollachius,NA,0.015540189,benthopelagic,km^2
+Mallotus villosus,NA,,12000,NA,NA,,,,,,,,,Selene setapinnis,NA,0.016886293,benthopelagic,km^2
+Mallotus villosus,NA,,53200,NA,NA,,,,,,,,,Stromateus fiatola,NA,0.019198279,benthopelagic,km^2
+Mallotus villosus,NA,,20200,NA,NA,,,,,,,,,Trachinotus carolinus,NA,0.018846561,benthopelagic,km^2
+Mallotus villosus,NA,,43000,NA,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Mallotus villosus,NA,,52400,NA,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Mallotus villosus,NA,,24800,NA,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Mallotus villosus,NA,,18234,NA,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Mallotus villosus,NA,,19090,NA,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Mallotus villosus,NA,,19070,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Mallotus villosus,NA,,30042,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Mallotus villosus,NA,,11317,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Mallotus villosus,NA,,18234,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Mallotus villosus,1.3,0.272531793,NA,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Mallotus villosus,1.3,0.272531793,NA,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Micropogonias undulatus,NA,,NA,1,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Micropogonias undulatus,NA,,NA,1,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Micropogonias undulatus,NA,,NA,1,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Micropogonias undulatus,0.87,0.418951549,NA,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Mycteroperca microlepis,NA,,NA,NA,3,,,,,,,,,Pennahia argentata,NA,0.018372,benthopelagic,km^2
+Mycteroperca microlepis,NA,,NA,NA,8,,,,,,,,,Pennahia argentata,NA,0.018372,benthopelagic,km^2
+Mycteroperca microlepis,NA,,NA,NA,3,,,,,,,,,Patagonotothen ramsayi,NA,0.020587932,benthopelagic,km^2
+Mycteroperca microlepis,NA,,865295,NA,NA,,,,,,,,,Phycis phycis,NA,0.01602246,benthopelagic,km^2
+Mycteroperca microlepis,NA,,4270250,NA,NA,,,,,,,,,Pollachius pollachius,NA,0.015540189,benthopelagic,km^2
+Mycteroperca microlepis,0.34,0.711770323,NA,NA,NA,,,,,,,,,Pollachius pollachius,NA,0.015540189,benthopelagic,km^2
+Mycteroperca microlepis,0.34,0.711770323,NA,NA,NA,,,,,,,,,Pollachius pollachius,NA,0.015540189,benthopelagic,km^2
+Mycteroperca microlepis,0.34,0.711770323,NA,NA,NA,,,,,,,,,Pollachius pollachius,NA,0.015540189,benthopelagic,km^2
+Mycteroperca microlepis,0.34,0.711770323,NA,NA,NA,,,,,,,,,Pollachius pollachius,NA,0.015540189,benthopelagic,km^2
+Mycteroperca phenax,NA,,NA,2,NA,,,,,,,,,Selene setapinnis,NA,0.016886293,benthopelagic,km^2
+Mycteroperca phenax,NA,,NA,2,NA,,,,,,,,,Selene setapinnis,NA,0.016886293,benthopelagic,km^2
+Opisthonema oglinum,NA,,NA,NA,1,,,,,,,,,Stromateus fiatola,NA,0.019198279,benthopelagic,km^2
+Opisthonema oglinum,0.55,0.57694981,NA,NA,NA,,,,,,,,,Trachinotus carolinus,NA,0.018846561,benthopelagic,km^2
+Osmerus mordax,NA,,NA,NA,10,,,,,,,,,Trachinotus carolinus,NA,0.018846561,benthopelagic,km^2
+Osmerus mordax,NA,,NA,NA,7,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Osmerus mordax,NA,,NA,2,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Osmerus mordax,NA,,NA,3,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Osmerus mordax,NA,,NA,2,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Osmerus mordax,NA,,NA,2,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Osmerus mordax,NA,,NA,6,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Osmerus mordax,NA,,NA,NA,6,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Osmerus mordax,NA,,NA,NA,2,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Osmerus mordax,NA,,69600,NA,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Osmerus mordax,NA,,26800,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Osmerus mordax,NA,,69600,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Osmerus mordax,0.72,0.486752256,NA,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Otolithes ruber,NA,,NA,NA,0.699999988,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Otolithes ruber,0.87,0.418951549,NA,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Pagellus acarne,NA,,NA,NA,1,,,,,,,,,Pennahia argentata,NA,0.018372,benthopelagic,km^2
+Pagellus acarne,NA,,NA,NA,2,,,,,,,,,Pollachius pollachius,NA,0.015540189,benthopelagic,km^2
+Pagellus acarne,NA,,NA,3,NA,,,,,,,,,Selene setapinnis,NA,0.016886293,benthopelagic,km^2
+Pagellus acarne,NA,,NA,2,NA,,,,,,,,,Trachinotus carolinus,NA,0.018846561,benthopelagic,km^2
+Pagellus acarne,NA,,NA,NA,1,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Pagellus acarne,NA,,NA,NA,2,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Pagellus acarne,NA,,NA,1.899999976,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Pagellus acarne,NA,,536000,NA,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Pagellus acarne,NA,,536000,NA,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Pagellus acarne,NA,,783114,NA,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Pagellus acarne,NA,,18889,NA,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Pagellus acarne,NA,,641957,NA,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Pagellus acarne,0.43,0.650509095,NA,NA,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Pagellus acarne,NA,,NA,2,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Paralabrax nebulifer,NA,,NA,3.5,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Paralabrax nebulifer,NA,,4100000,NA,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Parastromateus niger,NA,,151796,NA,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Parophrys vetulus,NA,,NA,3,NA,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Parophrys vetulus,NA,,NA,NA,5,,,,,,,,,Otolithes ruber,NA,0.015743009,benthopelagic,km^2
+Parophrys vetulus,NA,,NA,NA,3,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Parophrys vetulus,NA,,1900000,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Parophrys vetulus,0.26,0.771051586,NA,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Parophrys vetulus,0.26,0.771051586,NA,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Parupeneus porphyreus,NA,,NA,NA,1,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Pennahia argentata,NA,,NA,1,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Pennahia argentata,0.85,0.427414932,NA,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Pennahia argentata,0.93,0.39455371,NA,NA,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Plagiogeneion rubiginosum,NA,,NA,NA,3,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Plectorhinchus sordidus,NA,,NA,2.099999905,NA,,,,,,,,,Pagellus acarne,NA,0.010291201,benthopelagic,km^2
+Plectorhinchus sordidus,NA,,NA,1.799999952,NA,,,,,,,,,Pennahia argentata,NA,0.018372,benthopelagic,km^2
+Plectorhinchus sordidus,NA,,NA,2.1,NA,,,,,,,,,Pennahia argentata,NA,0.018372,benthopelagic,km^2
+Plectorhinchus sordidus,NA,,NA,1.8,NA,,,,,,,,,Pennahia argentata,NA,0.018372,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,2,,,,,,,,,Pennahia argentata,NA,0.018372,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,2,,,,,,,,,Pennahia argentata,NA,0.018372,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,2,,,,,,,,,Patagonotothen ramsayi,NA,0.020587932,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,3,,,,,,,,,Patagonotothen ramsayi,NA,0.020587932,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,3,,,,,,,,,Patagonotothen ramsayi,NA,0.020587932,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,3,,,,,,,,,Phycis phycis,NA,0.01602246,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,2,,,,,,,,,Phycis phycis,NA,0.01602246,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,2,,,,,,,,,Phycis phycis,NA,0.01602246,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,2,,,,,,,,,Pollachius pollachius,NA,0.015540189,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,3,,,,,,,,,Selene setapinnis,NA,0.016886293,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,3,,,,,,,,,Selene setapinnis,NA,0.016886293,benthopelagic,km^2
+Plectropomus leopardus,NA,,NA,NA,3,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Plectropomus leopardus,0.46,0.631283646,NA,NA,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Plectropomus leopardus,0.46,0.631283646,NA,NA,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Plectropomus leopardus,0.46,0.631283646,NA,NA,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Pollachius pollachius,NA,,NA,3,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Pollachius pollachius,NA,,NA,2,NA,,,,,,,,,Trisopterus esmarkii,NA,0.017838463,benthopelagic,km^2
+Pollachius pollachius,NA,,NA,3,NA,,,,,,,,,Acanthopagrus schlegelii,Blackhead seabream,0.012020098,demersal,km^2
+Pollachius pollachius,0.55,0.57694981,NA,NA,NA,,,,,,,,,Atheresthes evermanni,Kamchatka flounder,0.01033934,demersal,km^2
+Pontinus kuhlii,NA,,NA,NA,6,,,,,,,,,Bathyraja eatonii,Eaton's skate,0.013707264,demersal,km^2
+Sardina pilchardus,NA,,NA,2,NA,,,,,,,,,Cottoperca gobio,Channel bull blenny,0.010489566,demersal,km^2
+Sardina pilchardus,NA,,NA,2,NA,,,,,,,,,Cynoscion arenarius,Sand weakfish,0.020938432,demersal,km^2
+Sardina pilchardus,NA,,NA,1.700000048,NA,,,,,,,,,Leiostomus xanthurus,Spot croaker,0.018831644,demersal,km^2
+Sardina pilchardus,NA,,NA,1,NA,,,,,,,,,Menticirrhus saxatilis,Northern kingfish,0.010314424,demersal,km^2
+Sardina pilchardus,NA,,NA,2,NA,,,,,,,,,Micropogonias undulatus,Atlantic croaker,0.012588154,demersal,km^2
+Sardina pilchardus,NA,,60000,NA,NA,,,,,,,,,Pagrus major,Red seabream,0.016549116,demersal,km^2
+Sardina pilchardus,NA,,490000,NA,NA,,,,,,,,,Pentanemus quinquarius,Royal threadfin,0.014443064,demersal,km^2
+Sardina pilchardus,NA,,82660,NA,NA,,,,,,,,,Salilota australis,Tadpole codling,0.018173543,demersal,km^2
+Sardina pilchardus,NA,,75000,NA,NA,,,,,,,,,Sebastes carnatus,Gopher rockfish,0.01180901,demersal,km^2
+Sardina pilchardus,NA,,33851,NA,NA,,,,,,,,,Uranoscopus scaber,Stargazer,0.021567528,demersal,km^2
+Sardina pilchardus,0.5,0.60653066,NA,NA,NA,,,,,,,,,Acanthopagrus schlegelii,NA,0.012020098,demersal,km^2
+Sardina pilchardus,0.29,0.748263568,NA,NA,NA,,,,,,,,,Atheresthes evermanni,NA,0.01033934,demersal,km^2
+Sardina pilchardus,0.34,0.711770323,NA,NA,NA,,,,,,,,,Bathyraja eatonii,NA,0.013707264,demersal,km^2
+Sardina pilchardus,0.42,0.65704682,NA,NA,NA,,,,,,,,,Cottoperca gobio,NA,0.010489566,demersal,km^2
+Scomberoides commersonnianus,NA,,NA,NA,4,,,,,,,,,Cynoscion arenarius,NA,0.020938432,demersal,km^2
+Scomberoides commersonnianus,NA,,NA,NA,2,,,,,,,,,Leiostomus xanthurus,NA,0.018831644,demersal,km^2
+Scomberoides commersonnianus,NA,,2859935,NA,NA,,,,,,,,,Menticirrhus saxatilis,NA,0.010314424,demersal,km^2
+Scomberoides commersonnianus,NA,,NA,4.5,NA,,,,,,,,,Micropogonias undulatus,NA,0.012588154,demersal,km^2
+Scomberoides commersonnianus,NA,,NA,2.5,NA,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+Scomberomorus tritor,NA,,1000000,NA,NA,,,,,,,,,Pentanemus quinquarius,NA,0.014443064,demersal,km^2
+Scomberomorus tritor,0.87,0.418951549,NA,NA,NA,,,,,,,,,Salilota australis,NA,0.018173543,demersal,km^2
+Scomberomorus tritor,0.87,0.418951549,NA,NA,NA,,,,,,,,,Sebastes carnatus,NA,0.01180901,demersal,km^2
+Sebastes carnatus,NA,,NA,4,NA,,,,,,,,,Uranoscopus scaber,NA,0.021567528,demersal,km^2
+Sebastes carnatus,NA,,NA,5,NA,,,,,,,,,Acanthopagrus schlegelii,NA,0.012020098,demersal,km^2
+Sebastes carnatus,NA,,425000,NA,NA,,,,,,,,,Acanthopagrus schlegelii,NA,0.012020098,demersal,km^2
+Sebastes miniatus,NA,,NA,5,4,,,,,,,,,Acanthopagrus schlegelii,NA,0.012020098,demersal,km^2
+Sebastes miniatus,NA,,NA,5,5,,,,,,,,,Atheresthes evermanni,NA,0.01033934,demersal,km^2
+Sebastes miniatus,NA,,NA,6,NA,,,,,,,,,Bathyraja eatonii,NA,0.013707264,demersal,km^2
+Sebastes miniatus,NA,,2600000,NA,NA,,,,,,,,,Cottoperca gobio,NA,0.010489566,demersal,km^2
+Sebastes miniatus,NA,,5601000,NA,NA,,,,,,,,,Cynoscion arenarius,NA,0.020938432,demersal,km^2
+Semicossyphus pulcher,NA,,NA,4.25,NA,,,,,,,,,Leiostomus xanthurus,NA,0.018831644,demersal,km^2
+Semicossyphus pulcher,NA,,300000,NA,NA,,,,,,,,,Menticirrhus saxatilis,NA,0.010314424,demersal,km^2
+Tautogolabrus adspersus,NA,,NA,1,NA,,,,,,,,,Micropogonias undulatus,NA,0.012588154,demersal,km^2
+Tenualosa ilisha,NA,,1931000,NA,NA,,,,,,,,,Micropogonias undulatus,NA,0.012588154,demersal,km^2
+Tenualosa ilisha,NA,,1423000,NA,NA,,,,,,,,,Micropogonias undulatus,NA,0.012588154,demersal,km^2
+Tenualosa ilisha,NA,,1392000,NA,NA,,,,,,,,,Micropogonias undulatus,NA,0.012588154,demersal,km^2
+Tenualosa toli,NA,,NA,0.629999995,NA,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+Tenualosa toli,2.1,0.122456428,NA,NA,NA,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+Trisopterus esmarkii,NA,,NA,2,1,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+Trisopterus esmarkii,NA,,NA,2.299999952,NA,,,,,,,,,Pentanemus quinquarius,NA,0.014443064,demersal,km^2
+Trisopterus esmarkii,NA,,NA,1.5,NA,,,,,,,,,Salilota australis,NA,0.018173543,demersal,km^2
+Trisopterus esmarkii,NA,,NA,1.200000048,NA,,,,,,,,,Sebastes carnatus,NA,0.01180901,demersal,km^2
+Trisopterus esmarkii,NA,,NA,1.080000043,NA,,,,,,,,,Sebastes carnatus,NA,0.01180901,demersal,km^2
+Trisopterus esmarkii,NA,,384190,NA,NA,,,,,,,,,Uranoscopus scaber,NA,0.021567528,demersal,km^2
+Trisopterus esmarkii,NA,,31300,NA,NA,,,,,,,,,Uranoscopus scaber,NA,0.021567528,demersal,km^2
+Trisopterus esmarkii,1.6,0.201896518,NA,NA,NA,,,,,,,,,Uranoscopus scaber,NA,0.021567528,demersal,km^2
+Trisopterus esmarkii,1.48,0.227637688,NA,NA,NA,,,,,,,,,Acanthopagrus schlegelii,NA,0.012020098,demersal,km^2
+Uranoscopus scaber,NA,,NA,2,NA,,,,,,,,,Micropogonias undulatus,NA,0.012588154,demersal,km^2
+Uranoscopus scaber,NA,,NA,1,NA,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+,,,,,,,,,,,,,,Pentanemus quinquarius,NA,0.014443064,demersal,km^2
+,0.55,0.57694981,184820,3,,,,,,,,,,Sebastes carnatus,NA,0.01180901,demersal,km^2
+,,,,,,,,,,,,,,Uranoscopus scaber,NA,0.021567528,demersal,km^2
+,,,,,,,,,,,,,,Acanthopagrus schlegelii,NA,0.012020098,demersal,km^2
+,,,,,,,,,,,,,,Acanthopagrus schlegelii,NA,0.012020098,demersal,km^2
+,,,,,,,,,,,,,,Acanthopagrus schlegelii,NA,0.012020098,demersal,km^2
+,,,,,,,,,,,,,,Acanthopagrus schlegelii,NA,0.012020098,demersal,km^2
+,,,,,,,,,,,,,,Acanthopagrus schlegelii,NA,0.012020098,demersal,km^2
+,,,,,,,,,,,,,,Atheresthes evermanni,NA,0.01033934,demersal,km^2
+,,,,,,,,,,,,,,Atheresthes evermanni,NA,0.01033934,demersal,km^2
+,,,,,,,,,,,,,,Cynoscion arenarius,NA,0.020938432,demersal,km^2
+,,,,,,,,,,,,,,Cynoscion arenarius,NA,0.020938432,demersal,km^2
+,,,,,,,,,,,,,,Leiostomus xanthurus,NA,0.018831644,demersal,km^2
+,,,,,,,,,,,,,,Leiostomus xanthurus,NA,0.018831644,demersal,km^2
+,,,,,,,,,,,,,,Leiostomus xanthurus,NA,0.018831644,demersal,km^2
+,,,,,,,,,,,,,,Menticirrhus saxatilis,NA,0.010314424,demersal,km^2
+,,,,,,,,,,,,,,Menticirrhus saxatilis,NA,0.010314424,demersal,km^2
+,,,,,,,,,,,,,,Micropogonias undulatus,NA,0.012588154,demersal,km^2
+,,,,,,,,,,,,,,Micropogonias undulatus,NA,0.012588154,demersal,km^2
+,,,,,,,,,,,,,,Micropogonias undulatus,NA,0.012588154,demersal,km^2
+,,,,,,,,,,,,,,Micropogonias undulatus,NA,0.012588154,demersal,km^2
+,,,,,,,,,,,,,,Micropogonias undulatus,NA,0.012588154,demersal,km^2
+,,,,,,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+,,,,,,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+,,,,,,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+,,,,,,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+,,,,,,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+,,,,,,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+,,,,,,,,,,,,,,Pagrus major,NA,0.016549116,demersal,km^2
+,,,,,,,,,,,,,,Pentanemus quinquarius,NA,0.014443064,demersal,km^2
+,,,,,,,,,,,,,,Pentanemus quinquarius,NA,0.014443064,demersal,km^2
+,,,,,,,,,,,,,,Pentanemus quinquarius,NA,0.014443064,demersal,km^2
+,,,,,,,,,,,,,,Pentanemus quinquarius,NA,0.014443064,demersal,km^2
+,,,,,,,,,,,,,,Pentanemus quinquarius,NA,0.014443064,demersal,km^2
+,,,,,,,,,,,,,,Sebastes carnatus,NA,0.01180901,demersal,km^2
+,,,,,,,,,,,,,,Uranoscopus scaber,NA,0.021567528,demersal,km^2
+,,,,,,,,,,,,,,Uranoscopus scaber,NA,0.021567528,demersal,km^2
+,,,,,,,,,,,,,,Uranoscopus scaber,NA,0.021567528,demersal,km^2
+,,,,,,,,,,,,,,Acanthurus coeruleus,Blue tang surgeonfish,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus nigrofuscus,Brown surgeonfish,NA,NA,NA
+,,,,,,,,,,,,,,Caranx crysos,Blue runner,0.021204,NA,km^2
+,,,,,,,,,,,,,,Caulolatilus princeps,Ocean whitefish,0.020439,NA,km^2
+,,,,,,,,,,,,,,Chaetodon auriga,Threadfin butterflyfish,NA,NA,NA
+,,,,,,,,,,,,,,Chaetodon striatus,Banded butterflyfish,NA,NA,NA
+,,,,,,,,,,,,,,Cheilinus undulatus,Humphead wrasse,NA,NA,NA
+,,,,,,,,,,,,,,Dicentrarchus labrax,European seabass,0.017712,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,Nassau grouper,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,Nassau grouper,0.018305,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,Bluestriped grunt,0.01131,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,Bluestriped grunt,279,NA,m
+,,,,,,,,,,,,,,Kyphosus sectatrix,Bermuda sea chub,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,Gag,NA,NA,NA
+,,,,,,,,,,,,,,Paralabrax nebulifer,Barred sand bass,0.01000271,NA,km^2
+,,,,,,,,,,,,,,Parophrys vetulus,English sole,0.01,NA,km^2
+,,,,,,,,,,,,,,Parupeneus ciliatus,Whitesaddle goatfish,0.019201,NA,km^2
+,,,,,,,,,,,,,,Parupeneus porphyreus,NA,293,NA,m
+,,,,,,,,,,,,,,Plectropomus leopardus,Leopard coralgrouper,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,Leopard coralgrouper,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,Leopard coralgrouper,NA,NA,NA
+,,,,,,,,,,,,,,Scarus rivulatus,Rivulated parrotfish,NA,NA,NA
+,,,,,,,,,,,,,,Sebastes miniatus,Vermilion rockfish,0.013,NA,km^2
+,,,,,,,,,,,,,,Semicossyphus pulcher,California sheephead,0.015134,NA,km^2
+,,,,,,,,,,,,,,Acanthurus coeruleus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus nigrofuscus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Caranx crysos,NA,0.021204,NA,km^2
+,,,,,,,,,,,,,,Caulolatilus princeps,NA,0.020439,NA,km^2
+,,,,,,,,,,,,,,Chaetodon auriga,NA,NA,NA,NA
+,,,,,,,,,,,,,,Chaetodon striatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Cheilinus undulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,0.01131,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,279,NA,m
+,,,,,,,,,,,,,,Kyphosus sectatrix,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Paralabrax nebulifer,NA,0.01000271,NA,km^2
+,,,,,,,,,,,,,,Parophrys vetulus,NA,0.01,NA,km^2
+,,,,,,,,,,,,,,Parophrys vetulus,NA,0.01,NA,km^2
+,,,,,,,,,,,,,,Parupeneus ciliatus,NA,0.019201,NA,km^2
+,,,,,,,,,,,,,,Parupeneus porphyreus,NA,293,NA,m
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Scarus rivulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Sebastes miniatus,NA,0.013,NA,km^2
+,,,,,,,,,,,,,,Semicossyphus pulcher,NA,0.015134,NA,km^2
+,,,,,,,,,,,,,,Acanthurus coeruleus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus coeruleus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus nigrofuscus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus nigrofuscus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Caranx crysos,NA,0.021204,NA,km^2
+,,,,,,,,,,,,,,Caranx crysos,NA,0.021204,NA,km^2
+,,,,,,,,,,,,,,Caranx crysos,NA,0.021204,NA,km^2
+,,,,,,,,,,,,,,Caulolatilus princeps,NA,0.020439,NA,km^2
+,,,,,,,,,,,,,,Chaetodon auriga,NA,NA,NA,NA
+,,,,,,,,,,,,,,Chaetodon striatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Chaetodon striatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Cheilinus undulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Cheilinus undulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Cheilinus undulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Cheilinus undulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Cheilinus undulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,0.01131,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,279,NA,m
+,,,,,,,,,,,,,,Haemulon sciurus,NA,0.01131,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,279,NA,m
+,,,,,,,,,,,,,,Haemulon sciurus,NA,0.01131,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,279,NA,m
+,,,,,,,,,,,,,,Kyphosus sectatrix,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Paralabrax nebulifer,NA,0.01000271,NA,km^2
+,,,,,,,,,,,,,,Parophrys vetulus,NA,0.01,NA,km^2
+,,,,,,,,,,,,,,Parophrys vetulus,NA,0.01,NA,km^2
+,,,,,,,,,,,,,,Parophrys vetulus,NA,0.01,NA,km^2
+,,,,,,,,,,,,,,Parupeneus ciliatus,NA,0.019201,NA,km^2
+,,,,,,,,,,,,,,Parupeneus porphyreus,NA,293,NA,m
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Scarus rivulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Sebastes miniatus,NA,0.013,NA,km^2
+,,,,,,,,,,,,,,Sebastes miniatus,NA,0.013,NA,km^2
+,,,,,,,,,,,,,,Sebastes miniatus,NA,0.013,NA,km^2
+,,,,,,,,,,,,,,Semicossyphus pulcher,NA,0.015134,NA,km^2
+,,,,,,,,,,,,,,Acanthurus coeruleus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus nigrofuscus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Caranx crysos,NA,0.021204,NA,km^2
+,,,,,,,,,,,,,,Chaetodon auriga,NA,NA,NA,NA
+,,,,,,,,,,,,,,Chaetodon striatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Cheilinus undulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,0.01131,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,279,NA,m
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Paralabrax nebulifer,NA,0.01000271,NA,km^2
+,,,,,,,,,,,,,,Parophrys vetulus,NA,0.01,NA,km^2
+,,,,,,,,,,,,,,Parupeneus porphyreus,NA,293,NA,m
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Sebastes miniatus,NA,0.013,NA,km^2
+,,,,,,,,,,,,,,Sebastes miniatus,NA,0.013,NA,km^2
+,,,,,,,,,,,,,,Semicossyphus pulcher,NA,0.015134,NA,km^2
+,,,,,,,,,,,,,,Acanthurus coeruleus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus coeruleus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus coeruleus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus coeruleus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus coeruleus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus nigrofuscus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus nigrofuscus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus nigrofuscus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus nigrofuscus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus nigrofuscus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus nigrofuscus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Caranx crysos,NA,0.021204,NA,km^2
+,,,,,,,,,,,,,,Caranx crysos,NA,0.021204,NA,km^2
+,,,,,,,,,,,,,,Caranx crysos,NA,0.021204,NA,km^2
+,,,,,,,,,,,,,,Chaetodon auriga,NA,NA,NA,NA
+,,,,,,,,,,,,,,Cheilinus undulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Cheilinus undulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Cheilinus undulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Dicentrarchus labrax,NA,0.017712,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Epinephelus striatus,NA,0.018305,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,0.01131,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,279,NA,m
+,,,,,,,,,,,,,,Haemulon sciurus,NA,0.01131,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,279,NA,m
+,,,,,,,,,,,,,,Haemulon sciurus,NA,0.01131,NA,km^2
+,,,,,,,,,,,,,,Haemulon sciurus,NA,279,NA,m
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Mycteroperca microlepis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Paralabrax nebulifer,NA,0.01000271,NA,km^2
+,,,,,,,,,,,,,,Parophrys vetulus,NA,0.01,NA,km^2
+,,,,,,,,,,,,,,Parophrys vetulus,NA,0.01,NA,km^2
+,,,,,,,,,,,,,,Parupeneus porphyreus,NA,293,NA,m
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0104584,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,0.0187969,NA,km^2
+,,,,,,,,,,,,,,Plectropomus leopardus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Scarus rivulatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Sebastes miniatus,NA,0.013,NA,km^2
+,,,,,,,,,,,,,,Semicossyphus pulcher,NA,0.015134,NA,km^2
+,,,,,,,,,,,,,,Semicossyphus pulcher,NA,0.015134,NA,km^2
+,,,,,,,,,,,,,,Semicossyphus pulcher,NA,0.015134,NA,km^2
+,,,,,,,,,,,,,,Semicossyphus pulcher,NA,0.015134,NA,km^2
+,,,,,,,,,,,,,,Semicossyphus pulcher,NA,0.015134,NA,km^2
+,,,,,,,,,,,,,,Semicossyphus pulcher,NA,0.015134,NA,km^2
+,,,,,,,,,,,,,,Semicossyphus pulcher,NA,0.015134,NA,km^2
+,,,,,,,,,,,,,,Strombus gigas,NA,0.011031,NA,km^2
+,,,,,,,,,,,,,,Aliger gigas,NA,0.011031,NA,km^2
+,,,,,,,,,,,,,,Sepia apama,NA,0.01566,NA,km^2
+,,,,,,,,,,,,,,Homarus gammarus,NA,0.019879,NA,km^2
+,,,,,,,,,,,,,,Parupeneus porhyreus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Naso  unicornis,NA,NA,NA,NA
+,,,,,,,,,,,,,,Acanthurus chirugus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Epinehpelus guttatus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Parupeneus porhyreus,NA,NA,NA,NA
+,,,,,,,,,,,,,,Holocanthus tricolor,NA,NA,NA,NA
+,,,,,,,,,,,,,,Alosa pseudoharengus,Alewife,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Ilisha elongata,Elongate ilisha,0.015382588,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,European pilchard,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,West African Spanish mackerel,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,Hilsa shad,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa toli,Toli shad,0.014793647,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Ilisha elongata,NA,0.015382588,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa toli,NA,0.014793647,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Ilisha elongata,NA,0.015382588,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa toli,NA,0.014793647,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Ilisha elongata,NA,0.015382588,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa toli,NA,0.014793647,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Alosa pseudoharengus,NA,0.010435999,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Ilisha elongata,NA,0.015382588,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Ilisha elongata,NA,0.015382588,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Ilisha elongata,NA,0.015382588,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Ilisha elongata,NA,0.015382588,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Ilisha elongata,NA,0.015382588,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Ilisha elongata,NA,0.015382588,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Ilisha elongata,NA,0.015382588,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Sardina pilchardus,NA,0.014253499,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Scomberomorus tritor,NA,0.010987212,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa ilisha,NA,0.021477935,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Tenualosa toli,NA,0.014793647,pelagic-neritic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,Capelin,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,Rainbow smelt,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Mallotus villosus,NA,0.020116579,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Osmerus mordax,NA,0.018739811,pelagic-oceanic,km^2
+,,,,,,,,,,,,,,Alepes djedaba,Shrimp scad,0.010019758,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,Grey triggerfish,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides bajad,Orangespotted trevally,0.016765307,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides fulvoguttatus,Yellowspotted trevally,0.011848388,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides malabaricus,Malabar trevally,0.015119316,reef-associated,km^2
+,,,,,,,,,,,,,,Caranx ruber,Bar jack,0.011560514,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,Dusky grouper,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Hemiramphus balao,Balao halfbeak,0.017580801,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,Thumbprint emperor,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Mycteroperca phenax,Scamp,0.013206633,reef-associated,km^2
+,,,,,,,,,,,,,,Naucrates ductor,Pilotfish,0.020247432,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,Atlantic thread herring,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,Black pomfret,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Plectorhinchus sordidus,Sordid rubberlip,0.015854755,reef-associated,km^2
+,,,,,,,,,,,,,,Scomberoides commersonnianus,Talang queenfish,0.017301389,reef-associated,km^2
+,,,,,,,,,,,,,,Scomberoides lysan,Doublespotted queenfish,0.017289394,reef-associated,km^2
+,,,,,,,,,,,,,,Tautogolabrus adspersus,Cunner,0.014772144,reef-associated,km^2
+,,,,,,,,,,,,,,Trachinotus blochii,Snubnose pompano,0.016091273,reef-associated,km^2
+,,,,,,,,,,,,,,Alepes djedaba,NA,0.010019758,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides bajad,NA,0.016765307,reef-associated,km^2
+,#NAME?,,,,,,,,,,,,,Carangoides fulvoguttatus,NA,0.011848388,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides malabaricus,NA,0.015119316,reef-associated,km^2
+,,,,,,,,,,,,,,Caranx ruber,NA,0.011560514,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Hemiramphus balao,NA,0.017580801,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Mycteroperca phenax,NA,0.013206633,reef-associated,km^2
+,,,,,,,,,,,,,,Naucrates ductor,NA,0.020247432,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Plectorhinchus sordidus,NA,0.015854755,reef-associated,km^2
+,,,,,,,,,,,,,,Scomberoides commersonnianus,NA,0.017301389,reef-associated,km^2
+,,,,,,,,,,,,,,Scomberoides lysan,NA,0.017289394,reef-associated,km^2
+,,,,,,,,,,,,,,Tautogolabrus adspersus,NA,0.014772144,reef-associated,km^2
+,,,,,,,,,,,,,,Trachinotus blochii,NA,0.016091273,reef-associated,km^2
+,,,,,,,,,,,,,,Alepes djedaba,NA,0.010019758,reef-associated,km^2
+,,,,,,,,,,,,,,Alepes djedaba,NA,0.010019758,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides bajad,NA,0.016765307,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides fulvoguttatus,NA,0.011848388,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides malabaricus,NA,0.015119316,reef-associated,km^2
+,,,,,,,,,,,,,,Caranx ruber,NA,0.011560514,reef-associated,km^2
+,,,,,,,,,,,,,,Caranx ruber,NA,0.011560514,reef-associated,km^2
+,,,,,,,,,,,,,,Caranx ruber,NA,0.011560514,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Hemiramphus balao,NA,0.017580801,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Mycteroperca phenax,NA,0.013206633,reef-associated,km^2
+,,,,,,,,,,,,,,Naucrates ductor,NA,0.020247432,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Plectorhinchus sordidus,NA,0.015854755,reef-associated,km^2
+,,,,,,,,,,,,,,Plectorhinchus sordidus,NA,0.015854755,reef-associated,km^2
+,,,,,,,,,,,,,,Scomberoides commersonnianus,NA,0.017301389,reef-associated,km^2
+,,,,,,,,,,,,,,Scomberoides commersonnianus,NA,0.017301389,reef-associated,km^2
+,,,,,,,,,,,,,,Scomberoides lysan,NA,0.017289394,reef-associated,km^2
+,,,,,,,,,,,,,,Tautogolabrus adspersus,NA,0.014772144,reef-associated,km^2
+,,,,,,,,,,,,,,Trachinotus blochii,NA,0.016091273,reef-associated,km^2
+,,,,,,,,,,,,,,Alepes djedaba,NA,0.010019758,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides bajad,NA,0.016765307,reef-associated,km^2
+,,,,,,,,,,,,,,Caranx ruber,NA,0.011560514,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Mycteroperca phenax,NA,0.013206633,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Plectorhinchus sordidus,NA,0.015854755,reef-associated,km^2
+,,,,,,,,,,,,,,Scomberoides commersonnianus,NA,0.017301389,reef-associated,km^2
+,,,,,,,,,,,,,,Tautogolabrus adspersus,NA,0.014772144,reef-associated,km^2
+,,,,,,,,,,,,,,Trachinotus blochii,NA,0.016091273,reef-associated,km^2
+,,,,,,,,,,,,,,Alepes djedaba,NA,0.010019758,reef-associated,km^2
+,,,,,,,,,,,,,,Alepes djedaba,NA,0.010019758,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Balistes capriscus,NA,0.015525038,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides bajad,NA,0.016765307,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides bajad,NA,0.016765307,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides malabaricus,NA,0.015119316,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides malabaricus,NA,0.015119316,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides malabaricus,NA,0.015119316,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides malabaricus,NA,0.015119316,reef-associated,km^2
+,,,,,,,,,,,,,,Carangoides malabaricus,NA,0.015119316,reef-associated,km^2
+,,,,,,,,,,,,,,Caranx ruber,NA,0.011560514,reef-associated,km^2
+,,,,,,,,,,,,,,Caranx ruber,NA,0.011560514,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Epinephelus marginatus,NA,0.017629419,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Lethrinus harak,NA,0.015729701,reef-associated,km^2
+,,,,,,,,,,,,,,Mycteroperca phenax,NA,0.013206633,reef-associated,km^2
+,,,,,,,,,,,,,,Mycteroperca phenax,NA,0.013206633,reef-associated,km^2
+,,,,,,,,,,,,,,Mycteroperca phenax,NA,0.013206633,reef-associated,km^2
+,,,,,,,,,,,,,,Naucrates ductor,NA,0.020247432,reef-associated,km^2
+,,,,,,,,,,,,,,Naucrates ductor,NA,0.020247432,reef-associated,km^2
+,,,,,,,,,,,,,,Naucrates ductor,NA,0.020247432,reef-associated,km^2
+,,,,,,,,,,,,,,Naucrates ductor,NA,0.020247432,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Opisthonema oglinum,NA,0.018921387,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Parastromateus niger,NA,0.02109961,reef-associated,km^2
+,,,,,,,,,,,,,,Plectorhinchus sordidus,NA,0.015854755,reef-associated,km^2
+,,,,,,,,,,,,,,Plectorhinchus sordidus,NA,0.015854755,reef-associated,km^2
+,,,,,,,,,,,,,,Scomberoides commersonnianus,NA,0.017301389,reef-associated,km^2
+,,,,,,,,,,,,,,Scomberoides commersonnianus,NA,0.017301389,reef-associated,km^2
+,,,,,,,,,,,,,,Scomberoides lysan,NA,0.017289394,reef-associated,km^2
+,,,,,,,,,,,,,,Tautogolabrus adspersus,NA,0.014772144,reef-associated,km^2
+,,,,,,,,,,,,,,Tautogolabrus adspersus,NA,0.014772144,reef-associated,km^2
+,,,,,,,,,,,,,,Tautogolabrus adspersus,NA,0.014772144,reef-associated,km^2
+,,,,,,,,,,,,,,Tautogolabrus adspersus,NA,0.014772144,reef-associated,km^2
