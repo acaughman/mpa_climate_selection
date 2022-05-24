@@ -30,9 +30,9 @@ move.array2 <- array(0, c(NS.patches, EW.patches, 3, 2, 3))
 
 for(lat in 5:6) {
   for(lon in 1:2) {
-    for(i in 2:3) {
-      for(j in 1:2) {
-        for(k in 1:3) {
+    for(i in 3:3) {
+      for(j in 2:2) {
+        for(k in 1:1) {
           if(k == 1) { mean.dist <- Hom.A.movers }
           if(k == 2) { mean.dist <- Het.movers }
           if(k == 3) { mean.dist <- Hom.a.movers }
