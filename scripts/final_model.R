@@ -13,9 +13,9 @@ options(dplyr.summarise.inform = FALSE)
 
 NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
-NUM.gens.pre.fishing <- 0 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 0 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 30 # The number of generations with the reserve installed
+NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
+NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
+NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 100 # the number of patches on the north-south axis
@@ -29,19 +29,17 @@ init.a <- 0.3  # The initial frequency of the low movement allele
 
 sb <- 0.58 # survival proportion for babies
 s <- 0.58 # survival proportion
-dd <- 0.000005 # density dependence of baby survival 
-fecundity <- 180000 # The number of babies produced, on average, by each adult female each year.
+dd <- 0.0005 # density dependence of baby survival 
+fecundity <- 2000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished.factor <- 0.6
-#fished <- fished.factor*(1-s) # Fishing mortality: the proportion of adults that get fished per year
-fished <- fished.factor
+fished <- 0.8
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 reserves.at <- c(810,910,1010,
                  811,911,1011,
                  812,912,1012) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
 buffer.at <- c()
-bold.mover.distance <- 400 # Individuals with AA genotype move this distance on average every year
-lazy.mover.distance <- 300 # Individuals with aa genotype move this distance on average every year
+bold.mover.distance <- 300 # Individuals with AA genotype move this distance on average every year
+lazy.mover.distance <- 200 # Individuals with aa genotype move this distance on average every year
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 opt.temp = 25 #optimal temperature of species
@@ -344,9 +342,9 @@ move <- function(pop) {
               # determine the direction of each move
               theta <- runif(pop[lat,lon,i,j,k],0,2*pi)
               # bias this movement in the north-south direction (along coasts) if this is a great white shark simulation (otherwise, comment out the next three lines):
-              f.adj <- function(x, u) x-cos(x)*sin(x) - u
-              my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
-              theta <- vapply(theta, my.uniroot, numeric(1))
+              #f.adj <- function(x, u) x-cos(x)*sin(x) - u
+              #my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
+              #theta <- vapply(theta, my.uniroot, numeric(1))
               # convert direction and distance into a distance in the x-direction (longitude)
               x <- cos(theta)*dist
               # bounce off edges (assume fish start in centre of cell)
@@ -410,27 +408,6 @@ move <- function(pop) {
                   move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] <- move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] + freq2D[yy,xx]
                 }
               }
-              # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
-              # x.round = round(x/patch.size)
-              # y.round = round(y/patch.size)
-              # xy = as.data.frame(cbind(x.round,y.round))
-              # xy_sum = xy %>%
-              #   group_by(x.round, y.round) %>%
-              #   summarise(sum = n())
-              # xy_pivot = xy_sum %>%
-              #   ungroup() %>%
-              #   pivot_wider(values_from = sum, names_from = x.round)
-              # final_xy = xy_pivot %>%
-              #   select(-y.round)
-              # final_xy[is.na(final_xy)] <- 0
-              # final_xy = as.data.frame(final_xy)
-              # rownames(final_xy) = sort(unique(xy_sum$y.round))
-              # # populate the move.array with movers (and stayers)
-              # for(xx in 1:length(unique(xy_sum$x.round))) {
-              #   for(yy in 1:length(unique(xy_sum$y.round))) {
-              #     move.array[lat+as.numeric(row.names(final_xy)[yy]),lon+as.numeric(names(final_xy)[xx]),i,j,k] <- move.array[lat+as.numeric(row.names(final_xy)[yy]),lon+as.numeric(names(final_xy)[xx]),i,j,k] + final_xy[yy,xx]
-              #   }
-              # }
             }
           }
         }
@@ -479,4 +456,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "3x3NoClimate6F.rda"))
+save(output.array, file = here::here("data", "3x3noclimate8Ftest.rda"))

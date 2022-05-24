@@ -87,28 +87,29 @@ output_df = output_df %>%
   mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon))
 
-write_csv(output_df, here::here("output", "3x3NoClimate6F.csv"))
+write_csv(output_df, here::here("output", "3x3NoClimate8F.csv"))
 
 #Summarize pop size and frequency by genotype
 geno_sum = output_df %>% 
-  group_by(lat, lon, generation,genotype) %>% 
+  group_by(lat, lon, generation,genotype,age) %>% 
   summarise(geno_pop_sum = sum(pop)) 
 
 pop_sum = output_df %>% 
-  group_by(lat, lon, generation) %>% 
+  group_by(lat, lon, generation,age) %>% 
   summarise(pop_sum = sum(pop))
 
 
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum)
 
-write_csv(output_sum, here("output", "3x3NoClimate6F_sum.csv"))
+write_csv(output_sum, here("output", "3x3NoClimate8F_sum.csv"))
 
 # output_sum = read_csv(here("output", "3x3NoClimate8F.csv"))
 
 plot_sum = output_sum %>% 
-  filter(generation %in% c(100, 125, 150)) %>% 
-  mutate(generation = as.numeric(generation))
+  filter(generation %in% c(50,70,90,110,130,150)) %>% 
+  mutate(generation = as.numeric(generation)) %>% 
+  filter(age == "adult")
 
 p1 = ggplot(plot_sum, aes(lon, lat, fill = freq)) +
   geom_tile() + 
@@ -122,11 +123,11 @@ p2 = ggplot(plot_sum, aes(lon, lat, fill = geno_pop_sum)) +
   facet_grid(genotype~generation) + 
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size") +
   theme_bw() +
-  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 100)
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 250)
 
 p2 / p1
 
 plot = p2 / p1
 
-ggsave(plot, file=paste0("3x3NoClimate6F.pdf"), path = here("figs"), height = 11, width = 8)
+ggsave(plot, file=paste0("3x3NoClimate8F.pdf"), path = here("figs"), height = 11, width = 8)
 
