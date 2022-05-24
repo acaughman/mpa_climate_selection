@@ -198,7 +198,7 @@ em = ggplot(SSTdf_enso, aes(lon, lat, fill = survival)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
   theme_bw() +
-  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .25) +
+  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .3) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
