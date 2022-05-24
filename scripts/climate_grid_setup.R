@@ -17,7 +17,7 @@ calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
   return(nat.m)
 }
 
-# 0.37      29
+# 0.5272924 29
 # 0.3678794 30
 # 0.2369278 31
 # 0.1408584 32
