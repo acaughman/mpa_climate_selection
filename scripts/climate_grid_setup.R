@@ -1,4 +1,5 @@
 library(tidyverse)
+library(here)
 
 addTaskCallback(function(...) {set.seed(42);TRUE})
 options(warn=-1)
@@ -49,7 +50,7 @@ for (i in 1:years) {
     SST.patches.enso[lat,,i] = SST
     SST = SST - 0.01
   }
-  start_SST = start_SST + rnorm(1, mean = 0.018, sd = .5)
+  start_SST = start_SST + rnorm(1, mean = 0.018, sd = .25)
 }
 
 ### UNCOMMENT FOR SHOCK SST CHANGES
@@ -59,7 +60,7 @@ start_SST = (opt.temp + 4) + NS.patches*0.01
 for (i in 1:years) {
   heat_prob = runif(1, 0, 1)
   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-    intensity <- runif(1, .5, ifelse(i < 75, 2, 4))
+    intensity <- runif(1, .5, ifelse(i < 75, 2, 3))
     SST = start_SST + intensity
   } else {
     SST = start_SST
