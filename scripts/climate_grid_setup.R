@@ -128,13 +128,13 @@ mt = ggplot(SSTdf_mean, aes(lon, lat, fill = sst)) +
 
 SSTdf_mean = SSTdf_mean %>% 
   mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4.5^2)))) %>% 
-  mutate(survival = ifelse(mortality > 0.37, 0.37, mortality))
+  mutate(survival = ifelse(mortality > 0.58, 0.58, mortality))
 
 mm = ggplot(SSTdf_mean, aes(lon, lat, fill = survival)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
   theme_bw() +
-  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .2) +
+  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .25) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
@@ -192,13 +192,13 @@ et = ggplot(SSTdf_enso, aes(lon, lat, fill = sst)) +
 
 SSTdf_enso = SSTdf_enso %>% 
   mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4.5^2)))) %>% 
-  mutate(survival = ifelse(mortality > 0.37, 0.37, mortality))
+  mutate(survival = ifelse(mortality > 0.58, 0.58, mortality))
 
 em = ggplot(SSTdf_enso, aes(lon, lat, fill = survival)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
   theme_bw() +
-  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .2) +
+  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .25) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
@@ -256,13 +256,13 @@ st = ggplot(SSTdf_shock, aes(lon, lat, fill = sst)) +
 
 SSTdf_shock = SSTdf_shock %>% 
   mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4.5^2)))) %>% 
-  mutate(survival = ifelse(mortality > 0.37, 0.37, mortality))
+  mutate(survival = ifelse(mortality > 0.58, 0.58, mortality))
 
 sm = ggplot(SSTdf_shock, aes(lon, lat, fill = survival)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
   theme_bw() +
-  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .2) +
+  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .25) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
