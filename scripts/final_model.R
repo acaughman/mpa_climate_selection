@@ -11,7 +11,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 1 # The number of replicate simulations to run
+NUM.reps <- 10 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
@@ -29,7 +29,7 @@ init.a <- 0.3  # The initial frequency of the low movement allele
 
 sb <- 0.58 # survival proportion for babies
 s <- 0.58 # survival proportion
-dd <- 0.0005 # density dependence of baby survival 
+dd <- 0.005 # density dependence of baby survival 
 fecundity <- 2000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.8
@@ -116,7 +116,7 @@ init_SST <- function(years) {
   #   }
   #   start_SST = start_SST + 0.018
   # }
-  
+  # 
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
   # start_SST = (opt.temp + 4) + NS.patches*0.01
@@ -129,7 +129,7 @@ init_SST <- function(years) {
   #   }
   #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = .25)
   # }
-  
+
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
   # start_SST = (opt.temp + 4) + NS.patches*0.01
@@ -456,4 +456,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "3x3noclimate8Ftest.rda"))
+save(output.array, file = here::here("data", "3x3null8F.rda"))
