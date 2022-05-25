@@ -44,13 +44,16 @@ for (i in 1:years) {
 SST.patches.enso <- array(0, c(NS.patches, EW.patches, years))
 start_SST = (opt.temp + 3) + NS.patches*0.01
 
+t=seq(1,150,1)
+enso.value = 0.5*sin(.8*t) + 0.018
+
 for (i in 1:years) {
   SST = start_SST
   for (lat in 1:NS.patches) {
     SST.patches.enso[lat,,i] = SST
     SST = SST - 0.01
   }
-  start_SST = start_SST + rnorm(1, mean = 0.018, sd = .2)
+  start_SST = start_SST + enso.value[i]
 }
 
 ### UNCOMMENT FOR SHOCK SST CHANGES

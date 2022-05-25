@@ -76,7 +76,7 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  SST.patches <- array(opt.temp + 4, c(NS.patches, EW.patches, years))
+  SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
@@ -95,13 +95,16 @@ init_SST <- function(years) {
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
   # start_SST = (opt.temp + 3) + NS.patches*0.01
   # 
+  # t=seq(1,150,1)
+  # enso.value = 0.5*sin(.8*t) + 0.018
+  # 
   # for (i in 1:years) {
   #   SST = start_SST
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
   #     SST = SST - 0.01
   #   }
-  #   start_SST = start_SST + rnorm(1, mean = 0.018, sd = .2)
+  #   start_SST = start_SST + enso.value[i]
   # }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
@@ -476,4 +479,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "3x3shock8F.rda"))
+save(output.array, file = here::here("data", "3x3null8F.rda"))
