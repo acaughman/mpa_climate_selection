@@ -3,7 +3,7 @@ library(patchwork)
 
 # Allie Explore -----------------------------------------------------------
 
-reps = 10
+reps = 1
 NS.patches <- 100 # the number of patches on the north-south axis
 EW.patches <- 20
 NUM.age.classes <- 3 #babies, juvenile, adult
@@ -14,7 +14,7 @@ NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 gens = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-load(file = here::here("data", "3x3null8F.rda"))
+load(file = here::here("data","3x3mean8F.rda"))
 
 # Output results into a dataframe
 output_df = data.frame() #create dataframe to hold results
@@ -129,5 +129,5 @@ p2 / p1
 
 plot = p2 / p1
 
-ggsave(plot, file=paste0("3x3null8Ftest.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
+ggsave(plot, file=paste0("3x3mean8Ftest.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
 

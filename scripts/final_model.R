@@ -43,7 +43,7 @@ bold.mover.distance <- 300 # Individuals with AA genotype move this distance on 
 lazy.mover.distance <- 200 # Individuals with aa genotype move this distance on average every year
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
-opt.temp = 22 #optimal temperature of species
+opt.temp = 25 #optimal temperature of species
 temp.range = 5 #thermal breath of species
 
 ############################################################################
@@ -80,7 +80,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 2) + NS.patches*0.01
+  # start_SST = (opt.temp + 3) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -93,10 +93,10 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 2) + NS.patches*0.01
+  # start_SST = (opt.temp + 3) + NS.patches*0.01
   # 
   # t=seq(1,150,1)
-  # enso.value = sin(.8*t) + 0.018
+  # enso.value = 0.5*sin(.8*t) + 0.018
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -109,12 +109,12 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 2) + NS.patches*0.01
-  
+  # start_SST = (opt.temp + 3) + NS.patches*0.01
+  # 
   # for (i in 1:years) {
   #   heat_prob = runif(1, 0, 1)
   #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-  #     intensity <- runif(1, 1, ifelse(i < 75, 2, 4))
+  #     intensity <- runif(1, .5, ifelse(i < 75, 2, 3))
   #     SST = start_SST + intensity
   #   } else {
   #     SST = start_SST
