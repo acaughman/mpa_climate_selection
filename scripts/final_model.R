@@ -29,8 +29,8 @@ init.a <- 0.3  # The initial frequency of the low movement allele
 
 sb <- 0.58 # survival proportion for babies
 s <- 0.58 # survival proportion
-dd <- 0.0001 # density dependence of baby survival 
-fecundity <- 2000 # The number of babies produced, on average, by each adult female each year.
+dd <- 0.001 # density dependence of baby survival 
+fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.8
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
