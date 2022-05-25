@@ -80,7 +80,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 4) + NS.patches*0.01
+  # start_SST = (opt.temp + 3) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -90,10 +90,10 @@ init_SST <- function(years) {
   #   }
   #   start_SST = start_SST + 0.018
   # }
-  # 
+  
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 4) + NS.patches*0.01
+  # start_SST = (opt.temp + 3) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -106,7 +106,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 4) + NS.patches*0.01
+  # start_SST = (opt.temp + 3) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   heat_prob = runif(1, 0, 1)
@@ -476,4 +476,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "3x3null8F.rda"))
+save(output.array, file = here::here("data", "3x3shock8F.rda"))
