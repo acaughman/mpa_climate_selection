@@ -14,7 +14,7 @@ NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 gens = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-load(file = here::here("data", "3x3shock8F.rda"))
+load(file = here::here("data", "3x3null8F.rda"))
 
 # Output results into a dataframe
 output_df = data.frame() #create dataframe to hold results
@@ -87,7 +87,7 @@ output_df = output_df %>%
   mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon))
 
-write_csv(output_df, here::here("output", "3x3NoClimate8F.csv"))
+write_csv(output_df, here::here("output", "3x3null8F.csv"))
 
 #Summarize pop size and frequency by genotype
 geno_sum = output_df %>% 
@@ -102,9 +102,9 @@ pop_sum = output_df %>%
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum)
 
-write_csv(output_sum, here("output", "3x3NoClimate8F_sum.csv"))
+write_csv(output_sum, here("output", "3x3null8F_sum.csv"))
 
-# output_sum = read_csv(here("output", "3x3NoClimate8F.csv"))
+# output_sum = read_csv(here("output", "3x3null8F.csv"))
 
 plot_sum = output_sum %>% 
   filter(generation %in% c(50,70,90,110,130,150)) %>% 
@@ -123,11 +123,11 @@ p2 = ggplot(plot_sum, aes(lon, lat, fill = geno_pop_sum)) +
   facet_grid(genotype~generation) + 
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size") +
   theme_bw() +
-  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 250)
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 25)
 
 p2 / p1
 
 plot = p2 / p1
 
-ggsave(plot, file=paste0("3x3shock8Ftest.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
+ggsave(plot, file=paste0("3x3null8Ftest.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
 
