@@ -139,7 +139,7 @@ where.reserves <- function(reserves.at) {
       for(i in 1:length(reserves.at)) {
         x <- ((reserves.at[i]-1) %/% NS.patches) + 1
         y <- ((reserves.at[i]-1) %% NS.patches) + 1
-        if (count < 10) {
+        if (count < 9) {
           if (SST.patches[y,x,j] >= 31) {
             reserves.at = reserves.at + 8
             count = count + 1
