@@ -7,7 +7,7 @@ options(warn=-1)
 years = 150
 NS.patches = 100
 EW.patches = 20
-opt.temp = 25
+opt.temp = 22
 
 calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
   nat.m = array(0, c(nrow(SST), ncol(SST)))
@@ -17,19 +17,19 @@ calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
   return(nat.m)
 }
 
-# 0.5272924 29
-# 0.3678794 30
-# 0.2369278 31
-# 0.1408584 32
-# 0.0773    33
-# 0.0391639 34
-# 0.0183156 35
+# 0.5272924 26
+# 0.3678794 27
+# 0.2369278 28
+# 0.1408584 29
+# 0.0773    30
+# 0.0391639 31
+# 0.0183156 32
 
 
 
 ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
 SST.patches.mean <- array(0, c(NS.patches, EW.patches, years))
-start_SST = (opt.temp + 3) + NS.patches*0.01
+start_SST = (opt.temp + 2) + NS.patches*0.01
 
 for (i in 1:years) {
   SST = start_SST
@@ -42,10 +42,10 @@ for (i in 1:years) {
 
 ### UNCOMMENT FOR ENSO VARIABLE MEAN SST
 SST.patches.enso <- array(0, c(NS.patches, EW.patches, years))
-start_SST = (opt.temp + 3) + NS.patches*0.01
+start_SST = (opt.temp + 2) + NS.patches*0.01
 
-t=seq(1,150,1)
-enso.value = 0.5*sin(.8*t) + 0.018
+t=seq(1,200,1)
+enso.value = sin(.8*t) + 0.018
 
 for (i in 1:years) {
   SST = start_SST
@@ -58,12 +58,12 @@ for (i in 1:years) {
 
 ### UNCOMMENT FOR SHOCK SST CHANGES
 SST.patches.shock <- array(0, c(NS.patches, EW.patches, years))
-start_SST = (opt.temp + 3) + NS.patches*0.01
+start_SST = (opt.temp + 2) + NS.patches*0.01
 
 for (i in 1:years) {
   heat_prob = runif(1, 0, 1)
   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-    intensity <- runif(1, .5, ifelse(i < 75, 2, 3))
+    intensity <- runif(1, 1, ifelse(i < 75, 2, 4))
     SST = start_SST + intensity
   } else {
     SST = start_SST
@@ -123,21 +123,21 @@ mt = ggplot(SSTdf_mean, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 30.5) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 26) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
     strip.text.x = element_blank())
 
 SSTdf_mean = SSTdf_mean %>% 
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4.5^2)))) %>% 
+  mutate(mortality = 1 - (1 - exp((-(sst - 22)^2)/(5^2)))) %>% 
   mutate(survival = ifelse(mortality > 0.58, 0.58, mortality))
 
 mm = ggplot(SSTdf_mean, aes(lon, lat, fill = survival)) +
   geom_tile() +
-  labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
+  labs(x = "Longitude", y = "Latitude", fill = "s") +
   theme_bw() +
-  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .25) +
+  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .3) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
@@ -187,14 +187,14 @@ et = ggplot(SSTdf_enso, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 30.5) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 26) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
     strip.text.x = element_blank())
 
 SSTdf_enso = SSTdf_enso %>% 
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4.5^2)))) %>% 
+  mutate(mortality = 1 - (1 - exp((-(sst - 22)^2)/(5^2)))) %>% 
   mutate(survival = ifelse(mortality > 0.58, 0.58, mortality))
 
 em = ggplot(SSTdf_enso, aes(lon, lat, fill = survival)) +
@@ -251,21 +251,21 @@ st = ggplot(SSTdf_shock, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 30.5) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 26) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
     strip.text.x = element_blank())
 
 SSTdf_shock = SSTdf_shock %>% 
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4.5^2)))) %>% 
+  mutate(mortality = 1 - (1 - exp((-(sst - 22)^2)/(5^2)))) %>% 
   mutate(survival = ifelse(mortality > 0.58, 0.58, mortality))
 
 sm = ggplot(SSTdf_shock, aes(lon, lat, fill = survival)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
   theme_bw() +
-  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .25) +
+  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .3) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
