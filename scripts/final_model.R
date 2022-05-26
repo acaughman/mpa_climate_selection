@@ -11,7 +11,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 10 # The number of replicate simulations to run
+NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
@@ -80,7 +80,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 3) + NS.patches*0.01
+  # start_SST = (opt.temp + 2) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -93,10 +93,10 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 3) + NS.patches*0.01
+  # start_SST = (opt.temp + 2) + NS.patches*0.01
   # 
-  # t=seq(1,150,1)
-  # enso.value = 0.5*sin(.8*t) + 0.018
+  # t=seq(1,years,1)
+  # enso.value = sin(.8*t) + 0.018
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -114,7 +114,7 @@ init_SST <- function(years) {
   # for (i in 1:years) {
   #   heat_prob = runif(1, 0, 1)
   #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-  #     intensity <- runif(1, .5, ifelse(i < 75, 2, 3))
+  #     intensity <- runif(1, 1, ifelse(i < 75, 2, 4))
   #     SST = start_SST + intensity
   #   } else {
   #     SST = start_SST
@@ -479,4 +479,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "3x3null8F.rda"))
+save(output.array, file = here::here("data", "3x3null.rda"))

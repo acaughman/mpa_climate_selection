@@ -44,7 +44,7 @@ for (i in 1:years) {
 SST.patches.enso <- array(0, c(NS.patches, EW.patches, years))
 start_SST = (opt.temp + 2) + NS.patches*0.01
 
-t=seq(1,200,1)
+t=seq(1,years,1)
 enso.value = sin(.8*t) + 0.018
 
 for (i in 1:years) {
