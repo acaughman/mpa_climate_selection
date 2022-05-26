@@ -34,11 +34,13 @@ fecundity <- 20000 # The number of babies produced, on average, by each adult fe
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.8
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(810,910,1010,
-                 811,911,1011,
-                 812,912,1012) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve, c(369,370,371,372,389,390,391,392,409,410,411,412,429,430,431,432)
+reserves.at <- c(810,910,1010,811,911,1011,812,912,1012) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve
+# small MPA c(810,910,1010,811,911,1011,812,912,1012)
+# large MPA c(710,810,910,1010,1110,1210,1310,1410,711,811,911,1011,1111,1211,1311,1411,712,812,912,1012,1112,1212,1312,1412)
+# MPA network c(810,910,1010,811,911,1011,812,912,1012,842,942,1042,843,943,1043,844,944,1044,874,974,1074,875,975,1075,876,976,1076)
 dynamic.reserve = FALSE
 buffer.at <- c()
+# buffer c(709,809,909,1009,1109,710,1110,711,1111,712,1112,713,813,913,1013,1113)
 bold.mover.distance <- 300 # Individuals with AA genotype move this distance on average every year
 lazy.mover.distance <- 200 # Individuals with aa genotype move this distance on average every year
 Dominance.coefficient <- 0.5 # Dominance coefficient
