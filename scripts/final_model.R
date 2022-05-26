@@ -32,7 +32,7 @@ s <- 0.58 # survival proportion
 dd <- 0.001 # density dependence of baby survival 
 fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished <- 0.8
+fished <- 0.6
 buffer.fished <- 0 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 reserves.at <- c(810,910,1010,
                  811,911,1011,
@@ -369,9 +369,9 @@ move <- function(pop) {
               # determine the direction of each move
               theta <- runif(pop[lat,lon,i,j,k],0,2*pi)
               # bias this movement in the north-south direction (along coasts) if this is a great white shark simulation (otherwise, comment out the next three lines):
-              #f.adj <- function(x, u) x-cos(x)*sin(x) - u
-              #my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
-              #theta <- vapply(theta, my.uniroot, numeric(1))
+              f.adj <- function(x, u) x-cos(x)*sin(x) - u
+              my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
+              theta <- vapply(theta, my.uniroot, numeric(1))
               # convert direction and distance into a distance in the x-direction (longitude)
               x <- cos(theta)*dist
               # bounce off edges (assume fish start in centre of cell)
@@ -405,12 +405,12 @@ move <- function(pop) {
                       miss_y.edges <- TRUE }
                   }
                   if(y[m] > patch.size*(NS.patches-lat)+patch.size/2) {
-                    y[m] <- -(y[m]-2*(patch.size*(NS.patches-lat)+patch.size/2))
+                    y[m] <- y[m] - (patch.size * NS.patches)
                     # distance penalty for hitting an edge
                     #y[m] <- y[m] + 1
                   }
                   if(y[m] < patch.size/2-lat*patch.size) {
-                    y[m] <- -(y[m]-2*(patch.size/2-lat*patch.size))
+                    y[m] <- y[m] + (patch.size * NS.patches)
                     # distance penalty for hitting an edge
                     #y[m] <- y[m] - 1
                   }
@@ -484,4 +484,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "3x3null.rda"))
+save(output.array, file = here::here("data", "3x3null6F.rda"))
