@@ -76,7 +76,7 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
+  SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
@@ -459,6 +459,7 @@ for(rep in 1:reps) {
   print(rep)
   pop <- init()
   SST.patches <- init_SST(gens)
+  #save(SST.patches, file = here::here("data", "null.rda"))
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
