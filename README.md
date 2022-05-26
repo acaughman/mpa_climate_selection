@@ -1,5 +1,27 @@
 # MPA Climate Selection
 
+### Tests
+
+Fishing pressure tests
+
+1. 0.6
+2. 0.7
+3. 0.8
+
+Climate Tests - with chosen fishing pressure and small MPA
+
+1. Mean shift
+2. ENSO
+3. Heat Waves
+
+MPA Tests - with chosen fishing pressure and no climate
+
+1. Single Large
+2. Network
+3. Dynamics
+4. Buffer zone outside MPA
+
+
 ### Climate Scenarios
 
 1. No Climate
