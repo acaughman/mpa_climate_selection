@@ -2,19 +2,13 @@
 
 ### Tests
 
-Fishing pressure tests
-
-1. 0.6
-2. 0.7
-3. 0.8
-
-Climate Tests - with chosen fishing pressure and small MPA
+Climate Tests - with 0.8 and 0.7 fishing pressure and small MPA
 
 1. Mean shift
 2. ENSO
 3. Heat Waves
 
-MPA Tests - with chosen fishing pressure and no climate
+MPA Tests - with 0.8 fishing pressure and no climate
 
 1. Single Large
 2. Network
