@@ -14,7 +14,7 @@ NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 gens = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-load(file = here::here("data","3x3null6F.rda"))
+load(file = here::here("data","3x3mean8F.rda"))
 
 # Output results into a dataframe
 output_df = data.frame() #create dataframe to hold results
@@ -129,5 +129,5 @@ p2 / p1
 
 plot = p2 / p1
 
-ggsave(plot, file=paste0("3x3null.pdf"), path = here::here("figs", "climate"), height = 11, width = 8)
+ggsave(plot, file=paste0("3x3mean8F.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
 

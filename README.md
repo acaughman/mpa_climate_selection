@@ -2,13 +2,12 @@
 
 ### Tests
 
-Climate Tests - with 0.8 and 0.7 fishing pressure and small MPA
+Climate Tests - with 0.8 and 0.7 or 0.6 fishing pressure and small MPA
 
-1. Mean shift
 2. ENSO
 3. Heat Waves
 
-MPA Tests - with 0.8 fishing pressure and no climate
+MPA Tests - with 0.8 and 0.7 or 0.6 fishing pressure and no climate
 
 1. Single Large
 2. Network
@@ -33,26 +32,47 @@ MPA Tests - with 0.8 fishing pressure and no climate
 
 ### Mark off as done
 
-10 replicates
+20 replicates - 0.6 and 0.8 fishing pressure
 
-1.1
-1.2
-1.3
-1.4
-1.5
-2.1
-2.2
-2.3
-2.4
-2.5
-3.1
-3.2
-3.3
-3.4
-3.5
-4.1
-4.2
-4.3
-4.4
-4.5
+1.1.8
+1.2.8
+1.3.8
+1.4.8
+1.5.8
+2.1.8
+2.2.8
+2.3.8
+2.4.8
+2.5.8
+3.1.8
+3.2.8
+3.3.8
+3.4.8
+3.5.8
+4.1.8
+4.2.8
+4.3.8
+4.4.8
+4.5.8
+1.1.6
+1.2.6
+1.3.6
+1.4.6
+1.5.6
+2.1.6
+2.2.6
+2.3.6
+2.4.6
+2.5.6
+3.1.6
+3.2.6
+3.3.6
+3.4.6
+3.5.6
+4.1.6
+4.2.6
+4.3.6
+4.4.6
+4.5.6
 
+Do I need to repeat these with no evolution to prove a point? 
