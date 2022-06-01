@@ -2,10 +2,12 @@
 
 ### Tests
 
-Climate Tests - with 0.8 and 0.7 or 0.6 fishing pressure and small MPA
+Climate Tests - with 0.7 or 0.6 fishing pressure and small MPA
 
-2. ENSO
-3. Heat Waves
+2. ENSO 6/7
+3. Heat Waves 6/7
+
+** Decide bewteen .6 and .7 **
 
 MPA Tests - with 0.8 and 0.7 or 0.6 fishing pressure and no climate
 
@@ -14,6 +16,7 @@ MPA Tests - with 0.8 and 0.7 or 0.6 fishing pressure and no climate
 3. Dynamics
 4. Buffer zone outside MPA
 
+** Assuming all tests go well, proceed to real tests! **
 
 ### Climate Scenarios
 
@@ -32,7 +35,9 @@ MPA Tests - with 0.8 and 0.7 or 0.6 fishing pressure and no climate
 
 ### Mark off as done
 
-20 replicates - 0.6 and 0.8 fishing pressure
+20 simulations - 0.6 and 0.8 fishing pressure
+
+10 replicates in each
 
 1.1.8
 1.2.8
