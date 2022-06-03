@@ -2,14 +2,7 @@
 
 ### Tests
 
-Climate Tests - with 0.7 or 0.6 fishing pressure and small MPA
-
-2. ENSO 6/7
-3. Heat Waves 6/7
-
-** Decide bewteen .6 and .7 **
-
-MPA Tests - with 0.8 and 0.7 or 0.6 fishing pressure and no climate
+MPA Tests - with 0.8 and 0.6 fishing pressure and no climate
 
 1. Single Large
 2. Network
