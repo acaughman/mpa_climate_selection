@@ -72,5 +72,3 @@ MPA Tests - with 0.8 and 0.5 fishing pressure and no climate
 4.3.5
 4.4.5
 4.5.5
-
-Do I need to repeat these with no evolution to prove a point? 
