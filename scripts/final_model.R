@@ -78,7 +78,7 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  #SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
+  SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
@@ -94,20 +94,20 @@ init_SST <- function(years) {
   # }
   
   ### UNCOMMENT FOR ENSO  SST
-  SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
-  start_SST = (opt.temp + 2) + NS.patches*0.01 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
-
-  t=seq(1,years,1) #sequence for the number of years to sin transform
-  enso.value = sin(.8*t) + 0.018 #create sinusoid of ENSO deviations from mean for all years. Creates 4 year fluctuations and includes mean temperature increases
-
-  for (i in 1:years) {
-    SST = start_SST
-    for (lat in 1:NS.patches) {
-      SST.patches[lat,,i] = SST #assign SST values to grid
-      SST = SST - 0.01 #de increment by the 0.01 degree change every 100m
-    }
-    start_SST = start_SST + enso.value[i] #increase SST in next year 
-  }
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
+  # start_SST = (opt.temp + 2) + NS.patches*0.01 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
+  # 
+  # t=seq(1,years,1) #sequence for the number of years to sin transform
+  # enso.value = sin(.8*t) + 0.018 #create sinusoid of ENSO deviations from mean for all years. Creates 4 year fluctuations and includes mean temperature increases
+  # 
+  # for (i in 1:years) {
+  #   SST = start_SST
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST #assign SST values to grid
+  #     SST = SST - 0.01 #de increment by the 0.01 degree change every 100m
+  #   }
+  #   start_SST = start_SST + enso.value[i] #increase SST in next year 
+  # }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
@@ -482,4 +482,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "3x3enso5F.rda"))
+save(output.array, file = here::here("data", "3x3null5F.rda"))
