@@ -2,13 +2,6 @@
 
 ### Tests
 
-MPA Tests - with 0.8 and 0.5 fishing pressure and no climate
-
-1. Single Large
-2. Network
-3. Dynamics
-4. Buffer zone outside MPA
-
 ** Assuming all tests go well, proceed to real tests! **
 
 ### Climate Scenarios
