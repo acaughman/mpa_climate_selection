@@ -25,16 +25,8 @@ Hom.a.movers <- 300 # Individuals with aa genotype move this distance on average
 Het.movers <- min(Hom.A.movers,Hom.a.movers) + h * abs(Hom.A.movers - Hom.a.movers)
 Herit <- 2 # Influences heritability of movement. High numbers increase heritability by reducing the variance around the phenotypic mean. The phenotypic mean is determined by the genotype.
 
-move.array <- array(0, c(NS.patches, EW.patches, 3, 2, 3))
-move.array2 <- array(0, c(NS.patches, EW.patches, 3, 2, 3))
 
 move <- function(pop) {
-  
-  h <- Dominance.coefficient # Dominance coefficient
-  Hom.A.movers <- bold.mover.distance # Individuals with AA genotype move this distance on average, in nautical miles
-  Hom.a.movers <- lazy.mover.distance # Individuals with aa genotype move this distance on average, in nautical miles
-  Het.movers <- min(Hom.A.movers,Hom.a.movers) + h * abs(Hom.A.movers - Hom.a.movers)
-  Herit <- Heritability.index # Influences heritability of movement. High numbers increase heritability by reducing the variance around the phenotypic mean. The phenotypic mean is determined by the genotype.
   
   move.array <- world
   
@@ -51,28 +43,39 @@ move <- function(pop) {
               move.array[lat,lon,i,j,k] <- move.array[lat,lon,i,j,k] - pop[lat,lon,i,j,k]
               # determine the distribution of movement distances in nautical miles:
               dist <- rnbinom(pop[lat,lon,i,j,k], mu = mean.dist, size = Herit)
+              # dist2 <- rnbinom(sum(pop[lat,lon,,,k]), mu = mean.dist, size = Herit)
               # determine the direction of each move
               theta <- runif(pop[lat,lon,i,j,k],0,2*pi)
+              # theta2 = runif(sum(pop[lat,lon,,,k]),0,2*pi)
               # bias this movement in the north-south direction (along coasts) if this is a great white shark simulation (otherwise, comment out the next three lines):
               f.adj <- function(x, u) x-cos(x)*sin(x) - u
               my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
               theta <- vapply(theta, my.uniroot, numeric(1))
+              # theta2 <- vapply(theta2, my.uniroot, numeric(1))
+              # convert direction and distance into a distance in the x-direction (longitude)
               # convert direction and distance into a distance in the x-direction (longitude)
               x <- cos(theta)*dist
               # bounce off edges (assume fish start in centre of cell)
+              x_test = cos(theta)*dist
+              x_miss = ifelse((x_test <= patch.size*(EW.patches-lon)+patch.size/2) & (x_test >= patch.size/2-lon*patch.size), TRUE, FALSE)
+              x_final = ifelse((x_miss == FALSE) & (x_test > patch.size*(EW.patches-lon)+patch.size/2),(-(x_test-2*(patch.size*(EW.patches-lon)+patch.size/2))),x_test)
+              x_final = ifelse((x_miss == FALSE) & (x_test < patch.size/2-lon*patch.size),(-(x_test-2*(patch.size/2-lon*patch.size))),x_test)
               for(m in 1:length(x)) {
                 miss_x.edges <- FALSE
                 while(miss_x.edges==FALSE) {
-                  if(x[m] <= (patch.size*(EW.patches-lon)+patch.size/2) | !is.na(x[m])) {
-                    if(x[m] >= (patch.size/2-lon*patch.size) | !is.na(x[m])) {
-                      miss_x.edges <- TRUE 
-                    }
+                  if(x[m] <= patch.size*(EW.patches-lon)+patch.size/2) {
+                    if(x[m] >= patch.size/2-lon*patch.size) {
+                      miss_x.edges <- TRUE }
                   }
                   if(x[m] > patch.size*(EW.patches-lon)+patch.size/2) {
-                    x[m] <- NA
+                    x[m] <- -(x[m]-2*(patch.size*(EW.patches-lon)+patch.size/2))
+                    # distance penalty for hitting an edge
+                    #x[m] <- x[m] + 1
                   }
                   if(x[m] < patch.size/2-lon*patch.size) {
-                    x[m] <- NA
+                    x[m] <- -(x[m]-2*(patch.size/2-lon*patch.size))
+                    # distance penalty for hitting an edge
+                    #x[m] <- x[m] - 1
                   }
                 }
               }
@@ -82,18 +85,30 @@ move <- function(pop) {
               for(m in 1:length(y)) {
                 miss_y.edges <- FALSE
                 while(miss_y.edges==FALSE) {
-                  if(y[m] <= (patch.size*(NS.patches-lat)+patch.size/2) | !is.na(y[m])) {
-                    if(y[m] >= (patch.size/2-lat*patch.size) | !is.na(y[m])) {
+                  if(y[m] <= patch.size*(NS.patches-lat)+patch.size/2) {
+                    if(y[m] >= patch.size/2-lat*patch.size) {
                       miss_y.edges <- TRUE }
                   }
-                  if(y[m] > (patch.size*(NS.patches-lat)+patch.size/2)) {
-                    y[m] <- NA
+                  if(y[m] > patch.size*(NS.patches-lat)+patch.size/2) {
+                    y[m] <- y[m] - (patch.size * NS.patches)
+                    # distance penalty for hitting an edge
+                    #y[m] <- y[m] + 1
                   }
-                  if(y[m] < (patch.size/2-lat*patch.size)) {
-                    y[m] <- NA
+                  if(y[m] < patch.size/2-lat*patch.size) {
+                    y[m] <- y[m] + (patch.size * NS.patches)
+                    # distance penalty for hitting an edge
+                    #y[m] <- y[m] - 1
                   }
                 }
               }
+              # val = 0
+              # for(a in 1:dim(pop[lat,lon,,,k])[1]) {
+              #   for(b in 1:dim(pop[lat,lon,,,k])[2]) {
+              #     val = val + pop[lat,lon,,,k][a,b]
+              #     x_now = x2[1:val]
+              #     y_now = y2[1:val]
+              #   }
+              # }
               # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
               xy <- as.data.frame(cbind(x,y)) %>% 
                 drop_na()
