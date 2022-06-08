@@ -367,21 +367,53 @@ move <- function(pop) {
               # determine the direction of each move
               theta <- runif(pop[lat,lon,i,j,k],0,2*pi)
               # bias this movement in the north-south direction (along coasts) if this is a great white shark simulation (otherwise, comment out the next three lines):
-              f.adj <- function(x, u) x-cos(x)*sin(x) - u
-              my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
-              theta <- vapply(theta, my.uniroot, numeric(1))
+              #f.adj <- function(x, u) x-cos(x)*sin(x) - u
+              #my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
+              #theta <- vapply(theta, my.uniroot, numeric(1))
               # convert direction and distance into a distance in the x-direction (longitude)
               x <- cos(theta)*dist
               # bounce off edges (assume fish start in centre of cell)
-              x_bool = ifelse((x <= patch.size*(EW.patches-lon)+patch.size/2) & (x >= patch.size/2-lon*patch.size), TRUE, FALSE)
-              x = ifelse((x_bool == FALSE) & (x > patch.size*(EW.patches-lon)+patch.size/2),(-(x-2*(patch.size*(EW.patches-lon)+patch.size/2))),x)
-              x = ifelse((x_bool == FALSE) & (x < patch.size/2-lon*patch.size),(-(x-2*(patch.size/2-lon*patch.size))),x)
+              for(m in 1:length(x)) {
+                miss_x.edges <- FALSE
+                while(miss_x.edges==FALSE) {
+                  if(x[m] <= patch.size*(EW.patches-lon)+patch.size/2) {
+                    if(x[m] >= patch.size/2-lon*patch.size) {
+                      miss_x.edges <- TRUE }
+                  }
+                  if(x[m] > patch.size*(EW.patches-lon)+patch.size/2) {
+                    x[m] <- -(x[m]-2*(patch.size*(EW.patches-lon)+patch.size/2))
+                    # distance penalty for hitting an edge
+                    #x[m] <- x[m] + 1
+                  }
+                  if(x[m] < patch.size/2-lon*patch.size) {
+                    x[m] <- -(x[m]-2*(patch.size/2-lon*patch.size))
+                    # distance penalty for hitting an edge
+                    #x[m] <- x[m] - 1
+                  }
+                }
+              }
               # convert direction and distance into a distance in the y-direction (latitude)
               y <- sin(theta)*dist
               # bounce off edges (assume fish start in centre of cell)
-              y_bool = ifelse((y <= patch.size*(NS.patches-lat)+patch.size/2) & (y >= patch.size/2-lat*patch.size), TRUE, FALSE)
-              y = ifelse((y_bool == FALSE) & (y > patch.size*(NS.patches-lat)+patch.size/2),(y - (patch.size * NS.patches)),y)
-              y = ifelse((y_bool == FALSE) & (y < patch.size/2-lat*patch.size),(y + (patch.size * NS.patches)),y)
+              for(m in 1:length(y)) {
+                miss_y.edges <- FALSE
+                while(miss_y.edges==FALSE) {
+                  if(y[m] <= patch.size*(NS.patches-lat)+patch.size/2) {
+                    if(y[m] >= patch.size/2-lat*patch.size) {
+                      miss_y.edges <- TRUE }
+                  }
+                  if(y[m] > patch.size*(NS.patches-lat)+patch.size/2) {
+                    y[m] <- -(y[m]-2*(patch.size*(NS.patches-lat)+patch.size/2))
+                    # distance penalty for hitting an edge
+                    #y[m] <- y[m] + 1
+                  }
+                  if(y[m] < patch.size/2-lat*patch.size) {
+                    y[m] <- -(y[m]-2*(patch.size/2-lat*patch.size))
+                    # distance penalty for hitting an edge
+                    #y[m] <- y[m] - 1
+                  }
+                }
+              }
               # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
               xy <- as.data.frame(cbind(x,y))
               hx <- hist(xy$x, breaks = seq(round(min(x),-2)-patch.size/2,round(max(x),-2)+patch.size/2,patch.size), plot = FALSE)
