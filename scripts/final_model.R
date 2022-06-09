@@ -32,13 +32,13 @@ s <- 0.58 # survival proportion
 dd <- 0.001 # density dependence of baby survival 
 fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished <- 0.5
+fished <- 0.8
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 reserves.at <- c(810,910,1010,811,911,1011,812,912,1012) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve
 # small MPA c(810,910,1010,811,911,1011,812,912,1012)
 # large MPA c(710,810,910,1010,1110,1210,1310,1410,711,811,911,1011,1111,1211,1311,1411,712,812,912,1012,1112,1212,1312,1412)
 # MPA network c(810,910,1010,811,911,1011,812,912,1012,842,942,1042,843,943,1043,844,944,1044,874,974,1074,875,975,1075,876,976,1076)
-dynamic.reserve = FALSE
+dynamic.reserve = TRUE
 buffer.at <- c()
 # buffer c(709,809,909,1009,1109,710,1110,711,1111,712,1112,713,813,913,1013,1113)
 bold.mover.distance <- 300 # Individuals with AA genotype move this distance on average every year
@@ -130,6 +130,8 @@ init_SST <- function(years) {
   return(SST.patches) ### DO NOT COMMENT OUT
 }
 
+SST.patches <- init_SST(years)
+
 ############################################################################
 ## This function creates an array to tell the simulation the reserve locations
 
@@ -141,9 +143,9 @@ where.reserves <- function(reserves.at) {
       for(i in 1:length(reserves.at)) {
         x <- ((reserves.at[i]-1) %/% NS.patches) + 1
         y <- ((reserves.at[i]-1) %% NS.patches) + 1
-        if (count < 3) {
+        if (count < (floor(patch.size * NS.patches / 1000)-1)) {
           if (SST.patches[y,x,j] >= 31) {
-            reserves.at = reserves.at + 30
+            reserves.at = reserves.at + 10
             count = count + 1
           }
         }
@@ -151,11 +153,11 @@ where.reserves <- function(reserves.at) {
       }
     }
   } else {
-    reserve.patches <- array(0, c(NS.patches, EW.patches))
+    reserve.patches <- array(0, c(NS.patches, EW.patches, years))
     for(i in 1:length(reserves.at)) {
       x <- ((reserves.at[i]-1) %/% NS.patches) + 1
       y <- ((reserves.at[i]-1) %% NS.patches) + 1
-      reserve.patches[y,x] <- 1
+      reserve.patches[y,x,] <- 1
     }
   }
   return(reserve.patches)
@@ -306,7 +308,7 @@ fishing <- function(pop,gen) {
     }
   }
   if(gen > pre.reserve.gens+pre.fishing.gens) {
-    reserve.area <- sum(reserve.patches)/(NS.patches*EW.patches)
+    reserve.area <- sum(reserve.patches[,,gen])/(NS.patches*EW.patches)
     buffer.area <- sum(buffer.patches)/(NS.patches*EW.patches)
     fished.adj <- (fished - (buffer.area*buffer.fished)) * 1/(1-(reserve.area + buffer.area))
     each.patch.pop <- array(0,c(NS.patches,EW.patches))
@@ -317,11 +319,11 @@ fishing <- function(pop,gen) {
         }
       }
     }
-    each.patch.pop = ifelse(reserve.patches == 1 | buffer.patches == 1, NaN, each.patch.pop)
+    each.patch.pop = ifelse(reserve.patches[,,gen] == 1 | buffer.patches == 1, NaN, each.patch.pop)
     mean.per.patch.pop <- mean(each.patch.pop,na.rm=TRUE)
     ff <- mean.per.patch.pop*(1/fished.adj-1)
     patch.pop <- rowSums(pop[,,c(2,3),,], dims=2)
-    patch.pop = ifelse(reserve.patches == 1 | buffer.patches == 1, NaN, patch.pop)
+    patch.pop = ifelse(reserve.patches[,,gen] == 1 | buffer.patches == 1, NaN, patch.pop)
     f <- patch.pop/(ff+patch.pop)
     if(buffer.fished != 0) {
       f = ifelse(buffer.patches == 1, buffer.fished, f)
@@ -367,9 +369,9 @@ move <- function(pop) {
               # determine the direction of each move
               theta <- runif(pop[lat,lon,i,j,k],0,2*pi)
               # bias this movement in the north-south direction (along coasts) if this is a great white shark simulation (otherwise, comment out the next three lines):
-              #f.adj <- function(x, u) x-cos(x)*sin(x) - u
-              #my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
-              #theta <- vapply(theta, my.uniroot, numeric(1))
+              f.adj <- function(x, u) x-cos(x)*sin(x) - u
+              my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
+              theta <- vapply(theta, my.uniroot, numeric(1))
               # convert direction and distance into a distance in the x-direction (longitude)
               x <- cos(theta)*dist
               # bounce off edges (assume fish start in centre of cell)
@@ -403,12 +405,12 @@ move <- function(pop) {
                       miss_y.edges <- TRUE }
                   }
                   if(y[m] > patch.size*(NS.patches-lat)+patch.size/2) {
-                    y[m] <- -(y[m]-2*(patch.size*(NS.patches-lat)+patch.size/2))
+                    y[m] <- y[m] - (patch.size * NS.patches)
                     # distance penalty for hitting an edge
                     #y[m] <- y[m] + 1
                   }
                   if(y[m] < patch.size/2-lat*patch.size) {
-                    y[m] <- -(y[m]-2*(patch.size/2-lat*patch.size))
+                    y[m] <- y[m] + (patch.size * NS.patches)
                     # distance penalty for hitting an edge
                     #y[m] <- y[m] - 1
                   }
@@ -460,7 +462,6 @@ start_time <- Sys.time()
 for(rep in 1:reps) {
   print(rep)
   pop <- init()
-  SST.patches <- init_SST(gens)
   #save(SST.patches, file = here::here("data", "null.rda"))
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
@@ -482,4 +483,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "3x3null5F.rda"))
+save(output.array, file = here::here("data", "dyn3x3null8F.rda"))
