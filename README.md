@@ -1,9 +1,5 @@
 # MPA Climate Selection
 
-### Tests
-
-Dynamic MPA not working
-
 ### Climate Scenarios
 
 1. No Climate
