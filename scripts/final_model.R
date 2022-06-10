@@ -32,7 +32,7 @@ s <- 0.58 # survival proportion
 dd <- 0.001 # density dependence of baby survival 
 fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished <- 0.8
+fished <- 0.5
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 reserves.at <- c(810,910,1010,811,911,1011,812,912,1012) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve
 # small MPA c(810,910,1010,811,911,1011,812,912,1012)
@@ -138,18 +138,14 @@ SST.patches <- init_SST(years)
 where.reserves <- function(reserves.at) {
   if (dynamic.reserve) {
     reserve.patches <- array(0, c(NS.patches, EW.patches, years))
-    count = 1
     for(j in 1:years) {
       for(i in 1:length(reserves.at)) {
         x <- ((reserves.at[i]-1) %/% NS.patches) + 1
         y <- ((reserves.at[i]-1) %% NS.patches) + 1
-        if (count < (floor(patch.size * NS.patches / 1000)-1)) {
-          if (SST.patches[y,x,j] >= 31) {
-            reserves.at = reserves.at + 10
-            count = count + 1
-          }
-        }
         reserve.patches[y,x,j] <- 1
+      }
+      if ((j %% 30) == 0) {
+        reserves.at = reserves.at + 20
       }
     }
   } else {
@@ -483,4 +479,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "dyn3x3null8F.rda"))
+save(output.array, file = here::here("data", "dyn3x3null5F.rda"))
