@@ -11,7 +11,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 1 # The number of replicate simulations to run
+NUM.reps <- 10 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
@@ -32,7 +32,7 @@ s <- 0.58 # survival proportion
 dd <- 0.001 # density dependence of baby survival 
 fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished <- 0.8
+fished <- 0.5
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 reserves.at <- c(810,910,1010,811,911,1011,812,912,1012) # This determines which patches are marine reserves. Should be a list: e.g., for one reserve
 # small MPA c(810,910,1010,811,911,1011,812,912,1012)
@@ -479,4 +479,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "dyn3x3null8F.rda"))
+save(output.array, file = here::here("data", "3x3null5F.rda"))
