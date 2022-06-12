@@ -17,15 +17,20 @@
 
 ### Mark off as done
 
-20 simulations - 0.6 and 0.8 fishing pressure
+20 simulations - 0.5 and 0.8 fishing pressure
 
 10 replicates in each
 
-1.1.8
+1.1.8 - Running
 1.2.8
 1.3.8
 1.4.8
 1.5.8
+1.1.5
+1.2.5
+1.3.5
+1.4.5
+1.5.5
 2.1.8
 2.2.8
 2.3.8
@@ -41,11 +46,6 @@
 4.3.8
 4.4.8
 4.5.8
-1.1.5
-1.2.5
-1.3.5
-1.4.5
-1.5.5
 2.1.5
 2.2.5
 2.3.5
