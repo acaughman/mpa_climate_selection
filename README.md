@@ -21,8 +21,8 @@
 
 10 replicates in each
 
-1.1.8 - Running
-1.2.8
+1.1.8 - Done
+1.2.8 - Running
 1.3.8
 1.4.8
 1.5.8
