@@ -11,7 +11,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 1 # The number of replicate simulations to run
+NUM.reps <- 10 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
@@ -78,24 +78,24 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
+  SST.patches <- array(opt.temp + 1, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-  SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
-  start_SST = (opt.temp+1) + NS.patches*0.03 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
-
-  for (i in 1:years) {
-    SST = start_SST
-    for (lat in 1:NS.patches) {
-      SST.patches[lat,,i] = SST #assign SST values to grid
-      SST = SST - 0.03 #de increment by the 0.01 degree change every 100m
-    }
-    start_SST = start_SST + 0.018 #increase SST in next year by mean temp increase
-  }
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
+  # start_SST = (opt.temp+1) + NS.patches*0.03 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
+  # 
+  # for (i in 1:years) {
+  #   SST = start_SST
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST #assign SST values to grid
+  #     SST = SST - 0.03 #de increment by the 0.01 degree change every 100m
+  #   }
+  #   start_SST = start_SST + 0.018 #increase SST in next year by mean temp increase
+  # }
   
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
-  # start_SST = (opt.temp + 2) + NS.patches*0.01 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
+  # start_SST = (opt.temp + 1) + NS.patches*0.03 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
   # 
   # t=seq(1,years,1) #sequence for the number of years to sin transform
   # enso.value = sin(.8*t) + 0.018 #create sinusoid of ENSO deviations from mean for all years. Creates 4 year fluctuations and includes mean temperature increases
@@ -104,14 +104,14 @@ init_SST <- function(years) {
   #   SST = start_SST
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST #assign SST values to grid
-  #     SST = SST - 0.01 #de increment by the 0.01 degree change every 100m
+  #     SST = SST - 0.03 #de increment by the 0.01 degree change every 100m
   #   }
-  #   start_SST = start_SST + enso.value[i] #increase SST in next year 
+  #   start_SST = start_SST + enso.value[i] #increase SST in next year
   # }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
-  # start_SST = (opt.temp + 3) + NS.patches*0.01 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
+  # start_SST = (opt.temp + 1) + NS.patches*0.03 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
   # 
   # for (i in 1:years) {
   #   heat_prob = runif(1, 0, 1) #generate probability of heat wave occurring
@@ -123,7 +123,7 @@ init_SST <- function(years) {
   #   }
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST #assign SST values to grid
-  #     SST = SST - 0.01 #de increment by the 0.01 degree change every 100m
+  #     SST = SST - 0.03 #de increment by the 0.01 degree change every 100m
   #   }
   # }
   
@@ -479,4 +479,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "test8F.rda"))
+save(output.array, file = here::here("data", "test.rda"))

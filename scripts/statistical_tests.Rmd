@@ -1,0 +1,57 @@
+---
+title: ''
+author: "Allie Caughman"
+date: '2022-07-23'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+### Load in data
+
+```{r}
+test_mean = read_csv(here::here("output", "test8Fmean.csv")) %>% 
+  filter(generation > 50) %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_sum = sum(pop))
+
+test_mean_null = read_csv(here::here("output", "test8Fmean_null.csv")) %>% 
+  filter(generation > 50) %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_sum_null = sum(pop)) 
+
+data = full_join(test_mean, test_mean_null)
+```
+
+### paired t-test or repeated measures ANOVA 
+
+```{r}
+evolve = data %>% 
+  pull(geno_pop_sum)
+null = data %>% 
+  pull(geno_pop_sum_null)
+
+test = t.test(evolve, null, paired = TRUE, alternative = "less")
+```
+
+### MPA only squares
+
+```{r}
+data_f = data %>% 
+  filter(lon %in% c(9, 10, 11)) %>% 
+  filter(lat %in% c(10, 11, 12))
+```
+
+```{r}
+evolve_f = data_f %>% 
+  pull(geno_pop_sum)
+null_f = data_f %>% 
+  pull(geno_pop_sum_null)
+
+test_mpa = t.test(evolve_f, null_f, paired = TRUE, alternative = "less")
+```
+
