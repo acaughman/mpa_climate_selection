@@ -11,7 +11,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 10 # The number of replicate simulations to run
+NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
@@ -34,7 +34,7 @@ fecundity <- 20000 # The number of babies produced, on average, by each adult fe
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.8
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(810,910,1010,811,911,1011,812,912,1012,842,942,1042,843,943,1043,844,944,1044,874,974,1074,875,975,1075,876,976,1076)
+reserves.at <- c(810,910,1010,811,911,1011,812,912,1012)
 # small MPA c(810,910,1010,811,911,1011,812,912,1012)
 # large MPA c(710,810,910,1010,1110,1210,1310,1410,711,811,911,1011,1111,1211,1311,1411,712,812,912,1012,1112,1212,1312,1412)
 # MPA network c(810,910,1010,811,911,1011,812,912,1012,842,942,1042,843,943,1043,844,944,1044,874,974,1074,875,975,1075,876,976,1076)
@@ -81,17 +81,17 @@ init_SST <- function(years) {
   SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
-  # start_SST = (opt.temp + 2) + NS.patches*0.01 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
-  # 
-  # for (i in 1:years) {
-  #   SST = start_SST 
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST #assign SST values to grid
-  #     SST = SST - 0.01 #de increment by the 0.01 degree change every 100m
-  #   }
-  #   start_SST = start_SST + 0.018 #increase SST in next year by mean temp increase
-  # }
+  SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
+  start_SST = (opt.temp+1) + NS.patches*0.03 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
+
+  for (i in 1:years) {
+    SST = start_SST
+    for (lat in 1:NS.patches) {
+      SST.patches[lat,,i] = SST #assign SST values to grid
+      SST = SST - 0.03 #de increment by the 0.01 degree change every 100m
+    }
+    start_SST = start_SST + 0.018 #increase SST in next year by mean temp increase
+  }
   
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
@@ -479,4 +479,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "largenull8F.rda"))
+save(output.array, file = here::here("data", "test8F.rda"))
