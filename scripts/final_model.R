@@ -11,7 +11,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 10 # The number of replicate simulations to run
+NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
@@ -20,18 +20,18 @@ years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 100 # the number of patches on the north-south axis
 EW.patches <- 20 # the number of patches on the east-west axis
-patch.size <- 100 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
+patch.size <- 1 # the width and height of each grid cell in nautical miles (COULD BE METERS?)
 ## View the "world" coordinates:
 view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
 view.world
 
 init.a <- 0.3  # The initial frequency of the low movement allele
 
-sb <- 0.58 # survival proportion for babies
-s <- 0.58 # survival proportion
+sb <- 0.52 # survival proportion for babies
+s <- 0.52 # survival proportion
 dd <- 0.001 # density dependence of baby survival 
-fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
-maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
+fecundity <- 25000 # The number of babies produced, on average, by each adult female each year.
+maturity.age <- 4 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.8
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 reserves.at <- c(810,910,1010,811,911,1011,812,912,1012)
@@ -41,12 +41,12 @@ reserves.at <- c(810,910,1010,811,911,1011,812,912,1012)
 dynamic.reserve = FALSE
 buffer.at <- c()
 # buffer c(709,809,909,1009,1109,710,1110,711,1111,712,1112,713,813,913,1013,1113)
-bold.mover.distance <- 300 # Individuals with AA genotype move this distance on average every year
-lazy.mover.distance <- 200 # Individuals with aa genotype move this distance on average every year
+bold.mover.distance <- 3 # Individuals with AA genotype move this distance on average every year
+lazy.mover.distance <- 2 # Individuals with aa genotype move this distance on average every year
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 opt.temp = 25 #optimal temperature of species
-temp.range = 5 #thermal breath of species
+temp.range = 4 #thermal breath of species
 
 ############################################################################
 ## Create the world
@@ -78,52 +78,52 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  SST.patches <- array(opt.temp + 1, c(NS.patches, EW.patches, years))
+  #SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
-  # start_SST = (opt.temp+1) + NS.patches*0.03 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = (opt.temp + 2) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   SST = start_SST
   #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST #assign SST values to grid
-  #     SST = SST - 0.03 #de increment by the 0.01 degree change every 100m
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST - 0.01
   #   }
-  #   start_SST = start_SST + 0.018 #increase SST in next year by mean temp increase
+  #   start_SST = start_SST + 0.02
   # }
   
   ### UNCOMMENT FOR ENSO  SST
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
-  # start_SST = (opt.temp + 1) + NS.patches*0.03 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
-  # 
-  # t=seq(1,years,1) #sequence for the number of years to sin transform
-  # enso.value = sin(.8*t) + 0.018 #create sinusoid of ENSO deviations from mean for all years. Creates 4 year fluctuations and includes mean temperature increases
-  # 
-  # for (i in 1:years) {
-  #   SST = start_SST
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST #assign SST values to grid
-  #     SST = SST - 0.03 #de increment by the 0.01 degree change every 100m
-  #   }
-  #   start_SST = start_SST + enso.value[i] #increase SST in next year
-  # }
+  SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  start_SST = (opt.temp + 2) + NS.patches*0.01
+  
+  t=seq(1,years,1)
+  enso.value = sin(0.6*t) + 0.02
+  
+  for (i in 1:years) {
+    SST = start_SST
+    for (lat in 1:NS.patches) {
+      SST.patches[lat,,i] = SST
+      SST = SST - 0.01
+    }
+    start_SST = start_SST + enso.value[i]
+  }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years)) #create empty temp array
-  # start_SST = (opt.temp + 1) + NS.patches*0.03 #lowest temperature is opt.temp + 2 and each 100 meters increases 0.01 degrees
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = (opt.temp + 2) + NS.patches*0.01
   # 
   # for (i in 1:years) {
-  #   heat_prob = runif(1, 0, 1) #generate probability of heat wave occurring
-  #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) { #determine if heatwave occurred
-  #     intensity <- runif(1, 1, ifelse(i < 75, 2, 4)) #determine heat wave intensity
-  #     SST = start_SST + intensity #add intensity to current SST value
+  #   heat_prob = runif(1, 0, 1)
+  #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+  #     intensity <- runif(1, 1, ifelse(i < 75, 2, 4))
+  #     SST = start_SST + intensity
   #   } else {
-  #     SST = start_SST #not change to SST in non heat wave year
+  #     SST = start_SST
   #   }
   #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST #assign SST values to grid
-  #     SST = SST - 0.03 #de increment by the 0.01 degree change every 100m
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST - 0.01
   #   }
   # }
   
@@ -413,21 +413,21 @@ move <- function(pop) {
                 }
               }
               # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
-              xy <- as.data.frame(cbind(x,y))
-              hx <- hist(xy$x, breaks = seq(round(min(x),-2)-patch.size/2,round(max(x),-2)+patch.size/2,patch.size), plot = FALSE)
-              xbreaks <- hx$breaks
-              xmids <- hx$mids
-              hy <- hist(xy$y, breaks = seq(round(min(y),-2)-patch.size/2,round(max(y),-2)+patch.size/2,patch.size), plot = FALSE)
-              ybreaks <- hy$breaks
-              ymids <- hy$mids
-              freq <-  as.data.frame(table(cut(xy[,2], ybreaks,labels=ymids),cut(xy[,1], xbreaks,labels=xmids)))
-              freq2D <- as.data.frame(array(0,c(length(ymids),length(xmids))))
-              names(freq2D) <- xmids/patch.size
-              row.names(freq2D) <- ymids/patch.size
-              freq2D[cbind(freq[,1], freq[,2])] <- freq[,3]
+              xy <- as.data.frame(cbind(round(x),round(y))) %>% 
+                rename(x = V1) %>% 
+                rename(y = V2)
+              freq = xy %>% 
+                group_by(x,y) %>% 
+                summarize(count = n())
+              freq2D = as.data.frame(array(0,c(length(unique(xy$y)), length(unique(xy$x)))))
+              names(freq2D) <- sort(unique(xy$x))
+              row.names(freq2D) <- sort(unique(xy$y))
+              for(row in 1:length(freq$x)) {
+                freq2D[as.character(freq$y[row]), as.character(freq$x[row])] = freq$count[row]
+              }
               # populate the move.array with movers (and stayers)
-              for(xx in 1:length(xmids)) {
-                for(yy in 1:length(ymids)) {
+              for(xx in 1:length(unique(xy$x))) {
+                for(yy in 1:length(unique(xy$y))) {
                   move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] <- move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] + freq2D[yy,xx]
                 }
               }
@@ -479,4 +479,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "test.rda"))
+save(output.array, file = here::here("data", "test_enso.rda"))
