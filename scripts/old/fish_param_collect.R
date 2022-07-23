@@ -1,8 +1,8 @@
 library(rfishbase)
 library(tidyverse)
 
-data = read_csv("species.csv") %>% 
-  select(species, homerange, habitat, measure)
+data = read_csv(here::here("data","species.csv")) %>% 
+  select(species, homerange, measure)
 validate_names(data$species)
 
 fish = load_taxa()

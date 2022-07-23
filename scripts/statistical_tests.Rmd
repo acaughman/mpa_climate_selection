@@ -35,7 +35,7 @@ evolve = data %>%
 null = data %>% 
   pull(geno_pop_sum_null)
 
-test = t.test(evolve, null, paired = TRUE, alternative = "less")
+test = t.test(evolve, null, paired = TRUE, alternative = "two.sided")
 ```
 
 ### MPA only squares
@@ -52,6 +52,6 @@ evolve_f = data_f %>%
 null_f = data_f %>% 
   pull(geno_pop_sum_null)
 
-test_mpa = t.test(evolve_f, null_f, paired = TRUE, alternative = "less")
+test_mpa = t.test(evolve_f, null_f, paired = TRUE, alternative = "two.sided")
 ```
 

@@ -8,7 +8,7 @@ SST = seq(0, 50) #sea surface temperatures to model
 
 opt.temp = 25 # optimal temperature ranges
 
-temp.range = 5 # thermal performance range, w
+temp.range = 4 # thermal performance range, w
 
 
 # Mortality Function ------------------------------------------------------
@@ -36,8 +36,8 @@ simulate_mortality <- function(SST, opt.temp, temp.range) {
   results_plot = as.data.frame(results) %>% 
     rename(survival = V1) %>%
     mutate(survival.prop = case_when(
-      survival > .58 ~ .58,
-      survival < .58 ~ survival))
+      survival > .52 ~ .52,
+      survival < .52 ~ survival))
   
   results_plot$SST = SST
   results_plot$opt.temp = opt.temp
