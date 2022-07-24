@@ -27,10 +27,10 @@ view.world
 
 init.a <- 0.3  # The initial frequency of the low movement allele
 
-sb <- 0.52 # survival proportion for babies
-s <- 0.52 # survival proportion
+sb <- 0.59 # survival proportion for babies
+s <- 0.59 # survival proportion
 dd <- 0.001 # density dependence of baby survival 
-fecundity <- 40000 # The number of babies produced, on average, by each adult female each year.
+fecundity <- 25000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 4 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.8
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
@@ -90,7 +90,7 @@ init_SST <- function(years) {
   #     SST.patches[lat,,i] = SST
   #     SST = SST - 0.01
   #   }
-  #   start_SST = start_SST + 0.02
+  #   start_SST = start_SST + 0.018
   # }
   
   ### UNCOMMENT FOR ENSO  SST
@@ -98,7 +98,7 @@ init_SST <- function(years) {
   start_SST = (opt.temp + 2) + NS.patches*0.01
   
   t=seq(1,years,1)
-  enso.value = 0.8 * sin(0.6*t) + 0.02
+  enso.value = 0.75 * sin(0.8*t) + 0.018
   
   for (i in 1:years) {
     SST = start_SST

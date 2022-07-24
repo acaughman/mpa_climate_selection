@@ -34,7 +34,7 @@ for (i in 1:years) {
     SST.patches.mean[lat,,i] = SST
     SST = SST - 0.01
   }
-  start_SST = start_SST + 0.02
+  start_SST = start_SST + 0.018
 }
 
 ### UNCOMMENT FOR ENSO VARIABLE MEAN SST
@@ -42,7 +42,7 @@ SST.patches.enso <- array(0, c(NS.patches, EW.patches, years))
 start_SST = (opt.temp + 2) + NS.patches*0.01
 
 t=seq(1,years,1)
-enso.value = 0.8*sin(0.6*t) + 0.02
+enso.value = 0.75*sin(0.8*t) + 0.018
 
 for (i in 1:years) {
   SST = start_SST
