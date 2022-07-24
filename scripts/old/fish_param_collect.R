@@ -26,4 +26,4 @@ dat = full_join(dat, pop) %>%
 
 dat_full = full_join(dat, data)
 
-write_csv(dat_full, "species_sum.csv")
+write_csv(dat_full, here::here("species_sum.csv"))
