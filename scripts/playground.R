@@ -1,22 +1,22 @@
-library(foreach)
-library(doParallel)
+# setup -------------------------------------------------------------------
+
+#run final model parameters and functions first
 
 addTaskCallback(function(...) {set.seed(42);TRUE})
 options(warn=-1)
 options(dplyr.summarise.inform = FALSE)
 
-patch.size <- 1
+reps = 1
 
-bold.mover.distance <- 3 # Individuals with AA genotype move this distance on average every year
-lazy.mover.distance <- 2 # Individuals with aa genotype move this distance on average every year
-
-pre.fishing.gens <- NUM.gens.pre.fishing
-pre.reserve.gens <- NUM.gens.pre.reserve
-post.reserve.gens <- NUM.gens.post.reserve
+pre.fishing.gens <- 1
+pre.reserve.gens <- 2
+post.reserve.gens <- 3
 gens <- 5
 
 output.array <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
-output.array.par <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
+output.array.ifelse <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
+
+# current work ------------------------------------------------------------
 
 move <- function(pop) {
   
@@ -120,6 +120,80 @@ move <- function(pop) {
   return(pop+move.array)
 }
 
+move_ifelse <- function(pop) {
+  
+  h <- Dominance.coefficient # Dominance coefficient
+  Hom.A.movers <- bold.mover.distance # Individuals with AA genotype move this distance on average, in nautical miles
+  Hom.a.movers <- lazy.mover.distance # Individuals with aa genotype move this distance on average, in nautical miles
+  Het.movers <- min(Hom.A.movers,Hom.a.movers) + h * abs(Hom.A.movers - Hom.a.movers)
+  Herit <- Heritability.index # Influences heritability of movement. High numbers increase heritability by reducing the variance around the phenotypic mean. The phenotypic mean is determined by the genotype.
+  
+  move.array <- world
+  
+  for(lat in 1:NS.patches) {
+    for(lon in 1:EW.patches) {
+      for(i in 2:NUM.age.classes) {
+        for(j in 1:NUM.sexes) {
+          for(k in 1:NUM.genotypes) {
+            if(k == 1) { mean.dist <- Hom.A.movers }
+            if(k == 2) { mean.dist <- Het.movers }
+            if(k == 3) { mean.dist <- Hom.a.movers }
+            if(pop[lat,lon,i,j,k] > 0) {
+              # movers are subtracted from the present grid cell
+              move.array[lat,lon,i,j,k] <- move.array[lat,lon,i,j,k] - pop[lat,lon,i,j,k]
+              # determine the distribution of movement distances in nautical miles:
+              dist <- rnbinom(pop[lat,lon,i,j,k], mu = mean.dist, size = Herit)
+              dist <- ifelse(dist > EW.patches, EW.patches, dist)
+              # determine the direction of each move
+              theta <- runif(pop[lat,lon,i,j,k],0,2*pi)
+              # bias this movement in the north-south direction (along coasts) if this is a great white shark simulation (otherwise, comment out the next three lines):
+              f.adj <- function(x, u) x-cos(x)*sin(x) - u
+              my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
+              theta <- vapply(theta, my.uniroot, numeric(1))
+              # convert direction and distance into a distance in the x-direction (longitude)
+              x <- cos(theta)*dist
+              #bounce off edges
+              x_bool = ifelse((x <= patch.size*(EW.patches-lon)+patch.size/2) & (x >= patch.size/2-lon*patch.size), TRUE, FALSE)
+              x = ifelse((x_bool == FALSE) & (x > patch.size*(EW.patches-lon)+patch.size/2),(-(x-2*(patch.size*(EW.patches-lon)+patch.size/2))),x)
+              x = ifelse((x_bool == FALSE) & (x < patch.size/2-lon*patch.size),(-(x-2*(patch.size/2-lon*patch.size))),x)
+              # convert direction and distance into a distance in the y-direction (latitude)
+              y <- sin(theta)*dist
+              #bounce off edges
+              y_bool = ifelse((y <= patch.size*(NS.patches-lat)+patch.size/2) & (y >= patch.size/2-lat*patch.size), TRUE, FALSE)
+              y = ifelse((y_bool == FALSE) & (y > patch.size*(NS.patches-lat)+patch.size/2),(y - (patch.size * NS.patches)),y)
+              y = ifelse((y_bool == FALSE) & (y < patch.size/2-lat*patch.size),(y + (patch.size * NS.patches)),y)
+              # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
+              x = round(x)
+              y = round(y)
+              xy <- as.data.frame(cbind(x,y))
+              freq <<- xy %>% 
+                group_by(x,y) %>% 
+                summarize(count = n())
+              freq2D = as.data.frame(array(0,c(length(unique(xy$y)), length(unique(xy$x)))))
+              names(freq2D) <- sort(unique(xy$x))
+              row.names(freq2D) <- sort(unique(xy$y))
+              for(row in 1:length(freq$x)) {
+                freq2D[as.character(freq$y[row]), as.character(freq$x[row])] = freq$count[row]
+              }
+              # populate the move.array with movers (and stayers)
+              for(xx in 1:length(unique(xy$x))) {
+                for(yy in 1:length(unique(xy$y))) {
+                  move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] <- move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] + freq2D[yy,xx]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  # add move.array to pop to finish movement
+  return(pop+move.array)
+  gc()
+}
+
+# current simulation ------------------------------------------------------
+
 start_time <- Sys.time()
 
 for(rep in 1:reps) {
@@ -143,9 +217,36 @@ gc()
 
 end_time <- Sys.time()
 
+
+# working simulation ------------------------------------------------------
+
+start_time_ifelse <- Sys.time()
+
+for(rep in 1:reps) {
+  print(rep)
+  pop <- init()
+  #save(SST.patches, file = here::here("data", "null.rda"))
+  for(t in 1:gens) {
+    output.array[,,,,,t,rep] <- pop
+    pop <- spawn(pop)
+    pop <- recruit(pop)
+    if(t > pre.fishing.gens) {
+      gen <- t
+      pop <- fishing(pop,gen)
+    }
+    pop <- move_ifelse(pop)
+    print(t)
+  }
+  gc() #clear memory
+}
+gc()
+
+end_time_ifelse <- Sys.time()
+
+# sim comparison ----------------------------------------------------------
+
 end_time - start_time
-
-
+end_time_ifelse - start_time_ifelse
 
 # Old Move 7/23/2022 ------------------------------------------------------
 
