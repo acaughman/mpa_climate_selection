@@ -18,6 +18,36 @@ output.array.ifelse <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.s
 
 # current work ------------------------------------------------------------
 
+
+# profvis -----------------------------------------------------------------
+
+profvis::profvis({
+
+  gens = 1
+
+  for(rep in 1:reps) {
+    print(rep)
+    pop <- init()
+    #save(SST.patches, file = here::here("data", "enso.rda"))
+    for(t in 1:gens) {
+      output.array[,,,,,t,rep] <- pop
+      pop <- spawn(pop)
+      pop <- recruit(pop)
+      if(t > pre.fishing.gens) {
+        gen <- t
+        pop <- fishing(pop,gen)
+      }
+      pop <- move(pop)
+      print(t)
+    }
+    gc() #clear memory
+  }
+})
+
+# unvectorized move -------------------------------------------------------
+
+
+
 move <- function(pop) {
   
   h <- Dominance.coefficient # Dominance coefficient
