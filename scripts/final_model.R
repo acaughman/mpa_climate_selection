@@ -30,7 +30,7 @@ init.a <- 0.3  # The initial frequency of the low movement allele
 sb <- 0.52 # survival proportion for babies
 s <- 0.52 # survival proportion
 dd <- 0.001 # density dependence of baby survival 
-fecundity <- 25000 # The number of babies produced, on average, by each adult female each year.
+fecundity <- 40000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 4 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.8
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
@@ -61,9 +61,9 @@ world <- array(0, c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.geno
 ## This populates the world.
 
 init <- function() {
-  init.AA <- round(50*(1-init.a)^2) #initiate the AA 
-  init.Aa <- round(50*2*(init.a)*(1-init.a)) #initiate Aa
-  init.aa <- round(50*(init.a)^2) #initiate aa
+  init.AA <- round(100*(1-init.a)^2) #initiate the AA 
+  init.Aa <- round(100*2*(init.a)*(1-init.a)) #initiate Aa
+  init.aa <- round(100*(init.a)^2) #initiate aa
   pop <- world #assign pop as empty world
   pop[,,,,1] <- init.AA #add AA to world
   pop[,,,,2] <- init.Aa #add Aa to word
@@ -98,7 +98,7 @@ init_SST <- function(years) {
   start_SST = (opt.temp + 2) + NS.patches*0.01
   
   t=seq(1,years,1)
-  enso.value = sin(0.6*t) + 0.02
+  enso.value = 0.8 * sin(0.6*t) + 0.02
   
   for (i in 1:years) {
     SST = start_SST
@@ -357,6 +357,7 @@ move <- function(pop) {
             if(k == 1) { mean.dist <- Hom.A.movers }
             if(k == 2) { mean.dist <- Het.movers }
             if(k == 3) { mean.dist <- Hom.a.movers }
+            #pop[lat,lon,i,j,k] = ifelse(is.na(pop[lat,lon,i,j,k]), 0, pop[lat,lon,i,j,k])
             if(pop[lat,lon,i,j,k] > 0) {
               # movers are subtracted from the present grid cell
               move.array[lat,lon,i,j,k] <- move.array[lat,lon,i,j,k] - pop[lat,lon,i,j,k]
@@ -428,7 +429,7 @@ start_time <- Sys.time()
 for(rep in 1:reps) {
   print(rep)
   pop <- init()
-  #save(SST.patches, file = here::here("data", "null.rda"))
+  #save(SST.patches, file = here::here("data", "enso.rda"))
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
