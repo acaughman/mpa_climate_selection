@@ -26,20 +26,20 @@ calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
 
 ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
 SST.patches.mean <- array(0, c(NS.patches, EW.patches, years))
-start_SST = (opt.temp + 2) + NS.patches*0.008
+start_SST = (opt.temp + 2) + NS.patches*0.01
 
 for (i in 1:years) {
   SST = start_SST
   for (lat in 1:NS.patches) {
     SST.patches.mean[lat,,i] = SST
-    SST = SST - 0.008
+    SST = SST - 0.01
   }
   start_SST = start_SST + 0.018
 }
 
 ### UNCOMMENT FOR ENSO VARIABLE MEAN SST
 SST.patches.enso <- array(0, c(NS.patches, EW.patches, years))
-start_SST = (opt.temp + 2) + NS.patches*0.008
+start_SST = (opt.temp + 2) + NS.patches*0.01
 
 t=seq(1,years,1)
 enso.value = 0.5*sin(t) + 0.018
@@ -48,14 +48,14 @@ for (i in 1:years) {
   SST = start_SST
   for (lat in 1:NS.patches) {
     SST.patches.enso[lat,,i] = SST
-    SST = SST - 0.008
+    SST = SST - 0.01
   }
   start_SST = start_SST + enso.value[i]
 }
 
 ### UNCOMMENT FOR SHOCK SST CHANGES
 SST.patches.shock <- array(0, c(NS.patches, EW.patches, years))
-start_SST = (opt.temp + 2) + NS.patches*0.008
+start_SST = (opt.temp + 2) + NS.patches*0.01
 
 for (i in 1:years) {
   heat_prob = runif(1, 0, 1)
@@ -67,7 +67,7 @@ for (i in 1:years) {
   }
   for (lat in 1:NS.patches) {
     SST.patches.shock[lat,,i] = SST
-    SST = SST - 0.008
+    SST = SST - 0.01
   }
 }
 
@@ -127,8 +127,8 @@ mt = ggplot(SSTdf_mean, aes(lon, lat, fill = sst)) +
     strip.text.x = element_blank())
 
 SSTdf_mean = SSTdf_mean %>% 
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(5^2)))) %>% 
-  mutate(survival = ifelse(mortality > 0.52, 0.52, mortality))
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4^2)))) %>% 
+  mutate(survival = ifelse(mortality > 0.59, 0.59, mortality))
 
 mm = ggplot(SSTdf_mean, aes(lon, lat, fill = survival)) +
   geom_tile() +
@@ -191,8 +191,8 @@ et = ggplot(SSTdf_enso, aes(lon, lat, fill = sst)) +
     strip.text.x = element_blank())
 
 SSTdf_enso = SSTdf_enso %>% 
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(5^2)))) %>% 
-  mutate(survival = ifelse(mortality > 0.52, 0.52, mortality))
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4^2)))) %>% 
+  mutate(survival = ifelse(mortality > 0.59, 0.59, mortality))
 
 em = ggplot(SSTdf_enso, aes(lon, lat, fill = survival)) +
   geom_tile() +
@@ -255,8 +255,8 @@ st = ggplot(SSTdf_shock, aes(lon, lat, fill = sst)) +
     strip.text.x = element_blank())
 
 SSTdf_shock = SSTdf_shock %>% 
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(5^2)))) %>% 
-  mutate(survival = ifelse(mortality > 0.52, 0.52, mortality))
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4^2)))) %>% 
+  mutate(survival = ifelse(mortality > 0.59, 0.59, mortality))
 
 sm = ggplot(SSTdf_shock, aes(lon, lat, fill = survival)) +
   geom_tile() +

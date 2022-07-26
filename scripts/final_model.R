@@ -46,7 +46,7 @@ lazy.mover.distance <- 2 # Individuals with aa genotype move this distance on av
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 opt.temp = 25 #optimal temperature of species
-temp.range = 5 #thermal breath of species
+temp.range = 4 #thermal breath of species
 
 ############################################################################
 ## Create the world
@@ -94,38 +94,38 @@ init_SST <- function(years) {
   # }
   
   ### UNCOMMENT FOR ENSO  SST
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 2) + NS.patches*0.008
-  # 
-  # t=seq(1,years,1)
-  # enso.value = 0.5 * sin(t) + 0.018
-  # 
-  # for (i in 1:years) {
-  #   SST = start_SST
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.008
-  #   }
-  #   start_SST = start_SST + enso.value[i]
-  # }
-  
-  ### UNCOMMENT FOR SHOCK SST CHANGES
   SST.patches <- array(0, c(NS.patches, EW.patches, years))
   start_SST = (opt.temp + 2) + NS.patches*0.008
 
+  t=seq(1,years,1)
+  enso.value = 0.5 * sin(t) + 0.018
+
   for (i in 1:years) {
-    heat_prob = runif(1, 0, 1)
-    if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-      intensity <- runif(1, 1, ifelse(i < 75, 2, 4))
-      SST = start_SST + intensity
-    } else {
-      SST = start_SST
-    }
+    SST = start_SST
     for (lat in 1:NS.patches) {
       SST.patches[lat,,i] = SST
       SST = SST - 0.008
     }
+    start_SST = start_SST + enso.value[i]
   }
+  
+  ### UNCOMMENT FOR SHOCK SST CHANGES
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = (opt.temp + 2) + NS.patches*0.008
+  # 
+  # for (i in 1:years) {
+  #   heat_prob = runif(1, 0, 1)
+  #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+  #     intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
+  #     SST = start_SST + intensity
+  #   } else {
+  #     SST = start_SST
+  #   }
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST - 0.008
+  #   }
+  # }
   
   return(SST.patches) ### DO NOT COMMENT OUT
 }
@@ -449,4 +449,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "test_shock.rda"))
+save(output.array, file = here::here("data", "test_enso.rda"))
