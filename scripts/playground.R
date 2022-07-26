@@ -19,6 +19,157 @@ output.array.ifelse <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.s
 # current work ------------------------------------------------------------
 
 
+# replace tidyverse -------------------------------------------------------
+
+
+profvis::profvis({
+  pop1 = move(pop)
+  pop2 = move2(pop)
+})
+
+move2 <- function(pop) {
+  
+  h <- Dominance.coefficient # Dominance coefficient
+  Hom.A.movers <- bold.mover.distance # Individuals with AA genotype move this distance on average, in nautical miles
+  Hom.a.movers <- lazy.mover.distance # Individuals with aa genotype move this distance on average, in nautical miles
+  Het.movers <- min(Hom.A.movers,Hom.a.movers) + h * abs(Hom.A.movers - Hom.a.movers)
+  Herit <- Heritability.index # Influences heritability of movement. High numbers increase heritability by reducing the variance around the phenotypic mean. The phenotypic mean is determined by the genotype.
+  
+  move.array <- world
+  
+  for(lat in 1:NS.patches) {
+    for(lon in 1:EW.patches) {
+      for(i in 2:NUM.age.classes) {
+        for(j in 1:NUM.sexes) {
+          for(k in 1:NUM.genotypes) {
+            if(k == 1) { mean.dist <- Hom.A.movers }
+            if(k == 2) { mean.dist <- Het.movers }
+            if(k == 3) { mean.dist <- Hom.a.movers }
+            if(pop[lat,lon,i,j,k] > 0) {
+              # movers are subtracted from the present grid cell
+              move.array[lat,lon,i,j,k] <- move.array[lat,lon,i,j,k] - pop[lat,lon,i,j,k]
+              # determine the distribution of movement distances in nautical miles:
+              dist <- rnbinom(pop[lat,lon,i,j,k], mu = mean.dist, size = Herit)
+              dist <- ifelse(dist > EW.patches, EW.patches, dist)
+              # determine the direction of each move
+              theta <- runif(pop[lat,lon,i,j,k],0,2*pi)
+              # bias this movement in the north-south direction (along coasts) if this is a great white shark simulation (otherwise, comment out the next three lines):
+              f.adj <- function(x, u) x-cos(x)*sin(x) - u
+              my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
+              theta <- vapply(theta, my.uniroot, numeric(1))
+              # convert direction and distance into a distance in the x-direction (longitude)
+              x <- cos(theta)*dist
+              #bounce off edges
+              x_bool = ifelse((x <= patch.size*(EW.patches-lon)+patch.size/2) & (x >= patch.size/2-lon*patch.size), TRUE, FALSE)
+              x = ifelse((x_bool == FALSE) & (x > patch.size*(EW.patches-lon)+patch.size/2),(-(x-2*(patch.size*(EW.patches-lon)+patch.size/2))),x)
+              x = ifelse((x_bool == FALSE) & (x < patch.size/2-lon*patch.size),(-(x-2*(patch.size/2-lon*patch.size))),x)
+              # convert direction and distance into a distance in the y-direction (latitude)
+              y <- sin(theta)*dist
+              #bounce off edges
+              y_bool = ifelse((y <= patch.size*(NS.patches-lat)+patch.size/2) & (y >= patch.size/2-lat*patch.size), TRUE, FALSE)
+              y = ifelse((y_bool == FALSE) & (y > patch.size*(NS.patches-lat)+patch.size/2),(y - (patch.size * NS.patches)),y)
+              y = ifelse((y_bool == FALSE) & (y < patch.size/2-lat*patch.size),(y + (patch.size * NS.patches)),y)
+              # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
+              x = round(x)
+              y = round(y)
+              xy <- as.data.frame(cbind(x,y))
+              xy$count = 1
+              freq2 <- aggregate(count ~ x + y, data = xy,FUN=sum)
+              freq2D = as.data.frame(array(0,c(length(unique(xy$y)), length(unique(xy$x)))))
+              names(freq2D) <- sort(unique(xy$x))
+              row.names(freq2D) <- sort(unique(xy$y))
+              for(row in 1:length(freq$x)) {
+                freq2D[as.character(freq$y[row]), as.character(freq$x[row])] = freq$count[row]
+              }
+              # populate the move.array with movers (and stayers)
+              for(xx in 1:length(unique(xy$x))) {
+                for(yy in 1:length(unique(xy$y))) {
+                  move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] <- move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] + freq2D[yy,xx]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  # add move.array to pop to finish movement
+  return(pop+move.array)
+  gc()
+}
+
+move <- function(pop) {
+  
+  h <- Dominance.coefficient # Dominance coefficient
+  Hom.A.movers <- bold.mover.distance # Individuals with AA genotype move this distance on average, in nautical miles
+  Hom.a.movers <- lazy.mover.distance # Individuals with aa genotype move this distance on average, in nautical miles
+  Het.movers <- min(Hom.A.movers,Hom.a.movers) + h * abs(Hom.A.movers - Hom.a.movers)
+  Herit <- Heritability.index # Influences heritability of movement. High numbers increase heritability by reducing the variance around the phenotypic mean. The phenotypic mean is determined by the genotype.
+  
+  move.array <- world
+  
+  for(lat in 1:NS.patches) {
+    for(lon in 1:EW.patches) {
+      for(i in 2:NUM.age.classes) {
+        for(j in 1:NUM.sexes) {
+          for(k in 1:NUM.genotypes) {
+            if(k == 1) { mean.dist <- Hom.A.movers }
+            if(k == 2) { mean.dist <- Het.movers }
+            if(k == 3) { mean.dist <- Hom.a.movers }
+            if(pop[lat,lon,i,j,k] > 0) {
+              # movers are subtracted from the present grid cell
+              move.array[lat,lon,i,j,k] <- move.array[lat,lon,i,j,k] - pop[lat,lon,i,j,k]
+              # determine the distribution of movement distances in nautical miles:
+              dist <- rnbinom(pop[lat,lon,i,j,k], mu = mean.dist, size = Herit)
+              dist <- ifelse(dist > EW.patches, EW.patches, dist)
+              # determine the direction of each move
+              theta <- runif(pop[lat,lon,i,j,k],0,2*pi)
+              # bias this movement in the north-south direction (along coasts) if this is a great white shark simulation (otherwise, comment out the next three lines):
+              f.adj <- function(x, u) x-cos(x)*sin(x) - u
+              my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
+              theta <- vapply(theta, my.uniroot, numeric(1))
+              # convert direction and distance into a distance in the x-direction (longitude)
+              x <- cos(theta)*dist
+              #bounce off edges
+              x_bool = ifelse((x <= patch.size*(EW.patches-lon)+patch.size/2) & (x >= patch.size/2-lon*patch.size), TRUE, FALSE)
+              x = ifelse((x_bool == FALSE) & (x > patch.size*(EW.patches-lon)+patch.size/2),(-(x-2*(patch.size*(EW.patches-lon)+patch.size/2))),x)
+              x = ifelse((x_bool == FALSE) & (x < patch.size/2-lon*patch.size),(-(x-2*(patch.size/2-lon*patch.size))),x)
+              # convert direction and distance into a distance in the y-direction (latitude)
+              y <- sin(theta)*dist
+              #bounce off edges
+              y_bool = ifelse((y <= patch.size*(NS.patches-lat)+patch.size/2) & (y >= patch.size/2-lat*patch.size), TRUE, FALSE)
+              y = ifelse((y_bool == FALSE) & (y > patch.size*(NS.patches-lat)+patch.size/2),(y - (patch.size * NS.patches)),y)
+              y = ifelse((y_bool == FALSE) & (y < patch.size/2-lat*patch.size),(y + (patch.size * NS.patches)),y)
+              # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
+              x = round(x)
+              y = round(y)
+              xy <- as.data.frame(cbind(x,y))
+              freq <- xy %>% 
+                group_by(x,y) %>% 
+                summarize(count = n())
+              freq2D = as.data.frame(array(0,c(length(unique(xy$y)), length(unique(xy$x)))))
+              names(freq2D) <- sort(unique(xy$x))
+              row.names(freq2D) <- sort(unique(xy$y))
+              for(row in 1:length(freq$x)) {
+                freq2D[as.character(freq$y[row]), as.character(freq$x[row])] = freq$count[row]
+              }
+              # populate the move.array with movers (and stayers)
+              for(xx in 1:length(unique(xy$x))) {
+                for(yy in 1:length(unique(xy$y))) {
+                  move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] <- move.array[lat+as.numeric(row.names(freq2D)[yy]),lon+as.numeric(names(freq2D)[xx]),i,j,k] + freq2D[yy,xx]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  # add move.array to pop to finish movement
+  return(pop+move.array)
+  gc()
+}
+
 # profvis -----------------------------------------------------------------
 
 profvis::profvis({
@@ -45,8 +196,6 @@ profvis::profvis({
 })
 
 # unvectorized move -------------------------------------------------------
-
-
 
 move <- function(pop) {
   
@@ -122,11 +271,9 @@ move <- function(pop) {
                 }
               }
               # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
-              xy <- as.data.frame(cbind(round(x),round(y))) %>% 
-                rename(x = V1) %>% 
-                rename(y = V2)
+              xy <- as.data.frame(cbind(round(x),round(y)))
               freq = xy %>% 
-                group_by(x,y) %>% 
+                group_by(V1,V2) %>% 
                 summarize(count = n())
               freq2D = as.data.frame(array(0,c(length(unique(xy$y)), length(unique(xy$x)))))
               names(freq2D) <- sort(unique(xy$x))

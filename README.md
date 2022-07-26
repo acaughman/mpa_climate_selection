@@ -17,12 +17,12 @@
 
 ### Mark off as done
 
-20 simulations - 0.5 and 0.8 fishing pressure
+20 simulations for each 0.5 and 0.8 fishing pressure
 
 10 replicates in each
 
-1.1.8 - Done
-1.2.8 - Running
+1.1.8
+1.2.8
 1.3.8
 1.4.8
 1.5.8
@@ -61,3 +61,11 @@
 4.3.5
 4.4.5
 4.5.5
+
+### Testing effect of movement evolution inclusion
+
+Supplementary work
+
+20 simulations with $mu_A$ and $mu_a$ equal and 0.8 fishing pressure
+
+10 replications?
