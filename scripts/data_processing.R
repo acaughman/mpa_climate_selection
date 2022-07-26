@@ -124,7 +124,7 @@ p2 = ggplot(plot_sum, aes(lon, lat, fill = geno_pop_sum)) +
   facet_grid(genotype~generation) + 
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size") +
   theme_bw() +
-  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 6)
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 15)
 
 p2 / p1
 

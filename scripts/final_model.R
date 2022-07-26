@@ -30,7 +30,7 @@ init.a <- 0.3  # The initial frequency of the low movement allele
 sb <- 0.59 # survival proportion for babies
 s <- 0.59 # survival proportion
 dd <- 0.001 # density dependence of baby survival 
-fecundity <- 25000 # The number of babies produced, on average, by each adult female each year.
+fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.8
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
@@ -46,7 +46,7 @@ lazy.mover.distance <- 2 # Individuals with aa genotype move this distance on av
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 opt.temp = 25 #optimal temperature of species
-temp.range = 4 #thermal breath of species
+temp.range = 5 #thermal breath of species
 
 ############################################################################
 ## Create the world
@@ -81,51 +81,51 @@ init_SST <- function(years) {
   #SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-  SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  start_SST = (opt.temp + 2) + NS.patches*0.008
-
-  for (i in 1:years) {
-    SST = start_SST
-    for (lat in 1:NS.patches) {
-      SST.patches[lat,,i] = SST
-      SST = SST - 0.008
-    }
-    start_SST = start_SST + 0.018
-  }
-  
-  ### UNCOMMENT FOR ENSO  SST
-  SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  start_SST = (opt.temp + 2) + NS.patches*0.008
-  
-  t=seq(1,years,1)
-  enso.value = 0.5 * sin(t) + 0.018
-  
-  for (i in 1:years) {
-    SST = start_SST
-    for (lat in 1:NS.patches) {
-      SST.patches[lat,,i] = SST
-      SST = SST - 0.008
-    }
-    start_SST = start_SST + enso.value[i]
-  }
-  
-  ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
   # start_SST = (opt.temp + 2) + NS.patches*0.008
   # 
   # for (i in 1:years) {
-  #   heat_prob = runif(1, 0, 1)
-  #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-  #     intensity <- runif(1, 1, ifelse(i < 75, 2, 4))
-  #     SST = start_SST + intensity
-  #   } else {
-  #     SST = start_SST
-  #   }
+  #   SST = start_SST
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
   #     SST = SST - 0.008
   #   }
+  #   start_SST = start_SST + 0.018
   # }
+  
+  ### UNCOMMENT FOR ENSO  SST
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = (opt.temp + 2) + NS.patches*0.008
+  # 
+  # t=seq(1,years,1)
+  # enso.value = 0.5 * sin(t) + 0.018
+  # 
+  # for (i in 1:years) {
+  #   SST = start_SST
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST - 0.008
+  #   }
+  #   start_SST = start_SST + enso.value[i]
+  # }
+  
+  ### UNCOMMENT FOR SHOCK SST CHANGES
+  SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  start_SST = (opt.temp + 2) + NS.patches*0.008
+
+  for (i in 1:years) {
+    heat_prob = runif(1, 0, 1)
+    if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+      intensity <- runif(1, 1, ifelse(i < 75, 2, 4))
+      SST = start_SST + intensity
+    } else {
+      SST = start_SST
+    }
+    for (lat in 1:NS.patches) {
+      SST.patches[lat,,i] = SST
+      SST = SST - 0.008
+    }
+  }
   
   return(SST.patches) ### DO NOT COMMENT OUT
 }
@@ -386,9 +386,8 @@ move <- function(pop) {
               x = round(x)
               y = round(y)
               xy <- as.data.frame(cbind(x,y))
-              freq <- xy %>% 
-                group_by(x,y) %>% 
-                summarize(count = n())
+              xy$count = 1
+              freq <- aggregate(count ~ x + y, data = xy,FUN=sum)
               freq2D = as.data.frame(array(0,c(length(unique(xy$y)), length(unique(xy$x)))))
               names(freq2D) <- sort(unique(xy$x))
               row.names(freq2D) <- sort(unique(xy$y))
@@ -429,7 +428,7 @@ start_time <- Sys.time()
 for(rep in 1:reps) {
   print(rep)
   pop <- init()
-  #save(SST.patches, file = here::here("data", "enso.rda"))
+  save(SST.patches, file = here::here("data", "mean.rda"))
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
@@ -450,4 +449,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "test_mean.rda"))
+save(output.array, file = here::here("data", "test_shock.rda"))

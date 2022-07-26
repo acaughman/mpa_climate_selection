@@ -14,18 +14,69 @@ post.reserve.gens <- 3
 gens <- 5
 
 output.array <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
-output.array.ifelse <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
+output.array2 <- array(0 ,c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
+
+# current simulation ------------------------------------------------------
+
+start_time <- Sys.time()
+
+for(rep in 1:reps) {
+  print(rep)
+  pop <- init()
+  #save(SST.patches, file = here::here("data", "null.rda"))
+  for(t in 1:gens) {
+    output.array[,,,,,t,rep] <- pop
+    pop <- spawn(pop)
+    pop <- recruit(pop)
+    if(t > pre.fishing.gens) {
+      gen <- t
+      pop <- fishing(pop,gen)
+    }
+    pop <- move(pop)
+    print(t)
+  }
+  gc() #clear memory
+}
+gc()
+
+end_time <- Sys.time()
+
+
+# working simulation ------------------------------------------------------
+
+start_time2 <- Sys.time()
+
+for(rep in 1:reps) {
+  print(rep)
+  pop <- init()
+  #save(SST.patches, file = here::here("data", "null.rda"))
+  for(t in 1:gens) {
+    output.array2[,,,,,t,rep] <- pop
+    pop <- spawn(pop)
+    pop <- recruit(pop)
+    if(t > pre.fishing.gens) {
+      gen <- t
+      pop <- fishing(pop,gen)
+    }
+    pop <- move2(pop)
+    print(t)
+  }
+  gc() #clear memory
+}
+gc()
+
+end_time2 <- Sys.time()
+
+# sim comparison ----------------------------------------------------------
+
+end_time - start_time
+end_time2 - start_time2
 
 # current work ------------------------------------------------------------
 
 
+
 # replace tidyverse -------------------------------------------------------
-
-
-profvis::profvis({
-  pop1 = move(pop)
-  pop2 = move2(pop)
-})
 
 move2 <- function(pop) {
   
@@ -74,7 +125,7 @@ move2 <- function(pop) {
               y = round(y)
               xy <- as.data.frame(cbind(x,y))
               xy$count = 1
-              freq2 <- aggregate(count ~ x + y, data = xy,FUN=sum)
+              freq <- aggregate(count ~ x + y, data = xy,FUN=sum)
               freq2D = as.data.frame(array(0,c(length(unique(xy$y)), length(unique(xy$x)))))
               names(freq2D) <- sort(unique(xy$x))
               row.names(freq2D) <- sort(unique(xy$y))
@@ -369,61 +420,7 @@ move_ifelse <- function(pop) {
   gc()
 }
 
-# current simulation ------------------------------------------------------
 
-start_time <- Sys.time()
-
-for(rep in 1:reps) {
-  print(rep)
-  pop <- init()
-  #save(SST.patches, file = here::here("data", "null.rda"))
-  for(t in 1:gens) {
-    output.array[,,,,,t,rep] <- pop
-    pop <- spawn(pop)
-    pop <- recruit(pop)
-    if(t > pre.fishing.gens) {
-      gen <- t
-      pop <- fishing(pop,gen)
-    }
-    pop <- move(pop)
-    print(t)
-  }
-  gc() #clear memory
-}
-gc()
-
-end_time <- Sys.time()
-
-
-# working simulation ------------------------------------------------------
-
-start_time_ifelse <- Sys.time()
-
-for(rep in 1:reps) {
-  print(rep)
-  pop <- init()
-  #save(SST.patches, file = here::here("data", "null.rda"))
-  for(t in 1:gens) {
-    output.array[,,,,,t,rep] <- pop
-    pop <- spawn(pop)
-    pop <- recruit(pop)
-    if(t > pre.fishing.gens) {
-      gen <- t
-      pop <- fishing(pop,gen)
-    }
-    pop <- move_ifelse(pop)
-    print(t)
-  }
-  gc() #clear memory
-}
-gc()
-
-end_time_ifelse <- Sys.time()
-
-# sim comparison ----------------------------------------------------------
-
-end_time - start_time
-end_time_ifelse - start_time_ifelse
 
 # Old Move 7/23/2022 ------------------------------------------------------
 

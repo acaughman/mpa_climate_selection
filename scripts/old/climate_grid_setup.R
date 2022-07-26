@@ -127,7 +127,7 @@ mt = ggplot(SSTdf_mean, aes(lon, lat, fill = sst)) +
     strip.text.x = element_blank())
 
 SSTdf_mean = SSTdf_mean %>% 
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4^2)))) %>% 
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(5^2)))) %>% 
   mutate(survival = ifelse(mortality > 0.52, 0.52, mortality))
 
 mm = ggplot(SSTdf_mean, aes(lon, lat, fill = survival)) +
@@ -191,7 +191,7 @@ et = ggplot(SSTdf_enso, aes(lon, lat, fill = sst)) +
     strip.text.x = element_blank())
 
 SSTdf_enso = SSTdf_enso %>% 
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4^2)))) %>% 
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(5^2)))) %>% 
   mutate(survival = ifelse(mortality > 0.52, 0.52, mortality))
 
 em = ggplot(SSTdf_enso, aes(lon, lat, fill = survival)) +
@@ -255,7 +255,7 @@ st = ggplot(SSTdf_shock, aes(lon, lat, fill = sst)) +
     strip.text.x = element_blank())
 
 SSTdf_shock = SSTdf_shock %>% 
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(4^2)))) %>% 
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2)/(5^2)))) %>% 
   mutate(survival = ifelse(mortality > 0.52, 0.52, mortality))
 
 sm = ggplot(SSTdf_shock, aes(lon, lat, fill = survival)) +
