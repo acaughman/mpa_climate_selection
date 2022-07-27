@@ -14,7 +14,8 @@ NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 gens = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-load(file = here::here("data","test_mean.rda"))
+load(file = here::here("data","test_enso8.rda"))
+load(file = here::here("data","enso.rda"))
 
 # Output results into a dataframe
 output_df = data.frame() #create dataframe to hold results
@@ -33,6 +34,7 @@ for(a in 1:reps) {
           world_sub$sex = paste0(d)
           world_sub$age = paste0(e)
           world_sub$lat = c(1:NS.patches)
+          world_sub$temp = SST.patches[,,b]
           output_df = bind_rows(output_df, world_sub)
         }
       }
@@ -85,7 +87,7 @@ output_df = output_df %>%
   )) %>% 
   mutate(age = as.factor(age)) %>%
   mutate(lat = as.numeric(lat)) %>% 
-  mutate(lon = as.numeric(lon))
+  mutate(lon = as.numeric(lon)) 
 
 #write_csv(output_df, here::here("output", "test8Fmean.csv"))
 
@@ -93,12 +95,11 @@ output_df = output_df %>%
 geno_sum = output_df %>% 
   filter(rep == 1) %>% #FOR NOW
   group_by(lat, lon, generation,genotype,age) %>% 
-  summarise(geno_pop_sum = sum(pop)) 
+  summarise(geno_pop_sum = sum(pop))
 
 pop_sum = output_df %>% 
   group_by(lat, lon, generation,age) %>% 
-  summarise(pop_sum = sum(pop))
-
+  summarise(pop_sum = sum(pop), temp = temp)
 
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum)
@@ -108,9 +109,9 @@ output_sum = full_join(geno_sum, pop_sum) %>%
 # output_sum = read_csv(here("output", "3x3null8F.csv"))
 
 plot_sum = output_sum %>% 
-  filter(generation %in% c(50,70,90,110,130,150)) %>% 
+  filter(generation %in% c(25,50,75,100,125,150)) %>% 
   mutate(generation = as.numeric(generation)) %>% 
-  filter(age == "adult")
+  filter(age == "adult") 
 
 p1 = ggplot(plot_sum, aes(lon, lat, fill = freq)) +
   geom_tile() + 
@@ -124,11 +125,65 @@ p2 = ggplot(plot_sum, aes(lon, lat, fill = geno_pop_sum)) +
   facet_grid(genotype~generation) + 
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size") +
   theme_bw() +
-  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 20)
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 10)
 
 p2 / p1
 
 plot = p2 / p1
 
-#ggsave(plot, file=paste0("dyn3x3null8F.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
+#ggsave(plot, file=paste0("test.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
 
+line_df = output_sum %>% 
+  group_by(generation, age, genotype) %>% 
+  summarise(location_sum = sum(geno_pop_sum),
+            max_temp = max(temp),
+            min_temp = min(temp)) %>% 
+  filter(age == "adult") %>% 
+  mutate(generation = as.numeric(generation)) %>% 
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2)/(4^2)))) %>% 
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>% 
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2)/(4^2)))) %>% 
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>% 
+  select(-max_m, -min_m) %>% 
+  filter(generation > 25)
+  
+mpa_df = output_sum %>% 
+  filter(lon %in% c(9, 10, 11)) %>% 
+  filter(lat %in% c(10, 11, 12)) %>% 
+  group_by(generation, age, genotype) %>% 
+  summarise(location_sum = sum(geno_pop_sum),
+            max_temp = max(temp),
+            min_temp = min(temp)) %>% 
+  filter(age == "adult") %>% 
+  mutate(generation = as.numeric(generation)) %>% 
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2)/(4^2)))) %>% 
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>% 
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2)/(4^2)))) %>% 
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  select(-max_m, -min_m)
+
+p3 = ggplot(mpa_df, aes(generation, location_sum)) +
+  geom_line() +
+  facet_wrap(~genotype, nrow = 3, scales = "free_y") +
+  theme_bw() +
+  labs(x = "Year", 
+       y = "Population Density", 
+       color = "Age") +
+  geom_vline(xintercept = 11, alpha = 0.3) +
+  geom_vline(xintercept = 26, alpha = 0.3) +
+  geom_vline(xintercept = 73, alpha = 0.3) +
+  scale_x_continuous(breaks=c(11, 26, 73), labels=c("fishing starts","MPA establishment","Mortality < 0.2")) +
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+p3
+
+p4 = ggplot(line_df, aes(generation, location_sum)) +
+  geom_line() +
+  facet_wrap(~genotype, nrow = 3, scales = "free_y") +
+  theme_bw() +
+  labs(x = "Year", 
+       y = "Population Density", 
+       color = "Age") +
+  geom_vline(xintercept = 73, alpha = 0.2) +
+  scale_x_continuous(breaks=c(73), labels=c("Mortality < 0.2")) +
+  theme(axis.text.x = element_text(angle = 60, hjust=1))
+p4

@@ -60,7 +60,7 @@ start_SST = (opt.temp + 2) + NS.patches*0.01
 for (i in 1:years) {
   heat_prob = runif(1, 0, 1)
   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-    intensity <- runif(1, 1, ifelse(i < 75, 2, 4))
+    intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
     SST = start_SST + intensity
   } else {
     SST = start_SST

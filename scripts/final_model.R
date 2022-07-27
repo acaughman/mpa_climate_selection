@@ -13,9 +13,9 @@ options(dplyr.summarise.inform = FALSE)
 
 NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
-NUM.gens.pre.fishing <- 25 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
+NUM.gens.pre.fishing <- 10 # The number of generations before any fishery
+NUM.gens.pre.reserve <- 15 # The number of generations of fishing before reserves are installed
+NUM.gens.post.reserve <- 125 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 100 # the number of patches on the north-south axis
@@ -78,40 +78,40 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  #SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
+  SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 2) + NS.patches*0.008
+  # start_SST = (opt.temp + 2) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   SST = start_SST
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.008
+  #     SST = SST - 0.01
   #   }
   #   start_SST = start_SST + 0.018
   # }
   
   ### UNCOMMENT FOR ENSO  SST
-  SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  start_SST = (opt.temp + 2) + NS.patches*0.008
-
-  t=seq(1,years,1)
-  enso.value = 0.5 * sin(t) + 0.018
-
-  for (i in 1:years) {
-    SST = start_SST
-    for (lat in 1:NS.patches) {
-      SST.patches[lat,,i] = SST
-      SST = SST - 0.008
-    }
-    start_SST = start_SST + enso.value[i]
-  }
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = (opt.temp + 2) + NS.patches*0.01
+  # 
+  # t=seq(1,years,1)
+  # enso.value = 0.5 * sin(t) + 0.018
+  # 
+  # for (i in 1:years) {
+  #   SST = start_SST
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST - 0.01
+  #   }
+  #   start_SST = start_SST + enso.value[i]
+  # }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 2) + NS.patches*0.008
+  # start_SST = (opt.temp + 2) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   heat_prob = runif(1, 0, 1)
@@ -123,7 +123,7 @@ init_SST <- function(years) {
   #   }
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.008
+  #     SST = SST - 0.01
   #   }
   # }
   
@@ -428,7 +428,7 @@ start_time <- Sys.time()
 for(rep in 1:reps) {
   print(rep)
   pop <- init()
-  save(SST.patches, file = here::here("data", "mean.rda"))
+  #save(SST.patches, file = here::here("data", "shock.rda"))
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
@@ -449,4 +449,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data", "test_enso.rda"))
+save(output.array, file = here::here("data", "test_null.rda"))
