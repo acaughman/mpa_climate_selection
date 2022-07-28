@@ -19,7 +19,7 @@
 
 20 simulations for each 0.5 and 0.8 fishing pressure
 
-10 replicates in each
+10 replicates for 0.8, 1 replicate for 0.5
 
 1.1.8
 1.2.8
@@ -68,4 +68,4 @@ Supplementary work
 
 20 simulations with $mu_A$ and $mu_a$ equal and 0.8 fishing pressure
 
-10 replications?
+10 replications

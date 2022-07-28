@@ -14,8 +14,8 @@ NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 gens = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-load(file = here::here("data","test_enso8.rda"))
-load(file = here::here("data","enso.rda"))
+load(file = here::here("data","test_null8.rda"))
+load(file = here::here("data","null.rda"))
 
 # Output results into a dataframe
 output_df = data.frame() #create dataframe to hold results
@@ -34,7 +34,8 @@ for(a in 1:reps) {
           world_sub$sex = paste0(d)
           world_sub$age = paste0(e)
           world_sub$lat = c(1:NS.patches)
-          world_sub$temp = SST.patches[,,b]
+          world_sub$max_temp = SST.patches[1,1,b]
+          world_sub$min_temp = SST.patches[100,1,b]
           output_df = bind_rows(output_df, world_sub)
         }
       }
@@ -89,7 +90,7 @@ output_df = output_df %>%
   mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon)) 
 
-#write_csv(output_df, here::here("output", "test8Fmean.csv"))
+write_csv(output_df, here::here("output", "test_mean8.csv"))
 
 #Summarize pop size and frequency by genotype
 geno_sum = output_df %>% 
@@ -99,7 +100,7 @@ geno_sum = output_df %>%
 
 pop_sum = output_df %>% 
   group_by(lat, lon, generation,age) %>% 
-  summarise(pop_sum = sum(pop), temp = temp)
+  summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
 
 output_sum = full_join(geno_sum, pop_sum) %>%
   mutate(freq = geno_pop_sum/pop_sum)
@@ -125,7 +126,7 @@ p2 = ggplot(plot_sum, aes(lon, lat, fill = geno_pop_sum)) +
   facet_grid(genotype~generation) + 
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size") +
   theme_bw() +
-  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 10)
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 20)
 
 p2 / p1
 
@@ -136,8 +137,8 @@ plot = p2 / p1
 line_df = output_sum %>% 
   group_by(generation, age, genotype) %>% 
   summarise(location_sum = sum(geno_pop_sum),
-            max_temp = max(temp),
-            min_temp = min(temp)) %>% 
+            max_temp = max(max_temp),
+            min_temp = min(min_temp)) %>% 
   filter(age == "adult") %>% 
   mutate(generation = as.numeric(generation)) %>% 
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2)/(4^2)))) %>% 
@@ -152,8 +153,8 @@ mpa_df = output_sum %>%
   filter(lat %in% c(10, 11, 12)) %>% 
   group_by(generation, age, genotype) %>% 
   summarise(location_sum = sum(geno_pop_sum),
-            max_temp = max(temp),
-            min_temp = min(temp)) %>% 
+            max_temp = max(max_temp),
+            min_temp = min(min_temp)) %>% 
   filter(age == "adult") %>% 
   mutate(generation = as.numeric(generation)) %>% 
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2)/(4^2)))) %>% 
@@ -171,10 +172,14 @@ p3 = ggplot(mpa_df, aes(generation, location_sum)) +
        color = "Age") +
   geom_vline(xintercept = 11, alpha = 0.3) +
   geom_vline(xintercept = 26, alpha = 0.3) +
-  geom_vline(xintercept = 73, alpha = 0.3) +
-  scale_x_continuous(breaks=c(11, 26, 73), labels=c("fishing starts","MPA establishment","Mortality < 0.2")) +
+  #geom_vline(xintercept = c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129), alpha = 0.3, color= "red") +
+  scale_x_continuous(breaks=c(11, 26), labels=c("fishing starts","MPA establishment")) +
   theme(axis.text.x = element_text(angle = 30, hjust=1))
 p3
+
+#mean 66, enso 117, shock c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129)
+
+ggsave(p3, file=paste0("test_null8.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
 
 p4 = ggplot(line_df, aes(generation, location_sum)) +
   geom_line() +
