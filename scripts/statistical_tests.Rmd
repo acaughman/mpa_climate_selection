@@ -51,6 +51,18 @@ test_mean_noevo = read_csv(here::here("output", "test_mean_noevo.csv")) %>%
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "mean_noevo")
 
+test_enso_noevo = read_csv(here::here("output", "test_enso_noevo.csv")) %>% 
+  filter(generation > 25) %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_sum = sum(pop)) %>% 
+  mutate(type = "enso_noevo")
+
+test_shock_noevo = read_csv(here::here("output", "test_shock_noevo.csv")) %>% 
+  filter(generation > 25) %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_sum = sum(pop)) %>% 
+  mutate(type = "shock_noevo")
+
 test_null5 = read_csv(here::here("output", "test_null5.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
@@ -108,7 +120,7 @@ test_noevo = t.test(null8, null_noevo, paired = TRUE, alternative = "two.sided")
 ##ERRORED
 
 data8 = data %>% 
-  filter(type %in% c("null8", "mean8", "enso8", "shock8", "null_noevo", "mean_noevo"))
+  filter(type %in% c("null8", "mean8", "enso8", "shock8", "null_noevo", "mean_noevo", "enso_noevo", "shock_noevo"))
 
 data5 = data %>% 
   filter(type %in% c("null5", "mean5", "enso5", "shock5"))
@@ -161,7 +173,7 @@ test_mpa_noevo = t.test(null8_f, null_noevo_f, paired = TRUE, alternative = "two
 
 ```{r}
 data8_f = data_f %>% 
-  filter(type %in% c("null8", "mean8", "enso8", "shock8", "null_noevo", "mean_noevo"))
+  filter(type %in% c("null8", "mean8", "enso8", "shock8", "null_noevo", "mean_noevo", "enso_noevo", "shock_noevo"))
 
 data5_f = data_f %>% 
   filter(type %in% c("null5", "mean5", "enso5", "shock5"))
