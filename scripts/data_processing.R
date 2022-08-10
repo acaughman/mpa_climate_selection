@@ -14,8 +14,8 @@ NUM.gens.pre.reserve <- 25 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 100 # The number of generations with the reserve installed
 gens = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-load(file = here::here("data","test_null8.rda"))
-load(file = here::here("data","null.rda"))
+load(file = here::here("data", "tests", "test_shock5.rda"))
+load(file = here::here("data","shock.rda"))
 
 # Output results into a dataframe
 output_df = data.frame() #create dataframe to hold results
@@ -90,7 +90,7 @@ output_df = output_df %>%
   mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon)) 
 
-write_csv(output_df, here::here("output", "test_mean8.csv"))
+write_csv(output_df, here::here("output", "test_shock5.csv"))
 
 #Summarize pop size and frequency by genotype
 geno_sum = output_df %>% 
@@ -132,7 +132,13 @@ p2 / p1
 
 plot = p2 / p1
 
-#ggsave(plot, file=paste0("test.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
+ggsave(plot, file=paste0("test_shock5_h.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
+
+
+
+# Line plots --------------------------------------------------------------
+
+
 
 line_df = output_sum %>% 
   group_by(generation, age, genotype) %>% 
