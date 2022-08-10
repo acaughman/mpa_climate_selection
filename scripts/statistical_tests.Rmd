@@ -17,36 +17,95 @@ library(tidyverse)
 test_null8 = read_csv(here::here("output", "test_null8.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_sum = sum(pop))
+  summarise(geno_pop_sum = sum(pop)) %>% 
+  mutate(type = "null8")
 
 test_mean8 = read_csv(here::here("output", "test_mean8.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_sum_null = sum(pop)) 
+  summarise(geno_pop_sum = sum(pop)) %>% 
+  mutate(type = "mean8")
 
 test_enso8 = read_csv(here::here("output", "test_enso8.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_sum_null = sum(pop)) 
+  summarise(geno_pop_sum = sum(pop)) %>% 
+  mutate(type = "enso8")
 
 test_shock8 = read_csv(here::here("output", "test_shock8.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_sum_null = sum(pop)) 
+  summarise(geno_pop_sum = sum(pop)) %>% 
+  mutate(type = "shock8") 
 
-data = full_join(test_mean, test_mean_null)
+test_null_noevo = read_csv(here::here("output", "test_null_noevo.csv")) %>% 
+  filter(generation > 25) %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_sum = sum(pop)) %>% 
+  mutate(type = "null_noevo")
+
+test_null5 = read_csv(here::here("output", "test_null8.csv")) %>% 
+  filter(generation > 25) %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_sum = sum(pop)) %>% 
+  mutate(type = "null_null5")
+
+test_mean5 = read_csv(here::here("output", "test_mean8.csv")) %>% 
+  filter(generation > 25) %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_sum = sum(pop)) %>% 
+  mutate(type = "null_mean5")
+
+test_enso5 = read_csv(here::here("output", "test_enso8.csv")) %>% 
+  filter(generation > 25) %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_sum = sum(pop)) %>% 
+  mutate(type = "null_enso5") 
+
+test_shock5 = read_csv(here::here("output", "test_shock8.csv")) %>% 
+  filter(generation > 25) %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_sum = sum(pop)) %>% 
+  mutate(type = "null_shock5") 
+
+data1 = full_join(test_mean8, test_null8)
+data2 = full_join(data1, test_enso8)
+data3 = full_join(data2, test_shock8)
+data4 = full_join(data3, test_enso5)
+data5 = full_join(data4, test_shock5)
+data6 = full_join(data5, test_mean5)
+data7 = full_join(data6, test_null5)
+data = full_join(data7, test_null_noevo) %>% 
+  mutate(location = str_c(lat,lon,generation))
 ```
 
 ### paired t-test or repeated measures ANOVA 
 
 ```{r}
-evolve = data %>% 
+null8 = data %>% 
+  filter(type == "null8") %>% 
   pull(geno_pop_sum)
-null = data %>% 
-  pull(geno_pop_sum_null)
+null_noevo = data %>% 
+  filter(type == "null_noevo") %>% 
+  pull(geno_pop_sum)
 
-test = t.test(evolve, null, paired = TRUE, alternative = "two.sided")
+test_noevo = t.test(null8, null_noevo, paired = TRUE, alternative = "two.sided")
 ```
+
+```{r}
+##ERRORED
+
+data8 = data %>% 
+  filter(type %in% c("null8", "mean8", "enso8", "shock8"))
+
+data5 = data %>% 
+  filter(type %in% c("null5", "mean5", "enso5", "shock5"))
+
+# test_climate8 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data8)
+
+# test_climate5 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data5)
+```
+
 
 ### MPA only squares
 
@@ -57,11 +116,36 @@ data_f = data %>%
 ```
 
 ```{r}
-evolve_f = data_f %>% 
+null8_f = data_f %>% 
+  filter(type == "null8") %>% 
   pull(geno_pop_sum)
-null_f = data_f %>% 
-  pull(geno_pop_sum_null)
+null_noevo_f = data_f %>% 
+  filter(type == "null_noevo") %>% 
+  pull(geno_pop_sum)
 
-test_mpa = t.test(evolve_f, null_f, paired = TRUE, alternative = "two.sided")
+test_mpa_noevo = t.test(null8_f, null_noevo_f, paired = TRUE, alternative = "two.sided")
 ```
+
+```{r}
+data8_f = data_f %>% 
+  filter(type %in% c("null8", "mean8", "enso8", "shock8"))
+
+data5_f = data_f %>% 
+  filter(type %in% c("null5", "mean5", "enso5", "shock5"))
+
+test_climate8 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data8_f)
+
+pairwise.t.test(
+  x = geno_pop_sum,
+  g = type,
+  p.adjust.method = 'bonferroni')
+
+test_climate5 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data5_f)
+
+pairwise.t.test(
+  x = geno_pop_sum,
+  g = type,
+  p.adjust.method = 'bonferroni')
+```
+
 
