@@ -17,7 +17,7 @@
 
 ### Mark off as done
 
-20 simulations for each 0.5 and 0.8 fishing pressure
+20 simulations 0.8? fishing pressure either with or without evolution
 
 10 replicates 
 
