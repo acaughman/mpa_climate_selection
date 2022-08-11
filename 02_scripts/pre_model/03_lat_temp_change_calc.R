@@ -6,8 +6,8 @@ library(tidyverse)
 
 # Raster Data (cds.climate.copernicus.eu) -------------------------------------------------------------
 
-r1 = raster(here::here("climate_data", "20161201120000-ESACCI-L4_GHRSST-SSTdepth-OSTIA-GLOB_CDR2.1-v02.0-fv01.0.nc"))
-r2 = raster(here::here("climate_data", "20160701120000-ESACCI-L4_GHRSST-SSTdepth-OSTIA-GLOB_CDR2.1-v02.0-fv01.0.nc"))
+r1 = raster(here::here("raw_data", "climate_data", "20161201120000-ESACCI-L4_GHRSST-SSTdepth-OSTIA-GLOB_CDR2.1-v02.0-fv01.0.nc"))
+r2 = raster(here::here("raw_data", "climate_data", "20160701120000-ESACCI-L4_GHRSST-SSTdepth-OSTIA-GLOB_CDR2.1-v02.0-fv01.0.nc"))
 
 df1 = rasterToPoints(r1) %>% 
   as.data.frame() %>% 

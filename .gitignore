@@ -7,4 +7,4 @@ writing_drafts
 *.docx
 Tutorial_04
 climate_data
-output
+03_generated_data/full_csv
