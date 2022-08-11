@@ -95,7 +95,9 @@ data5 = full_join(data4, test_shock5)
 data6 = full_join(data5, test_mean5)
 data7 = full_join(data6, test_null5)
 data8 = full_join(data7, test_mean_noevo)
-data = full_join(data8, test_null_noevo) %>% 
+data9 = full_join(data8, test_enso_noevo)
+data10 = full_join(data9, test_shock_noevo)
+data = full_join(data10, test_null_noevo) %>% 
   mutate(location = str_c(lat,lon,generation))
 
 data_sum = data %>% 
