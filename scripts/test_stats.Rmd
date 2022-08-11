@@ -65,77 +65,28 @@ test_shock_noevo = read_csv(here::here("output", "test_shock_noevo.csv")) %>%
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "shock_noevo")
 
-test_null5 = read_csv(here::here("output", "test_null5.csv")) %>% 
-  filter(generation > 25) %>% 
-  group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_sum = sum(pop)) %>% 
-  mutate(type = "null5")
-
-test_mean5 = read_csv(here::here("output", "test_mean5.csv")) %>% 
-  filter(generation > 25) %>% 
-  group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_sum = sum(pop)) %>% 
-  mutate(type = "mean5")
-
-test_enso5 = read_csv(here::here("output", "test_enso5.csv")) %>% 
-  filter(generation > 25) %>% 
-  group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_sum = sum(pop)) %>% 
-  mutate(type = "enso5") 
-
-test_shock5 = read_csv(here::here("output", "test_shock5.csv")) %>% 
-  filter(generation > 25) %>% 
-  group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_sum = sum(pop)) %>% 
-  mutate(type = "shock5") 
-
 data1 = full_join(test_mean8, test_null8)
 data2 = full_join(data1, test_enso8)
 data3 = full_join(data2, test_shock8)
-data4 = full_join(data3, test_enso5)
-data5 = full_join(data4, test_shock5)
-data6 = full_join(data5, test_mean5)
-data7 = full_join(data6, test_null5)
-data8 = full_join(data7, test_mean_noevo)
+data8 = full_join(data3, test_mean_noevo)
 data9 = full_join(data8, test_enso_noevo)
 data10 = full_join(data9, test_shock_noevo)
-data = full_join(data10, test_null_noevo) %>% 
+data = full_join(data10, test_null_noevo) %>%
   mutate(location = str_c(lat,lon,generation))
 
-data_sum = data %>% 
-  group_by(generation, type) %>% 
-  summarize(mean_pop = mean(geno_pop_sum))
+rm(data1,data2,data3,data8,data9,data10,test_shock_noevo,test_enso_noevo,test_mean_noevo,test_null_noevo,test_null8,test_mean8,test_enso8,test_shock8)
+
 ```
 
 ### paired t-test or repeated measures ANOVA 
 
 ```{r}
-null8 = data %>% 
-  filter(type == "enso8") %>% 
-  pull(geno_pop_sum)
-null_noevo = data %>% 
-  filter(type == "enso_noevo") %>% 
-  pull(geno_pop_sum)
-
-test_noevo = t.test(null8, null_noevo, paired = TRUE, alternative = "two.sided")
-
-cohen.d(null8, null_noevo)
-```
-
-```{r}
 ##ERRORED
 
-data8 = data %>% 
-  filter(type %in% c("null8", "mean8", "enso8", "shock8", "null_noevo", "mean_noevo", "enso_noevo", "shock_noevo"))
-
-data5 = data %>% 
-  filter(type %in% c("null5", "mean5", "enso5", "shock5"))
-
-# test_climate8 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data8)
+# test_climate8 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data)
 # 
-# test_climate5 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data5)
 
-sum_climate8 = data8 %>% 
+sum_climate8 = data %>% 
   group_by(type, generation) %>% 
   summarise(pop_mean = mean(geno_pop_sum)) %>%
   mutate(generation = as.numeric(generation)) %>% 
@@ -146,10 +97,6 @@ sum_climate8 = data8 %>%
     str_detect(type, "shock") ~ "shock"
   ))
 
-sum_climate5 = data5 %>% 
-  group_by(type, generation) %>% 
-  summarise(pop_mean = mean(geno_pop_sum)) %>%
-  mutate(generation = as.numeric(generation))
 ```
 
 ### MPA only squares
@@ -158,50 +105,20 @@ sum_climate5 = data5 %>%
 data_f = data %>% 
   filter(lon %in% c(9, 10, 11)) %>% 
   filter(lat %in% c(10, 11, 12))
-
-data_f_sum = data_f %>% 
-  group_by(generation, type) %>% 
-  summarize(mean_pop = mean(geno_pop_sum))
 ```
 
-```{r}
-#don't think this is necessary
-null8_f = data_f %>% 
-  filter(type == "null8") %>% 
-  pull(geno_pop_sum)
-null_noevo_f = data_f %>% 
-  filter(type == "null_noevo") %>% 
-  pull(geno_pop_sum)
-
-test_mpa_noevo = t.test(null8_f, null_noevo_f, paired = TRUE, alternative = "two.sided")
-
-cohen.d(null8_f, null_noevo_f)
-```
 
 ```{r}
-data8_f = data_f %>% 
-  filter(type %in% c("null8", "mean8", "enso8", "shock8", "null_noevo", "mean_noevo", "enso_noevo", "shock_noevo"))
-
-data5_f = data_f %>% 
-  filter(type %in% c("null5", "mean5", "enso5", "shock5"))
-
-test_climate8 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data8_f)
+test_climate8 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data_f)
 
 eta_squared(test_climate8, partial = TRUE)
 
-pair_climate8 = pairwise.t.test(
-  x = data8_f$geno_pop_sum,
-  g = data8_f$type,
+pairwise.t.test(
+  x = data_f$geno_pop_sum,
+  g = data_f$type,
   p.adjust.method = 'bonferroni')
 
-test_climate5 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data5_f)
-
-pair_climate5 = pairwise.t.test(
-  x = data5_f$geno_pop_sum,
-  g = data5_f$type,
-  p.adjust.method = 'bonferroni')
-
-sum_climate8_f = data8_f %>% 
+sum_climate8_f = data_f %>% 
   group_by(type, generation) %>% 
   summarise(pop_mean = mean(geno_pop_sum)) %>%
   mutate(generation = as.numeric(generation)) %>% 
@@ -211,11 +128,6 @@ sum_climate8_f = data8_f %>%
     str_detect(type, "enso") ~ "enso",
     str_detect(type, "shock") ~ "shock"
   ))
-
-sum_climate5_f = data5_f %>% 
-  group_by(type, generation) %>% 
-  summarise(pop_mean = mean(geno_pop_sum)) %>%
-  mutate(generation = as.numeric(generation))
 ```
 
 ```{r}
@@ -226,16 +138,7 @@ p8 = ggplot(sum_climate8_f, aes(generation, pop_mean)) +
        y = "Population Density", 
        color = "")
 
-p5 = ggplot(sum_climate5_f, aes(generation, pop_mean)) +
-  geom_line(aes(color = type)) +
-  theme_bw() +
-  labs(x = "Year", 
-       y = "Population Density", 
-       color = "")
-
-plot = p8 / p5 + plot_layout(guides = "collect") + plot_annotation(tag_levels = 'A')
-
-ggsave(p8, file=paste0("test_mpa.pdf"), path = here::here("figs", "test"), height = 8, width = 8)
+#ggsave(p8, file=paste0("test_mpa.pdf"), path = here::here("figs", "test"), height = 8, width = 8)
 
 p_f = ggplot(sum_climate8_f, aes(generation, pop_mean)) +
   geom_line(aes(color = type)) +
@@ -257,6 +160,6 @@ p = ggplot(sum_climate8, aes(generation, pop_mean)) +
 
 p
 
-ggsave(p, file=paste0("test.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
+#ggsave(p, file=paste0("test.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
 ```
 
