@@ -107,17 +107,21 @@ data_f = data %>%
   filter(lat %in% c(10, 11, 12))
 ```
 
+compare MPAs in climates
 
 ```{r}
 test_climate8 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data_f)
 
 eta_squared(test_climate8, partial = TRUE)
+eta_squared(test_climate8, partial = FALSE)
 
 pairwise.t.test(
-  x = data_f$geno_pop_sum,
-  g = data_f$type,
+  x = data_evo$geno_pop_sum,
+  g = data_evo$type,
   p.adjust.method = 'bonferroni')
+```
 
+```{r}
 sum_climate8_f = data_f %>% 
   group_by(type, generation) %>% 
   summarise(pop_mean = mean(geno_pop_sum)) %>%
@@ -138,6 +142,8 @@ p8 = ggplot(sum_climate8_f, aes(generation, pop_mean)) +
        y = "Population Density", 
        color = "")
 
+p8
+
 #ggsave(p8, file=paste0("test_mpa.pdf"), path = here::here("figs", "test"), height = 8, width = 8)
 
 p_f = ggplot(sum_climate8_f, aes(generation, pop_mean)) +
@@ -147,6 +153,7 @@ p_f = ggplot(sum_climate8_f, aes(generation, pop_mean)) +
   labs(x = "Year", 
        y = "Population Density", 
        color = "")
+p_f
 ```
 
 ```{r}
