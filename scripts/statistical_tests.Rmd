@@ -10,6 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(patchwork)
+library(effsize)
+library(effectsize)
 ```
 
 ### Load in data
@@ -109,13 +111,15 @@ data_sum = data %>%
 
 ```{r}
 null8 = data %>% 
-  filter(type == "null8") %>% 
+  filter(type == "enso8") %>% 
   pull(geno_pop_sum)
 null_noevo = data %>% 
-  filter(type == "null_noevo") %>% 
+  filter(type == "enso_noevo") %>% 
   pull(geno_pop_sum)
 
 test_noevo = t.test(null8, null_noevo, paired = TRUE, alternative = "two.sided")
+
+cohen.d(null8, null_noevo)
 ```
 
 ```{r}
@@ -148,7 +152,6 @@ sum_climate5 = data5 %>%
   mutate(generation = as.numeric(generation))
 ```
 
-
 ### MPA only squares
 
 ```{r}
@@ -171,6 +174,8 @@ null_noevo_f = data_f %>%
   pull(geno_pop_sum)
 
 test_mpa_noevo = t.test(null8_f, null_noevo_f, paired = TRUE, alternative = "two.sided")
+
+cohen.d(null8_f, null_noevo_f)
 ```
 
 ```{r}
@@ -181,6 +186,8 @@ data5_f = data_f %>%
   filter(type %in% c("null5", "mean5", "enso5", "shock5"))
 
 test_climate8 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data8_f)
+
+eta_squared(test_climate8, partial = TRUE)
 
 pair_climate8 = pairwise.t.test(
   x = data8_f$geno_pop_sum,
