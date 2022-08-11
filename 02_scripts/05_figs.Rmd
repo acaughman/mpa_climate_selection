@@ -7,4 +7,180 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(patchwork)
 ```
+
+### Read in CSV
+
+```{r}
+
+```
+
+### Manipulate data
+
+```{r}
+#Summarize pop size and frequency by genotype
+geno_sum = output_df %>% 
+  filter(rep == 1) %>% #FOR NOW
+  group_by(lat, lon, generation,genotype,age) %>% 
+  summarise(geno_pop_sum = sum(pop))
+
+pop_sum = output_df %>% 
+  group_by(lat, lon, generation,age) %>% 
+  summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
+
+output_sum = full_join(geno_sum, pop_sum) %>%
+  mutate(freq = geno_pop_sum/pop_sum)
+
+## SELECT GENERATIONS and ADULTS ONLY <-edit to change
+plot_sum = output_sum %>% 
+  filter(generation %in% c(25,50,75,100,125,150)) %>% 
+  mutate(generation = as.numeric(generation)) %>% 
+  filter(age == "adult") 
+
+## SELECT ADULTS ONLY <-edit to change
+line_df = output_sum %>% 
+  group_by(generation, age, genotype) %>% 
+  summarise(location_sum = sum(geno_pop_sum),
+            max_temp = max(max_temp),
+            min_temp = min(min_temp)) %>% 
+  filter(age == "adult") %>% 
+  mutate(generation = as.numeric(generation)) %>% 
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2)/(4^2)))) %>% 
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>% 
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2)/(4^2)))) %>% 
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>% 
+  select(-max_m, -min_m) %>% 
+  filter(generation > 25)
+
+## SELECT ADULTS ONLY <-edit to change  
+mpa_df = output_sum %>% 
+  filter(lon %in% c(9, 10, 11)) %>% 
+  filter(lat %in% c(10, 11, 12)) %>% 
+  group_by(generation, age, genotype) %>% 
+  summarise(location_sum = sum(geno_pop_sum),
+            max_temp = max(max_temp),
+            min_temp = min(min_temp)) %>% 
+  filter(age == "adult") %>% 
+  mutate(generation = as.numeric(generation)) %>% 
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2)/(4^2)))) %>% 
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>% 
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2)/(4^2)))) %>% 
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  select(-max_m, -min_m)
+```
+
+### Heatmap figure
+
+```{r}
+p1 = ggplot(plot_sum, aes(lon, lat, fill = freq)) +
+  geom_tile() + 
+  facet_grid(genotype~generation) + 
+  labs(x = "Longitude", y = "Latitude", fill = "Genotype Frequency", color = "Genotype Frequency") +
+  theme_bw() +
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 0.5)
+```
+
+```{r}
+p2 = ggplot(plot_sum, aes(lon, lat, fill = geno_pop_sum)) +
+  geom_tile() + 
+  facet_grid(genotype~generation) + 
+  labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size") +
+  theme_bw() +
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 30)
+```
+
+```{r}
+p2 / p1
+
+plot = p2 / p1
+
+#ggsave(plot, file=paste0("test_null_h.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
+```
+
+### Line Plot Figures
+
+```{r}
+p3 = ggplot(mpa_df, aes(generation, location_sum)) +
+  geom_line() +
+  facet_wrap(~genotype, nrow = 3, scales = "free_y") +
+  theme_bw() +
+  labs(x = "Year", 
+       y = "Population Density", 
+       color = "Age") +
+  geom_vline(xintercept = 11, alpha = 0.3) +
+  geom_vline(xintercept = 26, alpha = 0.3) +
+  #geom_vline(xintercept = c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129), alpha = 0.3, color= "red") +
+  scale_x_continuous(breaks=c(11, 26), labels=c("fishing starts","MPA establishment")) +
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+
+p3
+
+#mean 66, enso 117, shock c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129) EDIT WITH FINAL VALUES
+
+#ggsave(p3, file=paste0("test_null6.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
+```
+
+```{r}
+p4 = ggplot(line_df, aes(generation, location_sum)) +
+  geom_line() +
+  facet_wrap(~genotype, nrow = 3, scales = "free_y") +
+  theme_bw() +
+  labs(x = "Year", 
+       y = "Population Density", 
+       color = "Age") +
+  geom_vline(xintercept = 73, alpha = 0.2) +
+  scale_x_continuous(breaks=c(73), labels=c("Mortality < 0.2")) +
+  theme(axis.text.x = element_text(angle = 60, hjust=1))
+
+p4
+```
+
+### Load in Summary data
+
+```{r}
+
+```
+
+### Typed line plots
+
+```{r}
+p5 = ggplot(sum_climate8_f, aes(generation, pop_mean)) +
+  geom_line(aes(color = type)) +
+  theme_bw() +
+  labs(x = "Year", 
+       y = "Population Density", 
+       color = "")
+
+p5
+
+#ggsave(p5, file=paste0("test_mpa.pdf"), path = here::here("figs", "test"), height = 8, width = 8)
+```
+
+```{r}
+p6 = ggplot(sum_climate8_f, aes(generation, pop_mean)) +
+  geom_line(aes(color = type)) +
+  facet_wrap(~cat, scales = "free_y", ncol = 1) +
+  theme_bw() +
+  labs(x = "Year", 
+       y = "Population Density", 
+       color = "")
+p6
+```
+
+```{r}
+p7 = ggplot(sum_climate8, aes(generation, pop_mean)) +
+  geom_line(aes(color = type)) +
+  facet_wrap(~cat, scales = "free_y", ncol = 1) +
+  theme_bw() +
+  labs(x = "Year", 
+       y = "Population Density", 
+       color = "")
+
+p7
+
+#ggsave(p7, file=paste0("test.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
+```
+

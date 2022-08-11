@@ -7,4 +7,63 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(effsize)
+library(effectsize)
 ```
+
+### Load in Data
+
+```{r}
+
+```
+
+### manipulate data
+
+```{r}
+sum_climate8 = data %>% 
+  group_by(type, generation) %>% 
+  summarise(pop_mean = mean(geno_pop_sum)) %>%
+  mutate(generation = as.numeric(generation)) %>% 
+  mutate(cat = case_when(
+    str_detect(type, "null") ~ "null",
+    str_detect(type, "mean") ~ "mean",
+    str_detect(type, "enso") ~ "enso",
+    str_detect(type, "shock") ~ "shock"
+  ))
+
+#write_csv()
+
+data_f = data %>% 
+  filter(lon %in% c(9, 10, 11)) %>% 
+  filter(lat %in% c(10, 11, 12))
+
+sum_climate8_f = data_f %>% 
+  group_by(type, generation) %>% 
+  summarise(pop_mean = mean(geno_pop_sum)) %>%
+  mutate(generation = as.numeric(generation)) %>% 
+  mutate(cat = case_when(
+    str_detect(type, "null") ~ "null",
+    str_detect(type, "mean") ~ "mean",
+    str_detect(type, "enso") ~ "enso",
+    str_detect(type, "shock") ~ "shock"
+  ))
+
+#write_csv()
+```
+
+### Repeated measures ANOVA
+
+```{r}
+test_climate8 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data_f)
+
+eta_squared(test_climate8, partial = TRUE)
+eta_squared(test_climate8, partial = FALSE)
+
+pairwise.t.test(
+  x = data_evo$geno_pop_sum,
+  g = data_evo$type,
+  p.adjust.method = 'bonferroni')
+```
+
