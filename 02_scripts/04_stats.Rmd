@@ -33,7 +33,7 @@ sum_climate8 = data %>%
     str_detect(type, "shock") ~ "shock"
   ))
 
-#write_csv()
+#write_csv(sum_climate8, here::here("03_generated_data", "summary_data", "test_null_sum.csv"))
 
 data_f = data %>% 
   filter(lon %in% c(9, 10, 11)) %>% 
@@ -50,7 +50,7 @@ sum_climate8_f = data_f %>%
     str_detect(type, "shock") ~ "shock"
   ))
 
-#write_csv()
+#write_csv(sum_climate8_f, here::here("03_generated_data", "summary_data", "test_null_sum_mpa.csv"))
 ```
 
 ### Repeated measures ANOVA
