@@ -78,20 +78,20 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  #SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
+  SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-  SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  start_SST = (opt.temp+2) + NS.patches*0.01
-
-  for (i in 1:years) {
-    SST = start_SST
-    for (lat in 1:NS.patches) {
-      SST.patches[lat,,i] = SST
-      SST = SST - 0.01
-    }
-    start_SST = start_SST + 0.018
-  }
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = (opt.temp+2) + NS.patches*0.01
+  # 
+  # for (i in 1:years) {
+  #   SST = start_SST
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST - 0.01
+  #   }
+  #   start_SST = start_SST + 0.018
+  # }
   
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
@@ -449,4 +449,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("data","tests", "test_mean.rda"))
+save(output.array, file = here::here("data","tests", "test_null.rda"))
