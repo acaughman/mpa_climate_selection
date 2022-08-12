@@ -17,49 +17,49 @@ library(effectsize)
 ### Load in data
 
 ```{r}
-test_null8 = read_csv(here::here("output", "test_null8.csv")) %>% 
+test_null8 = read_csv(here::here("03_generated_data", "full_csv", "test_null8.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "null8")
 
-test_mean8 = read_csv(here::here("output", "test_mean8.csv")) %>% 
+test_mean8 = read_csv(here::here("03_generated_data", "full_csv", "test_mean8.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "mean8")
 
-test_enso8 = read_csv(here::here("output", "test_enso8.csv")) %>% 
+test_enso8 = read_csv(here::here("03_generated_data", "full_csv", "test_enso8.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "enso8")
 
-test_shock8 = read_csv(here::here("output", "test_shock8.csv")) %>% 
+test_shock8 = read_csv(here::here("03_generated_data", "full_csv", "test_shock8.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "shock8") 
 
-test_null_noevo = read_csv(here::here("output", "test_null_noevo.csv")) %>% 
+test_null_noevo = read_csv(here::here("03_generated_data", "full_csv", "test_null_noevo.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "null_noevo")
 
-test_mean_noevo = read_csv(here::here("output", "test_mean_noevo.csv")) %>% 
+test_mean_noevo = read_csv(here::here("03_generated_data", "full_csv", "test_mean_noevo.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "mean_noevo")
 
-test_enso_noevo = read_csv(here::here("output", "test_enso_noevo.csv")) %>% 
+test_enso_noevo = read_csv(here::here("03_generated_data", "full_csv", "test_enso_noevo.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "enso_noevo")
 
-test_shock_noevo = read_csv(here::here("output", "test_shock_noevo.csv")) %>% 
+test_shock_noevo = read_csv(here::here("03_generated_data", "full_csv", "test_shock_noevo.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
@@ -68,13 +68,13 @@ test_shock_noevo = read_csv(here::here("output", "test_shock_noevo.csv")) %>%
 data1 = full_join(test_mean8, test_null8)
 data2 = full_join(data1, test_enso8)
 data3 = full_join(data2, test_shock8)
-data8 = full_join(data3, test_mean_noevo)
-data9 = full_join(data8, test_enso_noevo)
-data10 = full_join(data9, test_shock_noevo)
-data = full_join(data10, test_null_noevo) %>%
+data4 = full_join(data3, test_mean_noevo)
+data5 = full_join(data4, test_enso_noevo)
+data6 = full_join(data5, test_shock_noevo)
+data = full_join(data6, test_null_noevo) %>%
   mutate(location = str_c(lat,lon,generation))
 
-rm(data1,data2,data3,data8,data9,data10,test_shock_noevo,test_enso_noevo,test_mean_noevo,test_null_noevo,test_null8,test_mean8,test_enso8,test_shock8)
+rm(data1,data2,data3,data4,data5,data6,test_shock_noevo,test_enso_noevo,test_mean_noevo,test_null_noevo,test_null8,test_mean8,test_enso8,test_shock8)
 
 ```
 
