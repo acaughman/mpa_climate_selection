@@ -15,7 +15,7 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-
+output_df = read_csv(here::here("03_generated_data", "full_csv", "test_null.csv"))
 ```
 
 ### Manipulate data
@@ -141,13 +141,15 @@ p4
 ### Load in Summary data
 
 ```{r}
+sum = read_csv(here::here("03_generated_data", "summary_data", "test_null_sum.csv"))
 
+sum__f = read_csv(here::here("03_generated_data", "summary_data", "test_null_sum_f.csv"))
 ```
 
 ### Typed line plots
 
 ```{r}
-p5 = ggplot(sum_climate8_f, aes(generation, pop_mean)) +
+p5 = ggplot(sum__f, aes(generation, pop_mean)) +
   geom_line(aes(color = type)) +
   theme_bw() +
   labs(x = "Year", 
@@ -160,7 +162,7 @@ p5
 ```
 
 ```{r}
-p6 = ggplot(sum_climate8_f, aes(generation, pop_mean)) +
+p6 = ggplot(sum_f, aes(generation, pop_mean)) +
   geom_line(aes(color = type)) +
   facet_wrap(~cat, scales = "free_y", ncol = 1) +
   theme_bw() +
@@ -171,7 +173,7 @@ p6
 ```
 
 ```{r}
-p7 = ggplot(sum_climate8, aes(generation, pop_mean)) +
+p7 = ggplot(sum, aes(generation, pop_mean)) +
   geom_line(aes(color = type)) +
   facet_wrap(~cat, scales = "free_y", ncol = 1) +
   theme_bw() +
