@@ -4,7 +4,7 @@ library(here)
 addTaskCallback(function(...) {set.seed(42);TRUE})
 options(warn=-1)
 
-years = 150
+years = 1
 NS.patches = 100
 EW.patches = 20
 opt.temp = 25
@@ -268,9 +268,9 @@ sm = ggplot(SSTdf_shock, aes(lon, lat, fill = survival)) +
     strip.background = element_blank(),
     strip.text.x = element_blank())
 
-ggsave(mt, file=paste0("mean_temp.pdf"), path = here("figs", "climate"), height = 10, width = 15)
-ggsave(mm, file=paste0("mean_mortality.pdf"), path = here("figs", "climate"), height = 10, width = 15)
-ggsave(et, file=paste0("enso_temp.pdf"), path = here("figs", "climate"), height = 10, width = 15)
-ggsave(em, file=paste0("enso_mortality.pdf"), path = here("figs", "climate"), height = 10, width = 15)
-ggsave(st, file=paste0("shock_temp.pdf"), path = here("figs", "climate"), height = 10, width = 15)
-ggsave(sm, file=paste0("shock_mortality.pdf"), path = here("figs", "climate"), height = 10, width = 15)
+ggsave(mt, file=paste0("mean_temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
+ggsave(mm, file=paste0("mean_mortality.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
+ggsave(et, file=paste0("enso_temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
+ggsave(em, file=paste0("enso_mortality.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
+ggsave(st, file=paste0("shock_temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
+ggsave(sm, file=paste0("shock_mortality.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
