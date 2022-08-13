@@ -15,7 +15,7 @@ NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 10 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 15 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 125 # The number of generations with the reserve installed
+NUM.gens.post.reserve <- 150 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
 NS.patches <- 100 # the number of patches on the north-south axis
