@@ -13,8 +13,8 @@ options(dplyr.summarise.inform = FALSE)
 
 NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
-NUM.gens.pre.fishing <- 10 # The number of generations before any fishery
-NUM.gens.pre.reserve <- 15 # The number of generations of fishing before reserves are installed
+NUM.gens.pre.fishing <- 15 # The number of generations before any fishery
+NUM.gens.pre.reserve <- 10 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 150 # The number of generations with the reserve installed
 years = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
@@ -428,7 +428,7 @@ start_time <- Sys.time()
 for(rep in 1:reps) {
   print(rep)
   pop <- init()
-  #save(SST.patches, file = here::here("03_generated_data","climate_layer", "null.rda"))
+  #save(SST.patches, file = here::here("03_generated_data","climate_layer", "shock.rda"))
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
