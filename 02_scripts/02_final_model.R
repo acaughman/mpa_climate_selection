@@ -78,11 +78,11 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  SST.patches <- array(opt.temp + 2, c(NS.patches, EW.patches, years))
+  SST.patches <- array(opt.temp + 1.5, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp+2) + NS.patches*0.01
+  # start_SST = (opt.temp+1.5) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -95,7 +95,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp+2) + NS.patches*0.01
+  # start_SST = (opt.temp+1.5) + NS.patches*0.01
   # 
   # t=seq(1,years,1)
   # enso.value = 0.5 * sin(t) + 0.018
@@ -111,7 +111,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 2) + NS.patches*0.01
+  # start_SST = (opt.temp + 1.5) + NS.patches*0.01
   # 
   # for (i in 1:years) {
   #   heat_prob = runif(1, 0, 1)
