@@ -428,7 +428,7 @@ start_time <- Sys.time()
 for(rep in 1:reps) {
   print(rep)
   pop <- init()
-  #save(SST.patches, file = here::here("03_generated_data","climate_layer", "shock.rda"))
+  save(SST.patches, file = here::here("03_generated_data","climate_layer", "null.rda"))
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
