@@ -144,7 +144,7 @@ where.reserves <- function(reserves.at) {
         y <- ((reserves.at[i]-1) %% NS.patches) + 1
         reserve.patches[y,x,j] <- 1
       }
-      if (((j %% 20) == 0) & (j > 50) & (j != 150)) {
+      if (((j %% 25) == 0) & (j > 25) & (j < 125)) {
         reserves.at = reserves.at + 20
       }
     }
