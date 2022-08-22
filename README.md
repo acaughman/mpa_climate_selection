@@ -12,13 +12,12 @@
 1. Single Small
 2. Single Large
 3. Network
-4. Dynamics
-5. Buffer zone outside MPA
-6. No MPA <- do I need this is 
+4. Dynamic
+5. No MPA 
 
 ### Mark off as done
 
-simulations 0.7 (testing) fishing pressure either with or without evolution
+simulations 0.7 (testing) fishing pressure
 
 10 replicates 
 
@@ -42,23 +41,5 @@ simulations 0.7 (testing) fishing pressure either with or without evolution
 4.3.8
 4.4.8
 4.5.8
-1.1.noevo
-1.2.noevo
-1.3.noevo
-1.4.noevo
-1.5.noevo
-2.1.noevo
-2.2.noevo
-2.3.noevo
-2.4.noevo
-2.5.noevo
-3.1.noevo
-3.2.noevo
-3.3.noevo
-3.4.noevo
-3.5.noevo
-4.1.noevo
-4.2.noevo
-4.3.noevo
-4.4.noevo
-4.5.noevo
+
+# Do I test effect of adding low movement evolution specifically?
