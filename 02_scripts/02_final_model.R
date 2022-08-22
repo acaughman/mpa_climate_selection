@@ -37,7 +37,7 @@ buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, h
 reserves.at <- c(710,810,910,1010,1110,1210,1310,1410,711,811,911,1011,1111,1211,1311,1411,712,812,912,1012,1112,1212,1312,1412)
 # small MPA c(810,910,1010,811,911,1011,812,912,1012)
 # large MPA c(810,910,1010,1110,1210,1310,811,911,1011,1111,1211,1311,812,912,1012,1112,1212,1312,813,913,1013,1113,1213,1313,814,914,1014,1114,1214,1314,815,915,1015,1115,1215,1315)
-# MPA network c(810,910,1010,811,911,1011,812,912,1012,842,942,1042,843,943,1043,844,944,1044,874,974,1074,875,975,1075,876,976,1076)
+# MPA network c(810,910,1010,811,911,1011,812,912,1012,840,940,1040,841,941,1041,842,942,1042,870,970,1070,871,971,1071,872,972,1072)
 dynamic.reserve = FALSE
 buffer.at <- c()
 # buffer c(709,809,909,1009,1109,710,1110,711,1111,712,1112,713,813,913,1013,1113)
@@ -254,6 +254,7 @@ recruit <- function(pop) {
   # Some babies survive and recruit to juvenile age class
   s1 <- survival_b(rowSums(pop[,,1,,], dim = 2), SST)
   s <- survival(SST)
+  #baby dispersal here
   for(j in 1:NUM.sexes) {
     for(k in 1:NUM.genotypes) {
       recruit.array[,,1+1,j,k] <- recruit.array[,,1+1,j,k] + Reshape(rbinom(NS.patches * EW.patches,pop[,,1,j,k],s1), NS.patches, EW.patches)
