@@ -139,14 +139,12 @@ where.reserves <- function(reserves.at) {
   if (dynamic.reserve) {
     reserve.patches <- array(0, c(NS.patches, EW.patches, years))
     for(j in 1:years) {
-      print(j)
-      print(reserves.at)
       for(i in 1:length(reserves.at)) {
         x <- ((reserves.at[i]-1) %/% NS.patches) + 1
         y <- ((reserves.at[i]-1) %% NS.patches) + 1
         reserve.patches[y,x,j] <- 1
       }
-      if (((j %% 10) == 0) & (j >= 50) & (j <= 130)) {
+      if (((j %% 10) == 0) & (j >= 40) & (j <= 120)) {
         reserves.at = reserves.at + 10
       }
     }

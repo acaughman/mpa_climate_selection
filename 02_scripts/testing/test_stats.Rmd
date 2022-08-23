@@ -17,25 +17,25 @@ library(effectsize)
 ### Load in data
 
 ```{r}
-test_null8 = read_csv(here::here("03_generated_data", "full_csv", "test_null8.csv")) %>% 
+test_null_small = read_csv(here::here("03_generated_data", "full_csv", "test_null_small.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "null8")
 
-test_mean8 = read_csv(here::here("03_generated_data", "full_csv", "test_mean8.csv")) %>% 
+test_mean_small = read_csv(here::here("03_generated_data", "full_csv", "test_mean_small.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "mean8")
 
-test_enso8 = read_csv(here::here("03_generated_data", "full_csv", "test_enso8.csv")) %>% 
+test_enso_small = read_csv(here::here("03_generated_data", "full_csv", "test_enso_small.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "enso8")
 
-test_shock8 = read_csv(here::here("03_generated_data", "full_csv", "test_shock8.csv")) %>% 
+test_shock_small = read_csv(here::here("03_generated_data", "full_csv", "test_shock_small.csv")) %>% 
   filter(generation > 25) %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_sum = sum(pop)) %>% 
@@ -65,17 +65,17 @@ test_shock_noevo = read_csv(here::here("03_generated_data", "full_csv", "test_sh
   summarise(geno_pop_sum = sum(pop)) %>% 
   mutate(type = "shock_noevo")
 
-data1 = full_join(test_mean8, test_null8)
-data2 = full_join(data1, test_enso8)
-data3 = full_join(data2, test_shock8)
+data1 = full_join(test_mean_small, test_null_small)
+data2 = full_join(data1, test_enso_small)
+data3 = full_join(data2, test_shock_small)
 data4 = full_join(data3, test_mean_noevo)
 data5 = full_join(data4, test_enso_noevo)
 data6 = full_join(data5, test_shock_noevo)
 data = full_join(data6, test_null_noevo) %>%
   mutate(location = str_c(lat,lon,generation))
 
-rm(data1,data2,data3,data4,data5,data6,test_shock_noevo,test_enso_noevo,test_mean_noevo,test_null_noevo,test_null8,test_mean8,test_enso8,test_shock8)
-
+rm(data1,data2,data3,data4,data5,data6,test_shock_noevo,test_enso_noevo,test_mean_noevo,test_null_noevo,test_null_small,test_mean_small,test_enso_small,test_shock_small)
+gc()
 ```
 
 ### paired t-test or repeated measures ANOVA 
@@ -86,7 +86,7 @@ rm(data1,data2,data3,data4,data5,data6,test_shock_noevo,test_enso_noevo,test_mea
 # test_climate8 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data)
 # 
 
-sum_climate8 = data %>% 
+sum_climate = data %>% 
   group_by(type, generation) %>% 
   summarise(pop_mean = mean(geno_pop_sum)) %>%
   mutate(generation = as.numeric(generation)) %>% 
@@ -110,10 +110,10 @@ data_f = data %>%
 compare MPAs in climates
 
 ```{r}
-test_climate8 = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data_f)
+test_climate = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data_f)
 
-eta_squared(test_climate8, partial = TRUE)
-eta_squared(test_climate8, partial = FALSE)
+eta_squared(test_climate, partial = TRUE)
+eta_squared(test_climate, partial = FALSE)
 
 pairwise.t.test(
   x = data_evo$geno_pop_sum,
@@ -122,7 +122,7 @@ pairwise.t.test(
 ```
 
 ```{r}
-sum_climate8_f = data_f %>% 
+sum_climate_f = data_f %>% 
   group_by(type, generation) %>% 
   summarise(pop_mean = mean(geno_pop_sum)) %>%
   mutate(generation = as.numeric(generation)) %>% 
@@ -135,7 +135,7 @@ sum_climate8_f = data_f %>%
 ```
 
 ```{r}
-p8 = ggplot(sum_climate8_f, aes(generation, pop_mean)) +
+p8 = ggplot(sum_climate_f, aes(generation, pop_mean)) +
   geom_line(aes(color = type)) +
   theme_bw() +
   labs(x = "Year", 
@@ -146,7 +146,7 @@ p8
 
 #ggsave(p8, file=paste0("test_mpa.pdf"), path = here::here("figs", "test"), height = 8, width = 8)
 
-p_f = ggplot(sum_climate8_f, aes(generation, pop_mean)) +
+p_f = ggplot(sum_climate_f, aes(generation, pop_mean)) +
   geom_line(aes(color = type)) +
   facet_wrap(~cat, scales = "free_y", ncol = 1) +
   theme_bw() +
@@ -157,7 +157,7 @@ p_f
 ```
 
 ```{r}
-p = ggplot(sum_climate8, aes(generation, pop_mean)) +
+p = ggplot(sum_climate, aes(generation, pop_mean)) +
   geom_line(aes(color = type)) +
   facet_wrap(~cat, scales = "free_y", ncol = 1) +
   theme_bw() +
@@ -168,5 +168,91 @@ p = ggplot(sum_climate8, aes(generation, pop_mean)) +
 p
 
 #ggsave(p, file=paste0("test.pdf"), path = here::here("figs", "test"), height = 11, width = 8)
+```
+
+##Paired t-tests
+
+```{r}
+null = data %>% 
+  filter(type == "null8") %>% 
+  pull(geno_pop_sum)
+mean = data %>% 
+  filter(type == "mean8") %>% 
+  pull(geno_pop_sum)
+enso = data %>% 
+  filter(type == "enso8") %>% 
+  pull(geno_pop_sum)
+shock = data %>% 
+  filter(type == "shock8") %>% 
+  pull(geno_pop_sum)
+null_noevo = data %>% 
+  filter(type == "null_noevo") %>% 
+  pull(geno_pop_sum)
+mean_noevo = data %>% 
+  filter(type == "mean_noevo") %>% 
+  pull(geno_pop_sum)
+enso_noevo = data %>% 
+  filter(type == "enso_noevo") %>% 
+  pull(geno_pop_sum)
+shock_noevo = data %>% 
+  filter(type == "shock_noevo") %>% 
+  pull(geno_pop_sum)
+```
+
+```{r}
+null_f = data_f %>% 
+  filter(type == "null8") %>% 
+  pull(geno_pop_sum)
+mean_f = data_f %>% 
+  filter(type == "mean8") %>% 
+  pull(geno_pop_sum)
+enso_f = data_f %>% 
+  filter(type == "enso8") %>% 
+  pull(geno_pop_sum)
+shock_f = data_f %>% 
+  filter(type == "shock8") %>% 
+  pull(geno_pop_sum)
+null_noevo_f = data_f %>% 
+  filter(type == "null_noevo") %>% 
+  pull(geno_pop_sum)
+mean_noevo_f = data_f %>% 
+  filter(type == "mean_noevo") %>% 
+  pull(geno_pop_sum)
+enso_noevo_f = data_f %>% 
+  filter(type == "enso_noevo") %>% 
+  pull(geno_pop_sum)
+shock_noevo_f = data_f %>% 
+  filter(type == "shock_noevo") %>% 
+  pull(geno_pop_sum)
+```
+
+```{r}
+#NULL
+null_test = t.test(null, null_noevo, paired = TRUE)
+null_test
+
+null_test_f = t.test(null_f, null_noevo_f, paired = TRUE)
+null_test_f
+
+#MEAN
+mean_test = t.test(mean, mean_noevo, paired = TRUE)
+mean_test
+
+mean_test_f = t.test(mean_f, mean_noevo_f, paired = TRUE)
+mean_test_f
+
+#ENSO
+enso_test = t.test(enso,enso_noevo, paired = TRUE)
+enso_test
+
+enso_test_f = t.test(enso_f, enso_noevo_f, paired = TRUE)
+enso_test_f
+
+#SHOCK
+shock_test = t.test(shock, shock_noevo, paired = TRUE)
+shock_test
+
+shock_test_f = t.test(shock_f, shock_noevo_f, paired = TRUE)
+shock_test_f
 ```
 
