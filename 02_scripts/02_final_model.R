@@ -34,7 +34,7 @@ fecundity <- 20000 # The number of babies produced, on average, by each adult fe
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.7
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
-reserves.at <- c(710,810,910,1010,1110,1210,1310,1410,711,811,911,1011,1111,1211,1311,1411,712,812,912,1012,1112,1212,1312,1412)
+reserves.at <- c(810,910,1010,811,911,1011,812,912,1012)
 # small MPA c(810,910,1010,811,911,1011,812,912,1012)
 # large MPA c(810,910,1010,1110,1210,1310,811,911,1011,1111,1211,1311,812,912,1012,1112,1212,1312,813,913,1013,1113,1213,1313,814,914,1014,1114,1214,1314,815,915,1015,1115,1215,1315)
 # MPA network c(810,910,1010,811,911,1011,812,912,1012,840,940,1040,841,941,1041,842,942,1042,870,970,1070,871,971,1071,872,972,1072)
