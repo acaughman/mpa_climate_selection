@@ -26,7 +26,6 @@ view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
 view.world
 
 init.a <- 0.3  # The initial frequency of the low movement allele
-
 sb <- 0.59 # survival proportion for babies
 s <- 0.59 # survival proportion
 dd <- 0.001 # density dependence of baby survival 
@@ -34,17 +33,21 @@ fecundity <- 20000 # The number of babies produced, on average, by each adult fe
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.7
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
+
 reserves.at <- c(810,910,1010,811,911,1011,812,912,1012)
 # small MPA c(810,910,1010,811,911,1011,812,912,1012)
 # large MPA c(810,910,1010,1110,1210,1310,811,911,1011,1111,1211,1311,812,912,1012,1112,1212,1312,813,913,1013,1113,1213,1313,814,914,1014,1114,1214,1314,815,915,1015,1115,1215,1315)
-# MPA network c(810,910,1010,811,911,1011,812,912,1012,840,940,1040,841,941,1041,842,942,1042,870,970,1070,871,971,1071,872,972,1072)
+# MPA network c(810,910,1010,811,911,1011,812,912,1012,832,932,1032,833,933,1033,834,934,1034,854,954,1054,855,955,1055,856,956,1056,876,976,1076,877,977,1077,878,978,1078)
 dynamic.reserve = FALSE
+
 buffer.at <- c()
 # buffer c(709,809,909,1009,1109,710,1110,711,1111,712,1112,713,813,913,1013,1113)
+
 bold.mover.distance <- 3 # Individuals with AA genotype move this distance on average every year
 lazy.mover.distance <- 2 # Individuals with aa genotype move this distance on average every year
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
+
 opt.temp = 25 #optimal temperature of species
 temp.range = 4 #thermal breath of species
 
@@ -144,8 +147,8 @@ where.reserves <- function(reserves.at) {
         y <- ((reserves.at[i]-1) %% NS.patches) + 1
         reserve.patches[y,x,j] <- 1
       }
-      if (((j %% 10) == 0) & (j >= 40) & (j <= 120)) {
-        reserves.at = reserves.at + 10
+      if (((j %% 3) == 0) & (j >= 40) & (j < 120)) {
+        reserves.at = reserves.at + 3
       }
     }
   } else {
