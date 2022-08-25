@@ -88,6 +88,7 @@ output_df = output_df %>%
   )) %>% 
   mutate(age = as.factor(age)) %>%
   mutate(lat = as.numeric(lat)) %>% 
-  mutate(lon = as.numeric(lon)) 
+  mutate(lon = as.numeric(lon)) %>% 
+  mutate(rep = as.numeric(rep))
 
 write_csv(output_df, here::here("03_generated_data","full_csv", "null_small.csv"))
