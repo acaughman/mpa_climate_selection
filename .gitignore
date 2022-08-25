@@ -6,5 +6,9 @@ writing_drafts
 *.docx
 climate_data
 03_generated_data/full_csv
+<<<<<<< HEAD
 other
 test
+=======
+other
+>>>>>>> 5e0d29dd3fda0c00246743ca4e9c236cf27c40e1
