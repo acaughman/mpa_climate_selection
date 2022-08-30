@@ -387,8 +387,8 @@ move <- function(pop) {
               y = ifelse((y_bool == FALSE) & (y > patch.size*(NS.patches-lat)+patch.size/2),(y - (patch.size * NS.patches)),y)
               y = ifelse((y_bool == FALSE) & (y < patch.size/2-lat*patch.size),(y + (patch.size * NS.patches)),y)
               # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
-              x = round(x)
-              y = round(y)
+              x = round(x)/patch.size
+              y = round(y)/patch.size
               xy <- as.data.frame(cbind(x,y))
               xy$count = 1
               freq <- aggregate(count ~ x + y, data = xy,FUN=sum)
