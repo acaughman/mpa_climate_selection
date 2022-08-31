@@ -1,5 +1,37 @@
 # MPA Climate Selection
 
+
+## Tests
+
+1. mean2km
+2. enso2km
+3. mean5km
+4. enso5km
+
+Pick favorite
+
+Fishing Pressure
+1. 0.6
+2. 0.7
+3. 0.8
+
+Pick favorite
+
+Time
+1. Early
+2. Mid
+3. Late
+
+Pick Favorite
+
+Thermal Breadth
+1. 3
+2. 4
+3. 5
+4. 6
+
+## Full Runs
+
 ### Climate Scenarios
 
 1. No Climate
@@ -21,25 +53,23 @@ simulations 0.7 (testing) fishing pressure
 
 10 replicates 
 
-1.1.8
-1.2.8
-1.3.8
-1.4.8
-1.5.8
-2.1.8
-2.2.8
-2.3.8
-2.4.8
-2.5.8
-3.1.8
-3.2.8
-3.3.8
-3.4.8
-3.5.8
-4.1.8
-4.2.8
-4.3.8
-4.4.8
-4.5.8
-
-# Do I test effect of adding low movement evolution specifically?
+1.1
+1.2
+1.3
+1.4
+1.5
+2.1
+2.2
+2.3
+2.4
+2.5
+3.1
+3.2
+3.3
+3.4
+3.5
+4.1
+4.2
+4.3
+4.4
+4.5
