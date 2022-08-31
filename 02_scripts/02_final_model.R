@@ -11,7 +11,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 10 # The number of replicate simulations to run
+NUM.reps <- 1 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 15 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 10 # The number of generations of fishing before reserves are installed
@@ -453,4 +453,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("03_generated_data","null_small.rda"))
+save(output.array, file = here::here("test",".rda"))
