@@ -432,7 +432,7 @@ start_time <- Sys.time()
 for(rep in 1:reps) {
   print(rep)
   pop <- init()
-  #save(SST.patches, file = here::here("03_generated_data","climate_layer", "null.rda"))
+  #save(SST.patches, file = here::here("03_generated_data","climate_layer", "mean2km.rda"))
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
@@ -453,4 +453,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("test",".rda"))
+save(output.array, file = here::here("test","",".rda"))

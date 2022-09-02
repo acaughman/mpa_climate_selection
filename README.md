@@ -3,12 +3,7 @@
 
 ## Tests
 
-1. mean2km
-2. enso2km
-3. mean5km
-4. enso5km
-
-Pick favorite
+Pick favorite gride size
 
 Fishing Pressure
 1. 0.6
