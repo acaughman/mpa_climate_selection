@@ -3,7 +3,7 @@ library(patchwork)
 
 # Allie Explore -----------------------------------------------------------
 
-reps = 10
+reps = 1
 NS.patches <- 100 # the number of patches on the north-south axis
 EW.patches <- 20
 NUM.age.classes <- 3 #babies, juvenile, adult
@@ -14,8 +14,8 @@ NUM.gens.pre.reserve <- 10 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 150 # The number of generations with the reserve installed
 gens = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-load(file = here::here("03_generated_data", "null_small.rda"))
-load(file = here::here("03_generated_data", "climate_layer" ,"null.rda"))
+load(file = here::here("test", "climate_pace", "null_small.rda"))
+load(file = here::here("03_generated_data", "climate_layer" ,"mean2km.rda"))
 
 # Output results into a dataframe
 output_df = data.frame() #create dataframe to hold results
@@ -91,4 +91,4 @@ output_df = output_df %>%
   mutate(lon = as.numeric(lon)) %>% 
   mutate(rep = as.numeric(rep))
 
-write_csv(output_df, here::here("03_generated_data","full_csv", "null_small.csv"))
+write_csv(output_df, here::here("test","climate_pace", "mean2km.csv"))
