@@ -2,13 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
-writing_drafts
+05_writing_drafts
 *.docx
-climate_data
 03_generated_data/full_csv
-<<<<<<< HEAD
+climate_data
 other
-test
-=======
-other
->>>>>>> 5e0d29dd3fda0c00246743ca4e9c236cf27c40e1
