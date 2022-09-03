@@ -14,7 +14,7 @@ NUM.gens.pre.reserve <- 10 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 150 # The number of generations with the reserve installed
 gens = NUM.gens.pre.fishing+NUM.gens.pre.reserve+NUM.gens.post.reserve
 
-load(file = here::here("test", "", ".rda"))
+load(file = here::here("sensititvity_analysis", "", ".rda"))
 load(file = here::here("03_generated_data", "climate_layer" ,".rda"))
 
 # Output results into a dataframe
@@ -91,4 +91,4 @@ output_df = output_df %>%
   mutate(lon = as.numeric(lon)) %>% 
   mutate(rep = as.numeric(rep))
 
-write_csv(output_df, here::here("test","", ".csv"))
+write_csv(output_df, here::here("sensititvity_analysis","", ".csv"))

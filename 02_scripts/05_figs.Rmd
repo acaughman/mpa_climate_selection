@@ -15,7 +15,7 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-output_df = read_csv(here::here("test", "", ".csv"))
+output_df = read_csv(here::here("sensitivity_aalys", "", ".csv"))
 ```
 
 ### Manipulate data
@@ -97,7 +97,7 @@ p2 / p1
 
 plot = p2 / p1
 
-ggsave(plot, file=paste0("_h.pdf"), path = here::here("test", ""), height = 11, width = 8)
+ggsave(plot, file=paste0("_h.pdf"), path = here::here("sensitivity_analysis", ""), height = 11, width = 8)
 ```
 
 ### Line Plot Figures
@@ -120,7 +120,7 @@ p3
 
 #mean 66, enso 117, shock c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129) EDIT WITH FINAL VALUES
 
-ggsave(p3, file=paste0(".pdf"), path = here::here("test", ""), height = 11, width = 8)
+ggsave(p3, file=paste0(".pdf"), path = here::here("sensitivity_analysis", ""), height = 11, width = 8)
 ```
 
 
