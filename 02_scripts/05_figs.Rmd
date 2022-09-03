@@ -15,7 +15,7 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-output_df = read_csv(here::here("sensitivity_aalys", "", ".csv"))
+output_df = read_csv(here::here("sensitivity_analysis", "", ".csv"))
 ```
 
 ### Manipulate data

@@ -81,24 +81,24 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  SST.patches <- array(opt.temp + 1.5, c(NS.patches, EW.patches, years))
+  #SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp+1.5) + NS.patches*0.01
-  # 
-  # for (i in 1:years) {
-  #   SST = start_SST
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.01
-  #   }
-  #   start_SST = start_SST + 0.018
-  # }
+  SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  start_SST = (opt.temp) + NS.patches*0.03
+
+  for (i in 1:years) {
+    SST = start_SST
+    for (lat in 1:NS.patches) {
+      SST.patches[lat,,i] = SST
+      SST = SST - 0.03
+    }
+    start_SST = start_SST + 0.018
+  }
   
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp+1.5) + NS.patches*0.01
+  # start_SST = (opt.temp) + NS.patches*0.03
   # 
   # t=seq(1,years,1)
   # enso.value = 0.5 * sin(t) + 0.018
@@ -107,14 +107,14 @@ init_SST <- function(years) {
   #   SST = start_SST
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.01
+  #     SST = SST - 0.03
   #   }
   #   start_SST = start_SST + enso.value[i]
   # }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp + 1.5) + NS.patches*0.01
+  # start_SST = (opt.temp) + NS.patches*0.03
   # 
   # for (i in 1:years) {
   #   heat_prob = runif(1, 0, 1)
@@ -126,7 +126,7 @@ init_SST <- function(years) {
   #   }
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.01
+  #     SST = SST - 0.03
   #   }
   # }
   
@@ -432,7 +432,7 @@ start_time <- Sys.time()
 for(rep in 1:reps) {
   print(rep)
   pop <- init()
-  #save(SST.patches, file = here::here("03_generated_data","climate_layer", "mean2km.rda"))
+  #save(SST.patches, file = here::here("03_generated_data","climate_layer", ".rda"))
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
@@ -453,4 +453,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("test","",".rda"))
+save(output.array, file = here::here("sensitivity_analysis","climate_pace",".rda"))
