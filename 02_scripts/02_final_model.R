@@ -81,20 +81,20 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  #SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
+  SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-  SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  start_SST = (opt.temp+1) + NS.patches*0.02
-
-  for (i in 1:years) {
-    SST = start_SST
-    for (lat in 1:NS.patches) {
-      SST.patches[lat,,i] = SST
-      SST = SST - 0.02
-    }
-    start_SST = start_SST + 0.018
-  }
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = (opt.temp+1) + NS.patches*0.02
+  # 
+  # for (i in 1:years) {
+  #   SST = start_SST
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST - 0.02
+  #   }
+  #   start_SST = start_SST + 0.018
+  # }
   
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
@@ -147,8 +147,8 @@ where.reserves <- function(reserves.at) {
         y <- ((reserves.at[i]-1) %% NS.patches) + 1
         reserve.patches[y,x,j] <- 1
       }
-      if (((j %% 3) == 0) & (j >= 40) & (j < 120)) {
-        reserves.at = reserves.at + 3
+      if (((j %% 6) == 0) & (j >= 40) & (j < 120)) {
+        reserves.at = reserves.at + 6
       }
     }
   } else {
@@ -453,4 +453,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("sensitivity_analysis","climate_pace",".rda"))
+save(output.array, file = here::here("sensitivity_analysis","density_dependence0001",".rda"))

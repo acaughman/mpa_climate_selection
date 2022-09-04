@@ -3,7 +3,13 @@
 
 ## Tests
 
-Pick favorite gride size
+Density Dependence
+
+1. 0.01
+2. 0.001
+3. 0.0001
+
+Pick which works best
 
 Fishing Pressure
 1. 0.6
@@ -26,12 +32,6 @@ Thermal Breadth
 2. 4
 3. 5
 4. 6
-
-Density Dependence
-
-1. 0.01
-2. 0.001
-3. 0.0001
 
 ## Full Runs
 
