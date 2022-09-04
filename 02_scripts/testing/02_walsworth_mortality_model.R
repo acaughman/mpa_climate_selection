@@ -36,8 +36,8 @@ simulate_mortality <- function(SST, opt.temp, temp.range) {
   results_plot = as.data.frame(results) %>% 
     rename(survival = V1) %>%
     mutate(survival.prop = case_when(
-      survival > .52 ~ .52,
-      survival < .52 ~ survival))
+      survival > .7 ~ .7,
+      survival < .7 ~ survival))
   
   results_plot$SST = SST
   results_plot$opt.temp = opt.temp
