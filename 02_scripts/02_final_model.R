@@ -26,8 +26,8 @@ view.world <- array(seq(1,NS.patches*EW.patches),c(NS.patches,EW.patches))
 view.world
 
 init.a <- 0.3  # The initial frequency of the low movement allele
-sb <- 0.59 # survival proportion for babies
-s <- 0.59 # survival proportion
+sb <- 0.70 # survival proportion for babies
+s <- 0.70 # survival proportion
 dd <- 0.001 # density dependence of baby survival 
 fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
@@ -85,20 +85,20 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  start_SST = (opt.temp) + NS.patches*0.03
+  start_SST = (opt.temp+1) + NS.patches*0.02
 
   for (i in 1:years) {
     SST = start_SST
     for (lat in 1:NS.patches) {
       SST.patches[lat,,i] = SST
-      SST = SST - 0.03
+      SST = SST - 0.02
     }
     start_SST = start_SST + 0.018
   }
   
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp) + NS.patches*0.03
+  # start_SST = (opt.temp+1) + NS.patches*0.02
   # 
   # t=seq(1,years,1)
   # enso.value = 0.5 * sin(t) + 0.018
@@ -107,14 +107,14 @@ init_SST <- function(years) {
   #   SST = start_SST
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.03
+  #     SST = SST - 0.02
   #   }
   #   start_SST = start_SST + enso.value[i]
   # }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp) + NS.patches*0.03
+  # start_SST = (opt.temp+1) + NS.patches*0.02
   # 
   # for (i in 1:years) {
   #   heat_prob = runif(1, 0, 1)
@@ -126,7 +126,7 @@ init_SST <- function(years) {
   #   }
   #   for (lat in 1:NS.patches) {
   #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.03
+  #     SST = SST - 0.02
   #   }
   # }
   

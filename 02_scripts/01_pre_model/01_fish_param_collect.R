@@ -1,8 +1,8 @@
 library(rfishbase)
 library(tidyverse)
 
-data = read_csv(here::here("data","species.csv")) %>% 
-  select(species, homerange, measure)
+data = read_csv(here::here("01_raw_data","species.csv")) %>% 
+  select(species)
 validate_names(data$species)
 
 fish = load_taxa()
@@ -26,4 +26,4 @@ dat = full_join(dat, pop) %>%
 
 dat_full = full_join(dat, data)
 
-write_csv(dat_full, here::here("species_sum.csv"))
+write_csv(dat_full, here::here("03_generated_data","species_sum.csv"))

@@ -1,668 +1,290 @@
-species,M,FecundityMax,AgeMatMin,,,species,TempPreferred,TempPref50,TempMin,TempMax,,,species,FBname
-Balistes vetula,2.6,NA,NA,,,Caranx ignobilis,27,27,26,29,3,,Acanthurus bahianus,Barber surgeonfish
-Balistes vetula,2.6,NA,NA,,,Caranx sexfasciatus,26,27,26,29,3,,Acanthurus blochii,Ringtail surgeonfish
-Caranx ignobilis,NA,NA,NA,,,Coris aygula,NA,NA,24,28,4,,Balistes vetula,Queen triggerfish
-Caranx melampygus,NA,NA,NA,,,Lutjanus argentimaculatus,27,27,16,30,14,,Balistes vetula,Queen triggerfish
-Caranx melampygus,NA,4270000,NA,,,Seriola lalandi,25,26,18,24,6,,Bolbometopon muricatum,Green humphead parrotfish
-Carcharhinus albimarginatus,NA,11,NA,,,,,,,,,,Carangoides ferdau,Blue trevally
-Carcharhinus albimarginatus,NA,10,NA,,,,26.5,,,,6,,Caranx ignobilis,Giant trevally
-Carcharhinus albimarginatus,NA,10,NA,,,,27,,,,4,,Caranx melampygus,Bluefin trevally
-Carcharhinus amblyrhynchos,NA,NA,NA,,,,,,,,,,Caranx papuensis,Brassy trevally
-Carcharhinus amblyrhynchos,NA,NA,NA,,,,,,,,,,Caranx sexfasciatus,Bigeye trevally
-Carcharhinus amblyrhynchos,NA,6,NA,,,,,,,,,,Carcharhinus albimarginatus,Silvertip shark
-Carcharhinus amblyrhynchos,NA,6,NA,,,,,,,,,,Carcharhinus amblyrhynchos,Blacktail reef shark
-Carcharhinus amblyrhynchos,NA,4,NA,,,,,,,,,,Carcharhinus amblyrhynchos,Blacktail reef shark
-Carcharhinus amblyrhynchos,NA,4,NA,,,,,,,,,,Carcharhinus cautus,Nervous shark
-Carcharhinus amblyrhynchos,NA,3,NA,,,,,,,,,,Carcharhinus cautus,Nervous shark
-Carcharhinus amblyrhynchos,NA,3,NA,,,,,,,,,,Carcharhinus galapagensis,Galapagos shark
-Carcharhinus amblyrhynchos,NA,4,NA,,,,,,,,,,Carcharhinus limbatus,Blacktip shark
-Carcharhinus amblyrhynchos,NA,4,NA,,,,,,,,,,Centropristis striata,Black seabass
-Carcharhinus amblyrhynchos,NA,6,NA,,,,,,,,,,Cephalopholis sonnerati,Tomato hind
-Carcharhinus amblyrhynchos,NA,6,NA,,,,,,,,,,Cheilinus undulatus,Humphead wrasse
-Carcharhinus amblyrhynchos,NA,6,NA,,,,,,,,,,Chlorurus frontalis,Pacific slopehead parrotfish
-Carcharhinus amblyrhynchos,NA,6,NA,,,,,,,,,,Chlorurus microrhinos,Steephead parrots
-Carcharhinus amblyrhynchos,0.154,NA,NA,,,,,,,,,,Coris aygula,Clown coris
-Carcharhinus amblyrhynchos,0.154,NA,NA,,,,,,,,,,Epinephelus fuscoguttatus,Brown-marbled grouper
-Carcharhinus amblyrhynchos,0.26,NA,NA,,,,,,,,,,Epinephelus guttatus,Red hind
-Carcharhinus amblyrhynchos,0.26,NA,NA,,,,,,,,,,Epinephelus maculatus,Highfin grouper
-Carcharhinus cautus,NA,5,NA,,,,,,,,,,Epinephelus marginatus,Dusky grouper
-Carcharhinus cautus,NA,5,NA,,,,,,,,,,Epinephelus morio,Red grouper
-Carcharhinus galapagensis,NA,NA,6,,,,,,,,,,Epinephelus multinotatus,White-blotched grouper
-Carcharhinus galapagensis,NA,NA,6.5,,,,,,,,,,Galeocerdo cuvier,Tiger shark
-Carcharhinus galapagensis,NA,16,NA,,,,,,,,,,Haemulon flavolineatum,French grunt
-Carcharhinus limbatus,NA,NA,3,,,,,,,,,,Kyphosus sydneyanus,Silver drummer
-Carcharhinus limbatus,NA,NA,4,,,,,,,,,,Lethrinus mahsena,Sky emperor
-Carcharhinus limbatus,NA,NA,NA,,,,,,,,,,Lethrinus miniatus,Trumpet emperor
-Carcharhinus limbatus,NA,NA,NA,,,,,,,,,,Lethrinus nebulosus,Spangled emperor
-Carcharhinus limbatus,NA,10,NA,,,,,,,,,,Lutjanus argentimaculatus,Mangrove red snapper
-Carcharhinus limbatus,NA,7,NA,,,,,,,,,,Lutjanus campechanus,Northern red snapper
-Carcharhinus limbatus,NA,7,NA,,,,,,,,,,Lutjanus campechanus,Northern red snapper
-Carcharhinus limbatus,NA,10,NA,,,,,,,,,,Ocyurus chrysurus,Yellowtail snapper
-Carcharhinus limbatus,0.26,NA,NA,,,,,,,,,,Plectorhinchus flavomaculatus,Lemonfish
-Cephalopholis sonnerati,NA,508581,NA,,,,,,,,,,Plectropomus areolatus,Squaretail coralgrouper
-Cheilinus undulatus,NA,NA,5,,,,,,,,,,Plectropomus leopardus,Leopard coralgrouper
-Epinephelus fuscoguttatus,0.1,NA,NA,,,,,,,,,,Pseudocaranx dentex,White trevally
-Epinephelus guttatus,NA,NA,NA,,,,,,,,,,Rostroraja alba,White skate
-Epinephelus guttatus,NA,3364900,NA,,,,,,,,,,Scomberoides commersonnianus,Talang queenfish
-Epinephelus guttatus,NA,526000,NA,,,,,,,,,,Seriola dumerili,Greater amberjack
-Epinephelus guttatus,0.68,NA,NA,,,,,,,,,,Seriola lalandi,Yellowtail amberjack
-Epinephelus marginatus,NA,NA,5,,,,,,,,,,Siganus fuscescens,Mottled spinefoot
-Epinephelus marginatus,NA,NA,5,,,,,,,,,,Siganus sutor,Shoemaker spinefoot
-Epinephelus marginatus,NA,NA,5,,,,,,,,,,Sparisoma aurofrenatum,Redband parrotfish
-Epinephelus marginatus,NA,NA,NA,,,,,,,,,,Sphyraena barracuda,Great barracuda
-Epinephelus marginatus,NA,NA,NA,,,,,,,,,,Triaenodon obesus,Whitetip reef shark
-Epinephelus marginatus,NA,NA,NA,,,,,,,,,,Variola louti,Yellow-edged lyretail
-Epinephelus marginatus,NA,7984835,NA,,,,,,,,,,Acanthurus blochii,NA
-Epinephelus marginatus,0.1,NA,NA,,,,,,,,,,Balistes vetula,NA
-Epinephelus marginatus,0.05,NA,NA,,,,,,,,,,Balistes vetula,NA
-Epinephelus morio,NA,NA,4,,,,,,,,,,Bolbometopon muricatum,NA
-Epinephelus morio,NA,17141170,NA,,,,,,,,,,Carangoides ferdau,NA
-Epinephelus morio,0.18,NA,NA,,,,,,,,,,Caranx ignobilis,NA
-Galeocerdo cuvier,NA,NA,4,,,,,,,,,,Caranx melampygus,NA
-Galeocerdo cuvier,NA,NA,4,,,,,,,,,,Caranx papuensis,NA
-Galeocerdo cuvier,NA,NA,NA,,,,,,,,,,Caranx sexfasciatus,NA
-Galeocerdo cuvier,NA,NA,NA,,,,,,,,,,Carcharhinus albimarginatus,NA
-Galeocerdo cuvier,NA,NA,NA,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-Galeocerdo cuvier,NA,82,NA,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-Galeocerdo cuvier,NA,30,NA,,,,,,,,,,Carcharhinus cautus,NA
-Lethrinus mahsena,NA,NA,3,,,,,,,,,,Carcharhinus cautus,NA
-Lethrinus mahsena,NA,NA,NA,,,,,,,,,,Carcharhinus galapagensis,NA
-Lethrinus mahsena,NA,166200,NA,,,,,,,,,,Carcharhinus limbatus,NA
-Lethrinus mahsena,0.304,NA,NA,,,,,,,,,,Carcharhinus limbatus,NA
-Lethrinus miniatus,NA,NA,2,,,,,,,,,,Centropristis striata,NA
-Lethrinus miniatus,NA,NA,3,,,,,,,,,,Cephalopholis sonnerati,NA
-Lethrinus miniatus,NA,NA,NA,,,,,,,,,,Cheilinus undulatus,NA
-Lethrinus miniatus,0.44,NA,NA,,,,,,,,,,Chlorurus frontalis,NA
-Lethrinus miniatus,0.57,NA,NA,,,,,,,,,,Chlorurus microrhinos,NA
-Lethrinus miniatus,1.06,NA,NA,,,,,,,,,,Coris aygula,NA
-Lethrinus miniatus,NA,NA,NA,,,,,,,,,,Epinephelus fuscoguttatus,NA
-Lethrinus nebulosus,NA,NA,4,,,,,,,,,,Epinephelus guttatus,NA
-Lethrinus nebulosus,NA,NA,NA,,,,,,,,,,Epinephelus maculatus,NA
-Lethrinus nebulosus,NA,NA,NA,,,,,,,,,,Epinephelus marginatus,NA
-Lethrinus nebulosus,NA,NA,NA,,,,,,,,,,Epinephelus morio,NA
-Lethrinus nebulosus,NA,NA,NA,,,,,,,,,,Epinephelus multinotatus,NA
-Lethrinus nebulosus,NA,NA,NA,,,,,,,,,,Galeocerdo cuvier,NA
-Lethrinus nebulosus,NA,NA,NA,,,,,,,,,,Haemulon flavolineatum,NA
-Lethrinus nebulosus,NA,NA,NA,,,,,,,,,,Kyphosus sydneyanus,NA
-Lethrinus nebulosus,0.17,NA,NA,,,,,,,,,,Lethrinus mahsena,NA
-Lutjanus argentimaculatus,NA,NA,NA,,,,,,,,,,Lethrinus miniatus,NA
-Lutjanus argentimaculatus,NA,NA,NA,,,,,,,,,,Lethrinus nebulosus,NA
-Lutjanus argentimaculatus,0.25,NA,NA,,,,,,,,,,Lutjanus argentimaculatus,NA
-Lutjanus campechanus,NA,59665760,NA,,,,,,,,,,Lutjanus campechanus,NA
-Lutjanus campechanus,NA,59665760,NA,,,,,,,,,,Lutjanus campechanus,NA
-Lutjanus campechanus,0.2,NA,NA,,,,,,,,,,Ocyurus chrysurus,NA
-Lutjanus campechanus,0.2,NA,NA,,,,,,,,,,Plectorhinchus flavomaculatus,NA
-Ocyurus chrysurus,NA,NA,NA,,,,,,,,,,Plectropomus areolatus,NA
-Ocyurus chrysurus,0.62,NA,NA,,,,,,,,,,Plectropomus leopardus,NA
-Ocyurus chrysurus,0.45,NA,NA,,,,,,,,,,Pseudocaranx dentex,NA
-Ocyurus chrysurus,0.2,NA,NA,,,,,,,,,,Rostroraja alba,NA
-Plectropomus areolatus,NA,NA,NA,,,,,,,,,,Scomberoides commersonnianus,NA
-Plectropomus areolatus,NA,NA,NA,,,,,,,,,,Seriola dumerili,NA
-Plectropomus areolatus,NA,NA,NA,,,,,,,,,,Seriola lalandi,NA
-Plectropomus leopardus,NA,NA,2,,,,,,,,,,Siganus fuscescens,NA
-Plectropomus leopardus,NA,NA,2,,,,,,,,,,Siganus sutor,NA
-Plectropomus leopardus,NA,NA,3,,,,,,,,,,Sparisoma aurofrenatum,NA
-Plectropomus leopardus,NA,NA,3,,,,,,,,,,Sphyraena barracuda,NA
-Plectropomus leopardus,0.46,NA,NA,,,,,,,,,,Triaenodon obesus,NA
-Rostroraja alba,NA,153,NA,,,,,,,,,,Variola louti,NA
-Scomberoides commersonnianus,NA,NA,2,,,,,,,,,,Acanthurus bahianus,NA
-Scomberoides commersonnianus,NA,NA,NA,,,,,,,,,,Acanthurus blochii,NA
-Scomberoides commersonnianus,NA,2859935,NA,,,,,,,,,,Balistes vetula,NA
-Scomberoides commersonnianus,NA,NA,NA,,,,,,,,,,Balistes vetula,NA
-Scomberoides commersonnianus,NA,NA,NA,,,,,,,,,,Balistes vetula,NA
-Seriola dumerili,NA,NA,2,,,,,,,,,,Balistes vetula,NA
-Seriola dumerili,NA,NA,3,,,,,,,,,,Bolbometopon muricatum,NA
-Seriola dumerili,NA,NA,3,,,,,,,,,,Carangoides ferdau,NA
-Seriola dumerili,NA,NA,NA,,,,,,,,,,Caranx ignobilis,NA
-Seriola lalandi,NA,NA,2,,,,,,,,,,Caranx ignobilis,NA
-Seriola lalandi,0.94,NA,NA,,,,,,,,,,Caranx melampygus,NA
-Seriola lalandi,0.12,NA,NA,,,,,,,,,,Caranx papuensis,NA
-Seriola lalandi,0.488,NA,NA,,,,,,,,,,Caranx sexfasciatus,NA
-Siganus fuscescens,NA,618603,NA,,,,,,,,,,Carcharhinus albimarginatus,NA
-Siganus sutor,0.631,NA,NA,,,,,,,,,,Carcharhinus albimarginatus,NA
-Sphyraena barracuda,NA,NA,2,,,,,,,,,,Carcharhinus albimarginatus,NA
-Sphyraena barracuda,NA,NA,4,,,,,,,,,,Carcharhinus albimarginatus,NA
-Triaenodon obesus,NA,NA,5,,,,,,,,,,Carcharhinus albimarginatus,NA
-Triaenodon obesus,NA,NA,NA,,,,,,,,,,Carcharhinus albimarginatus,NA
-Triaenodon obesus,NA,5,NA,,,,,,,,,,Carcharhinus albimarginatus,NA
-Variola louti,0.6,NA,NA,,,,,,,,,,Carcharhinus albimarginatus,NA
-,,,,,,,,,,,,,Carcharhinus albimarginatus,NA
-,0.520724138,4237085.486,3.574074074,,,,,,,,,,Carcharhinus albimarginatus,NA
-,0.26,10,3,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,0.594090189,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,0.771051586,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus cautus,NA
-,,,,,,,,,,,,,Carcharhinus cautus,NA
-,,,,,,,,,,,,,Carcharhinus cautus,NA
-,,,,,,,,,,,,,Carcharhinus cautus,NA
-,,,,,,,,,,,,,Carcharhinus galapagensis,NA
-,,,,,,,,,,,,,Carcharhinus galapagensis,NA
-,,,,,,,,,,,,,Carcharhinus galapagensis,NA
-,,,,,,,,,,,,,Carcharhinus galapagensis,NA
-,,,,,,,,,,,,,Carcharhinus galapagensis,NA
-,,,,,,,,,,,,,Carcharhinus galapagensis,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Centropristis striata,NA
-,,,,,,,,,,,,,Centropristis striata,NA
-,,,,,,,,,,,,,Centropristis striata,NA
-,,,,,,,,,,,,,Cephalopholis sonnerati,NA
-,,,,,,,,,,,,,Cephalopholis sonnerati,NA
-,,,,,,,,,,,,,Cephalopholis sonnerati,NA
-,,,,,,,,,,,,,Cheilinus undulatus,NA
-,,,,,,,,,,,,,Cheilinus undulatus,NA
-,,,,,,,,,,,,,Cheilinus undulatus,NA
-,,,,,,,,,,,,,Cheilinus undulatus,NA
-,,,,,,,,,,,,,Cheilinus undulatus,NA
-,,,,,,,,,,,,,Chlorurus frontalis,NA
-,,,,,,,,,,,,,Chlorurus microrhinos,NA
-,,,,,,,,,,,,,Coris aygula,NA
-,,,,,,,,,,,,,Epinephelus fuscoguttatus,NA
-,,,,,,,,,,,,,Epinephelus guttatus,NA
-,,,,,,,,,,,,,Epinephelus guttatus,NA
-,,,,,,,,,,,,,Epinephelus maculatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus multinotatus,NA
-,,,,,,,,,,,,,Epinephelus multinotatus,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Haemulon flavolineatum,NA
-,,,,,,,,,,,,,Kyphosus sydneyanus,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lutjanus argentimaculatus,NA
-,,,,,,,,,,,,,Lutjanus argentimaculatus,NA
-,,,,,,,,,,,,,Lutjanus argentimaculatus,NA
-,,,,,,,,,,,,,Lutjanus argentimaculatus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Plectorhinchus flavomaculatus,NA
-,,,,,,,,,,,,,Plectropomus areolatus,NA
-,,,,,,,,,,,,,Plectropomus areolatus,NA
-,,,,,,,,,,,,,Plectropomus areolatus,NA
-,,,,,,,,,,,,,Plectropomus areolatus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Pseudocaranx dentex,NA
-,,,,,,,,,,,,,Pseudocaranx dentex,NA
-,,,,,,,,,,,,,Rostroraja alba,NA
-,,,,,,,,,,,,,Scomberoides commersonnianus,NA
-,,,,,,,,,,,,,Scomberoides commersonnianus,NA
-,,,,,,,,,,,,,Seriola dumerili,NA
-,,,,,,,,,,,,,Seriola dumerili,NA
-,,,,,,,,,,,,,Seriola dumerili,NA
-,,,,,,,,,,,,,Seriola dumerili,NA
-,,,,,,,,,,,,,Seriola lalandi,NA
-,,,,,,,,,,,,,Siganus fuscescens,NA
-,,,,,,,,,,,,,Siganus fuscescens,NA
-,,,,,,,,,,,,,Siganus sutor,NA
-,,,,,,,,,,,,,Sparisoma aurofrenatum,NA
-,,,,,,,,,,,,,Sphyraena barracuda,NA
-,,,,,,,,,,,,,Sphyraena barracuda,NA
-,,,,,,,,,,,,,Sphyraena barracuda,NA
-,,,,,,,,,,,,,Triaenodon obesus,NA
-,,,,,,,,,,,,,Triaenodon obesus,NA
-,,,,,,,,,,,,,Triaenodon obesus,NA
-,,,,,,,,,,,,,Triaenodon obesus,NA
-,,,,,,,,,,,,,Triaenodon obesus,NA
-,,,,,,,,,,,,,Triaenodon obesus,NA
-,,,,,,,,,,,,,Triaenodon obesus,NA
-,,,,,,,,,,,,,Variola louti,NA
-,,,,,,,,,,,,,Variola louti,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Caranx ignobilis,NA
-,,,,,,,,,,,,,Caranx melampygus,NA
-,,,,,,,,,,,,,Caranx sexfasciatus,NA
-,,,,,,,,,,,,,Carcharhinus albimarginatus,NA
-,,,,,,,,,,,,,Carcharhinus albimarginatus,NA
-,,,,,,,,,,,,,Carcharhinus albimarginatus,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus cautus,NA
-,,,,,,,,,,,,,Carcharhinus cautus,NA
-,,,,,,,,,,,,,Carcharhinus galapagensis,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Centropristis striata,NA
-,,,,,,,,,,,,,Cephalopholis sonnerati,NA
-,,,,,,,,,,,,,Cheilinus undulatus,NA
-,,,,,,,,,,,,,Epinephelus fuscoguttatus,NA
-,,,,,,,,,,,,,Epinephelus guttatus,NA
-,,,,,,,,,,,,,Epinephelus guttatus,NA
-,,,,,,,,,,,,,Epinephelus maculatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus multinotatus,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Haemulon flavolineatum,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lutjanus argentimaculatus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Plectorhinchus flavomaculatus,NA
-,,,,,,,,,,,,,Plectropomus areolatus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Pseudocaranx dentex,NA
-,,,,,,,,,,,,,Rostroraja alba,NA
-,,,,,,,,,,,,,Scomberoides commersonnianus,NA
-,,,,,,,,,,,,,Seriola dumerili,NA
-,,,,,,,,,,,,,Seriola lalandi,NA
-,,,,,,,,,,,,,Siganus fuscescens,NA
-,,,,,,,,,,,,,Siganus fuscescens,NA
-,,,,,,,,,,,,,Sparisoma aurofrenatum,NA
-,,,,,,,,,,,,,Sphyraena barracuda,NA
-,,,,,,,,,,,,,Triaenodon obesus,NA
-,,,,,,,,,,,,,Variola louti,NA
-,,,,,,,,,,,,,Acanthurus bahianus,NA
-,,,,,,,,,,,,,Acanthurus bahianus,NA
-,,,,,,,,,,,,,Acanthurus blochii,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Balistes vetula,NA
-,,,,,,,,,,,,,Bolbometopon muricatum,NA
-,,,,,,,,,,,,,Bolbometopon muricatum,NA
-,,,,,,,,,,,,,Carangoides ferdau,NA
-,,,,,,,,,,,,,Caranx ignobilis,NA
-,,,,,,,,,,,,,Caranx ignobilis,NA
-,,,,,,,,,,,,,Caranx ignobilis,NA
-,,,,,,,,,,,,,Caranx ignobilis,NA
-,,,,,,,,,,,,,Caranx melampygus,NA
-,,,,,,,,,,,,,Caranx melampygus,NA
-,,,,,,,,,,,,,Caranx melampygus,NA
-,,,,,,,,,,,,,Caranx sexfasciatus,NA
-,,,,,,,,,,,,,Carcharhinus albimarginatus,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus amblyrhynchos,NA
-,,,,,,,,,,,,,Carcharhinus cautus,NA
-,,,,,,,,,,,,,Carcharhinus cautus,NA
-,,,,,,,,,,,,,Carcharhinus galapagensis,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Carcharhinus limbatus,NA
-,,,,,,,,,,,,,Centropristis striata,NA
-,,,,,,,,,,,,,Centropristis striata,NA
-,,,,,,,,,,,,,Centropristis striata,NA
-,,,,,,,,,,,,,Centropristis striata,NA
-,,,,,,,,,,,,,Centropristis striata,NA
-,,,,,,,,,,,,,Centropristis striata,NA
-,,,,,,,,,,,,,Centropristis striata,NA
-,,,,,,,,,,,,,Cephalopholis sonnerati,NA
-,,,,,,,,,,,,,Cheilinus undulatus,NA
-,,,,,,,,,,,,,Cheilinus undulatus,NA
-,,,,,,,,,,,,,Cheilinus undulatus,NA
-,,,,,,,,,,,,,Chlorurus frontalis,NA
-,,,,,,,,,,,,,Chlorurus microrhinos,NA
-,,,,,,,,,,,,,Chlorurus microrhinos,NA
-,,,,,,,,,,,,,Chlorurus microrhinos,NA
-,,,,,,,,,,,,,Epinephelus fuscoguttatus,NA
-,,,,,,,,,,,,,Epinephelus fuscoguttatus,NA
-,,,,,,,,,,,,,Epinephelus fuscoguttatus,NA
-,,,,,,,,,,,,,Epinephelus fuscoguttatus,NA
-,,,,,,,,,,,,,Epinephelus fuscoguttatus,NA
-,,,,,,,,,,,,,Epinephelus guttatus,NA
-,,,,,,,,,,,,,Epinephelus guttatus,NA
-,,,,,,,,,,,,,Epinephelus guttatus,NA
-,,,,,,,,,,,,,Epinephelus guttatus,NA
-,,,,,,,,,,,,,Epinephelus guttatus,NA
-,,,,,,,,,,,,,Epinephelus maculatus,NA
-,,,,,,,,,,,,,Epinephelus maculatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus marginatus,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus morio,NA
-,,,,,,,,,,,,,Epinephelus multinotatus,NA
-,,,,,,,,,,,,,Epinephelus multinotatus,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Galeocerdo cuvier,NA
-,,,,,,,,,,,,,Haemulon flavolineatum,NA
-,,,,,,,,,,,,,Haemulon flavolineatum,NA
-,,,,,,,,,,,,,Haemulon flavolineatum,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus mahsena,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus miniatus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lethrinus nebulosus,NA
-,,,,,,,,,,,,,Lutjanus argentimaculatus,NA
-,,,,,,,,,,,,,Lutjanus argentimaculatus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Lutjanus campechanus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Ocyurus chrysurus,NA
-,,,,,,,,,,,,,Plectropomus areolatus,NA
-,,,,,,,,,,,,,Plectropomus areolatus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Plectropomus leopardus,NA
-,,,,,,,,,,,,,Pseudocaranx dentex,NA
-,,,,,,,,,,,,,Pseudocaranx dentex,NA
-,,,,,,,,,,,,,Pseudocaranx dentex,NA
-,,,,,,,,,,,,,Pseudocaranx dentex,NA
-,,,,,,,,,,,,,Scomberoides commersonnianus,NA
-,,,,,,,,,,,,,Scomberoides commersonnianus,NA
-,,,,,,,,,,,,,Seriola dumerili,NA
-,,,,,,,,,,,,,Seriola dumerili,NA
-,,,,,,,,,,,,,Seriola dumerili,NA
-,,,,,,,,,,,,,Seriola dumerili,NA
-,,,,,,,,,,,,,Seriola dumerili,NA
-,,,,,,,,,,,,,Seriola dumerili,NA
-,,,,,,,,,,,,,Seriola lalandi,NA
-,,,,,,,,,,,,,Seriola lalandi,NA
-,,,,,,,,,,,,,Seriola lalandi,NA
-,,,,,,,,,,,,,Seriola lalandi,NA
-,,,,,,,,,,,,,Seriola lalandi,NA
-,,,,,,,,,,,,,Siganus fuscescens,NA
-,,,,,,,,,,,,,Siganus sutor,NA
-,,,,,,,,,,,,,Siganus sutor,NA
-,,,,,,,,,,,,,Siganus sutor,NA
-,,,,,,,,,,,,,Siganus sutor,NA
-,,,,,,,,,,,,,Siganus sutor,NA
-,,,,,,,,,,,,,Sparisoma aurofrenatum,NA
-,,,,,,,,,,,,,Sparisoma aurofrenatum,NA
-,,,,,,,,,,,,,Sphyraena barracuda,NA
-,,,,,,,,,,,,,Sphyraena barracuda,NA
-,,,,,,,,,,,,,Sphyraena barracuda,NA
-,,,,,,,,,,,,,Triaenodon obesus,NA
-,,,,,,,,,,,,,Variola louti,NA
-,,,,,,,,,,,,,Variola louti,NA
-,,,,,,,,,,,,,Variola louti,NA
-,,,,,,,,,,,,,Variola louti,NA
-,,,,,,,,,,,,,Carcharhinus ambylrynchos,NA
-,,,,,,,,,,,,,Seriola riviolana,NA
-,,,,,,,,,,,,,Lutjanus aya,NA
-,,,,,,,,,,,,,Lutjanus johni,NA
-,,,,,,,,,,,,,Scarus prasiognathus,NA
-,,,,,,,,,,,,,Scarus rubroviolaceous,NA
-,,,,,,,,,,,,,Carcharhinus perezi,NA
+species,M,FecundityMax,AgeMatMin,,species,TempPreferred,TempPref50,TempMin,TempMax,Temp Range
+Albula vulpes,NA,NA,NA,,Albula vulpes,26,27,NA,NA,NA
+Albula vulpes,NA,NA,2,,Bolbometopon muricatum,28,28,NA,NA,NA
+Albula vulpes,NA,NA,3,,Carangoides fulvoguttatus,28,28,NA,NA,NA
+Albula vulpes,NA,NA,NA,,Caranx ignobilis,27,27,26,29,3
+Albula vulpes,NA,NA,2.670000076,,Caranx ignobilis,27,27,26,29,3
+Albula vulpes,NA,NA,NA,,Caranx melampygus,28,28,NA,NA,NA
+Albula vulpes,NA,NA,2.670000076,,Caranx sexfasciatus,26,27,26,29,3
+Albula vulpes,NA,1700000,NA,,Carcharhinus limbatus,27,27,NA,NA,NA
+Caranx ignobilis,NA,NA,NA,,Carcharhinus plumbeus,27,26,23,27,4
+Caranx ignobilis,NA,NA,NA,,Coris aygula,NA,NA,24,28,4
+Caranx melampygus,NA,NA,NA,,Elagatis bipinnulata,28,27,NA,NA,NA
+Caranx melampygus,NA,4270000,NA,,Epinephelus fuscoguttatus,27,28,NA,NA,NA
+Carcharhinus amblyrhynchos,NA,NA,NA,,Epinephelus guttatus,26,26,NA,NA,NA
+Carcharhinus amblyrhynchos,NA,6,NA,,Epinephelus marginatus,26,25,NA,NA,NA
+Carcharhinus amblyrhynchos,NA,4,NA,,Epinephelus morio,26,27,NA,NA,NA
+Carcharhinus amblyrhynchos,NA,3,NA,,Gadus morhua,6,6,0,15,15
+Carcharhinus amblyrhynchos,NA,4,NA,,Gymnosarda unicolor,28,27,20,28,8
+Carcharhinus amblyrhynchos,NA,6,NA,,Lepidocybium flavobrunneum,27,26,NA,NA,NA
+Carcharhinus amblyrhynchos,NA,6,NA,,Lethrinus mahsena,28,28,NA,NA,NA
+Carcharhinus amblyrhynchos,0.154,NA,NA,,Lethrinus nebulosus,28,27,NA,NA,NA
+Carcharhinus amblyrhynchos,0.26,NA,NA,,Lutjanus campechanus,22,24,NA,NA,NA
+Carcharhinus amboinensis,NA,13,NA,,Mycteroperca microlepis,24,26,NA,NA,NA
+Carcharhinus amboinensis,NA,13,NA,,Negaprion brevirostris,27,NA,NA,NA,NA
+Carcharhinus amboinensis,NA,7,NA,,Negaprion brevirostris,27,NA,NA,NA,NA
+Carcharhinus galapagensis,NA,NA,6.5,,Plectropomus areolatus,28,28,NA,NA,NA
+Carcharhinus galapagensis,NA,NA,6,,Plectropomus leopardus,NA,NA,24,NA,NA
+Carcharhinus galapagensis,NA,16,NA,,Pseudocaranx dentex,20,20,NA,NA,NA
+Carcharhinus leucas,NA,NA,6,,Ruvettus pretiosus,25,25,NA,NA,NA
+Carcharhinus leucas,NA,NA,18.20000076,,Seriola lalandi,25,26,18,24,6
+Carcharhinus leucas,NA,NA,14,,Sphyraena barracuda,27,27,NA,NA,NA
+Carcharhinus leucas,NA,NA,NA,,Thunnus obesus,27,26,13,29,16
+Carcharhinus leucas,NA,NA,NA,,Thunnus tonggol,28,28,NA,NA,NA
+Carcharhinus leucas,NA,NA,NA,,,,,,,
+Carcharhinus leucas,NA,13,NA,,Average:,25.79310345,,,,6.888888889
+Carcharhinus leucas,NA,12,NA,,Median:,27,,,,4
+Carcharhinus leucas,NA,NA,NA,,,,,,,
+Carcharhinus leucas,NA,NA,NA,,,,,,,
+Carcharhinus limbatus,NA,NA,4,,,,,,,
+Carcharhinus limbatus,NA,NA,3,,,,,,,
+Carcharhinus limbatus,NA,NA,6,,,,,,,
+Carcharhinus limbatus,NA,NA,NA,,,,,,,
+Carcharhinus limbatus,NA,10,NA,,,,,,,
+Carcharhinus limbatus,NA,7,NA,,,,,,,
+Carcharhinus limbatus,NA,7,NA,,,,,,,
+Carcharhinus limbatus,NA,10,NA,,,,,,,
+Carcharhinus limbatus,0.26,NA,NA,,,,,,,
+Carcharhinus melanopterus,NA,4,NA,,,,,,,
+Carcharhinus melanopterus,NA,4,NA,,,,,,,
+Carcharhinus plumbeus,NA,NA,NA,,,,,,,
+Carcharhinus plumbeus,NA,NA,NA,,,,,,,
+Carcharhinus plumbeus,NA,NA,13,,,,,,,
+Carcharhinus plumbeus,NA,NA,13,,,,,,,
+Carcharhinus plumbeus,NA,NA,15,,,,,,,
+Carcharhinus plumbeus,NA,NA,15,,,,,,,
+Carcharhinus plumbeus,NA,14,NA,,,,,,,
+Carcharhinus plumbeus,NA,12,NA,,,,,,,
+Carcharhinus plumbeus,NA,NA,NA,,,,,,,
+Carcharhinus plumbeus,NA,NA,NA,,,,,,,
+Carcharhinus plumbeus,NA,NA,NA,,,,,,,
+Cephalopholis sonnerati,NA,508581,NA,,,,,,,
+Cheilinus undulatus,NA,NA,5,,,,,,,
+Epinephelus fuscoguttatus,0.1,NA,NA,,,,,,,
+Epinephelus guttatus,NA,NA,NA,,,,,,,
+Epinephelus guttatus,NA,3364900,NA,,,,,,,
+Epinephelus guttatus,NA,526000,NA,,,,,,,
+Epinephelus guttatus,0.68,NA,NA,,,,,,,
+Epinephelus marginatus,NA,NA,5,,,,,,,
+Epinephelus marginatus,NA,NA,5,,,,,,,
+Epinephelus marginatus,NA,NA,5,,,,,,,
+Epinephelus marginatus,NA,NA,NA,,,,,,,
+Epinephelus marginatus,NA,NA,NA,,,,,,,
+Epinephelus marginatus,NA,NA,NA,,,,,,,
+Epinephelus marginatus,NA,7984835,NA,,,,,,,
+Epinephelus marginatus,0.1,NA,NA,,,,,,,
+Epinephelus marginatus,0.05,NA,NA,,,,,,,
+Epinephelus morio,NA,NA,4,,,,,,,
+Epinephelus morio,NA,17141170,NA,,,,,,,
+Epinephelus morio,0.18,NA,NA,,,,,,,
+Gadus morhua,NA,NA,2,,,,,,,
+Gadus morhua,NA,NA,4,,,,,,,
+Gadus morhua,NA,NA,5,,,,,,,
+Gadus morhua,NA,NA,5,,,,,,,
+Gadus morhua,NA,NA,2.5,,,,,,,
+Gadus morhua,NA,NA,7,,,,,,,
+Gadus morhua,NA,NA,6,,,,,,,
+Gadus morhua,NA,NA,6,,,,,,,
+Gadus morhua,NA,NA,3,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,6,,,,,,,
+Gadus morhua,NA,NA,6,,,,,,,
+Gadus morhua,NA,NA,3,,,,,,,
+Gadus morhua,NA,NA,6,,,,,,,
+Gadus morhua,NA,NA,7,,,,,,,
+Gadus morhua,NA,NA,2.5,,,,,,,
+Gadus morhua,NA,NA,3,,,,,,,
+Gadus morhua,NA,NA,2.5,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,5,,,,,,,
+Gadus morhua,NA,NA,3,,,,,,,
+Gadus morhua,NA,NA,4,,,,,,,
+Gadus morhua,NA,NA,4,,,,,,,
+Gadus morhua,NA,NA,3,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,3,,,,,,,
+Gadus morhua,NA,NA,1,,,,,,,
+Gadus morhua,NA,NA,2,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,2,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,2,,,,,,,
+Gadus morhua,NA,NA,2,,,,,,,
+Gadus morhua,NA,NA,2,,,,,,,
+Gadus morhua,NA,NA,2,,,,,,,
+Gadus morhua,NA,NA,3,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,5,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,3,,,,,,,
+Gadus morhua,NA,NA,3,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,3,,,,,,,
+Gadus morhua,NA,NA,2,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,9100000,NA,,,,,,,
+Gadus morhua,NA,9000000,NA,,,,,,,
+Gadus morhua,NA,5000000,NA,,,,,,,
+Gadus morhua,NA,5000000,NA,,,,,,,
+Gadus morhua,NA,434200,NA,,,,,,,
+Gadus morhua,NA,358500,NA,,,,,,,
+Gadus morhua,NA,370900,NA,,,,,,,
+Gadus morhua,NA,6898000,NA,,,,,,,
+Gadus morhua,NA,6652390,NA,,,,,,,
+Gadus morhua,NA,9100000,NA,,,,,,,
+Gadus morhua,NA,6928000,NA,,,,,,,
+Gadus morhua,NA,4472000,NA,,,,,,,
+Gadus morhua,NA,25784161,NA,,,,,,,
+Gadus morhua,NA,6123400,NA,,,,,,,
+Gadus morhua,NA,31700000,NA,,,,,,,
+Gadus morhua,NA,2325000,NA,,,,,,,
+Gadus morhua,NA,6095700,NA,,,,,,,
+Gadus morhua,NA,8635180,NA,,,,,,,
+Gadus morhua,NA,726000,NA,,,,,,,
+Gadus morhua,NA,1887500,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,0.2,NA,NA,,,,,,,
+Gadus morhua,0.4,NA,NA,,,,,,,
+Gadus morhua,0.18,NA,NA,,,,,,,
+Gadus morhua,0.18,NA,NA,,,,,,,
+Gadus morhua,0.44,NA,NA,,,,,,,
+Gadus morhua,0.33,NA,NA,,,,,,,
+Gadus morhua,0.31,NA,NA,,,,,,,
+Gadus morhua,0.2,NA,NA,,,,,,,
+Gadus morhua,0.2,NA,NA,,,,,,,
+Gadus morhua,0.55,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,0.33,NA,NA,,,,,,,
+Gadus morhua,0.2,NA,NA,,,,,,,
+Gadus morhua,NA,NA,NA,,,,,,,
+Gadus morhua,0.25,NA,NA,,,,,,,
+Gadus morhua,0.32,NA,NA,,,,,,,
+Gadus morhua,0.18,NA,NA,,,,,,,
+Gadus morhua,0.2,NA,NA,,,,,,,
+Gadus morhua,0.44,NA,NA,,,,,,,
+Gadus morhua,0.1,NA,NA,,,,,,,
+Lethrinus mahsena,NA,NA,3,,,,,,,
+Lethrinus mahsena,NA,NA,NA,,,,,,,
+Lethrinus mahsena,NA,166200,NA,,,,,,,
+Lethrinus mahsena,0.304,NA,NA,,,,,,,
+Lethrinus miniatus,NA,NA,2,,,,,,,
+Lethrinus miniatus,NA,NA,3,,,,,,,
+Lethrinus miniatus,NA,NA,NA,,,,,,,
+Lethrinus miniatus,0.44,NA,NA,,,,,,,
+Lethrinus miniatus,0.57,NA,NA,,,,,,,
+Lethrinus miniatus,1.06,NA,NA,,,,,,,
+Lethrinus miniatus,NA,NA,NA,,,,,,,
+Lethrinus nebulosus,NA,NA,NA,,,,,,,
+Lethrinus nebulosus,NA,NA,NA,,,,,,,
+Lethrinus nebulosus,NA,NA,NA,,,,,,,
+Lethrinus nebulosus,NA,NA,NA,,,,,,,
+Lethrinus nebulosus,NA,NA,4,,,,,,,
+Lethrinus nebulosus,NA,NA,7,,,,,,,
+Lethrinus nebulosus,NA,NA,6,,,,,,,
+Lethrinus nebulosus,NA,NA,NA,,,,,,,
+Lethrinus nebulosus,0.17,NA,NA,,,,,,,
+Lutjanus campechanus,NA,59665760,NA,,,,,,,
+Lutjanus campechanus,0.2,NA,NA,,,,,,,
+Mycteroperca microlepis,NA,NA,3,,,,,,,
+Mycteroperca microlepis,NA,NA,8,,,,,,,
+Mycteroperca microlepis,NA,NA,3,,,,,,,
+Mycteroperca microlepis,NA,865295,NA,,,,,,,
+Mycteroperca microlepis,NA,4270250,NA,,,,,,,
+Mycteroperca microlepis,0.34,NA,NA,,,,,,,
+Mycteroperca microlepis,0.34,NA,NA,,,,,,,
+Mycteroperca microlepis,0.34,NA,NA,,,,,,,
+Mycteroperca microlepis,0.34,NA,NA,,,,,,,
+Negaprion brevirostris,NA,NA,NA,,,,,,,
+Negaprion brevirostris,NA,NA,NA,,,,,,,
+Negaprion brevirostris,NA,NA,NA,,,,,,,
+Negaprion brevirostris,NA,NA,NA,,,,,,,
+Negaprion brevirostris,NA,17,NA,,,,,,,
+Negaprion brevirostris,NA,17,NA,,,,,,,
+Negaprion brevirostris,0.805,NA,NA,,,,,,,
+Negaprion brevirostris,0.805,NA,NA,,,,,,,
+Plectropomus areolatus,NA,NA,NA,,,,,,,
+Plectropomus areolatus,NA,NA,NA,,,,,,,
+Plectropomus areolatus,NA,NA,NA,,,,,,,
+Plectropomus leopardus,NA,NA,2,,,,,,,
+Plectropomus leopardus,NA,NA,3,,,,,,,
+Plectropomus leopardus,NA,NA,2,,,,,,,
+Plectropomus leopardus,NA,NA,3,,,,,,,
+Plectropomus leopardus,0.46,NA,NA,,,,,,,
+Rhinoptera bonasus,NA,NA,NA,,,,,,,
+Rhinoptera bonasus,NA,NA,NA,,,,,,,
+Rhinoptera bonasus,NA,NA,NA,,,,,,,
+Scarus rubroviolaceus,NA,NA,NA,,,,,,,
+Scarus rubroviolaceus,0.387,NA,NA,,,,,,,
+Seriola lalandi,NA,NA,2,,,,,,,
+Seriola lalandi,0.94,NA,NA,,,,,,,
+Seriola lalandi,0.12,NA,NA,,,,,,,
+Seriola lalandi,0.488,NA,NA,,,,,,,
+Siganus sutor,0.631,NA,NA,,,,,,,
+Sphyraena barracuda,NA,NA,2,,,,,,,
+Sphyraena barracuda,NA,NA,4,,,,,,,
+Thunnus obesus,NA,NA,3,,,,,,,
+Thunnus obesus,NA,NA,3,,,,,,,
+Thunnus obesus,NA,6300000,NA,,,,,,,
+Thunnus obesus,NA,10365317,NA,,,,,,,
+Thunnus obesus,0.39,NA,NA,,,,,,,
+Thunnus tonggol,0.49,NA,NA,,,,,,,
+Triaenodon obesus,NA,NA,5,,,,,,,
+Triaenodon obesus,NA,NA,8,,,,,,,
+Triaenodon obesus,NA,5,NA,,,,,,,
+,,,,,,,,,,
+Average:,0.356826087,4709275.875,4.682337674,,,,,,,
+Median:,0.325,517290.5,3,,,,,,,
+,0.699894208,,,,,,,,,
+,0.722527354,,,,,,,,,
