@@ -81,7 +81,7 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
+  #SST.patches <- array(opt.temp + 1, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
@@ -113,22 +113,22 @@ init_SST <- function(years) {
   # }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp+1) + NS.patches*0.02
-  # 
-  # for (i in 1:years) {
-  #   heat_prob = runif(1, 0, 1)
-  #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-  #     intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
-  #     SST = start_SST + intensity
-  #   } else {
-  #     SST = start_SST
-  #   }
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.02
-  #   }
-  # }
+  SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  start_SST = (opt.temp+1) + NS.patches*0.02
+
+  for (i in 1:years) {
+    heat_prob = runif(1, 0, 1)
+    if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+      intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
+      SST = start_SST + intensity
+    } else {
+      SST = start_SST
+    }
+    for (lat in 1:NS.patches) {
+      SST.patches[lat,,i] = SST
+      SST = SST - 0.02
+    }
+  }
   
   return(SST.patches) ### DO NOT COMMENT OUT
 }
