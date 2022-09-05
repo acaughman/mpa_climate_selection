@@ -28,7 +28,7 @@ view.world
 init.a <- 0.3  # The initial frequency of the low movement allele
 sb <- 0.70 # survival proportion for babies
 s <- 0.70 # survival proportion
-dd <- 0.001 # density dependence of baby survival 
+dd <- 0.003 # density dependence of baby survival 
 fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
 fished <- 0.7
@@ -97,38 +97,38 @@ init_SST <- function(years) {
   # }
   
   ### UNCOMMENT FOR ENSO  SST
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp+1) + NS.patches*0.02
-  # 
-  # t=seq(1,years,1)
-  # enso.value = 0.5 * sin(t) + 0.018
-  # 
-  # for (i in 1:years) {
-  #   SST = start_SST
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.02
-  #   }
-  #   start_SST = start_SST + enso.value[i]
-  # }
-  
-  ### UNCOMMENT FOR SHOCK SST CHANGES
   SST.patches <- array(0, c(NS.patches, EW.patches, years))
   start_SST = (opt.temp+1) + NS.patches*0.02
 
+  t=seq(1,years,1)
+  enso.value = 0.5 * sin(t) + 0.018
+
   for (i in 1:years) {
-    heat_prob = runif(1, 0, 1)
-    if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-      intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
-      SST = start_SST + intensity
-    } else {
-      SST = start_SST
-    }
+    SST = start_SST
     for (lat in 1:NS.patches) {
       SST.patches[lat,,i] = SST
       SST = SST - 0.02
     }
+    start_SST = start_SST + enso.value[i]
   }
+  
+  ### UNCOMMENT FOR SHOCK SST CHANGES
+  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  # start_SST = (opt.temp+1) + NS.patches*0.02
+  # 
+  # for (i in 1:years) {
+  #   heat_prob = runif(1, 0, 1)
+  #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+  #     intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
+  #     SST = start_SST + intensity
+  #   } else {
+  #     SST = start_SST
+  #   }
+  #   for (lat in 1:NS.patches) {
+  #     SST.patches[lat,,i] = SST
+  #     SST = SST - 0.02
+  #   }
+  # }
   
   return(SST.patches) ### DO NOT COMMENT OUT
 }
@@ -453,4 +453,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("sensitivity_analysis","fishing_pressure","null.rda"))
+save(output.array, file = here::here("sensitivity_analysis","density_dependence","enso003.rda"))

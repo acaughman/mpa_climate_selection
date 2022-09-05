@@ -3,15 +3,8 @@
 
 ## Tests
 
-Density Dependence
-
-1. 0.01
-2. 0.001
-3. 0.0001
-
-Pick which works best
-
 Fishing Pressure
+
 1. 0.6
 2. 0.7
 3. 0.8
@@ -19,6 +12,7 @@ Fishing Pressure
 Pick favorite
 
 Time
+
 1. Early
 2. Mid
 3. Late
@@ -28,6 +22,7 @@ Pick Favorite
 ## Other sensitivity analysis
 
 Thermal Breadth
+
 1. 3
 2. 4
 3. 5
