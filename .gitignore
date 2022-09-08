@@ -9,3 +9,4 @@ climate_data
 other
 *.csv
 tests
+*.png
