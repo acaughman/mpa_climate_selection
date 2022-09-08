@@ -81,11 +81,11 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  SST.patches <- array(opt.temp + 0.5, c(NS.patches, EW.patches, years))
+  SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp+0.5) + NS.patches*0.02
+  # start_SST = (opt.temp) + NS.patches*0.02
   # 
   # for (i in 1:years) {
   #   SST = start_SST
@@ -98,7 +98,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR ENSO  SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp+0.5) + NS.patches*0.02
+  # start_SST = (opt.temp) + NS.patches*0.02
   # 
   # t=seq(1,years,1)
   # enso.value = 0.5 * sin(t) + 0.018
@@ -114,7 +114,7 @@ init_SST <- function(years) {
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp+0.5) + NS.patches*0.02
+  # start_SST = (opt.temp) + NS.patches*0.02
   # 
   # for (i in 1:years) {
   #   heat_prob = runif(1, 0, 1)
@@ -453,4 +453,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("sensitivity_analysis","fishing_pressure",".rda"))
+save(output.array, file = here::here("tests","enso.rda"))
