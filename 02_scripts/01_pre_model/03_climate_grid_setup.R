@@ -113,7 +113,7 @@ mt = ggplot(SSTdf_mean, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 29) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 28) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
@@ -177,7 +177,7 @@ et = ggplot(SSTdf_enso, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 29) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 28) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
@@ -241,7 +241,7 @@ st = ggplot(SSTdf_shock, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 29) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 28) +
   facet_wrap(~year) + 
   theme(
     strip.background = element_blank(),
