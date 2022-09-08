@@ -135,6 +135,8 @@ init_SST <- function(years) {
 
 SST.patches <- init_SST(years)
 
+#save(SST.patches, file = here::here("03_generated_data","climate_layer", ".rda"))
+
 ############################################################################
 ## This function creates an array to tell the simulation the reserve locations
 
@@ -432,7 +434,6 @@ start_time <- Sys.time()
 for(rep in 1:reps) {
   print(rep)
   pop <- init()
-  #save(SST.patches, file = here::here("03_generated_data","climate_layer", ".rda"))
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
     pop <- spawn(pop)
@@ -453,4 +454,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("tests","enso.rda"))
+save(output.array, file = here::here("tests","null_small.rda"))
