@@ -15,7 +15,7 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-output_df = read_csv(here::here("tests", "mean_dyn.csv"))
+output_df = read_csv(here::here("tests", "shock_nompa.csv"))
 ```
 
 ### Manipulate data
@@ -89,7 +89,7 @@ p2 = ggplot(plot_sum, aes(lon, lat, fill = geno_pop_sum)) +
   facet_grid(genotype~generation) + 
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size") +
   theme_bw() +
-  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 15)
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 30)
 ```
 
 ```{r}
@@ -97,7 +97,7 @@ p2 / p1
 
 plot = p2 / p1
 
-ggsave(plot, file=paste0("mean_dyn_h.pdf"), path = here::here("tests"), height = 11, width = 8)
+ggsave(plot, file=paste0("shock_nompa_h.pdf"), path = here::here("tests"), height = 11, width = 8)
 ```
 
 ### Line Plot Figures
@@ -120,7 +120,7 @@ p3
 
 #mean 66, enso 117, shock c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129) EDIT WITH FINAL VALUES
 
-ggsave(p3, file=paste0("mean_dyn.pdf"), path = here::here("tests"), height = 11, width = 8)
+ggsave(p3, file=paste0("shock_nompa.pdf"), path = here::here("tests"), height = 11, width = 8)
 ```
 
 
