@@ -144,7 +144,7 @@ p8 = ggplot(sum_climate_f, aes(generation, pop_mean)) +
 
 p8
 
-#ggsave(p8, file=paste0("test_mpa.pdf"), path = here::here("figs", "test"), height = 8, width = 8)
+ggsave(p_f, file=paste0("test_mpa.pdf"), path = here::here("tests", "figs"), height = 10, width = 8)
 
 p_f = ggplot(sum_climate_f, aes(generation, pop_mean)) +
   geom_line(aes(color = type)) +
