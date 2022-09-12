@@ -34,7 +34,7 @@ maturity.age <- 3 # The average age at which individuals mature (i.e., the age a
 fished <- 0.7
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 
-reserves.at <- c(810,910,1010,811,911,1011,812,912,1012)
+reserves.at <- c(810,910,1010,1110,1210,1310,811,911,1011,1111,1211,1311,812,912,1012,1112,1212,1312,813,913,1013,1113,1213,1313,814,914,1014,1114,1214,1314,815,915,1015,1115,1215,1315)
 # small MPA c(810,910,1010,811,911,1011,812,912,1012)
 # large MPA c(810,910,1010,1110,1210,1310,811,911,1011,1111,1211,1311,812,912,1012,1112,1212,1312,813,913,1013,1113,1213,1313,814,914,1014,1114,1214,1314,815,915,1015,1115,1215,1315)
 # MPA network c(810,910,1010,811,911,1011,812,912,1012,832,932,1032,833,933,1033,834,934,1034,854,954,1054,855,955,1055,856,956,1056,876,976,1076,877,977,1077,878,978,1078)
@@ -43,8 +43,8 @@ dynamic.reserve = FALSE
 buffer.at <- c()
 # buffer c(709,809,909,1009,1109,710,1110,711,1111,712,1112,713,813,913,1013,1113)
 
-bold.mover.distance <- 3 # Individuals with AA genotype move this distance on average every year
-lazy.mover.distance <- 2 # Individuals with aa genotype move this distance on average every year
+bold.mover.distance <- 2.5 # Individuals with AA genotype move this distance on average every year
+lazy.mover.distance <- 2.5 # Individuals with aa genotype move this distance on average every year
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 
@@ -81,7 +81,7 @@ init <- function() {
 init_SST <- function(years) {
   
   ### UNCOMMENT FOR CONSISTENT SST
-  SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
+  #SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
   
   ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
@@ -97,20 +97,20 @@ init_SST <- function(years) {
   # }
   
   ### UNCOMMENT FOR ENSO  SST
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp) + NS.patches*0.02
-  # 
-  # t=seq(1,years,1)
-  # enso.value = 0.5 * sin(t) + 0.018
-  # 
-  # for (i in 1:years) {
-  #   SST = start_SST
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.02
-  #   }
-  #   start_SST = start_SST + enso.value[i]
-  # }
+  SST.patches <- array(0, c(NS.patches, EW.patches, years))
+  start_SST = (opt.temp) + NS.patches*0.02
+
+  t=seq(1,years,1)
+  enso.value = 0.5 * sin(t) + 0.018
+
+  for (i in 1:years) {
+    SST = start_SST
+    for (lat in 1:NS.patches) {
+      SST.patches[lat,,i] = SST
+      SST = SST - 0.02
+    }
+    start_SST = start_SST + enso.value[i]
+  }
   
   ### UNCOMMENT FOR SHOCK SST CHANGES
   # SST.patches <- array(0, c(NS.patches, EW.patches, years))
@@ -149,8 +149,8 @@ where.reserves <- function(reserves.at) {
         y <- ((reserves.at[i]-1) %% NS.patches) + 1
         reserve.patches[y,x,j] <- 1
       }
-      if (((j %% 6) == 0) & (j >= 40) & (j < 120)) {
-        reserves.at = reserves.at + 6
+      if (((j %% 3) == 0) & (j >= 40) & (j < 120)) {
+        reserves.at = reserves.at + 3
       }
     }
   } else {
@@ -454,4 +454,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("tests","null_small.rda"))
+save(output.array, file = here::here("tests","enso_large_noevo.rda"))

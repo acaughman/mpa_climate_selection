@@ -1,25 +1,13 @@
 # MPA Climate Selection
 
 
-## Tests
+## Sensitivity analysis
+
+Density Dependence
 
 Fishing Pressure
 
-1. 0.6
-2. 0.7
-3. 0.8
-
-Pick favorite
-
-Time
-
-1. Early
-2. Mid
-3. Late
-
-Pick Favorite
-
-## Other sensitivity analysis
+Initial SST Value
 
 Thermal Breadth
 
@@ -47,7 +35,7 @@ Thermal Breadth
 
 ### Mark off as done
 
-simulations 0.7 (testing) fishing pressure
+simulations 0.7 fishing pressure
 
 10 replicates 
 
