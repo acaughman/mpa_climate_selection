@@ -34,10 +34,10 @@ maturity.age <- 3 # The average age at which individuals mature (i.e., the age a
 fished <- 0.7
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 
-reserves.at <- c()
-# small MPA c()
-# large MPA c()
-#dynamic.reserve = FALSE
+reserves.at <- c(949,1049,1149,950,1050,1150,951,1051,1151)
+# small MPA c(848,948,1048,1148,1248,1348,849,949,1049,1149,1249,1349,850,950,1050,1150,1250,1350,851,951,1051,1151,1251,1351,852,952,1052,1152,1252,1352,853,953,1053,1153,1253,1353)
+# large MPA c(949,1049,1149,950,1050,1150,951,1051,1151)
+dynamic.reserve = FALSE
 
 buffer.at <- c()
 
