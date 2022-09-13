@@ -80,9 +80,27 @@ init_SST <- function(years, climate) {
   
   if (climate == "null") {
     SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
+    start_SST = (opt.temp) + NS.patches*0.02
+    
+    for (i in 1:years) {
+      SST = start_SST
+      for (lat in 1:NS.patches) {
+        SST.patches[lat,,i] = SST
+        SST = SST - 0.02
+      }
+    }
+    
   } else if (climate == "mean") {
     SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
     start_SST = (opt.temp) + NS.patches*0.02
+    
+    for (i in 1:25) {
+      SST = start_SST
+      for (lat in 1:NS.patches) {
+        SST.patches[lat,,i] = SST
+        SST = SST - 0.02
+      }
+    }
     
     for (i in 26:years) {
       SST = start_SST
@@ -90,14 +108,25 @@ init_SST <- function(years, climate) {
         SST.patches[lat,,i] = SST
         SST = SST - 0.02
       }
-      start_SST = start_SST + 0.018
+      start_SST = start_SST + 0.033
     }
+    
   } else if (climate == "enso") {
     SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
     start_SST = (opt.temp) + NS.patches*0.02
     
-    t=seq(1,years,1)
-    enso.value = 0.5 * sin(t) + 0.018
+    for (i in 1:25) {
+      SST = start_SST
+      for (lat in 1:NS.patches) {
+        SST.patches[lat,,i] = SST
+        SST = SST - 0.02
+      }
+    }
+    
+    t=seq(1,years-25,1)
+    b = array(0, 25)
+    change = 0.5*sin(t) + 0.033
+    enso.value = c(b,change)
     
     for (i in 26:years) {
       SST = start_SST
@@ -107,9 +136,18 @@ init_SST <- function(years, climate) {
       }
       start_SST = start_SST + enso.value[i]
     }
+    
   } else if (climate == "shock") {
     SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
     start_SST = (opt.temp) + NS.patches*0.02
+    
+    for (i in 1:25) {
+      SST = start_SST
+      for (lat in 1:NS.patches) {
+        SST.patches[lat,,i] = SST
+        SST = SST - 0.02
+      }
+    }
     
     for (i in 26:years) {
       heat_prob = runif(1, 0, 1)
@@ -124,22 +162,33 @@ init_SST <- function(years, climate) {
         SST = SST - 0.02
       }
     }
+    
   } else if (climate == "mean shock") {
     SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
     start_SST = (opt.temp) + NS.patches*0.02
     
+    for (i in 1:25) {
+      SST = start_SST
+      for (lat in 1:NS.patches) {
+        SST.patches[lat,,i] = SST
+        SST = SST - 0.02
+      }
+    }
+    
     for (i in 26:years) {
+      SST = start_SST
       heat_prob = runif(1, 0, 1)
       if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
         intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
-        SST = start_SST + intensity + 0.018
+        SST = start_SST + intensity
       } else {
-        SST = start_SST + 0.018
+        SST = start_SST
       }
       for (lat in 1:NS.patches) {
         SST.patches[lat,,i] = SST
         SST = SST - 0.02
       }
+      start_SST = start_SST + 0.033
     }
   }
   return(SST.patches)
@@ -443,8 +492,8 @@ start_time <- Sys.time()
 
 for(rep in 1:reps) {
   print(rep)
-  SST.patches <- init_SST(years, "null") #null, mean, enso, shock, or mean shock
-  #save(SST.patches, file = here::here("03_generated_data","climate_layer", ".rda"))
+  SST.patches <- init_SST(years, "mean shock") #null, mean, enso, shock, or mean shock
+  #save(SST.patches, file = here::here("03_generated_data","climate_layer", "mean_shock.rda"))
   pop <- init()
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
