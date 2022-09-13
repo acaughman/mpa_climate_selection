@@ -34,14 +34,12 @@ maturity.age <- 3 # The average age at which individuals mature (i.e., the age a
 fished <- 0.7
 buffer.fished <- 0.2 #buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 
-reserves.at <- c(810,910,1010,1110,1210,1310,811,911,1011,1111,1211,1311,812,912,1012,1112,1212,1312,813,913,1013,1113,1213,1313,814,914,1014,1114,1214,1314,815,915,1015,1115,1215,1315)
-# small MPA c(810,910,1010,811,911,1011,812,912,1012)
-# large MPA c(810,910,1010,1110,1210,1310,811,911,1011,1111,1211,1311,812,912,1012,1112,1212,1312,813,913,1013,1113,1213,1313,814,914,1014,1114,1214,1314,815,915,1015,1115,1215,1315)
-# MPA network c(810,910,1010,811,911,1011,812,912,1012,832,932,1032,833,933,1033,834,934,1034,854,954,1054,855,955,1055,856,956,1056,876,976,1076,877,977,1077,878,978,1078)
-dynamic.reserve = FALSE
+reserves.at <- c()
+# small MPA c()
+# large MPA c()
+#dynamic.reserve = FALSE
 
 buffer.at <- c()
-# buffer c(709,809,909,1009,1109,710,1110,711,1111,712,1112,713,813,913,1013,1113)
 
 bold.mover.distance <- 3 # Individuals with AA genotype move this distance on average every year
 lazy.mover.distance <- 2 # Individuals with aa genotype move this distance on average every year
@@ -78,64 +76,76 @@ init <- function() {
 ############################################################################
 ## This function sets up the Sea surface temperature grid
 
-init_SST <- function(years) {
+init_SST <- function(years, climate) {
   
-  ### UNCOMMENT FOR CONSISTENT SST
-  #SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
-  
-  ### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp) + NS.patches*0.02
-  # 
-  # for (i in 1:years) {
-  #   SST = start_SST
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.02
-  #   }
-  #   start_SST = start_SST + 0.018
-  # }
-  
-  ### UNCOMMENT FOR ENSO  SST
-  SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  start_SST = (opt.temp) + NS.patches*0.02
-
-  t=seq(1,years,1)
-  enso.value = 0.5 * sin(t) + 0.018
-
-  for (i in 1:years) {
-    SST = start_SST
-    for (lat in 1:NS.patches) {
-      SST.patches[lat,,i] = SST
-      SST = SST - 0.02
+  if (climate == "null") {
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
+  } else if (climate == "mean") {
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
+    start_SST = (opt.temp) + NS.patches*0.02
+    
+    for (i in 26:years) {
+      SST = start_SST
+      for (lat in 1:NS.patches) {
+        SST.patches[lat,,i] = SST
+        SST = SST - 0.02
+      }
+      start_SST = start_SST + 0.018
     }
-    start_SST = start_SST + enso.value[i]
+  } else if (climate == "enso") {
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
+    start_SST = (opt.temp) + NS.patches*0.02
+    
+    t=seq(1,years,1)
+    enso.value = 0.5 * sin(t) + 0.018
+    
+    for (i in 26:years) {
+      SST = start_SST
+      for (lat in 1:NS.patches) {
+        SST.patches[lat,,i] = SST
+        SST = SST - 0.02
+      }
+      start_SST = start_SST + enso.value[i]
+    }
+  } else if (climate == "shock") {
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
+    start_SST = (opt.temp) + NS.patches*0.02
+    
+    for (i in 26:years) {
+      heat_prob = runif(1, 0, 1)
+      if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+        intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
+        SST = start_SST + intensity
+      } else {
+        SST = start_SST
+      }
+      for (lat in 1:NS.patches) {
+        SST.patches[lat,,i] = SST
+        SST = SST - 0.02
+      }
+    }
+  } else if (climate == "mean shock") {
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
+    start_SST = (opt.temp) + NS.patches*0.02
+    
+    for (i in 26:years) {
+      heat_prob = runif(1, 0, 1)
+      if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+        intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
+        SST = start_SST + intensity + 0.018
+      } else {
+        SST = start_SST + 0.018
+      }
+      for (lat in 1:NS.patches) {
+        SST.patches[lat,,i] = SST
+        SST = SST - 0.02
+      }
+    }
   }
-  
-  ### UNCOMMENT FOR SHOCK SST CHANGES
-  # SST.patches <- array(0, c(NS.patches, EW.patches, years))
-  # start_SST = (opt.temp) + NS.patches*0.02
-  # 
-  # for (i in 1:years) {
-  #   heat_prob = runif(1, 0, 1)
-  #   if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-  #     intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
-  #     SST = start_SST + intensity
-  #   } else {
-  #     SST = start_SST
-  #   }
-  #   for (lat in 1:NS.patches) {
-  #     SST.patches[lat,,i] = SST
-  #     SST = SST - 0.02
-  #   }
-  # }
-  
-  return(SST.patches) ### DO NOT COMMENT OUT
+  return(SST.patches)
 }
 
-SST.patches <- init_SST(years)
 
-#save(SST.patches, file = here::here("03_generated_data","climate_layer", ".rda"))
 
 ############################################################################
 ## This function creates an array to tell the simulation the reserve locations
@@ -433,6 +443,8 @@ start_time <- Sys.time()
 
 for(rep in 1:reps) {
   print(rep)
+  SST.patches <- init_SST(years, "null") #null, mean, enso, shock, or mean shock
+  #save(SST.patches, file = here::here("03_generated_data","climate_layer", ".rda"))
   pop <- init()
   for(t in 1:gens) {
     output.array[,,,,,t,rep] <- pop
