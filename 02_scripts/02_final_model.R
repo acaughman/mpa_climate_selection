@@ -43,8 +43,8 @@ dynamic.reserve = FALSE
 buffer.at <- c()
 # buffer c(709,809,909,1009,1109,710,1110,711,1111,712,1112,713,813,913,1013,1113)
 
-bold.mover.distance <- 2.5 # Individuals with AA genotype move this distance on average every year
-lazy.mover.distance <- 2.5 # Individuals with aa genotype move this distance on average every year
+bold.mover.distance <- 3 # Individuals with AA genotype move this distance on average every year
+lazy.mover.distance <- 2 # Individuals with aa genotype move this distance on average every year
 Dominance.coefficient <- 0.5 # Dominance coefficient
 Heritability.index <- 2 # Influences stochastic variation in movement distance. High numbers decrease variation by reducing the variance around the phenotypic mean in a negative binomial distribution. The phenotypic mean is determined by the genotype.
 
@@ -454,4 +454,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("tests","enso_large_noevo.rda"))
+save(output.array, file = here::here("",".rda"))
