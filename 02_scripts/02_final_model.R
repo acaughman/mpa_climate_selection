@@ -14,7 +14,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 1 # The number of replicate simulations to run
+NUM.reps <- 2 # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 15 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 10 # The number of generations of fishing before reserves are installed
@@ -449,7 +449,7 @@ move <- function(pop) {
               y_bool <- ifelse((y <= patch.size * (NS.patches - lat) + patch.size / 2) & (y >= patch.size / 2 - lat * patch.size), TRUE, FALSE)
               y <- ifelse((y_bool == FALSE) & (y > patch.size * (NS.patches - lat) + patch.size / 2), (-(y - 2 * (patch.size * (NS.patches - lat) + patch.size / 2))), y)
               y <- ifelse((y_bool == FALSE) & (y < patch.size / 2 - lat * patch.size), (-(y - 2 * (patch.size / 2 - lat * patch.size))), y)
-              #### Loop NS
+              #### Loop North/South
               # y_bool = ifelse((y <= patch.size*(NS.patches-lat)+patch.size/2) & (y >= patch.size/2-lat*patch.size), TRUE, FALSE)
               # y = ifelse((y_bool == FALSE) & (y > patch.size*(NS.patches-lat)+patch.size/2),(y - (patch.size * NS.patches)),y)
               # y = ifelse((y_bool == FALSE) & (y < patch.size/2-lat*patch.size),(y + (patch.size * NS.patches)),y)
@@ -498,7 +498,7 @@ start_time <- Sys.time()
 
 for (rep in 1:reps) {
   print(rep)
-  SST.patches <- init_SST(years, "null") # null, mean, enso, shock, or mean shock
+  SST.patches <- init_SST(years, "mean shock") # null, mean, enso, shock, or mean shock
   # save(SST.patches, file = here::here("03_generated_data","climate_layer", "mean_shock.rda"))
   pop <- init()
   for (t in 1:gens) {
@@ -521,4 +521,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("sensitivity_analysis", "test.rda"))
+save(output.array, file = here::here("sensitivity_analysis", "density_dependence", "mean_shock_002.rda"))
