@@ -2,72 +2,45 @@
 
 ## Sensitivity analysis
 
-### Density Dependence
+Density Dependence
 
-### Fishing Pressure
+Movement Types
 
-### Initial SST Value
+Fishing Pressure
 
-### Thermal Breadth
+Initial SST Value
+
+Movement Distances
+
+Thermal Breadth
 
 ## Full Runs
 
 ### Climate Scenarios
 
-1. No Climate
+1. No Climate - Control
 2. Mean shift
 3. ENSO
 4. Heat Waves
+5. Heat Waves w Mean Shift
 
 ### MPA Scenarios
 
-1. Single Small
+1. Single Small 
 2. Single Large
-3. Network
-4. Dynamic
-5. No MPA 
+3. No MPA - Control
 
-### Mark off as done
+### Evolution Scenario
 
-simulations 0.7 fishing pressure
+1. Low Movement Evolution
+2. No Low Movement Evolution
+
+### Movement Distances
+
+1. 2-3 grids
+2. 4-6 grids
+3. 9-12 grids
+
+### Simulations
 
 10 replicates 
-
-1.1
-1.2
-1.3
-1.4
-1.5
-2.1
-2.2
-2.3
-2.4
-2.5
-3.1
-3.2
-3.3
-3.4
-3.5
-4.1
-4.2
-4.3
-4.4
-4.5
-
-No evolution 10 replicates? 
-1.1
-1.2
-1.3
-1.4
-2.1
-2.2
-2.3
-2.4
-3.1
-3.2
-3.3
-3.4
-4.1
-4.2
-4.3
-4.4
