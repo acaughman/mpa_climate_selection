@@ -16,26 +16,26 @@ library(effectsize)
 ### Load in Data
 
 ```{r}
-#read in data
+# read in data
 
-null8 = read_csv(here::here("output", "test_null8.csv")) %>% 
-  filter(generation > 25) %>% 
-  group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_sum = sum(pop)) %>% 
+null8 <- read_csv(here::here("output", "test_null8.csv")) %>%
+  filter(generation > 25) %>%
+  group_by(lat, lon, generation) %>%
+  summarise(geno_pop_sum = sum(pop)) %>%
   mutate(type = "null8")
 
-#merge data
+# merge data
 
-data = null8
+data <- null8
 ```
 
 ### manipulate data
 
 ```{r}
-sum = data %>% 
-  group_by(type, generation) %>% 
+sum <- data %>%
+  group_by(type, generation) %>%
   summarise(pop_mean = mean(geno_pop_sum)) %>%
-  mutate(generation = as.numeric(generation)) %>% 
+  mutate(generation = as.numeric(generation)) %>%
   mutate(cat = case_when(
     str_detect(type, "null") ~ "null",
     str_detect(type, "mean") ~ "mean",
@@ -43,16 +43,16 @@ sum = data %>%
     str_detect(type, "shock") ~ "shock"
   ))
 
-#write_csv(sum_climate, here::here("03_generated_data", "summary_data", "test_null_sum.csv"))
+# write_csv(sum_climate, here::here("03_generated_data", "summary_data", "test_null_sum.csv"))
 
-data_f = data %>% 
-  filter(lon %in% c(9, 10, 11)) %>% 
+data_f <- data %>%
+  filter(lon %in% c(9, 10, 11)) %>%
   filter(lat %in% c(10, 11, 12))
 
-sum_f = data_f %>% 
-  group_by(type, generation) %>% 
+sum_f <- data_f %>%
+  group_by(type, generation) %>%
   summarise(pop_mean = mean(geno_pop_sum)) %>%
-  mutate(generation = as.numeric(generation)) %>% 
+  mutate(generation = as.numeric(generation)) %>%
   mutate(cat = case_when(
     str_detect(type, "null") ~ "null",
     str_detect(type, "mean") ~ "mean",
@@ -60,13 +60,13 @@ sum_f = data_f %>%
     str_detect(type, "shock") ~ "shock"
   ))
 
-#write_csv(sum_f, here::here("03_generated_data", "summary_data", "test_null_sum_mpa.csv"))
+# write_csv(sum_f, here::here("03_generated_data", "summary_data", "test_null_sum_mpa.csv"))
 ```
 
 ### Repeated measures ANOVA
 
 ```{r}
-anova_mod = aov(formula = geno_pop_sum ~ type + Error(location/type), data = data_f)
+anova_mod <- aov(formula = geno_pop_sum ~ type + Error(location / type), data = data_f)
 
 eta_squared(anova_mod, partial = TRUE)
 eta_squared(anova_mod, partial = FALSE)
@@ -74,6 +74,6 @@ eta_squared(anova_mod, partial = FALSE)
 pairwise.t.test(
   x = data_f$geno_pop_sum,
   g = data_f$type,
-  p.adjust.method = 'bonferroni')
+  p.adjust.method = "bonferroni"
+)
 ```
-
