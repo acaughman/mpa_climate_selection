@@ -15,7 +15,7 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-output_df <- read_csv(here::here("tests", "shock_nompa.csv"))
+output_df <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_shock_005.csv"))
 ```
 
 ### Manipulate data
@@ -60,7 +60,7 @@ line_df <- output_sum %>%
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df <- output_sum %>%
   filter(lon %in% c(9, 10, 11)) %>%
-  filter(lat %in% c(10, 11, 12)) %>%
+  filter(lat %in% c(49, 50, 51)) %>%
   group_by(generation, age, genotype) %>%
   summarise(
     location_sum = sum(geno_pop_sum),
@@ -93,7 +93,7 @@ p2 <- ggplot(plot_sum, aes(lon, lat, fill = geno_pop_sum)) +
   facet_grid(genotype ~ generation) +
   labs(x = "Longitude", y = "Latitude", fill = "Population Size", color = "Population Size") +
   theme_bw() +
-  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 30)
+  scale_fill_gradient2(low = "gainsboro", high = "midnightblue", mid = "skyblue3", midpoint = 10)
 ```
 
 ```{r}
@@ -101,7 +101,7 @@ p2 / p1
 
 plot <- p2 / p1
 
-ggsave(plot, file = paste0("shock_nompa_h.pdf"), path = here::here("tests"), height = 11, width = 8)
+ggsave(plot, file = paste0("mean_shock_005_1_h.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 11, width = 8)
 ```
 
 ### Line Plot Figures
@@ -126,7 +126,7 @@ p3
 
 # mean 66, enso 117, shock c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129) EDIT WITH FINAL VALUES
 
-ggsave(p3, file = paste0("shock_nompa.pdf"), path = here::here("tests"), height = 11, width = 8)
+ggsave(p3, file = paste0("mean_shock_005_1.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 11, width = 8)
 ```
 
 

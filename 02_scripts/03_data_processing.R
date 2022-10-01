@@ -3,7 +3,7 @@ library(patchwork)
 
 # Allie Explore -----------------------------------------------------------
 
-reps <- 1
+reps <- 2
 NS.patches <- 100 # the number of patches on the north-south axis
 EW.patches <- 20
 NUM.age.classes <- 3 # babies, juvenile, adult
@@ -11,11 +11,11 @@ NUM.sexes <- 2 # female male
 NUM.genotypes <- 3 # AA,Aa,aa
 NUM.gens.pre.fishing <- 15 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 10 # The number of generations of fishing before reserves are installed
-NUM.gens.post.reserve <- 150 # The number of generations with the reserve installed
+NUM.gens.post.reserve <- 150 # The number of generations with the reserve installed <- would like to reduce to 100
 gens <- NUM.gens.pre.fishing + NUM.gens.pre.reserve + NUM.gens.post.reserve
 
-load(file = here::here("tests", "shock_nompa.rda"))
-load(file = here::here("03_generated_data", "climate_layer", "shock.rda"))
+load(file = here::here("sensitivity_analysis", "density_dependence", "mean_shock_005.rda"))
+load(file = here::here("03_generated_data", "climate_layer", "mean_shock.rda"))
 
 # Output results into a dataframe
 output_df <- data.frame() # create dataframe to hold results
@@ -92,4 +92,4 @@ output_df <- output_df %>%
   mutate(lon = as.numeric(lon)) %>%
   mutate(rep = as.numeric(rep))
 
-write_csv(output_df, here::here("tests", "shock_nompa.csv"))
+write_csv(output_df, here::here("sensitivity_analysis", "density_dependence", "mean_shock_005.csv"))

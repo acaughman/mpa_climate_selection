@@ -4,15 +4,25 @@
 
 Density Dependence
 
+Discuss w Darcy
+
 Movement Types
 
 Fishing Pressure
 
+0.5,0.6,0.7,0.8
+
 Initial SST Value
+
+0, +0.5, +1
 
 Movement Distances
 
+2/3, 4/6, 9/12
+
 Thermal Breadth
+
+3,4,5,6
 
 ## Full Runs
 
