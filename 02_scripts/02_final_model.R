@@ -123,7 +123,7 @@ init_SST <- function(years, climate) {
       }
     }
 
-    t <- seq(1, years - 25, 1)
+    t <- seq(3, years - 25 + 3, 1)
     b <- array(0, 25)
     change <- 0.5 * sin(t) + 0.033
     enso.value <- c(b, change)
