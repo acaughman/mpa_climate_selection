@@ -123,7 +123,7 @@ init_SST <- function(years, climate) {
       }
     }
 
-    t <- seq(1, years - 25, 1)
+    t <- seq(3, years - 25 + 3, 1)
     b <- array(0, 25)
     change <- 0.5 * sin(t) + 0.033
     enso.value <- c(b, change)
@@ -150,8 +150,8 @@ init_SST <- function(years, climate) {
 
     for (i in 26:years) {
       heat_prob <- runif(1, 0, 1)
-      if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-        intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
+      if ((i < 100 & heat_prob < 0.1) | (i >= 100 & heat_prob < 0.35)) {
+        intensity <- runif(1, 1, ifelse(i < 100, 3, 5))
         SST <- start_SST + intensity
       } else {
         SST <- start_SST
@@ -176,8 +176,8 @@ init_SST <- function(years, climate) {
     for (i in 26:years) {
       SST <- start_SST
       heat_prob <- runif(1, 0, 1)
-      if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-        intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
+      if ((i < 100 & heat_prob < 0.1) | (i >= 100 & heat_prob < 0.35)) {
+        intensity <- runif(1, 1, ifelse(i < 100, 3, 5))
         SST <- start_SST + intensity
       } else {
         SST <- start_SST
