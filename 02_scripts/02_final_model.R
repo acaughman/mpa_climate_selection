@@ -150,8 +150,8 @@ init_SST <- function(years, climate) {
 
     for (i in 26:years) {
       heat_prob <- runif(1, 0, 1)
-      if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-        intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
+      if ((i < 100 & heat_prob < 0.1) | (i >= 100 & heat_prob < 0.35)) {
+        intensity <- runif(1, 1, ifelse(i < 100, 3, 5))
         SST <- start_SST + intensity
       } else {
         SST <- start_SST
@@ -176,8 +176,8 @@ init_SST <- function(years, climate) {
     for (i in 26:years) {
       SST <- start_SST
       heat_prob <- runif(1, 0, 1)
-      if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-        intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
+      if ((i < 100 & heat_prob < 0.1) | (i >= 100 & heat_prob < 0.35)) {
+        intensity <- runif(1, 1, ifelse(i < 100, 3, 5))
         SST <- start_SST + intensity
       } else {
         SST <- start_SST
