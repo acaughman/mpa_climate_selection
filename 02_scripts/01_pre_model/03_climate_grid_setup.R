@@ -82,8 +82,8 @@ for (i in 1:25) {
 for (i in 26:years) {
   SST <- start_SST
   heat_prob <- runif(1, 0, 1)
-  if ((i < 100 & heat_prob < 0.1) | (i >= 100 & heat_prob < 0.35)) {
-    intensity <- runif(1, 1, ifelse(i < 100, 3, 5))
+  if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+    intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
     SST <- start_SST + intensity
   } else {
     SST <- start_SST
@@ -108,8 +108,8 @@ for (i in 1:25) {
 
 for (i in 26:years) {
   heat_prob <- runif(1, 0, 1)
-  if ((i < 100 & heat_prob < 0.1) | (i >= 100 & heat_prob < 0.35)) {
-    intensity <- runif(1, 1, ifelse(i < 100, 3, 5))
+  if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+    intensity <- runif(1, 1, ifelse(i < 75, 3, 5))
     SST <- start_SST + intensity
   } else {
     SST <- start_SST
@@ -172,7 +172,7 @@ mt <- ggplot(SSTdf_mean, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 28) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 29) +
   facet_wrap(~year) +
   theme(
     strip.background = element_blank(),
@@ -239,7 +239,7 @@ et <- ggplot(SSTdf_enso, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 28) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 29) +
   facet_wrap(~year) +
   theme(
     strip.background = element_blank(),
@@ -306,7 +306,7 @@ st <- ggplot(SSTdf_shock, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 28) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 29) +
   facet_wrap(~year) +
   theme(
     strip.background = element_blank(),
@@ -373,7 +373,7 @@ mst <- ggplot(SSTdf_mean_shock, aes(lon, lat, fill = sst)) +
   geom_tile() +
   labs(x = "Longitude", y = "Latitude", fill = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 28) +
+  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 29) +
   facet_wrap(~year) +
   theme(
     strip.background = element_blank(),
