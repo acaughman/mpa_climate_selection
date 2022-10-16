@@ -31,10 +31,10 @@ view.world
 init.a <- 0.3 # The initial frequency of the low movement allele
 sb <- 0.70 # survival proportion for babies
 s <- 0.70 # survival proportion
-dd <- 0.001 # density dependence of baby survival
+dd <- 0.005 # density dependence of baby survival
 fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished <- 0.7
+fished <- 0.5
 buffer.fished <- 0.2 # buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 
 reserves.at <- c(949, 1049, 1149, 950, 1050, 1150, 951, 1051, 1151)
@@ -521,4 +521,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("sensitivity_analysis", "density_dependence", "mean_shock_001.rda"))
+save(output.array, file = here::here("sensitivity_analysis", "fishing_pressure", "null5.rda"))

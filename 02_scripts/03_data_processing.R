@@ -14,14 +14,13 @@ NUM.gens.pre.reserve <- 10 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 150 # The number of generations with the reserve installed <- would like to reduce to 100
 gens <- NUM.gens.pre.fishing + NUM.gens.pre.reserve + NUM.gens.post.reserve
 
-load(file = here::here("sensitivity_analysis", "density_dependence", "mean_shock_005.rda"))
-load(file = here::here("03_generated_data", "climate_layer", "mean_shock.rda"))
+load(file = here::here("sensitivity_analysis", "density_dependence", "null_005.rda"))
+load(file = here::here("03_generated_data", "climate_layer", "null.rda"))
 
 # Output results into a dataframe
 output_df <- data.frame() # create dataframe to hold results
 
 for (a in 1:reps) {
-  world_sub <- array(0, c(NS.patches, EW.patches))
   for (b in 1:gens) {
     for (c in 1:NUM.genotypes) {
       for (d in 1:NUM.sexes) {
@@ -92,4 +91,4 @@ output_df <- output_df %>%
   mutate(lon = as.numeric(lon)) %>%
   mutate(rep = as.numeric(rep))
 
-write_csv(output_df, here::here("sensitivity_analysis", "density_dependence", "mean_shock_005.csv"))
+write_csv(output_df, here::here("sensitivity_analysis", "density_dependence", "null_005.csv"))
