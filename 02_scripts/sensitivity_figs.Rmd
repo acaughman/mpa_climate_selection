@@ -15,15 +15,15 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null5.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_001.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null6.csv"))
+df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_002.csv"))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null7.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_003.csv"))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null8.csv"))
+df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_004.csv"))
 
-df5 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", ".csv"))
+df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_005.csv"))
 ```
 
 ### Manipulate data
@@ -90,7 +90,7 @@ mpa_df1 <- output_sum1 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>% 
-  mutate(fp = 0.001)
+  mutate(dd = 0.001)
 
 rm(df1)
 rm(geno_sum1)
@@ -159,7 +159,7 @@ mpa_df2 <- output_sum2 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>% 
-  mutate(fp = 0.002)
+  mutate(dd = 0.002)
 
 rm(df2)
 rm(geno_sum2)
@@ -228,7 +228,7 @@ mpa_df3 <- output_sum3 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>% 
-  mutate(fp = 0.003)
+  mutate(dd = 0.003)
 
 rm(df3)
 rm(geno_sum3)
@@ -239,17 +239,16 @@ rm(pop_sum3)
 
 ```{r}
 # Summarize pop size and frequency by genotype
-geno_sum4 <- df5 %>%
+geno_sum4 <- df4 %>%
   filter(age == "adult") %>% 
-  select(rep == 1) %>% 
-  group_by(lat, lon, generation) %>%
+  group_by(lat, lon, generation, rep) %>%
   summarise(geno_pop_sum = sum(pop))
 
 geno_mean4 <- geno_sum4 %>% 
   group_by(lat, lon, generation) %>% 
   summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE))
 
-pop_sum4 <- df5 %>%
+pop_sum4 <- df4 %>%
   filter(age == "adult") %>% 
   group_by(lat, lon, generation, rep) %>%
   summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
@@ -298,7 +297,7 @@ mpa_df4 <- output_sum4 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>% 
-  mutate(fp = 0.004)
+  mutate(dd = 0.004)
 
 rm(df4)
 rm(geno_sum4)
@@ -369,7 +368,7 @@ mpa_df5 <- output_sum5 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>% 
-  mutate(fp = 0.005)
+  mutate(dd = 0.005)
 
 rm(df5)
 rm(geno_sum5)
@@ -381,7 +380,7 @@ data = full_join(mpa_df1, mpa_df2)
 data = full_join(data, mpa_df3)
 data = full_join(data, mpa_df4)
 data = full_join(data, mpa_df5) %>% 
-  mutate(fp = as.factor(fp))
+  mutate(dd = as.factor(dd))
 
 rm(mpa_df1)
 rm(mpa_df2)
@@ -395,12 +394,12 @@ rm(mpa_df5)
 
 ```{r}
 p <- ggplot(data, aes(generation, location_sum)) +
-  geom_line(aes(color=fp)) +
+  geom_line(aes(color=dd)) +
   theme_bw() +
   labs(
     x = "Year",
     y = "Population Density",
-    color = "Age"
+    color = "Density Dependence"
   ) +
   geom_vline(xintercept = 16, alpha = 0.3) +
   geom_vline(xintercept = 26, alpha = 0.3) +
@@ -411,7 +410,7 @@ p <- ggplot(data, aes(generation, location_sum)) +
   theme(panel.grid.minor = element_blank())
 
 sub = ggplot(data, aes(generation, location_sum)) +
-  geom_line(aes(color=fp)) +
+  geom_line(aes(color=dd)) +
   theme_bw() +
   labs(
     x = "",
@@ -435,6 +434,6 @@ plot = p + inset_element(sub, right = .95,
                   top = 0.96) + plot_annotation(tag_levels = "a")
 # mean 66, null 117, shock c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129) EDIT WITH FINAL VALUES
 
-ggsave(plot, file = paste0("null.pdf"), path = here::here("sensitivity_analysis", "fishing_pressure"), height = 8, width = 15)
+ggsave(plot, file = paste0("null.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 8, width = 15)
 ```
 

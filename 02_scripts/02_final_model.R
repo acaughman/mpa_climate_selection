@@ -498,7 +498,7 @@ start_time <- Sys.time()
 
 for (rep in 1:reps) {
   print(rep)
-  SST.patches <- init_SST(years, "mean shock") # null, mean, enso, shock, or mean shock
+  SST.patches <- init_SST(years, "null") # null, mean, enso, shock, or mean shock
   # save(SST.patches, file = here::here("03_generated_data","climate_layer", "mean_shock.rda"))
   pop <- init()
   for (t in 1:gens) {
