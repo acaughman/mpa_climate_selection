@@ -310,8 +310,7 @@ rm(pop_sum4)
 # Summarize pop size and frequency by genotype
 geno_sum5 <- df5 %>%
   filter(age == "adult") %>% 
-  select(rep == 1) %>% 
-  group_by(lat, lon, generation) %>%
+  group_by(lat, lon, generation, rep) %>%
   summarise(geno_pop_sum = sum(pop))
 
 geno_mean5 <- geno_sum5 %>% 
@@ -320,8 +319,7 @@ geno_mean5 <- geno_sum5 %>%
 
 pop_sum5 <- df5 %>%
   filter(age == "adult") %>% 
-  select(rep == 2) %>% 
-  group_by(lat, lon, generation) %>%
+  group_by(lat, lon, generation, rep) %>%
   summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
 
 pop_mean5 <- pop_sum5 %>%
