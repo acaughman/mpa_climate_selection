@@ -434,9 +434,9 @@ move <- function(pop) {
               # determine the direction of each move
               theta <- runif(pop[lat, lon, i, j, k], 0, 2 * pi)
               #### bias this movement in the north-south direction (along coasts) if this is a great white shark simulation (otherwise, comment out the next three lines):
-              f.adj <- function(x, u) x-cos(x)*sin(x) - u
-              my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
-              theta <- vapply(theta, my.uniroot, numeric(1))
+              # f.adj <- function(x, u) x-cos(x)*sin(x) - u
+              # my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
+              # theta <- vapply(theta, my.uniroot, numeric(1))
               # convert direction and distance into a distance in the x-direction (longitude)
               x <- cos(theta) * dist
               # bounce off edges
@@ -521,4 +521,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("sensitivity_analysis", "movement_pattern", "null_bias.rda"))
+save(output.array, file = here::here("sensitivity_analysis", "movement_pattern", "null_bias_wrap.rda"))
