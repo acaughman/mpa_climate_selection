@@ -498,7 +498,7 @@ start_time <- Sys.time()
 
 for (rep in 1:reps) {
   print(rep)
-  SST.patches <- init_SST(years, "null") # null, mean, enso, shock, or mean shock
+  SST.patches <- init_SST(years, "shock") # null, mean, enso, shock, or mean shock
   # save(SST.patches, file = here::here("03_generated_data","climate_layer", "mean_shock.rda"))
   pop <- init()
   for (t in 1:gens) {
@@ -521,4 +521,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("sensitivity_analysis", "movement_pattern", "null_bias_wrap.rda"))
+save(output.array, file = here::here("sensitivity_analysis", "movement_pattern", "shock.rda"))
