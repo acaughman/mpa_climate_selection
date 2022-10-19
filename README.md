@@ -2,12 +2,6 @@
 
 ## Sensitivity analysis
 
-Density Dependence
-
-Discuss w Darcy
-
-Movement Types
-
 Fishing Pressure
 
 0.5,0.6,0.7,0.8
