@@ -8,11 +8,7 @@ Fishing Pressure
 
 Initial SST Value
 
-0, +0.5, +1
-
-Movement Distances
-
-2/3, 4/6, 9/12
+-1. -0.5, 0, +0.5, +1
 
 Thermal Breadth
 
@@ -31,8 +27,9 @@ Thermal Breadth
 ### MPA Scenarios
 
 1. Single Small 
-2. Single Large
-3. No MPA - Control
+2. Single Medium
+3. Single Large
+4. No MPA - Control
 
 ### Evolution Scenario
 

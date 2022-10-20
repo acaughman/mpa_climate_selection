@@ -15,11 +15,11 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null_large.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null_bias.csv"))
+df2 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null_large_bias.csv"))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null_bias_wrap.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null_large_bias_wrap.csv"))
 
 df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_004.csv"))
 
@@ -377,7 +377,7 @@ rm(pop_sum5)
 data = full_join(mpa_df1, mpa_df2)
 data = full_join(data, mpa_df3)
 data = full_join(data, mpa_df4)
-data = full_join(data, mpa_df5) %>% 
+data = full_join(data, mpa_df3) %>% 
   mutate(dd = as.factor(dd))
 
 rm(mpa_df1)
@@ -432,6 +432,6 @@ plot = p + inset_element(sub, right = .95,
                   top = 0.96) + plot_annotation(tag_levels = "a")
 # mean 66, null 117, shock c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129) EDIT WITH FINAL VALUES
 
-ggsave(plot, file = paste0("null.pdf"), path = here::here("sensitivity_analysis", "movement_pattern"), height = 8, width = 15)
+ggsave(p, file = paste0("null_large.pdf"), path = here::here("sensitivity_analysis", "movement_pattern"), height = 8, width = 15)
 ```
 
