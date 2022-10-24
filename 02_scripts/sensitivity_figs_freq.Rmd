@@ -15,15 +15,13 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null5.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large5.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null6.csv"))
+df2 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large6.csv"))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null7.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large7.csv"))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null8.csv"))
-
-df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_005.csv"))
+df4 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large8.csv"))
 ```
 
 ### Manipulate data
@@ -52,11 +50,6 @@ pop_mean1 <- pop_sum1 %>%
 
 output_sum1 <- full_join(geno_mean1, pop_mean1) %>%
   mutate(freq = geno_pop_mean / pop_mean)
-
-## SELECT GENERATIONS and ADULTS ONLY <-edit to change
-plot_sum1 <- output_sum1 %>%
-  filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
-  mutate(generation = as.numeric(generation))
 
 ## SELECT ADULTS ONLY <-edit to change
 line_df1 <- output_sum1 %>%
@@ -125,11 +118,6 @@ pop_mean2 <- pop_sum2 %>%
 output_sum2 <- full_join(geno_mean2, pop_mean2) %>%
   mutate(freq = geno_pop_mean / pop_mean)
 
-## SELECT GENERATIONS and ADULTS ONLY <-edit to change
-plot_sum2 <- output_sum2 %>%
-  filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
-  mutate(generation = as.numeric(generation))
-
 ## SELECT ADULTS ONLY <-edit to change
 line_df2 <- output_sum2 %>%
   group_by(generation) %>%
@@ -196,11 +184,6 @@ pop_mean3 <- pop_sum3 %>%
 
 output_sum3 <- full_join(geno_mean3, pop_mean3) %>%
   mutate(freq = geno_pop_mean / pop_mean)
-
-## SELECT GENERATIONS and ADULTS ONLY <-edit to change
-plot_sum3 <- output_sum3 %>%
-  filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
-  mutate(generation = as.numeric(generation))
 
 ## SELECT ADULTS ONLY <-edit to change
 line_df3 <- output_sum3 %>%
@@ -269,10 +252,6 @@ pop_mean4 <- pop_sum4 %>%
 output_sum4 <- full_join(geno_mean4, pop_mean4) %>%
   mutate(freq = geno_pop_mean / pop_mean)
 
-## SELECT GENERATIONS and ADULTS ONLY <-edit to change
-plot_sum4 <- output_sum4 %>%
-  filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
-  mutate(generation = as.numeric(generation))
 
 ## SELECT ADULTS ONLY <-edit to change
 line_df4 <- output_sum4 %>%
@@ -316,75 +295,6 @@ rm(geno_mean4)
 rm(pop_mean4)
 ```
 
-##### 5
-
-```{r}
-# Summarize pop size and frequency by genotype
-geno_sum5 <- df5 %>%
-  filter(age == "adult") %>% 
-  group_by(lat, lon, generation, rep) %>%
-  summarise(geno_pop_sum = sum(pop))
-
-geno_mean5 <- geno_sum5 %>% 
-  group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE))
-
-pop_sum5 <- df5 %>%
-  filter(age == "adult") %>% 
-  group_by(lat, lon, generation, rep) %>%
-  summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
-
-pop_mean5 <- pop_sum5 %>%
-  group_by(lat, lon, generation) %>%
-  summarise(pop_mean = mean(pop_sum, rm.na = TRUE), max_temp = max_temp, min_temp = min_temp)
-
-output_sum5 <- full_join(geno_mean5, pop_mean5) %>%
-  mutate(freq = geno_pop_mean / pop_mean)
-
-## SELECT GENERATIONS and ADULTS ONLY <-edit to change
-plot_sum5 <- output_sum5 %>%
-  filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
-  mutate(generation = as.numeric(generation))
-
-## SELECT ADULTS ONLY <-edit to change
-line_df5 <- output_sum5 %>%
-  group_by(generation) %>%
-  summarise(
-    location_sum = sum(geno_pop_mean),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp)
-  ) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m) %>%
-  filter(generation > 25)
-
-## SELECT ADULTS ONLY <-edit to change
-mpa_df5 <- output_sum5 %>%
-  filter(lon %in% c(9, 10, 11)) %>%
-  filter(lat %in% c(49, 50, 51)) %>%
-  group_by(generation) %>%
-  summarise(
-    location_sum = sum(geno_pop_mean),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp)
-  ) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m) %>% 
-  mutate(dd = 0.005)
-
-rm(df5)
-rm(geno_sum5)
-rm(pop_sum5)
-```
-
 ```{r}
 data = full_join(mpa_df1, mpa_df2)
 data = full_join(data, mpa_df3)
@@ -403,7 +313,7 @@ p <- ggplot(data, aes(generation, freq_avg)) +
   labs(
     x = "Year",
     y = "Population Density",
-    color = "Movement Pattern"
+    color = "Fishing Pressure"
   ) +
   geom_vline(xintercept = 16, alpha = 0.3) +
   geom_vline(xintercept = 26, alpha = 0.3) +
@@ -413,31 +323,6 @@ p <- ggplot(data, aes(generation, freq_avg)) +
     scale_color_viridis_d() +
   theme(panel.grid.minor = element_blank())
 
-sub = ggplot(data, aes(generation, location_sum)) +
-  geom_line(aes(color=dd)) +
-  theme_bw() +
-  labs(
-    x = "",
-    y = "",
-    color = ""
-  ) +
-  geom_vline(xintercept = 16, alpha = 0.3) +
-  geom_vline(xintercept = 26, alpha = 0.3) +
-  # geom_vline(xintercept = c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129), alpha = 0.3, color= "red") +
-  theme(axis.text = element_blank()) +
-  theme(axis.title = element_blank()) +
-  theme(axis.ticks = element_blank()) +
-  theme(axis.line = element_blank()) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-    scale_color_viridis_d() + ylim(c(0, 10000)) +
-  theme(legend.position = "none")
-
-plot = p + inset_element(sub, right = .95, 
-                  bottom = 0.5,
-                  left= 0.3,
-                  top = 0.96) + plot_annotation(tag_levels = "a")
-# mean 66, null 117, shock c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129) EDIT WITH FINAL VALUES
-
-ggsave(p, file = paste0("null.pdf"), path = here::here("sensitivity_analysis", "fishing_pressure"), height = 8, width = 15)
+ggsave(p, file = paste0("null_large.pdf"), path = here::here("sensitivity_analysis", "fishing_pressure"), height = 8, width = 15)
 ```
 
