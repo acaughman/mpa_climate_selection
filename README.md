@@ -2,14 +2,6 @@
 
 ## Sensitivity analysis
 
-Fishing Pressure
-
-0.5,0.6,0.7,0.8
-
-Initial SST Value
-
--1. -0.5, 0, +0.5, +1
-
 Thermal Breadth
 
 3,4,5,6

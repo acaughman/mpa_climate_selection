@@ -34,10 +34,10 @@ s <- 0.70 # survival proportion
 dd <- 0.005 # density dependence of baby survival
 fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished <- 0.7
+fished <- 0.5
 buffer.fished <- 0.2 # buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 
-reserves.at <- c(848, 948, 1048, 1148, 1248, 1348, 849, 949, 1049, 1149, 1249, 1349, 850, 950, 1050, 1150, 1250, 1350, 851, 951, 1051, 1151, 1251, 1351, 852, 952, 1052, 1152, 1252, 1352, 853, 953, 1053, 1153, 1253, 1353)
+reserves.at <- c(949, 1049, 1149, 950, 1050, 1150, 951, 1051, 1151)
 # large_MPA  c(445, 545, 645, 745, 845, 945, 1045, 1145, 1245, 1345, 1445, 1545, 446, 546, 646, 746, 846, 946, 1046, 1146, 1246, 1346, 1446, 1546, 447, 547, 647, 747, 847, 947, 1047, 1147, 1247, 1347, 1447, 1547, 448, 548, 648, 748, 848, 948, 1048, 1148, 1248, 1348, 1448, 1548, 449, 549, 649, 749, 849, 949, 1049, 1149, 1249, 1349, 1449, 1549, 450, 550, 650, 750, 850, 950, 1050, 1150, 1250, 1350, 1450, 1550, 451, 551, 651, 751, 851, 951, 1051, 1151, 1251, 1351, 1451, 1551, 452, 552, 652, 752, 852, 952, 1052, 1152, 1252, 1352, 1452, 1552, 453, 553, 653, 753, 853, 953, 1053, 1153, 1253, 1353, 1453, 1553, 454, 554, 654, 754, 854, 954, 1054, 1154, 1254, 1354, 1454, 1554,455, 555, 655, 755, 855, 955, 1055, 1155, 1255, 1355, 1455, 1555,456, 556, 656, 756, 856, 956, 1056, 1156, 1256, 1356, 1456, 1556)
 # med MPA c(848, 948, 1048, 1148, 1248, 1348, 849, 949, 1049, 1149, 1249, 1349, 850, 950, 1050, 1150, 1250, 1350, 851, 951, 1051, 1151, 1251, 1351, 852, 952, 1052, 1152, 1252, 1352, 853, 953, 1053, 1153, 1253, 1353)
 # small_MPA  c(949, 1049, 1149, 950, 1050, 1150, 951, 1051, 1151)
@@ -499,7 +499,7 @@ start_time <- Sys.time()
 
 for (rep in 1:reps) {
   print(rep)
-  SST.patches <- init_SST(years, "null") # null, mean, enso, shock, or mean shock
+  SST.patches <- init_SST(years, "shock") # null, mean, enso, shock, or mean shock
   # save(SST.patches, file = here::here("03_generated_data","climate_layer", "mean_shock.rda"))
   pop <- init()
   for (t in 1:gens) {
@@ -522,4 +522,4 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("sensitivity_analysis", "movement_pattern", "null_med.rda"))
+save(output.array, file = here::here("sensitivity_analysis", "density_dependece", "shock_small5.rda"))
