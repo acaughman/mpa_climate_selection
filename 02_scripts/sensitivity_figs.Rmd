@@ -15,15 +15,15 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_001.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_001.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_002.csv"))
+df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_002.csv"))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_003.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_003.csv"))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_004.csv"))
+df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_004.csv"))
 
-df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_005.csv"))
+df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_005.csv"))
 ```
 
 ### Manipulate data
@@ -379,20 +379,14 @@ data = full_join(data, mpa_df3)
 data = full_join(data, mpa_df4)
 data = full_join(data, mpa_df5) %>% 
   mutate(dd = as.factor(dd))
-
-rm(mpa_df1)
-rm(mpa_df2)
-rm(mpa_df3)
-rm(mpa_df4)
-rm(mpa_df5)
 ```
 
 
 ### Line Plot Figures
 
 ```{r}
-p <- ggplot(mpa_df3, aes(generation, location_sum)) +
-  geom_line() +
+p <- ggplot(data, aes(generation, location_sum)) +
+  geom_line(aes(color = dd)) +
   theme_bw() +
   labs(
     x = "Year",
@@ -423,7 +417,7 @@ sub = ggplot(data, aes(generation, location_sum)) +
   theme(axis.ticks = element_blank()) +
   theme(axis.line = element_blank()) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-    scale_color_viridis_d() + ylim(c(0, 10000)) +
+    scale_color_viridis_d() + ylim(c(0, 30000)) +
   theme(legend.position = "none")
 
 plot = p + inset_element(sub, right = .95, 
@@ -431,6 +425,6 @@ plot = p + inset_element(sub, right = .95,
                   left= 0.3,
                   top = 0.96) + plot_annotation(tag_levels = "a")
 
-ggsave(plot, file = paste0("mean_small.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 8, width = 15)
+ggsave(plot, file = paste0("null_large.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 8, width = 15)
 ```
 
