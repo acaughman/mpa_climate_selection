@@ -15,13 +15,13 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large5.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "enso_small5.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large6.csv"))
+df2 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "enso_small6.csv"))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large7.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "enso_small7.csv"))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large8.csv"))
+df4 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "enso_small8.csv"))
 ```
 
 ### Manipulate data
@@ -300,29 +300,10 @@ data = full_join(mpa_df1, mpa_df2)
 data = full_join(data, mpa_df3)
 data = full_join(data, mpa_df4) %>% 
   mutate(dd = as.factor(dd))
+
+write_csv(data, here::here("sensitivity_analysis", "fishing_pressure", "enso_small_sum.csv"))
+
+beepr::beep(5)
 ```
 
-
-### Line Plot Figures
-
-```{r}
-p <- ggplot(data, aes(generation, freq_avg)) +
-  geom_line(aes(color=dd)) +
-  theme_bw() +
-  facet_wrap(~genotype) +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Fishing Pressure"
-  ) +
-  geom_vline(xintercept = 16, alpha = 0.3) +
-  geom_vline(xintercept = 26, alpha = 0.3) +
-  # geom_vline(xintercept = c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129), alpha = 0.3, color= "red") +
-  scale_x_continuous(breaks = c(16, 26), labels = c("fishing starts", "MPA establishment")) +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) +
-    scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank())
-
-ggsave(p, file = paste0("null_large.pdf"), path = here::here("sensitivity_analysis", "fishing_pressure"), height = 8, width = 15)
-```
 

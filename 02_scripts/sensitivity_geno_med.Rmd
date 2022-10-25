@@ -300,29 +300,9 @@ data = full_join(mpa_df1, mpa_df2)
 data = full_join(data, mpa_df3)
 data = full_join(data, mpa_df4) %>% 
   mutate(dd = as.factor(dd))
-```
 
+write_csv(data, here::here("sensitivity_analysis", "fishing_pressure", "null_med_sum.csv"))
 
-### Line Plot Figures
-
-```{r}
-p <- ggplot(data, aes(generation, freq_avg)) +
-  geom_line(aes(color=dd)) +
-  theme_bw() +
-  facet_wrap(~genotype) +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Fishing Pressure"
-  ) +
-  geom_vline(xintercept = 16, alpha = 0.3) +
-  geom_vline(xintercept = 26, alpha = 0.3) +
-  # geom_vline(xintercept = c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129), alpha = 0.3, color= "red") +
-  scale_x_continuous(breaks = c(16, 26), labels = c("fishing starts", "MPA establishment")) +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) +
-    scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank())
-
-ggsave(p, file = paste0("null_med.pdf"), path = here::here("sensitivity_analysis", "fishing_pressure"), height = 8, width = 15)
+beepr::beep(5)
 ```
 

@@ -15,11 +15,11 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null_large.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_001.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null_large_bias.csv")) 
+df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_002.csv")) 
 
-df3 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null_large_bias_wrap.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_003.csv"))
 
 df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_004.csv")) %>%
   mutate(dd = 0.004)
@@ -324,7 +324,7 @@ mpa_df1 <- output_sum1 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>%
-  mutate(dd = "none")
+  mutate(dd = 0.001)
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df2 <- output_sum2 %>%
@@ -342,7 +342,7 @@ mpa_df2 <- output_sum2 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>%
-  mutate(dd = "bias")
+  mutate(dd = 0.002)
 
 mpa_df3 <- output_sum3 %>%
   filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
@@ -359,7 +359,7 @@ mpa_df3 <- output_sum3 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>%
-  mutate(dd = "bias and wrap")
+  mutate(dd = 0.003)
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df4 <- output_sum4 %>%
@@ -403,10 +403,10 @@ mpa_df5 <- output_sum5 %>%
 data <- full_join(mpa_df1, mpa_df2)
 data <- full_join(data, mpa_df3)
 data <- full_join(data, mpa_df4)
-data <- full_join(data, mpa_df3) %>%
+data <- full_join(data, mpa_df5 ) %>%
   mutate(dd = as.factor(dd))
 
 
-write_csv(data, here::here("sensitivity_analysis", "movement_pattern", "null_large_sum.csv"))
+write_csv(data, here::here("sensitivity_analysis", "density_dependence", "null_large_sum.csv"))
 ```
 
