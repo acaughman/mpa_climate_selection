@@ -15,14 +15,11 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_001.csv")) %>%
-  mutate(dd = 0.001)
+df1 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null_large.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_002.csv")) %>%
-  mutate(dd = 0.002)
+df2 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null_large_bias.csv")) 
 
-df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_003.csv")) %>%
-  mutate(dd = 0.003)
+df3 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "null_large_bias_wrap.csv"))
 
 df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_004.csv")) %>%
   mutate(dd = 0.004)
@@ -313,8 +310,8 @@ rm(pop_sum5)
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df1 <- output_sum1 %>%
-  filter(lon %in% c(8, 9, 10, 11, 12, 13)) %>%
-  filter(lat %in% c(48, 49, 50, 51, 52, 53)) %>%
+  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
+  filter(lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -327,12 +324,12 @@ mpa_df1 <- output_sum1 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>%
-  mutate(dd = 0.001)
+  mutate(dd = "none")
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df2 <- output_sum2 %>%
-  filter(lon %in% c(8, 9, 10, 11, 12, 13)) %>%
-  filter(lat %in% c(48, 49, 50, 51, 52, 53)) %>%
+  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
+  filter(lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -345,11 +342,11 @@ mpa_df2 <- output_sum2 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>%
-  mutate(dd = 0.002)
+  mutate(dd = "bias")
 
 mpa_df3 <- output_sum3 %>%
-  filter(lon %in% c(8, 9, 10, 11, 12, 13)) %>%
-  filter(lat %in% c(48, 49, 50, 51, 52, 53)) %>%
+  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
+  filter(lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -362,12 +359,12 @@ mpa_df3 <- output_sum3 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>%
-  mutate(dd = 0.003)
+  mutate(dd = "bias and wrap")
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df4 <- output_sum4 %>%
-  filter(lon %in% c(8, 9, 10, 11, 12, 13)) %>%
-  filter(lat %in% c(48, 49, 50, 51, 52, 53)) %>%
+  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
+  filter(lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -384,8 +381,8 @@ mpa_df4 <- output_sum4 %>%
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df5 <- output_sum5 %>%
-  filter(lon %in% c(8, 9, 10, 11, 12, 13)) %>%
-  filter(lat %in% c(48, 49, 50, 51, 52, 53)) %>%
+  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
+  filter(lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -406,56 +403,10 @@ mpa_df5 <- output_sum5 %>%
 data <- full_join(mpa_df1, mpa_df2)
 data <- full_join(data, mpa_df3)
 data <- full_join(data, mpa_df4)
-data <- full_join(data, mpa_df5) %>%
+data <- full_join(data, mpa_df3) %>%
   mutate(dd = as.factor(dd))
+
+
+write_csv(data, here::here("sensitivity_analysis", "movement_pattern", "null_large_sum.csv"))
 ```
 
-
-### Line Plot Figures
-
-```{r}
-p <- ggplot(data, aes(generation, location_sum)) +
-  geom_line(aes(color = dd)) +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Density Dependence"
-  ) +
-  geom_vline(xintercept = 16, alpha = 0.3) +
-  geom_vline(xintercept = 26, alpha = 0.3) +
-  # geom_vline(xintercept = c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129), alpha = 0.3, color= "red") +
-  scale_x_continuous(breaks = c(16, 26), labels = c("fishing starts", "MPA establishment")) +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) +
-  scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank())
-
-sub <- ggplot(data, aes(generation, location_sum)) +
-  geom_line(aes(color = dd)) +
-  theme_bw() +
-  labs(
-    x = "",
-    y = "",
-    color = ""
-  ) +
-  geom_vline(xintercept = 16, alpha = 0.3) +
-  geom_vline(xintercept = 26, alpha = 0.3) +
-  # geom_vline(xintercept = c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129), alpha = 0.3, color= "red") +
-  theme(axis.text = element_blank()) +
-  theme(axis.title = element_blank()) +
-  theme(axis.ticks = element_blank()) +
-  theme(axis.line = element_blank()) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-  scale_color_viridis_d() +
-  ylim(c(0, 100000)) +
-  theme(legend.position = "none")
-
-plot <- p + inset_element(sub,
-  right = .95,
-  bottom = 0.5,
-  left = 0.3,
-  top = 0.96
-) + plot_annotation(tag_levels = "a")
-
-ggsave(plot, file = paste0("null_large.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 8, width = 15)
-```

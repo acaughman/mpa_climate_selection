@@ -15,20 +15,15 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_001.csv")) %>% 
-  mutate(dd = 0.001)
+df1 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "enso.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_002.csv")) %>% 
-  mutate(dd = 0.002)
+df2 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "enso_bias.csv"))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_003.csv")) %>% 
-  mutate(dd = 0.003)
+df3 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "enso_bias_wrap.csv"))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_004.csv")) %>% 
-  mutate(dd = 0.004)
+df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_004.csv")) 
 
-df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_005.csv")) %>% 
-  mutate(dd = 0.005)
+df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_005.csv")) 
 ```
 
 ### Manipulate data
@@ -408,52 +403,7 @@ data = full_join(data, mpa_df3)
 data = full_join(data, mpa_df4)
 data = full_join(data, mpa_df5) %>% 
   mutate(dd = as.factor(dd))
-```
 
-
-### Line Plot Figures
-
-```{r}
-p <- ggplot(data, aes(generation, location_sum)) +
-  geom_line(aes(color = dd)) +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Initial Sea Surface Temperature"
-  ) +
-  geom_vline(xintercept = 16, alpha = 0.3) +
-  geom_vline(xintercept = 26, alpha = 0.3) +
-  # geom_vline(xintercept = c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129), alpha = 0.3, color= "red") +
-  scale_x_continuous(breaks = c(16, 26), labels = c("fishing starts", "MPA establishment")) +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) +
-    scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank())
-
-sub = ggplot(data, aes(generation, location_sum)) +
-  geom_line(aes(color=dd)) +
-  theme_bw() +
-  labs(
-    x = "",
-    y = "",
-    color = ""
-  ) +
-  geom_vline(xintercept = 16, alpha = 0.3) +
-  geom_vline(xintercept = 26, alpha = 0.3) +
-  # geom_vline(xintercept = c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129), alpha = 0.3, color= "red") +
-  theme(axis.text = element_blank()) +
-  theme(axis.title = element_blank()) +
-  theme(axis.ticks = element_blank()) +
-  theme(axis.line = element_blank()) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-    scale_color_viridis_d() + ylim(c(0, 30000)) +
-  theme(legend.position = "none")
-
-plot = p + inset_element(sub, right = .95, 
-                  bottom = 0.5,
-                  left= 0.3,
-                  top = 0.96) + plot_annotation(tag_levels = "a")
-
-ggsave(plot, file = paste0("shock.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 8, width = 15)
+write_csv(data, here::here("sensitivity_analysis", "movement_pattern", "enso_small_sum.csv"))
 ```
 
