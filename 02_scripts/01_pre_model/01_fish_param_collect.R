@@ -2,7 +2,7 @@ library(rfishbase)
 library(tidyverse)
 
 data <- read_csv(here::here("01_raw_data", "species.csv")) %>%
-  select(species)
+  select(species = Species)
 validate_names(data$species)
 
 fish <- load_taxa()
@@ -20,12 +20,18 @@ dat <- full_join(dat, pop) %>%
   filter(Species %in% data$species) %>%
   select(
     Species, M,
-    FecundityMax, tm, AgeMatMin,
-    TempPreferred, TempPref50,
-    TempMin, TempMax, FBname
+    AgeMatMin,
+    TempMin, TempMax
   ) %>%
-  rename(species = Species)
+  rename(species = Species) %>% 
+  mutate(ThermalBreadth = TempMax - TempMin)
 
-dat_full <- full_join(dat, data)
+dat_full <- full_join(dat, data) %>% 
+  group_by(species) %>% 
+  summarize(M = mean(M, na.rm = TRUE),
+            AgeMatMin = mean(AgeMatMin, na.rm =TRUE),
+            ThermalBreadth = mean(ThermalBreadth, na.rm = TRUE)) %>% 
+  mutate(SurvivalRate = exp(-M)) %>% 
+  select(-M)
 
 write_csv(dat_full, here::here("03_generated_data", "species_sum.csv"))

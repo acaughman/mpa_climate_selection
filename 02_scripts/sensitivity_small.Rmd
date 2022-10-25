@@ -15,15 +15,15 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_small_neg1.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_neg1.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_small_neg5.csv"))
+df2 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_neg5.csv"))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_small0.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small0.csv"))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_small_pos5.csv"))
+df4 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_pos5.csv"))
 
-df5 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_small_pos1.csv"))
+df5 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_pos1.csv"))
 ```
 
 ### Manipulate data
@@ -404,7 +404,7 @@ data = full_join(data, mpa_df4)
 data = full_join(data, mpa_df5) %>% 
   mutate(dd = as.factor(dd))
 
-write_csv(data, here::here("sensitivity_analysis", "initial_SST", "mean_small_sum.csv"))
+write_csv(data, here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_sum.csv"))
 
 beepr::beep(5)
 ```
