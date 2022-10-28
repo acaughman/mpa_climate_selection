@@ -15,15 +15,15 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_neg1.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_small_001.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_neg5.csv"))
+df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_small_002.csv"))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small0.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_003.csv"))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_pos5.csv"))
+df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_004.csv"))
 
-df5 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_pos1.csv"))
+df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_005.csv"))
 ```
 
 ### Manipulate data
@@ -322,7 +322,7 @@ mpa_df1 <- output_sum1 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m)%>% 
-  mutate(dd = -1)
+  mutate(dd = 0.001)
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df2 <- output_sum2 %>%
@@ -340,7 +340,7 @@ mpa_df2 <- output_sum2 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>% 
-  mutate(dd = -0.05)
+  mutate(dd = 0.002)
 
 mpa_df3 <- output_sum3 %>%
   filter(lon %in% c(9, 10, 11)) %>%
@@ -357,7 +357,7 @@ mpa_df3 <- output_sum3 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>%
-  mutate(dd = 0)
+  mutate(dd = 0.003)
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df4 <- output_sum4 %>%
@@ -375,7 +375,7 @@ mpa_df4 <- output_sum4 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>% 
-  mutate(dd = 0.05)
+  mutate(dd = 0.004)
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df5 <- output_sum5 %>%
@@ -393,7 +393,7 @@ mpa_df5 <- output_sum5 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>% 
-  mutate(dd = 1)
+  mutate(dd = 0.005)
 ```
 
 
@@ -404,8 +404,6 @@ data = full_join(data, mpa_df4)
 data = full_join(data, mpa_df5) %>% 
   mutate(dd = as.factor(dd))
 
-write_csv(data, here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_sum.csv"))
-
-beepr::beep(5)
+write_csv(data, here::here("sensitivity_analysis", "density_dependence", "shock_small_sum.csv"))
 ```
 

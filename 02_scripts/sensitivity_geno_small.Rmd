@@ -15,13 +15,13 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "enso_small5.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "mean_shock_small5.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "enso_small6.csv"))
+df2 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "mean_shock_small6.csv"))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "enso_small7.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "mean_shock7.csv"))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "enso_small8.csv"))
+df4 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "mean_shock_small8.csv"))
 ```
 
 ### Manipulate data
@@ -301,7 +301,7 @@ data = full_join(data, mpa_df3)
 data = full_join(data, mpa_df4) %>% 
   mutate(dd = as.factor(dd))
 
-write_csv(data, here::here("sensitivity_analysis", "fishing_pressure", "enso_small_sum.csv"))
+write_csv(data, here::here("sensitivity_analysis", "fishing_pressure", "mean_shock_small_sum.csv"))
 
 beepr::beep(5)
 ```
