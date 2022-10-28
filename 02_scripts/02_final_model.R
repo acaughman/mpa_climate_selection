@@ -15,7 +15,7 @@ options(dplyr.summarise.inform = FALSE)
 ## Parameters:
 
 NUM.reps <- 10 - # The number of replicate simulations to run
-## 150 years total
+## 175 years total
 NUM.gens.pre.fishing <- 15 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 10 # The number of generations of fishing before reserves are installed
 NUM.gens.post.reserve <- 150 # The number of generations with the reserve installed
