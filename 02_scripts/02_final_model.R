@@ -14,7 +14,7 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Parameters:
 
-NUM.reps <- 2 # The number of replicate simulations to run
+NUM.reps <- 10 - # The number of replicate simulations to run
 ## 150 years total
 NUM.gens.pre.fishing <- 15 # The number of generations before any fishery
 NUM.gens.pre.reserve <- 10 # The number of generations of fishing before reserves are installed
@@ -34,7 +34,7 @@ s <- 0.70 # survival proportion
 dd <- 0.005 # density dependence of baby survival
 fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished <- 0.8
+fished <- 0.7
 buffer.fished <- 0.2 # buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 
 reserves.at <- c(949, 1049, 1149, 950, 1050, 1150, 951, 1051, 1151)
@@ -345,6 +345,7 @@ recruit <- function(pop) {
 ## This function determines fishing mortality within each grid cell, depending whether the cell is a reserve.
 
 fishing <- function(pop, gen) {
+  fished.num <- array(0, c(NUM.age.classes, NUM.sexes, NUM.genotypes))
   if (gen <= pre.reserve.gens + pre.fishing.gens) {
     each.patch.pop <- array(0, c(NS.patches, EW.patches))
     for (i in 2:NUM.age.classes) {
@@ -361,7 +362,9 @@ fishing <- function(pop, gen) {
     for (i in 2:NUM.age.classes) {
       for (j in 1:NUM.sexes) {
         for (k in 1:NUM.genotypes) {
-          pop[, , i, j, k] <- Reshape(rbinom(NS.patches * EW.patches, pop[, , i, j, k], (1 - f)), NS.patches, EW.patches)
+          survived <- Reshape(rbinom(NS.patches * EW.patches, pop[, , i, j, k], (1 - f)), NS.patches, EW.patches)
+          pop[, , i, j, k] <- survived
+          fished.num[i, j, k] <- sum(each.patch.pop[, ]) - sum(survived)
         }
       }
     }
@@ -392,11 +395,13 @@ fishing <- function(pop, gen) {
         for (k in 1:NUM.genotypes) {
           fished.array <- Reshape(rbinom(NS.patches * EW.patches, pop[, , i, j, k], (1 - f)), NS.patches, EW.patches)
           pop[, , i, j, k] <- ifelse(is.na(fished.array[, ]), pop[, , i, j, k], fished.array[, ])
+          fished.num[i, j, k] <- sum(each.patch.pop[, ], na.rm = TRUE) - sum(fished.array, na.rm = TRUE)
         }
       }
     }
   }
-  return(pop)
+  fished.list <- list("pop" = pop, "fish" = fished.num)
+  return(fished.list)
 }
 
 ############################################################################
@@ -494,12 +499,13 @@ post.reserve.gens <- NUM.gens.post.reserve
 gens <- pre.fishing.gens + pre.reserve.gens + post.reserve.gens
 
 output.array <- array(0, c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
+fished.array <- array(0, c(NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
 
 start_time <- Sys.time()
 
 for (rep in 1:reps) {
   print(rep)
-  SST.patches <- init_SST(years, "mean shock") # null, mean, enso, shock, or mean shock
+  SST.patches <- init_SST(years, "null") # null, mean, enso, shock, or mean shock
   # save(SST.patches, file = here::here("03_generated_data","climate_layer", "mean_shock.rda"))
   pop <- init()
   for (t in 1:gens) {
@@ -508,7 +514,9 @@ for (rep in 1:reps) {
     pop <- recruit(pop)
     if (t > pre.fishing.gens) {
       gen <- t
-      pop <- fishing(pop, gen)
+      fishing_result <- fishing(pop, gen)
+      pop <- fishing_result$pop
+      fished.array[, , , t, rep] <- fishing_result$fish
     }
     pop <- move(pop)
     print(t)
@@ -522,4 +530,5 @@ end_time - start_time
 
 beepr::beep(5)
 
-save(output.array, file = here::here("sensitivity_analysis", "fishing_pressure", "mean_shock_small8.rda"))
+save(output.array, file = here::here("test.rda"))
+save(fished.array, file = here::here("test_fished.rda"))
