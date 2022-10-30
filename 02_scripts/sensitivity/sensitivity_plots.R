@@ -4,27 +4,27 @@ library(lemon)
 
 # Read in Data ------------------------------------------------------------
 
-df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_shock_small_sum.csv")) %>% 
+df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_shock_large_sum.csv")) %>% 
   mutate(climate = "Mean Shock") %>% 
   mutate(dd = as.factor(dd)) %>% 
   mutate(max_temp = as.character(max_temp))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_small_sum.csv")) %>% 
+df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_large_sum.csv")) %>% 
   mutate(climate = "Mean") %>% 
   mutate(dd = as.factor(dd)) %>% 
   mutate(max_temp = as.character(max_temp))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_small_sum.csv")) %>% 
+df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_large_sum.csv")) %>% 
   mutate(climate = "Shock") %>% 
   mutate(dd = as.factor(dd)) %>% 
   mutate(max_temp = as.character(max_temp))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "enso_small_sum.csv")) %>% 
+df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "enso_large_sum.csv")) %>% 
   mutate(climate = "Enso") %>% 
   mutate(dd = as.factor(dd)) %>% 
   mutate(max_temp = as.character(max_temp))
 
-df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_small_sum.csv")) %>% 
+df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_sum.csv")) %>% 
   mutate(climate = "Null") %>% 
   mutate(dd = as.factor(dd)) %>% 
   mutate(max_temp = as.character(max_temp))
@@ -53,21 +53,21 @@ p <- ggplot(data, aes(generation, location_sum)) +
   scale_x_continuous(breaks = c(16, 26), labels = c("fishing starts", "MPA establishment")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank()) + ylim(c(0, 120000))
+  theme(panel.grid.minor = element_blank()) + ylim(c(0, 1000000))
   
 
-ggsave(p, file = paste0("small.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 8, width = 15)
+ggsave(reposition_legend(p, 'center', panel='panel-3-2'), file = paste0("large.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 8, width = 15)
 #reposition_legend(p, 'center', panel='panel-3-2')
 
 # Frequency Plot ----------------------------------------------------------
 
-p <- ggplot(df3, aes(generation, freq_avg)) +
+p <- ggplot(data, aes(generation, freq_avg)) +
   geom_line(aes(color=dd)) +
   theme_bw() +
   facet_grid(climate~genotype) +
   labs(
     x = "Year",
-    y = "Population Density",
+    y = "Allele Frequency",
     color = "Fishing Pressure"
   ) +
   geom_vline(xintercept = 16, alpha = 0.3) +
@@ -78,5 +78,5 @@ p <- ggplot(df3, aes(generation, freq_avg)) +
   scale_color_viridis_d() +
   theme(panel.grid.minor = element_blank())
 
-ggsave(p, file = paste0("small.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 8, width = 15)
+ggsave(p, file = paste0("large.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 8, width = 15)
 

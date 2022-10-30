@@ -14,9 +14,9 @@ NUM.gens.pre.reserve <- 10 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 150 # The number of generations with the reserve installed <- would like to reduce to 100
 gens <- NUM.gens.pre.fishing + NUM.gens.pre.reserve + NUM.gens.post.reserve
 
-load(file = here::here("test.rda"))
-load(file = here::here("test_fished.rda"))
-load(file = here::here("03_generated_data", "climate_layer", "null.rda"))
+load(file = here::here("sensitivity_analysis", "fishing_pressure", "shock_small5.rda"))
+# load(file = here::here("test_fished.rda"))
+load(file = here::here("03_generated_data", "climate_layer", "shock.rda"))
 
 # Output results into a dataframe
 output_df <- data.frame() # create dataframe to hold results
@@ -36,7 +36,7 @@ for (a in 1:reps) {
           world_sub$lat <- c(1:NS.patches)
           world_sub$max_temp <- SST.patches[1, 1, b]
           world_sub$min_temp <- SST.patches[100, 1, b]
-          world_sub$fished <- fished.array[e, d, c, b, a]
+          # world_sub$fished <- fished.array[e, d, c, b, a]
           output_df <- bind_rows(output_df, world_sub)
         }
       }
@@ -92,7 +92,8 @@ output_df <- output_df %>%
   mutate(lat = as.numeric(lat)) %>%
   mutate(lon = as.numeric(lon)) %>%
   mutate(rep = as.numeric(rep)) %>%
-  mutate(fished = as.numeric(fished)) %>%
+  # mutate(fished = as.numeric(fished)) %>%
   distinct()
 
-write_csv(output_df, here::here("sensitivity_analysis", "density_dependence", "shock_large003.csv"))
+write_csv(output_df, here::here("sensitivity_analysis", "fishing_pressure", "shock_small5.csv"))
+

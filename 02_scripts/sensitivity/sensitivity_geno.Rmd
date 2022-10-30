@@ -15,13 +15,13 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large5.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "shock_small5.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large6.csv"))
+df2 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "shock_small6.csv"))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large7.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "shock_small7.csv"))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_large8.csv"))
+df4 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "shock_small8.csv"))
 ```
 
 ### Manipulate data
@@ -69,8 +69,8 @@ line_df1 <- output_sum1 %>%
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df1 <- output_sum1 %>%
-  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
-  filter(lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)) %>%
+  filter(lon %in% c(9, 10, 11)) %>%
+  filter(lat %in% c(49, 50, 51))%>%
   group_by(generation, genotype) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -136,8 +136,8 @@ line_df2 <- output_sum2 %>%
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df2 <- output_sum2 %>%
-  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
-  filter(lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)) %>%
+  filter(lon %in% c(9, 10, 11)) %>%
+  filter(lat %in% c(49, 50, 51)) %>%
   group_by(generation, genotype) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -203,8 +203,8 @@ line_df3 <- output_sum3 %>%
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df3 <- output_sum3 %>%
-  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
-  filter(lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)) %>%
+  filter(lon %in% c(9, 10, 11)) %>%
+  filter(lat %in% c(49, 50, 51)) %>%
   group_by(generation, genotype) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -271,8 +271,8 @@ line_df4 <- output_sum4 %>%
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df4 <- output_sum4 %>%
-  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
-  filter(lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)) %>%
+  filter(lon %in% c(9, 10, 11)) %>%
+  filter(lat %in% c(49, 50, 51)) %>%
   group_by(generation, genotype) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -301,11 +301,9 @@ data = full_join(data, mpa_df3)
 data = full_join(data, mpa_df4) %>% 
   mutate(dd = as.factor(dd))
 
-write_csv(data, here::here("sensitivity_analysis", "fishing_pressure", "null_large_sum.csv"))
+write_csv(data, here::here("sensitivity_analysis", "fishing_pressure", "shock_small_sum.csv"))
 
 beepr::beep(5)
 ```
-
-
 
 
