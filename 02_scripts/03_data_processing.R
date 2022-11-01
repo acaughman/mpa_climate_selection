@@ -14,7 +14,7 @@ NUM.gens.pre.reserve <- 10 # The number of generations of fishing before reserve
 NUM.gens.post.reserve <- 150 # The number of generations with the reserve installed <- would like to reduce to 100
 gens <- NUM.gens.pre.fishing + NUM.gens.pre.reserve + NUM.gens.post.reserve
 
-load(file = here::here("sensitivity_analysis", "fishing_pressure", "shock_small5.rda"))
+load(file = here::here("sensitivity_analysis", "initial_SST", "shock_large_neg1.rda"))
 # load(file = here::here("test_fished.rda"))
 load(file = here::here("03_generated_data", "climate_layer", "shock.rda"))
 
@@ -95,5 +95,5 @@ output_df <- output_df %>%
   # mutate(fished = as.numeric(fished)) %>%
   distinct()
 
-write_csv(output_df, here::here("sensitivity_analysis", "fishing_pressure", "shock_small5.csv"))
+write_csv(output_df, here::here("sensitivity_analysis", "initial_SST", "shock_large_neg1.csv"))
 
