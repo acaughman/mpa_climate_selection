@@ -15,15 +15,19 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_small_001.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "thermal_breadth", "mean_shock_large3.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_small_002.csv"))
+df2 <- read_csv(here::here("sensitivity_analysis", "movement_pattern", "mean_shock_large_sum.csv")) %>% 
+  filter(dd == "random walk") %>% 
+  mutate(dd  = 4)
 
-df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_003.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "thermal_breadth", "mean_shock_large5.csv"))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_004.csv"))
+df4 <- read_csv(here::here("sensitivity_analysis", "thermal_breadth", "mean_shock_large6.csv"))
 
-df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_005.csv"))
+# df5 <- read_csv(here::here("sensitivity_analysis", "thermal_breadth", "mean_shock_large_pos1.csv"))
+# 
+# df6 <- read_csv(here::here("sensitivity_analysis", "thermal_breadth", "mean_shock_large_pos2.csv"))
 ```
 
 ### Manipulate data
@@ -68,9 +72,9 @@ line_df1 <- output_sum1 %>%
   ) %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
   select(-max_m, -min_m) %>%
   filter(generation > 25)
 
@@ -84,54 +88,54 @@ rm(pop_sum1)
 ##### 2
 
 ```{r}
-# Summarize pop size and frequency by genotype
-geno_sum2 <- df2 %>%
-  filter(age == "adult") %>% 
-  group_by(lat, lon, generation, rep) %>%
-  summarise(geno_pop_sum = sum(pop))
-
-geno_mean2 <- geno_sum2 %>% 
-  group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE))
-
-pop_sum2 <- df2 %>%
-  filter(age == "adult") %>% 
-  group_by(lat, lon, generation, rep) %>%
-  summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
-
-pop_mean2 <- pop_sum2 %>%
-  group_by(lat, lon, generation) %>%
-  summarise(pop_mean = mean(pop_sum, rm.na = TRUE), max_temp = max_temp, min_temp = min_temp)
-
-output_sum2 <- full_join(geno_mean2, pop_mean2) %>%
-  mutate(freq = geno_pop_mean / pop_mean)
-
-## SELECT GENERATIONS and ADULTS ONLY <-edit to change
-plot_sum2 <- output_sum2 %>%
-  filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
-  mutate(generation = as.numeric(generation))
-
-## SELECT ADULTS ONLY <-edit to change
-line_df2 <- output_sum2 %>%
-  group_by(generation) %>%
-  summarise(
-    location_sum = sum(geno_pop_mean),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp)
-  ) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m) %>%
-  filter(generation > 25)
-
-
-
-rm(df2)
-rm(geno_sum2)
-rm(pop_sum2)
+# # Summarize pop size and frequency by genotype
+# geno_sum2 <- df2 %>%
+#   filter(age == "adult") %>% 
+#   group_by(lat, lon, generation, rep) %>%
+#   summarise(geno_pop_sum = sum(pop))
+# 
+# geno_mean2 <- geno_sum2 %>% 
+#   group_by(lat, lon, generation) %>% 
+#   summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE))
+# 
+# pop_sum2 <- df2 %>%
+#   filter(age == "adult") %>% 
+#   group_by(lat, lon, generation, rep) %>%
+#   summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
+# 
+# pop_mean2 <- pop_sum2 %>%
+#   group_by(lat, lon, generation) %>%
+#   summarise(pop_mean = mean(pop_sum, rm.na = TRUE), max_temp = max_temp, min_temp = min_temp)
+# 
+# output_sum2 <- full_join(geno_mean2, pop_mean2) %>%
+#   mutate(freq = geno_pop_mean / pop_mean)
+# 
+# ## SELECT GENERATIONS and ADULTS ONLY <-edit to change
+# plot_sum2 <- output_sum2 %>%
+#   filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
+#   mutate(generation = as.numeric(generation))
+# 
+# ## SELECT ADULTS ONLY <-edit to change
+# line_df2 <- output_sum2 %>%
+#   group_by(generation) %>%
+#   summarise(
+#     location_sum = sum(geno_pop_mean),
+#     max_temp = max(max_temp),
+#     min_temp = min(min_temp)
+#   ) %>%
+#   mutate(generation = as.numeric(generation)) %>%
+#   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+#   mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+#   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+#   mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+#   select(-max_m, -min_m) %>%
+#   filter(generation > 25)
+# 
+# 
+# 
+# rm(df2)
+# rm(geno_sum2)
+# rm(pop_sum2)
 ```
 
 ##### 3
@@ -174,9 +178,9 @@ line_df3 <- output_sum3 %>%
   ) %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
   select(-max_m, -min_m) %>%
   filter(generation > 25)
 
@@ -228,9 +232,9 @@ line_df4 <- output_sum4 %>%
   ) %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
   select(-max_m, -min_m) %>%
   filter(generation > 25)
 
@@ -245,71 +249,121 @@ rm(pop_sum4)
 
 ```{r}
 # Summarize pop size and frequency by genotype
-geno_sum5 <- df5 %>%
-  filter(age == "adult") %>% 
-  group_by(lat, lon, generation, rep) %>%
-  summarise(geno_pop_sum = sum(pop))
-
-geno_mean5 <- geno_sum5 %>% 
-  group_by(lat, lon, generation) %>% 
-  summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE))
-
-pop_sum5 <- df5 %>%
-  filter(age == "adult") %>% 
-  group_by(lat, lon, generation, rep) %>%
-  summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
-
-pop_mean5 <- pop_sum5 %>%
-  group_by(lat, lon, generation) %>%
-  summarise(pop_mean = mean(pop_sum, rm.na = TRUE), max_temp = max_temp, min_temp = min_temp)
-
-output_sum5 <- full_join(geno_mean5, pop_mean5) %>%
-  mutate(freq = geno_pop_mean / pop_mean)
-
-## SELECT GENERATIONS and ADULTS ONLY <-edit to change
-plot_sum5 <- output_sum5 %>%
-  filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
-  mutate(generation = as.numeric(generation))
-
-## SELECT ADULTS ONLY <-edit to change
-line_df5 <- output_sum5 %>%
-  group_by(generation) %>%
-  summarise(
-    location_sum = sum(geno_pop_mean),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp)
-  ) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m) %>%
-  filter(generation > 25)
-
-rm(df5)
-rm(geno_sum5)
-rm(pop_sum5)
+# geno_sum5 <- df5 %>%
+#   filter(age == "adult") %>% 
+#   group_by(lat, lon, generation, rep) %>%
+#   summarise(geno_pop_sum = sum(pop))
+# 
+# geno_mean5 <- geno_sum5 %>% 
+#   group_by(lat, lon, generation) %>% 
+#   summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE))
+# 
+# pop_sum5 <- df5 %>%
+#   filter(age == "adult") %>% 
+#   group_by(lat, lon, generation, rep) %>%
+#   summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
+# 
+# pop_mean5 <- pop_sum5 %>%
+#   group_by(lat, lon, generation) %>%
+#   summarise(pop_mean = mean(pop_sum, rm.na = TRUE), max_temp = max_temp, min_temp = min_temp)
+# 
+# output_sum5 <- full_join(geno_mean5, pop_mean5) %>%
+#   mutate(freq = geno_pop_mean / pop_mean)
+# 
+# ## SELECT GENERATIONS and ADULTS ONLY <-edit to change
+# plot_sum5 <- output_sum5 %>%
+#   filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
+#   mutate(generation = as.numeric(generation))
+# 
+# ## SELECT ADULTS ONLY <-edit to change
+# line_df5 <- output_sum5 %>%
+#   group_by(generation) %>%
+#   summarise(
+#     location_sum = sum(geno_pop_mean),
+#     max_temp = max(max_temp),
+#     min_temp = min(min_temp)
+#   ) %>%
+#   mutate(generation = as.numeric(generation)) %>%
+#   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+#   mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+#   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+#   mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+#   select(-max_m, -min_m) %>%
+#   filter(generation > 25)
+# 
+# rm(df5)
+# rm(geno_sum5)
+# rm(pop_sum5)
 ```
 
+##### 6
 
 ```{r}
-### SMALL
+# # Summarize pop size and frequency by genotype
+# geno_sum6 <- df6 %>%
+#   filter(age == "adult") %>%
+#   group_by(lat, lon, generation, rep) %>%
+#   summarise(geno_pop_sum = sum(pop))
+# 
+# geno_mean6 <- geno_sum6 %>%
+#   group_by(lat, lon, generation) %>%
+#   summarise(geno_pop_mean = mean(geno_pop_sum, na.rm = TRUE))
+# 
+# pop_sum6 <- df6 %>%
+#   filter(age == "adult") %>%
+#   group_by(lat, lon, generation, rep) %>%
+#   summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
+# 
+# pop_mean6 <- pop_sum6 %>%
+#   group_by(lat, lon, generation) %>%
+#   summarise(pop_mean = mean(pop_sum, rm.na = TRUE), max_temp = max_temp, min_temp = min_temp)
+# 
+# output_sum6 <- full_join(geno_mean6, pop_mean6) %>%
+#   mutate(freq = geno_pop_mean / pop_mean)
+# 
+# ## SELECT GENERATIONS and ADULTS ONLY <-edit to change
+# plot_sum6 <- output_sum6 %>%
+#   filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
+#   mutate(generation = as.numeric(generation))
+# 
+# ## SELECT ADULTS ONLY <-edit to change
+# line_df6 <- output_sum6 %>%
+#   group_by(generation) %>%
+#   summarise(
+#     location_sum = sum(geno_pop_mean),
+#     max_temp = max(max_temp),
+#     min_temp = min(min_temp)
+#   ) %>%
+#   mutate(generation = as.numeric(generation)) %>%
+#   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+#   mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+#   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+#   mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+#   select(-max_m, -min_m) %>%
+#   filter(generation > 25)
+# 
+# rm(df6)
+# rm(geno_sum6)
+# rm(pop_sum6)
+```
+
+```{r}
+### large
 #lon %in% c(9, 10, 11)
 #lat %in% c(49, 50, 51)
 
-### MED
+### large
 #lon %in% c(8, 9, 10, 11, 12, 13)
 #lat %in% c(48, 49, 50, 51, 52, 53)
 
-### LARGE
+### large
 #lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)
 #lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df1 <- output_sum1 %>%
-  filter(lon %in% c(9, 10, 11)) %>%
-  filter(lat %in% c(49, 50, 51)) %>%
+  filter(lon %in% c(8, 9, 10, 11, 12, 13)) %>%
+  filter(lat %in% c(48, 49, 50, 51, 52, 53)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -318,33 +372,33 @@ mpa_df1 <- output_sum1 %>%
   ) %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m)%>% 
-  mutate(dd = 0.001)
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m) %>%
+  mutate(dd = 3)
 
 ## SELECT ADULTS ONLY <-edit to change
-mpa_df2 <- output_sum2 %>%
-  filter(lon %in% c(9, 10, 11)) %>%
-  filter(lat %in% c(49, 50, 51)) %>%
-  group_by(generation) %>%
-  summarise(
-    location_sum = sum(geno_pop_mean),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp)
-  ) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m) %>% 
-  mutate(dd = 0.002)
+# mpa_df2 <- output_sum2 %>%
+#   filter(lon %in% c(9, 10, 11)) %>%
+#   filter(lat %in% c(49, 50, 51)) %>%
+#   group_by(generation) %>%
+#   summarise(
+#     location_sum = sum(geno_pop_mean),
+#     max_temp = max(max_temp),
+#     min_temp = min(min_temp)
+#   ) %>%
+#   mutate(generation = as.numeric(generation)) %>%
+#   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+#   mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+#   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+#   mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+#   select(-max_m, -min_m) %>%
+#   mutate(dd = 4)
 
 mpa_df3 <- output_sum3 %>%
-  filter(lon %in% c(9, 10, 11)) %>%
-  filter(lat %in% c(49, 50, 51)) %>%
+  filter(lon %in% c(8, 9, 10, 11, 12, 13)) %>%
+  filter(lat %in% c(48, 49, 50, 51, 52, 53)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -353,16 +407,16 @@ mpa_df3 <- output_sum3 %>%
   ) %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m) %>%
-  mutate(dd = 0.003)
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m)  %>%
+  mutate(dd = 5)
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df4 <- output_sum4 %>%
-  filter(lon %in% c(9, 10, 11)) %>%
-  filter(lat %in% c(49, 50, 51)) %>%
+  filter(lon %in% c(8, 9, 10, 11, 12, 13)) %>%
+  filter(lat %in% c(48, 49, 50, 51, 52, 53)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -371,39 +425,58 @@ mpa_df4 <- output_sum4 %>%
   ) %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m) %>% 
-  mutate(dd = 0.004)
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m) %>%
+  mutate(dd = 6)
 
 ## SELECT ADULTS ONLY <-edit to change
-mpa_df5 <- output_sum5 %>%
-  filter(lon %in% c(9, 10, 11)) %>%
-  filter(lat %in% c(49, 50, 51)) %>%
-  group_by(generation) %>%
-  summarise(
-    location_sum = sum(geno_pop_mean),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp)
-  ) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m) %>% 
-  mutate(dd = 0.005)
+# mpa_df5 <- output_sum5 %>%
+#   filter(lon %in% c(9, 10, 11)) %>%
+#   filter(lat %in% c(49, 50, 51)) %>%
+#   group_by(generation) %>%
+#   summarise(
+#     location_sum = sum(geno_pop_mean),
+#     max_temp = max(max_temp),
+#     min_temp = min(min_temp)
+#   ) %>%
+#   mutate(generation = as.numeric(generation)) %>%
+#   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+#   mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+#   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+#   mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+#   select(-max_m, -min_m) %>%
+#   mutate(dd = "opt.temp + 1")
+
+# mpa_df6 <- output_sum6 %>%
+#   filter(lon %in% c(9, 10, 11)) %>%
+#   filter(lat %in% c(49, 50, 51)) %>%
+#   group_by(generation) %>%
+#   summarise(
+#     location_sum = sum(geno_pop_mean),
+#     max_temp = max(max_temp),
+#     min_temp = min(min_temp)
+#   ) %>%
+#   mutate(generation = as.numeric(generation)) %>%
+#   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+#   mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+#   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+#   mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+#   select(-max_m, -min_m) %>%
+#   mutate(dd = "opt.temp + 2")
 ```
 
 
+
 ```{r}
-data = full_join(mpa_df1, mpa_df2)
+data = full_join(mpa_df1, df2)
 data = full_join(data, mpa_df3)
-data = full_join(data, mpa_df4)
-data = full_join(data, mpa_df5) %>% 
+# data = full_join(data, mpa_df4)
+# data = full_join(data, mpa_df5)
+data = full_join(data, mpa_df4) %>% 
   mutate(dd = as.factor(dd))
 
-write_csv(data, here::here("sensitivity_analysis", "density_dependence", "shock_small_sum.csv"))
+write_csv(data, here::here("sensitivity_analysis", "thermal_breadth", "mean_shock_large_sum.csv"))
 ```
 

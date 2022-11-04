@@ -1,0 +1,118 @@
+---
+title: "Figs"
+author: "Allie Caughman"
+date: "2022-08-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(patchwork)
+```
+
+### Read in CSV
+
+```{r}
+df1 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_med_pos2.csv"))
+
+df2 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_med_sum.csv"))
+```
+
+### Manipulate data
+
+##### 1
+
+```{r}
+# Summarize pop size and frequency by genotype
+geno_sum1 <- df1 %>%
+  filter(age == "adult") %>% 
+  group_by(lat, lon, generation, rep) %>%
+  summarise(geno_pop_sum = sum(pop))
+
+geno_mean1 <- geno_sum1 %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE))
+
+pop_sum1 <- df1 %>%
+  filter(age == "adult") %>% 
+  group_by(lat, lon, generation, rep) %>%
+  summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
+
+pop_mean1 <- pop_sum1 %>%
+  group_by(lat, lon, generation) %>%
+  summarise(pop_mean = mean(pop_sum, rm.na = TRUE), max_temp = max_temp, min_temp = min_temp)
+
+output_sum1 <- full_join(geno_mean1, pop_mean1) %>%
+  mutate(freq = geno_pop_mean / pop_mean)
+
+## SELECT GENERATIONS and ADULTS ONLY <-edit to change
+plot_sum1 <- output_sum1 %>%
+  filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
+  mutate(generation = as.numeric(generation))
+
+## SELECT ADULTS ONLY <-edit to change
+line_df1 <- output_sum1 %>%
+  group_by(generation) %>%
+  summarise(
+    location_sum = sum(geno_pop_mean),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp)
+  ) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m) %>%
+  filter(generation > 25)
+
+  
+
+rm(df1)
+rm(geno_sum1)
+rm(pop_sum1)
+```
+
+```{r}
+### med
+#lon %in% c(9, 10, 11)
+#lat %in% c(49, 50, 51)
+
+### MED
+#lon %in% c(8, 9, 10, 11, 12, 13)
+#lat %in% c(48, 49, 50, 51, 52, 53)
+
+### med
+#lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)
+#lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)
+
+## SELECT ADULTS ONLY <-edit to change
+mpa_df1 <- output_sum1 %>%
+  filter(lon %in% c(8, 9, 10, 11, 12, 13)) %>%
+  filter(lat %in% c(48, 49, 50, 51, 52, 53)) %>%
+  group_by(generation) %>%
+  summarise(
+    location_sum = sum(geno_pop_mean),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp)
+  ) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m) %>%
+  mutate(dd = "opt.temp + 2")
+```
+
+
+
+```{r}
+data = full_join(mpa_df1, df2) %>% 
+  mutate(dd = as.factor(dd))
+
+write_csv(data, here::here("sensitivity_analysis", "initial_SST", "mean_shock_med_sum.csv"))
+```
+
