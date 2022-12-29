@@ -1,11 +1,5 @@
 # MPA Climate Selection
 
-## Sensitivity analysis
-
-Thermal Breadth
-
-3,4,5,6
-
 ## Full Runs
 
 ### Climate Scenarios
