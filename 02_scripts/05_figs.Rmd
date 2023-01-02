@@ -15,7 +15,7 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-output_df <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null8.csv"))
+output_df <- read_csv(here::here("03_generated_data", "model_outputs", "model1.csv"))
 ```
 
 ### Manipulate data
@@ -23,32 +23,51 @@ output_df <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "nu
 ```{r}
 # Summarize pop size and frequency by genotype
 geno_sum <- output_df %>%
-  filter(rep == 2) %>% # FOR NOW
-  group_by(lat, lon, generation, genotype, age) %>%
-  summarise(geno_pop_sum = sum(pop))
+  filter(age == "adult") %>% 
+  group_by(lat, lon, generation, rep) %>%
+  summarise(geno_pop_sum = sum(pop),
+            fished_sum = sum(fished))
+
+geno_mean <- geno_sum %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE),
+            fished_mean = mean(fished_sum, na.rm=TRUE))
+
+rm(geno_sum)
 
 pop_sum <- output_df %>%
-  group_by(lat, lon, generation, age) %>%
-  summarise(pop_sum = sum(pop), max_temp = max_temp, min_temp = min_temp)
+  filter(age == "adult") %>% 
+  group_by(lat, lon, generation, rep) %>%
+  summarise(pop_sum = sum(pop), max_temp = max_temp, 
+            min_temp = min_temp)
 
-output_sum <- full_join(geno_sum, pop_sum) %>%
-  mutate(freq = geno_pop_sum / pop_sum)
+rm(output_df)
+
+pop_mean <- pop_sum %>%
+  group_by(lat, lon, generation) %>%
+  summarise(pop_mean = mean(pop_sum, rm.na = TRUE), max_temp = max_temp, min_temp = min_temp)
+
+rm(pop_sum)
+
+output_sum <- full_join(geno_mean, pop_mean) %>%
+  mutate(freq = geno_pop_mean / pop_mean)
+
+rm(geno_mean)
+rm(pop_mean)
 
 ## SELECT GENERATIONS and ADULTS ONLY <-edit to change
 plot_sum <- output_sum %>%
   filter(generation %in% c(25, 50, 75, 100, 125, 150, 175)) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  filter(age == "adult")
+  mutate(generation = as.numeric(generation))
 
 ## SELECT ADULTS ONLY <-edit to change
 line_df <- output_sum %>%
-  group_by(generation, age, genotype) %>%
+  group_by(generation) %>%
   summarise(
-    location_sum = sum(geno_pop_sum),
+    location_sum = sum(geno_pop_mean),
     max_temp = max(max_temp),
     min_temp = min(min_temp)
   ) %>%
-  filter(age == "adult") %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
   mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
@@ -61,19 +80,19 @@ line_df <- output_sum %>%
 mpa_df <- output_sum %>%
   filter(lon %in% c(9, 10, 11)) %>%
   filter(lat %in% c(49, 50, 51)) %>%
-  group_by(generation, age, genotype) %>%
+  group_by(generation) %>%
   summarise(
-    location_sum = sum(geno_pop_sum),
+    location_sum = sum(geno_pop_mean),
     max_temp = max(max_temp),
-    min_temp = min(min_temp)
+    min_temp = min(min_temp),
+    fished_sum = sum(fished_mean)
   ) %>%
-  filter(age == "adult") %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.7, 0.7, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.7, 0.7, max_m)) %>%
-  select(-max_m, -min_m)
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m) 
 ```
 
 ### Heatmap figure
@@ -101,7 +120,7 @@ p2 / p1
 
 plot <- p2 / p1
 
-ggsave(plot, file = paste0("null_8_h.pdf"), path = here::here("sensitivity_analysis", "fishing_pressure"), height = 11, width = 8)
+#ggsave(plot, file = paste0("null_8_h.pdf"), path = here::here("sensitivity_analysis", "fishing_pressure"), height = 11, width = 8)
 ```
 
 ### Line Plot Figures
@@ -109,7 +128,7 @@ ggsave(plot, file = paste0("null_8_h.pdf"), path = here::here("sensitivity_analy
 ```{r}
 p3 <- ggplot(mpa_df, aes(generation, location_sum)) +
   geom_line() +
-  facet_wrap(~genotype, nrow = 3, scales = "free_y") +
+  # facet_wrap(~genotype, nrow = 3, scales = "free_y") +
   theme_bw() +
   labs(
     x = "Year",
@@ -126,7 +145,7 @@ p3
 
 # mean 66, enso 117, shock c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129) EDIT WITH FINAL VALUES
 
-ggsave(p3, file = paste0("mean_shock_005_1.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 11, width = 8)
+#ggsave(p3, file = paste0("mean_shock_005_1.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 11, width = 8)
 ```
 
 
@@ -136,15 +155,15 @@ ggsave(p3, file = paste0("mean_shock_005_1.pdf"), path = here::here("sensitivity
 ```{r}
 p4 <- ggplot(line_df, aes(generation, location_sum)) +
   geom_line() +
-  facet_wrap(~genotype, nrow = 3, scales = "free_y") +
+  # facet_wrap(~genotype, nrow = 3, scales = "free_y") +
   theme_bw() +
   labs(
     x = "Year",
     y = "Population Density",
     color = "Age"
   ) +
-  geom_vline(xintercept = 73, alpha = 0.2) +
-  scale_x_continuous(breaks = c(73), labels = c("Mortality < 0.2")) +
+  # geom_vline(xintercept = 73, alpha = 0.2) +
+  # scale_x_continuous(breaks = c(73), labels = c("Mortality < 0.2")) +
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
 p4
@@ -155,13 +174,13 @@ p4
 ```{r}
 sum <- read_csv(here::here("03_generated_data", "summary_data", "test_null_sum.csv"))
 
-sum__f <- read_csv(here::here("03_generated_data", "summary_data", "test_null_sum_f.csv"))
+sum_f <- read_csv(here::here("03_generated_data", "summary_data", "test_null_sum_f.csv"))
 ```
 
 ### Typed line plots
 
 ```{r}
-p5 <- ggplot(sum__f, aes(generation, pop_mean)) +
+p5 <- ggplot(sum_f, aes(generation, pop_mean)) +
   geom_line(aes(color = type)) +
   theme_bw() +
   labs(

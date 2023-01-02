@@ -18,15 +18,17 @@ library(effectsize)
 ```{r}
 # read in data
 
-null8 <- read_csv(here::here("output", "test_null8.csv")) %>%
+m1 <- read_csv(here::here("03_generated_data", "model_outputs", "model1.csv")) %>%
   filter(generation > 25) %>%
   group_by(lat, lon, generation) %>%
   summarise(geno_pop_sum = sum(pop)) %>%
-  mutate(type = "null8")
+  mutate(type = "null small")
 
 # merge data
 
-data <- null8
+data <- m1
+
+rm(m1)
 ```
 
 ### manipulate data
@@ -47,7 +49,7 @@ sum <- data %>%
 
 data_f <- data %>%
   filter(lon %in% c(9, 10, 11)) %>%
-  filter(lat %in% c(10, 11, 12))
+  filter(lat %in% c(49, 50, 51)) 
 
 sum_f <- data_f %>%
   group_by(type, generation) %>%
