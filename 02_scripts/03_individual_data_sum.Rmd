@@ -1,0 +1,83 @@
+---
+title: "Data Summarizing"
+author: "Allie Caughman"
+date: "2023-01-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(patchwork)
+```
+
+### Read in CSV
+
+```{r}
+output_df <- read_csv(here::here("03_generated_data", "model_outputs", "model1.csv"))
+```
+
+### Manipulate data
+
+```{r}
+# Summarize pop size and frequency by genotype
+geno_sum <- output_df %>%
+  filter(age == "adult") %>% 
+  group_by(lat, lon, generation, rep) %>%
+  summarise(geno_pop_sum = sum(pop),
+            fished_sum = sum(fished))
+
+geno_mean <- geno_sum %>% 
+  group_by(lat, lon, generation) %>% 
+  summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE),
+            fished_mean = mean(fished_sum, na.rm=TRUE))
+
+rm(geno_sum)
+
+pop_sum <- output_df %>%
+  filter(age == "adult") %>% 
+  group_by(lat, lon, generation, rep) %>%
+  summarise(pop_sum = sum(pop), max_temp = max_temp, 
+            min_temp = min_temp)
+
+rm(output_df)
+
+pop_mean <- pop_sum %>%
+  group_by(lat, lon, generation) %>%
+  summarise(pop_mean = mean(pop_sum, rm.na = TRUE), max_temp = max_temp, min_temp = min_temp)
+
+rm(pop_sum)
+
+output_sum <- full_join(geno_mean, pop_mean) %>%
+  mutate(freq = geno_pop_mean / pop_mean)
+
+write_csv(output_sum, here::here("03_generated_data", "summary_data", "summary_mX.csv"))
+```
+
+```{r}
+# Summarize pop size and frequency by genotype
+geno_sum2 <- output_df %>%
+  filter(age == "adult") %>% 
+  group_by(lat, lon, generation, rep, genotype) %>%
+  summarise(geno_pop_sum = sum(pop, na.rm = TRUE))
+
+geno_mean2 <- geno_sum2 %>% 
+  group_by(lat, lon, generation, rep, genotype) %>%
+  summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE))
+
+pop_sum2 <- output_df %>%
+  filter(age == "adult") %>% 
+  group_by(lat, lon, generation, rep) %>%
+  summarise(pop_sum = sum(pop, na.rm = TRUE), max_temp = max_temp, min_temp = min_temp)
+
+pop_mean2 <- pop_sum2 %>%
+  group_by(lat, lon, generation, rep) %>%
+  summarise(pop_mean = mean(pop_sum, rm.na = TRUE), max_temp = max_temp, min_temp = min_temp)
+
+output_sum2 <- full_join(geno_mean2, pop_mean2) %>%
+  mutate(freq = geno_pop_mean / pop_mean)
+
+write_csv(output_sum2, here::here("03_generated_data", "summary_data", "genotype_summary_mX.csv"))
+```
+
