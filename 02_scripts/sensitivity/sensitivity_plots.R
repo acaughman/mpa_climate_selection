@@ -4,36 +4,36 @@ library(lemon)
 
 # Read in Data ------------------------------------------------------------
 
-df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_shock_large_sum.csv")) %>% 
+df1 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_sum.csv")) %>% 
   mutate(climate = "Mean Shock") %>% 
   mutate(dd = as.factor(dd)) %>% 
   mutate(max_temp = as.character(max_temp))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_large_sum.csv")) %>% 
+df2 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_small_sum.csv")) %>% 
   mutate(climate = "Mean") %>% 
   mutate(dd = as.factor(dd)) %>% 
   mutate(max_temp = as.character(max_temp))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_large_sum.csv")) %>% 
+df3 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "shock_small_sum.csv")) %>% 
   mutate(climate = "Shock") %>% 
   mutate(dd = as.factor(dd)) %>% 
   mutate(max_temp = as.character(max_temp))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "enso_large_sum.csv")) %>% 
+df4 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "enso_small_sum.csv")) %>% 
   mutate(climate = "Enso") %>% 
   mutate(dd = as.factor(dd)) %>% 
   mutate(max_temp = as.character(max_temp))
 
-df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_sum.csv")) %>%
-  mutate(climate = "Null") %>%
-  mutate(dd = as.factor(dd)) %>%
-  mutate(max_temp = as.character(max_temp))
+# df5 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "null_small_sum.csv")) %>%
+#   mutate(climate = "Null") %>%
+#   mutate(dd = as.factor(dd)) %>%
+#   mutate(max_temp = as.character(max_temp))
 
 data = full_join(df1, df2)
 data = full_join(data, df3) 
-data = full_join(data, df4)
-data = full_join(data, df5) %>% 
-  mutate(climate=fct_relevel(climate,c("Null" ,"Mean", "Mean Shock", "Shock", "Enso"))) %>%
+# data = full_join(data, df4)
+data = full_join(data, df4) %>% 
+  mutate(climate=fct_relevel(climate,c("Mean", "Mean Shock", "Shock", "Enso"))) %>%
   mutate(dd = as.factor(dd))
 
 
@@ -46,7 +46,7 @@ p <- ggplot(data, aes(generation, location_sum)) +
   labs(
     x = "Year",
     y = "Population Density",
-    color = "Density Dependence"
+    color = "Initial SST"
   ) +
   geom_vline(xintercept = 16, alpha = 0.3) +
   geom_vline(xintercept = 26, alpha = 0.3) +
@@ -54,9 +54,9 @@ p <- ggplot(data, aes(generation, location_sum)) +
   scale_x_continuous(breaks = c(16, 26), labels = c("fishing starts", "MPA establishment")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank()) + ylim(c(0, 800000))
+  theme(panel.grid.minor = element_blank()) + ylim(c(0, 2000))
   
-ggsave(p, file = paste0("large.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 8, width = 15)
+ggsave(p, file = paste0("small.pdf"), path = here::here("sensitivity_analysis", "initial_SST"), height = 8, width = 15)
 #reposition_legend(p, 'center', panel='panel-3-2')
 
 # Frequency Plot ----------------------------------------------------------
@@ -78,5 +78,5 @@ p <- ggplot(data, aes(generation, freq_avg)) +
   scale_color_viridis_d() +
   theme(panel.grid.minor = element_blank())
 
-ggsave(p, file = paste0("large.pdf"), path = here::here("sensitivity_analysis", "density_dependence"), height = 8, width = 15)
+ggsave(p, file = paste0("small.pdf"), path = here::here("sensitivity_analysis", "initial_SST"), height = 8, width = 15)
 

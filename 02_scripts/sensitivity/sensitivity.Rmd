@@ -15,17 +15,17 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "shock_large_neg5.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_neg5.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "shock_large_neg1.csv")) 
+df2 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_neg1.csv")) 
 
-df3 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "shock_large0.csv"))
+df3 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small0.csv"))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "shock_large_pos5.csv"))
+df4 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_pos5.csv"))
 
-df5 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "shock_large_pos1.csv"))
+df5 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_pos1.csv"))
 
-df6 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "shock_large_pos2.csv"))
+df6 <- read_csv(here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_pos2.csv"))
 ```
 
 ### Manipulate data
@@ -344,22 +344,22 @@ rm(pop_sum6)
 ```
 
 ```{r}
-### large
+### small
 #lon %in% c(9, 10, 11)
 #lat %in% c(49, 50, 51)
 
-### large
+### small
 #lon %in% c(8, 9, 10, 11, 12, 13)
 #lat %in% c(48, 49, 50, 51, 52, 53)
 
-### large
+### small
 #lon %in% c(4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
 #lat %in% c(45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56)
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df1 <- output_sum1 %>%
-  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
-  filter(lat %in% c(45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56)) %>%
+  filter(lon %in% c(9, 10, 11)) %>%
+  filter(lat %in% c(49, 50, 51)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -376,8 +376,8 @@ mpa_df1 <- output_sum1 %>%
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df2 <- output_sum2 %>%
-  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
-  filter(lat %in% c(45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56)) %>%
+  filter(lon %in% c(9, 10, 11)) %>%
+  filter(lat %in% c(49, 50, 51)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -393,8 +393,8 @@ mpa_df2 <- output_sum2 %>%
   mutate(dd = "opt.temp - 0.5")
 
 mpa_df3 <- output_sum3 %>%
-  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
-  filter(lat %in% c(45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56)) %>%
+  filter(lon %in% c(9, 10, 11)) %>%
+  filter(lat %in% c(49, 50, 51)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -411,8 +411,8 @@ mpa_df3 <- output_sum3 %>%
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df4 <- output_sum4 %>%
-  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
-  filter(lat %in% c(45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56)) %>%
+  filter(lon %in% c(9, 10, 11)) %>%
+  filter(lat %in% c(49, 50, 51)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -429,8 +429,8 @@ mpa_df4 <- output_sum4 %>%
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df5 <- output_sum5 %>%
-  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
-  filter(lat %in% c(45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56)) %>%
+  filter(lon %in% c(9, 10, 11)) %>%
+  filter(lat %in% c(49, 50, 51)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -446,8 +446,8 @@ mpa_df5 <- output_sum5 %>%
   mutate(dd = "opt.temp + 1")
 
 mpa_df6 <- output_sum6 %>%
-  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
-  filter(lat %in% c(45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56)) %>%
+  filter(lon %in% c(9, 10, 11)) %>%
+  filter(lat %in% c(49, 50, 51)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -463,16 +463,14 @@ mpa_df6 <- output_sum6 %>%
   mutate(dd = "opt.temp + 2")
 ```
 
-
-
 ```{r}
-data = full_join(mpa_df1, df2)
+data = full_join(mpa_df1, mpa_df2)
 data = full_join(data, mpa_df3)
 data = full_join(data, mpa_df4)
 data = full_join(data, mpa_df5)
 data = full_join(data, mpa_df6) %>% 
   mutate(dd = as.factor(dd))
 
-write_csv(data, here::here("sensitivity_analysis", "initial_SST", "shock_large_sum.csv"))
+write_csv(data, here::here("sensitivity_analysis", "initial_SST", "mean_shock_small_sum.csv"))
 ```
 
