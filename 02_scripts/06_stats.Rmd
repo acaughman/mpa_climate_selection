@@ -17,65 +17,40 @@ library(effectsize)
 
 ```{r}
 # read in data
-
-m1 <- read_csv(here::here("03_generated_data", "model_outputs", "model1.csv")) %>%
+data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>% 
   filter(generation > 25) %>%
-  group_by(lat, lon, generation) %>%
-  summarise(geno_pop_sum = sum(pop)) %>%
-  mutate(type = "null small")
-
-# merge data
-
-data <- m1
-
-rm(m1)
+  mutate(generation = as.numeric(generation))
 ```
 
 ### manipulate data
 
 ```{r}
 sum <- data %>%
-  group_by(type, generation) %>%
-  summarise(pop_mean = mean(geno_pop_sum)) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(cat = case_when(
-    str_detect(type, "null") ~ "null",
-    str_detect(type, "mean") ~ "mean",
-    str_detect(type, "enso") ~ "enso",
-    str_detect(type, "shock") ~ "shock"
-  ))
+  group_by(generation, climate, evolution, mpa_size) %>%
+  summarise(pop_mean = mean(pop_mean)) 
 
 # write_csv(sum_climate, here::here("03_generated_data", "summary_data", "test_null_sum.csv"))
-
-data_f <- data %>%
-  filter(lon %in% c(9, 10, 11)) %>%
-  filter(lat %in% c(49, 50, 51)) 
-
-sum_f <- data_f %>%
-  group_by(type, generation) %>%
-  summarise(pop_mean = mean(geno_pop_sum)) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(cat = case_when(
-    str_detect(type, "null") ~ "null",
-    str_detect(type, "mean") ~ "mean",
-    str_detect(type, "enso") ~ "enso",
-    str_detect(type, "shock") ~ "shock"
-  ))
-
-# write_csv(sum_f, here::here("03_generated_data", "summary_data", "test_null_sum_mpa.csv"))
 ```
 
 ### Repeated measures ANOVA
 
 ```{r}
-anova_mod <- aov(formula = geno_pop_sum ~ type + Error(location / type), data = data_f)
+anova_mod <- aov(formula = pop_mean ~ mpa_size*evolution*climate + Error(generation), data = data)
 
-eta_squared(anova_mod, partial = TRUE)
-eta_squared(anova_mod, partial = FALSE)
+cohens_f_squared(anova_mod, partial = TRUE)
+cohens_f_squared(anova_mod, partial = FALSE)
 
-pairwise.t.test(
-  x = data_f$geno_pop_sum,
-  g = data_f$type,
-  p.adjust.method = "bonferroni"
-)
+anova_mod_geno <- aov(formula = geno_pop_mean ~ mpa_size*evolution*climate + Error(generation), data = data)
+
+cohens_f_squared(anova_mod_geno, partial = TRUE)
+cohens_f_squared(anova_mod_geno, partial = FALSE)
+
+anova_mod_sum <- aov(formula = pop_mean ~ mpa_size*evolution*climate + Error(generation), data = sum)
+
+eta_squared(anova_mod_sum, partial = TRUE)
+cohens_f_squared(anova_mod_sum, partial = TRUE)
+
+#investigate options
 ```
+
+### 
