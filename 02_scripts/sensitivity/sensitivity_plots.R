@@ -4,36 +4,36 @@ library(lemon)
 
 # Read in Data ------------------------------------------------------------
 
-df1 <- read_csv(here::here("sensitivity_analysis", "generation_time", "mean_shock_large_sum.csv")) %>%
+df1 <- read_csv(here::here("sensitivity_analysis", "climate_rate", "mean_shock_large_sum.csv")) %>%
   mutate(climate = "Mean Shock") %>%
   mutate(dd = as.factor(dd)) %>%
   mutate(max_temp = as.character(max_temp))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "generation_time", "mean_large_sum.csv")) %>%
+df2 <- read_csv(here::here("sensitivity_analysis", "climate_rate", "mean_large_sum.csv")) %>%
   mutate(climate = "Mean") %>%
   mutate(dd = as.factor(dd)) %>%
   mutate(max_temp = as.character(max_temp))
 
-df3 <- read_csv(here::here("sensitivity_analysis", "generation_time", "shock_large_sum.csv")) %>%
-  mutate(climate = "Shock") %>%
-  mutate(dd = as.factor(dd)) %>%
-  mutate(max_temp = as.character(max_temp))
+# df3 <- read_csv(here::here("sensitivity_analysis", "climate_rate", "shock_large_sum.csv")) %>%
+#   mutate(climate = "Shock") %>%
+#   mutate(dd = as.factor(dd)) %>%
+#   mutate(max_temp = as.character(max_temp))
 
-df4 <- read_csv(here::here("sensitivity_analysis", "generation_time", "enso_large_sum.csv")) %>%
+df4 <- read_csv(here::here("sensitivity_analysis", "climate_rate", "enso_large_sum.csv")) %>%
   mutate(climate = "Enso") %>%
   mutate(dd = as.factor(dd)) %>%
   mutate(max_temp = as.character(max_temp))
 
-df5 <- read_csv(here::here("sensitivity_analysis", "generation_time", "null_large_sum.csv")) %>%
-  mutate(climate = "Null") %>%
-  mutate(dd = as.factor(dd)) %>%
-  mutate(max_temp = as.character(max_temp))
+# df5 <- read_csv(here::here("sensitivity_analysis", "climate_rate", "null_large_sum.csv")) %>%
+#   mutate(climate = "Null") %>%
+#   mutate(dd = as.factor(dd)) %>%
+#   mutate(max_temp = as.character(max_temp))
 
 data <- full_join(df1, df2)
-data <- full_join(data, df3)
-data = full_join(data, df4)
-data <- full_join(data, df5) %>%
-  mutate(climate = fct_relevel(climate, c("Null", "Mean", "Mean Shock", "Shock", "Enso"))) %>%
+# data <- full_join(data, df3)
+# data = full_join(data, df4)
+data <- full_join(data, df4) %>%
+  mutate(climate = fct_relevel(climate, c("Mean", "Mean Shock", "Enso"))) %>%
   mutate(dd = as.factor(dd))
 
 
@@ -41,12 +41,12 @@ data <- full_join(data, df5) %>%
 
 p <- ggplot(data, aes(generation, location_sum)) +
   geom_line(aes(color = dd)) +
-  facet_wrap(~climate) +
+  facet_wrap(~climate, ncol = 2) +
   theme_bw() +
   labs(
     x = "Year",
     y = "Population Density",
-    color = "Maturation Age"
+    color = "Climate Rate per Year (degree C)"
   ) +
   geom_vline(xintercept = 16, alpha = 0.3) +
   geom_vline(xintercept = 26, alpha = 0.3) +
@@ -55,9 +55,9 @@ p <- ggplot(data, aes(generation, location_sum)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   scale_color_viridis_d() +
   theme(panel.grid.minor = element_blank()) +
-  ylim(c(0, 300000))
+  ylim(c(0, 200000))
 
-ggsave(reposition_legend(p, 'center', panel='panel-3-2'), file = paste0("large.pdf"), path = here::here("sensitivity_analysis", "generation_time"), height = 8, width = 15)
+ggsave(reposition_legend(p, 'center', panel='panel-2-2'), file = paste0("large.pdf"), path = here::here("sensitivity_analysis", "climate_rate"), height = 8, width = 15)
 # reposition_legend(p, 'center', panel='panel-3-2')
 
 # Frequency Plot ----------------------------------------------------------
@@ -79,4 +79,4 @@ p <- ggplot(data, aes(generation, freq_avg)) +
   scale_color_viridis_d() +
   theme(panel.grid.minor = element_blank())
 
-# ggsave(p, file = paste0("large.pdf"), path = here::here("sensitivity_analysis", "generation_time"), height = 8, width = 15)
+# ggsave(p, file = paste0("large.pdf"), path = here::here("sensitivity_analysis", "climate_rate"), height = 8, width = 15)

@@ -18,7 +18,16 @@ library(patchwork)
 data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>% 
   filter(generation > 25) %>%
   mutate(generation = as.numeric(generation)) %>% 
-  filter(mpa_size != "None")
+  filter(mpa_size != "None") %>%
+  mutate(climate = fct_relevel(climate, c("Null", "Shock", "Mean Shock", "Mean", "Enso")))
+```
+
+```{r}
+data_change <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>% 
+  filter(generation >= 35) %>%
+  mutate(generation = as.numeric(generation)) %>% 
+  filter(mpa_size != "None") %>%
+  mutate(climate = fct_relevel(climate, c("Null", "Shock", "Mean Shock", "Mean", "Enso")))
 ```
 
 ```{r}
@@ -84,11 +93,19 @@ line_df_geno_lat <- data %>%
   filter(evolution == "Yes") %>% 
   mutate(lat = as.factor(lat)) %>% 
   mutate(max_temp = as.factor(max_temp))
+```
 
+```{r}
+collapse = line_df %>% 
+  select(generation, evolution, mpa_size, climate, location_sum) %>% 
+  filter(location_sum <= 20) %>% 
+  group_by(evolution, mpa_size, climate) %>% 
+  summarize(min_gen = min(generation))
 ```
 
 ```{r}
 p1 = ggplot(line_df, aes(generation, location_sum)) +
+  geom_vline(data = collapse, aes(xintercept = min_gen, color = climate, linetype = evolution), alpha = 0.6) +
   geom_line(aes(color = climate, linetype = evolution)) +
   facet_wrap(~ mpa_size, scales = 'free', nrow = 3) +
   theme_bw() +
@@ -97,112 +114,160 @@ p1 = ggplot(line_df, aes(generation, location_sum)) +
     y = "Population Density",
     color = "Evolution?"
   ) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  theme(panel.grid.minor = element_blank()) +
-  scale_color_viridis_d()
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_color_viridis_d() 
 
 ggsave(p1, file = paste0("sum.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
 ```{r}
-p2 = ggplot(line_df_geno, aes(generation, freq_avg)) +
-  geom_line(aes(color = climate)) +
-  facet_wrap(genotype~ mpa_size, scales = 'free', ncol = 3) +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Allele Frequency",
-    color = "Fishing Pressure"
-  ) +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) +
-  scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank())
-
-ggsave(p2, file = paste0("sum_geno.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+# p2 = ggplot(line_df_geno, aes(generation, freq_avg)) +
+#   geom_line(aes(color = climate)) +
+#   facet_wrap(genotype~ mpa_size, scales = 'free', ncol = 3) +
+#   theme_bw() +
+#   labs(
+#     x = "Year",
+#     y = "Allele Frequency",
+#     color = "Fishing Pressure"
+#   ) +
+#   theme(axis.text.x = element_text(angle = 30, hjust = 1)) +
+#   scale_color_viridis_d() +
+#   theme(panel.grid.minor = element_blank())
+# 
+# ggsave(p2, file = paste0("sum_geno.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
 ```{r}
-line_df_lat = line_df_lat %>% 
-  filter(lat == 1 | lat == 100 | lat == 50)
-shock_df_lat = line_df_lat %>% 
-  filter(climate == "Shock") %>% 
-  filter(lat == 1 | lat == 100 | lat == 50)
-mean_shock_df_lat = line_df_lat %>% 
-  filter(climate == "Mean Shock") %>% 
-  filter(lat == 1 | lat == 100 | lat == 50)
-mean_df_lat = line_df_lat %>% 
-  filter(climate == "Mean") %>% 
-  filter(lat == 1 | lat == 100 | lat == 50)
-null_df_lat = line_df_lat %>% 
-  filter(climate == "Null") %>% 
-  filter(lat == 1 | lat == 100 | lat == 50)
-
-p3 = ggplot(line_df_lat, aes(generation, location_sum)) +
-  geom_line(aes(color = lat)) +
-  facet_wrap(climate ~mpa_size, scales = 'free', ncol = 3) +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = ""
-  ) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  theme(panel.grid.minor = element_blank()) +
-  scale_color_viridis_d() +
-  theme(legend.position = "none")
-
-ggsave(p3, file = paste0("sum_lat.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+# line_df_lat = line_df_lat %>% 
+#   filter(lat == 10 | lat == 90 | lat == 50)
+# shock_df_lat = line_df_lat %>% 
+#   filter(climate == "Shock") %>% 
+#   filter(lat == 10 | lat == 90 | lat == 50)
+# mean_shock_df_lat = line_df_lat %>% 
+#   filter(climate == "Mean Shock") %>% 
+#   filter(lat == 10 | lat == 90 | lat == 50)
+# mean_df_lat = line_df_lat %>% 
+#   filter(climate == "Mean") %>% 
+#   filter(lat == 10 | lat == 90 | lat == 50)
+# null_df_lat = line_df_lat %>% 
+#   filter(climate == "Null") %>% 
+#   filter(lat == 10 | lat == 90 | lat == 50)
+# 
+# p3 = ggplot(line_df_lat, aes(generation, location_sum)) +
+#   geom_line(aes(color = lat)) +
+#   facet_wrap(climate ~mpa_size, scales = 'free', ncol = 3) +
+#   theme_bw() +
+#   labs(
+#     x = "Year",
+#     y = "Population Density",
+#     color = ""
+#   ) +
+#   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#   theme(panel.grid.minor = element_blank()) +
+#   scale_color_viridis_d() 
+# 
+# ggsave(p3, file = paste0("sum_lat.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
 ```{r}
-enso_df_geno_lat = line_df_geno_lat %>% 
-  filter(climate == "ENSO") %>% 
-  filter(lat == 1 | lat == 100 | lat == 50)
-shock_df_geno_lat = line_df_geno_lat %>% 
-  filter(climate == "Shock") %>% 
-  filter(lat == 1 | lat == 100 | lat == 50)
-mean_shock_df_geno_lat = line_df_geno_lat %>% 
-  filter(climate == "Mean Shock") %>% 
-  filter(lat == 1 | lat == 100 | lat == 50)
-mean_df_geno_lat = line_df_geno_lat %>% 
-  filter(climate == "Mean") %>% 
-  filter(lat == 1 | lat == 100 | lat == 50)
-null_df_geno_lat = line_df_geno_lat %>% 
-  filter(climate == "Null") %>% 
-  filter(lat == 1 | lat == 100 | lat == 50)
+# enso_df_geno_lat = line_df_geno_lat %>% 
+#   filter(climate == "ENSO") %>% 
+#   filter(lat == 10 | lat == 90 | lat == 50)
+# shock_df_geno_lat = line_df_geno_lat %>% 
+#   filter(climate == "Shock") %>% 
+#   filter(lat == 10 | lat == 90 | lat == 50)
+# mean_shock_df_geno_lat = line_df_geno_lat %>% 
+#   filter(climate == "Mean Shock") %>% 
+#   filter(lat == 10 | lat == 90 | lat == 50)
+# mean_df_geno_lat = line_df_geno_lat %>% 
+#   filter(climate == "Mean") %>% 
+#   filter(lat == 10 | lat == 90 | lat == 50)
+# null_df_geno_lat = line_df_geno_lat %>% 
+#   filter(climate == "Null") %>% 
+#   filter(lat == 10 | lat == 90 | lat == 50)
+# 
+# line_df_geno_lat = line_df_geno_lat %>% 
+#   filter(lat == 10 | lat == 90 | lat == 50)
+# 
+# p4 = ggplot(line_df_geno_lat, aes(generation, freq_avg)) +
+#   geom_line(aes(color = lat, linetype = climate)) +
+#   facet_wrap(genotype~mpa_size, scales = 'free') +
+#   theme_bw() +
+#   labs(
+#     x = "Year",
+#     y = "Allele Frequency",
+#     color = "Latitude",
+#     linetype = "Climate"
+#   ) +
+#   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#   theme(panel.grid.minor = element_blank()) +
+#   scale_color_viridis_d()
+# 
+# ggsave(p4, file = paste0("sum_lat_geno_clim.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 
-line_df_geno_lat = line_df_geno_lat %>% 
-  filter(lat == 1 | lat == 100 | lat == 50)
-
-p4 =ggplot(line_df_geno_lat, aes(generation, freq_avg)) +
-  geom_line(aes(color = lat, linetype = climate)) +
-  facet_wrap(genotype~mpa_size, scales = 'free') +
+p5 = ggplot(line_df_geno_lat, aes(generation, freq_avg)) +
+  geom_line(aes(color = lat, linetype = mpa_size)) +
+  facet_grid(genotype~climate) +
   theme_bw() +
   labs(
-    x = "Year",
+    x = "",
     y = "Allele Frequency",
     color = "Latitude",
-    linetype = "Climate"
+    linetype = "MPA size"
   ) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  theme(panel.grid.minor = element_blank()) +
-  scale_color_viridis_d()
+  theme() +
+  scale_color_viridis_d() +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
 
-ggsave(p4, file = paste0("sum_lat_geno.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+ggsave(p5, file = paste0("sum_lat_geno_mpa.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+```
 
-p5 = ggplot(mean_df_geno_lat, aes(generation, freq_avg)) +
-  geom_line(aes(color = lat)) +
-  facet_wrap(genotype~mpa_size, scales = 'free') +
+```{r}
+change = data_change %>% 
+  select(-genotype, -geno_pop_mean, -freq, -fished_mean) %>% 
+  distinct() %>% 
+  group_by(climate, evolution, mpa_size, lat, lon) %>% 
+  mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation))
+
+mean_change = change %>% 
+  group_by(lat, climate, evolution, mpa_size) %>% 
+  summarize(mean_change = mean(rate, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  filter(lat %in% c(30:70)) %>% 
+  mutate(lat = as.numeric(lat))
+
+mpa_boundaries = data.frame(mpa_size = c("Small", "Medium", "Large"),
+                            r_bound = c(51, 53, 56),
+                            l_bound = c(49, 48, 45))
+```
+
+```{r}
+p6 = ggplot(mean_change, aes(lat, mean_change)) +
+  geom_vline(data = mpa_boundaries, aes(xintercept = r_bound), alpha = 0.3, linetype = "dashed") +
+  geom_vline(data = mpa_boundaries, aes(xintercept = l_bound), alpha = 0.3, linetype = "dashed") +
+  geom_line(aes(color = evolution)) +
   theme_bw() +
+  ggh4x::facet_grid2(climate ~ mpa_size, scales = "free", independent = "x") + 
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_color_viridis_d() +
   labs(
-    x = "Year",
-    y = "Allele Frequency",
-    color = "Latitude"
-  ) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  theme(panel.grid.minor = element_blank()) +
-  scale_color_viridis_d()
+    x = "Latitude",
+    y = "Mean Rate of Change",
+    color = "Evolution?"
+  ) 
 
-ggsave(p5, file = paste0("sum_lat_geno_mean.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+ggsave(p6, file = paste0("rate_of_change.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
