@@ -19,7 +19,8 @@ library(effectsize)
 # read in data
 data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>% 
   filter(generation > 25) %>%
-  mutate(generation = as.numeric(generation))
+  mutate(generation = as.numeric(generation)) %>% 
+  filter(mpa_size != "None")
 ```
 
 ### manipulate data
@@ -31,6 +32,60 @@ sum <- data %>%
 
 # write_csv(sum_climate, here::here("03_generated_data", "summary_data", "test_null_sum.csv"))
 ```
+
+### Collapse Point
+
+```{r}
+line_df <- data %>%
+  group_by(generation, evolution, mpa_size, climate) %>%
+  summarise(
+    location_sum = sum(geno_pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  select(-max_m, -min_m)
+
+collapse = line_df %>% 
+  select(generation, evolution, mpa_size, climate, location_sum) %>% 
+  filter(location_sum <= 20) %>% 
+  group_by(evolution, mpa_size, climate) %>% 
+  summarize(min_gen = min(generation))
+```
+
+```{r}
+small_zero_ms = small %>% 
+  filter(climate == "Mean Shock") %>% 
+  pull(generation)
+
+position = which((diff(small_zero_ms) == 1) == FALSE)
+
+mean_shock_death_s = small_zero_ms[max(position) + 1]
+```
+
+
+### Derivative
+
+```{r}
+change = data %>% 
+  select(-genotype, -geno_pop_mean, -freq, -fished_mean) %>% 
+  distinct() %>% 
+  group_by(climate, evolution, mpa_size) %>% 
+  mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) %>% 
+  ungroup()
+
+mean_change = change %>% 
+  group_by(lat, lon, climate, evolution, mpa_size) %>% 
+  summarize(mean_change = mean(rate, na.rm = TRUE))
+```
+
+
+
+# Old
 
 ### Repeated measures ANOVA
 
