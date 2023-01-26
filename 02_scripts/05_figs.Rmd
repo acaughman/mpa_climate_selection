@@ -190,7 +190,7 @@ p4 =ggplot(line_df_geno_lat, aes(generation, freq_avg)) +
 
 ggsave(p4, file = paste0("sum_lat_geno.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 
-p5 = ggplot(enso_df_geno_lat, aes(generation, freq_avg)) +
+p5 = ggplot(mean_df_geno_lat, aes(generation, freq_avg)) +
   geom_line(aes(color = lat)) +
   facet_wrap(genotype~mpa_size, scales = 'free') +
   theme_bw() +
@@ -203,6 +203,6 @@ p5 = ggplot(enso_df_geno_lat, aes(generation, freq_avg)) +
   theme(panel.grid.minor = element_blank()) +
   scale_color_viridis_d()
 
-ggsave(p5, file = paste0("sum_lat_geno_enso.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+ggsave(p5, file = paste0("sum_lat_geno_mean.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
