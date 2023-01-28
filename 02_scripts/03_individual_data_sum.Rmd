@@ -14,7 +14,7 @@ library(tidyverse)
 ### Read in CSV
 
 ```{r}
-output_df <- read_csv(here::here("03_generated_data", "model_outputs", "model40.csv"))
+output_df <- read_csv(here::here("03_generated_data", "model_outputs", "model39_4_6.csv"))
 
 gc()
 ```
@@ -57,12 +57,12 @@ output_sum2 <- full_join(geno_mean2, pop_mean2) %>%
   mutate(freq = geno_pop_mean / pop_mean,
          mpa_size = "Large",
          climate = "Mean Shock",
-         evolution = "No") %>% 
+         evolution = "Yes") %>% 
   distinct()
 
 rm(pop_mean2, geno_mean2)
 
-write_csv(output_sum2, here::here("03_generated_data", "summary_data", "summary_m40.csv"))
+write_csv(output_sum2, here::here("03_generated_data", "summary_data", "summary_m39_4_6.csv"))
 
 rm(list=ls())
 
