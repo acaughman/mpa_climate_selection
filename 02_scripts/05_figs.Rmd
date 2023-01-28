@@ -15,7 +15,7 @@ library(patchwork)
 ### Read in Data
 
 ```{r}
-data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>% 
+data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>%
   filter(generation > 25) %>%
   mutate(generation = as.numeric(generation)) %>% 
   filter(mpa_size != "None") %>%
@@ -269,5 +269,23 @@ p6 = ggplot(mean_change, aes(lat, mean_change)) +
   ) 
 
 ggsave(p6, file = paste0("rate_of_change.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+```
+
+```{r}
+p7 = ggplot(collapse, aes(min_gen, mpa_size)) +
+  geom_jitter(aes(color = climate, shape = evolution), height = 0.2) +
+  theme_bw() +
+  scale_color_viridis_d() +
+  labs(
+    x = "Time",
+    y = "MPA Size",
+    color = "Climate Scenario",
+    shape = "Movement Evolution?"
+  ) + 
+  theme(panel.grid.minor = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggsave(p7, file = paste0("collapse_points.pdf"), path = here::here("04_figs"), height = 8, width = 8)
 ```
 
