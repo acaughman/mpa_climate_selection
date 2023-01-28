@@ -273,7 +273,7 @@ ggsave(p6, file = paste0("rate_of_change.pdf"), path = here::here("04_figs"), he
 
 ```{r}
 p7 = ggplot(collapse, aes(min_gen, mpa_size)) +
-  geom_jitter(aes(color = climate, shape = evolution), height = 0.2) +
+  geom_jitter(aes(color = climate, shape = evolution), height = 0.2, size = 3) +
   theme_bw() +
   scale_color_viridis_d() +
   labs(
