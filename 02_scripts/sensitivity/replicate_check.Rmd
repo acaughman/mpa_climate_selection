@@ -14,7 +14,7 @@ library(tidyverse)
 ### Read in CSV
 
 ```{r}
-output_df <- read_csv(here::here("03_generated_data", "model_outputs", "model7.csv"))
+output_df <- read_csv(here::here("03_generated_data", "model_outputs", "model39_4_6.csv"))
 
 gc()
 ```
@@ -44,7 +44,7 @@ output_sum2 <- full_join(geno_sum2, pop_sum2) %>%
 
 rm(pop_sum2, geno_sum2)
 
-write_csv(output_sum2, here::here("sensitivity_analysis", "replicate_check", "summary_m7_rep.csv"))
+write_csv(output_sum2, here::here("sensitivity_analysis", "replicate_check", "summary_m39_4_6_rep.csv"))
 
 gc()
 
@@ -87,7 +87,7 @@ p = ggplot(line_df, aes(generation, location_sum)) +
   theme(panel.grid.minor = element_blank()) +
   scale_color_viridis_d()
 
-ggsave(p, file = paste0("m7.pdf"), path = here::here("sensitivity_analysis", "replicate_check"), height = 8, width = 7)
+ggsave(p, file = paste0("m39_4_6.pdf"), path = here::here("sensitivity_analysis", "replicate_check"), height = 8, width = 7)
 
 gc()
 ```
