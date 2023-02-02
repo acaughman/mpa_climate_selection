@@ -281,7 +281,7 @@ p6 = ggplot(mean_change, aes(lat, mean_change)) +
   geom_vline(data = mpa_boundaries, aes(xintercept = l_bound), alpha = 0.3, linetype = "dashed") +
   geom_line(aes(color = evolution)) +
   theme_bw() +
-  ggh4x::facet_grid2(mpa_size ~ climate, scales = "free", independent = "y") + 
+  ggh4x::facet_grid2(mpa_size ~ climate) + 
   theme(panel.grid.minor = element_blank(),
         strip.text = element_text(face = "bold"),
         strip.background = element_rect(fill = "white"),
