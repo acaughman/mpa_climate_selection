@@ -57,17 +57,6 @@ collapse = line_df %>%
   summarize(min_gen = min(generation))
 ```
 
-```{r}
-small_zero_ms = small %>% 
-  filter(climate == "Mean Shock") %>% 
-  pull(generation)
-
-position = which((diff(small_zero_ms) == 1) == FALSE)
-
-mean_shock_death_s = small_zero_ms[max(position) + 1]
-```
-
-
 ### Derivative
 
 ```{r}
@@ -82,8 +71,6 @@ mean_change = change %>%
   group_by(lat, lon, climate, evolution, mpa_size) %>% 
   summarize(mean_change = mean(rate, na.rm = TRUE))
 ```
-
-
 
 # Old
 

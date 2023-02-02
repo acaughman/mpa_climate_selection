@@ -14,7 +14,7 @@ library(tidyverse)
 ### Read in CSV
 
 ```{r}
-output_df <- read_csv(here::here("03_generated_data", "model_outputs", "model39_4_6.csv"))
+output_df <- read_csv(here::here("03_generated_data", "model_outputs", "model40.csv"))
 
 gc()
 ```
@@ -30,7 +30,10 @@ geno_sum2 <- output_df %>%
 
 geno_mean2 <- geno_sum2 %>% 
   group_by(lat, lon, generation, genotype) %>%
-  summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE))
+  summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE),
+            geno_pop_sd = sd(geno_pop_sum, na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(geno_pop_se = geno_pop_sd / sqrt(10))
 
 rm(geno_sum2)
 
@@ -46,23 +49,36 @@ rm(output_df)
 
 pop_mean2 <- pop_sum2 %>%
   group_by(lat, lon, generation) %>%
-  summarise(pop_mean = mean(pop_sum, rm.na = TRUE), 
+  summarise(pop_mean = mean(pop_sum, na.rm = TRUE), 
+            pop_sd = sd(pop_sum, na.rm = TRUE),
             max_temp = max_temp, 
             min_temp = min_temp,
-            fished_mean = mean(fished_sum, na.rm=TRUE))
+            fished_mean = mean(fished_sum, na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(pop_se = pop_sd / sqrt(10))
 
 rm(pop_sum2)
 
-output_sum2 <- full_join(geno_mean2, pop_mean2) %>%
-  mutate(freq = geno_pop_mean / pop_mean,
-         mpa_size = "Large",
-         climate = "Mean Shock",
-         evolution = "Yes") %>% 
-  distinct()
+gc()
+gc()
+gc()
+
+output_sum2 <- full_join(geno_mean2, pop_mean2)
 
 rm(pop_mean2, geno_mean2)
 
-write_csv(output_sum2, here::here("03_generated_data", "summary_data", "summary_m39_4_6.csv"))
+gc()
+gc()
+gc()
+
+output_sum2 = output_sum2 %>%
+  distinct() %>% 
+  mutate(freq = geno_pop_mean / pop_mean,
+         mpa_size = "Large",
+         climate = "Mean Shock",
+         evolution = "No")
+
+write_csv(output_sum2, here::here("03_generated_data", "summary_data", "summary_m40.csv"))
 
 rm(list=ls())
 
