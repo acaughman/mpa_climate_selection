@@ -15,11 +15,11 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "climate_rate", "large_mean_shock_023.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "movement_rate", "med_mean_shock_3_1.csv"))
 
-df2 <- read_csv(here::here("sensitivity_analysis", "climate_rate", "mean_shock_large_sum.csv")) #%>%
+df2 <- read_csv(here::here("sensitivity_analysis", "movement_rate", "mean_shock_med_sum.csv")) #%>%
   # filter(dd == 0.005) %>%
-  # mutate(dd = .033)
+  # mutate(dd = "3/2")
 ```
 
 ### Manipulate data
@@ -77,22 +77,22 @@ rm(pop_sum1)
 ```
 
 ```{r}
-### large
+### small
+#lon %in% c(10)
+#lat %in% c(50)
+
+### medium
 #lon %in% c(9, 10, 11)
 #lat %in% c(49, 50, 51)
 
 ### large
-#lon %in% c(8, 9, 10, 11, 12, 13)
-#lat %in% c(48, 49, 50, 51, 52, 53)
-
-### large
-#lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)
-#lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)
+#lon %in% c(6,7,8, 9, 10, 11, 12, 13, 14)
+#lat %in% c(46,47,48, 49, 50, 51, 52, 53,54)
 
 ## SELECT ADULTS ONLY <-edit to change
 mpa_df1 <- output_sum1 %>%
-  filter(lon %in% c(4,5,6,7,8, 9, 10, 11, 12, 13, 14,15)) %>%
-  filter(lat %in% c(45,46,47,48, 49, 50, 51, 52, 53,54,55,56)) %>%
+  filter(lon %in% c(9, 10, 11)) %>%
+  filter(lat %in% c(49, 50, 51)) %>%
   group_by(generation) %>%
   summarise(
     location_sum = sum(geno_pop_mean),
@@ -105,13 +105,13 @@ mpa_df1 <- output_sum1 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
   select(-max_m, -min_m) %>%
-  mutate(dd = 0.023)
+  mutate(dd = "3/1")
 ```
 
 ```{r}
 data = full_join(mpa_df1, df2) %>% 
   mutate(dd = as.factor(dd))
 
-write_csv(data, here::here("sensitivity_analysis", "climate_rate", "mean_shock_large_sum.csv"))
+write_csv(data, here::here("sensitivity_analysis", "movement_rate", "mean_shock_med_sum.csv"))
 ```
 
