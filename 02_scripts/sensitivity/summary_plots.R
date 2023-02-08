@@ -5,40 +5,40 @@ library(lemon)
 
 # load data ---------------------------------------------------------------
 
-df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_shock_med_sum.csv")) %>%
+df1 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_shock_large_sum.csv")) %>%
   mutate(climate = "Mean Shock") %>%
   mutate(dd = as.factor(dd)) %>%
   mutate(max_temp = as.character(max_temp)) %>%
   filter(dd == 0.005) %>%
-  mutate(size = "Medium")
+  mutate(size = "largeium")
 
-df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_med_sum.csv")) %>%
+df2 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_large_sum.csv")) %>%
   mutate(climate = "Mean") %>%
   mutate(dd = as.factor(dd)) %>%
   mutate(max_temp = as.character(max_temp)) %>%
   filter(dd == 0.005) %>%
-  mutate(size = "Medium")
+  mutate(size = "largeium")
 
-df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_med_sum.csv")) %>%
+df3 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "shock_large_sum.csv")) %>%
   mutate(climate = "Shock") %>%
   mutate(dd = as.factor(dd)) %>%
   mutate(max_temp = as.character(max_temp)) %>%
   filter(dd == 0.005) %>%
-  mutate(size = "Medium")
+  mutate(size = "largeium")
 
-df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "enso_med_sum.csv")) %>%
+df4 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "enso_large_sum.csv")) %>%
   mutate(climate = "Enso") %>%
   mutate(dd = as.factor(dd)) %>%
   mutate(max_temp = as.character(max_temp)) %>%
   filter(dd == 0.005) %>%
-  mutate(size = "Medium")
+  mutate(size = "largeium")
 
-df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_med_sum.csv")) %>%
+df5 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_large_sum.csv")) %>%
   mutate(climate = "Null") %>%
   mutate(dd = as.factor(dd)) %>%
   mutate(max_temp = as.character(max_temp)) %>%
   filter(dd == 0.005) %>%
-  mutate(size = "Medium")
+  mutate(size = "largeium")
 
 df6 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "mean_shock_small_sum.csv")) %>%
   mutate(climate = "Mean Shock") %>%
@@ -113,7 +113,7 @@ df15 <- read_csv(here::here("sensitivity_analysis", "density_dependence", "null_
 # merge data --------------------------------------------------------------
 
 
-med <- list(df1, df2, df3, df4, df5) %>% 
+large <- list(df1, df2, df3, df4, df5) %>% 
   reduce(full_join) %>% 
   select(-dd) %>% 
   filter(generation > 20)
@@ -159,32 +159,32 @@ position = which((diff(small_zero_m) == 1) == FALSE)
 mean_death_s = small_zero_m[max(position) + 1]
 
 
-med_zero_ms = med %>% 
+large_zero_ms = large %>% 
   filter(location_sum == 0) %>% 
   filter(climate == "Mean Shock") %>% 
   pull(generation)
 
-position = which((diff(med_zero_ms) == 1) == FALSE)
+position = which((diff(large_zero_ms) == 1) == FALSE)
 
-mean_shock_death_m = med_zero_ms[max(position) + 1]
+mean_shock_death_m = large_zero_ms[max(position) + 1]
 
-med_zero_e = med %>% 
+large_zero_e = large %>% 
   filter(location_sum == 0) %>% 
   filter(climate == "Enso") %>% 
   pull(generation)
 
-position = which((diff(med_zero_e) == 1) == FALSE)
+position = which((diff(large_zero_e) == 1) == FALSE)
 
-enso_death_m = med_zero_e[max(position) + 1]
+enso_death_m = large_zero_e[max(position) + 1]
 
-med_zero_m = med %>% 
+large_zero_m = large %>% 
   filter(location_sum == 0) %>% 
   filter(climate == "Mean") %>% 
   pull(generation)
 
-position = which((diff(med_zero_m) == 1) == FALSE)
+position = which((diff(large_zero_m) == 1) == FALSE)
 
-mean_death_m = med_zero_m[max(position) + 1]
+mean_death_m = large_zero_m[max(position) + 1]
 
 
 large_zero_ms = large %>% 
@@ -230,7 +230,7 @@ p1 = ggplot(small, aes(generation, location_sum)) +
   geom_vline(xintercept = enso_death_s, alpha = 0.5, color = "#440154") +
   geom_vline(xintercept = mean_death_s, alpha = 0.5, color = "#3b528b")
 
-p2 = ggplot(med, aes(generation, location_sum)) +
+p2 = ggplot(large, aes(generation, location_sum)) +
   geom_line(aes(color = climate)) +
   theme_bw() +
   labs(
