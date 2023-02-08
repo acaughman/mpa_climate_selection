@@ -173,7 +173,7 @@ p1 = ggplot(line_df, aes(generation, location_sum)) +
         axis.ticks.x = element_blank()) +
   scale_color_viridis_d() 
 
-ggsave(p1, file = paste0("decline_full_10.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+ggsave(p1, file = paste0("decline_full_1.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -353,7 +353,7 @@ p7 = ggplot(collapse_full, aes(min_gen, mpa_size)) +
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggsave(p7, file = paste0("collapse_points_10.pdf"), path = here::here("04_figs"), height = 8, width = 8)
+ggsave(p7, file = paste0("collapse_points_1.pdf"), path = here::here("04_figs"), height = 8, width = 8)
 ```
 
 ```{r}
@@ -412,7 +412,7 @@ p10 = ggplot(line_df_mpa_full, aes(generation, location_sum)) +
   scale_color_viridis_d() + scale_fill_viridis_d() +
   guides(fill="none")
   
-ggsave(p10, file = paste0("decline_mpa_full_10.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+ggsave(p10, file = paste0("decline_mpa_full_1.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
 
