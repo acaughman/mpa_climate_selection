@@ -14,7 +14,7 @@ library(tidyverse)
 ### Read in CSV
 
 ```{r}
-output_df <- read_csv(here::here("03_generated_data", "model_outputs", "model6.csv"))
+output_df <- read_csv(here::here("03_generated_data", "model_outputs", "model31.csv"))
 
 gc()
 ```
@@ -78,7 +78,7 @@ output_sum2 = output_sum2 %>%
          climate = "Null",
          evolution = "No")
 
-write_csv(output_sum2, here::here("03_generated_data", "summary_data", "summary_m6.csv"))
+write_csv(output_sum2, here::here("03_generated_data", "summary_data", "summary_m31.csv"))
 
 rm(list=ls())
 
