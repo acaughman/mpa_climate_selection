@@ -17,8 +17,7 @@ library(effectsize)
 
 ```{r}
 # read in data
-data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>% 
-  filter(generation > 25) %>%
+data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv"))
   mutate(generation = as.numeric(generation)) %>% 
   filter(mpa_size != "None")
 ```
@@ -37,7 +36,40 @@ sum <- data %>%
 
 ```{r}
 line_df <- data %>%
+  filter(generation > 25) %>%
   group_by(generation, evolution, mpa_size, climate) %>%
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>% 
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  select(-max_m, -min_m)
+
+line_df_mpa_full <- data %>%
+  filter(generation > 25) %>%
+  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
+  distinct() %>% 
+  group_by(generation, evolution, mpa_size, climate) %>%
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp)) %>% 
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  select(-max_m, -min_m)
+
+line_df_geno <- data %>%
+  group_by(generation, evolution, mpa_size, climate, genotype) %>% 
   summarise(
     location_sum = sum(geno_pop_mean, na.rm = TRUE),
     max_temp = max(max_temp),
@@ -48,13 +80,45 @@ line_df <- data %>%
   mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m)
+  select(-max_m, -min_m) %>% 
+  filter(evolution == "Yes")
+
+line_df_geno_lat <- data %>%
+  group_by(generation, evolution, mpa_size, climate, genotype, lat) %>% 
+  summarise(
+    location_sum = sum(geno_pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  select(-max_m, -min_m) %>% 
+  filter(evolution == "Yes") %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(max_temp = as.factor(max_temp))
 
 collapse = line_df %>% 
   select(generation, evolution, mpa_size, climate, location_sum) %>% 
-  filter(location_sum <= 20) %>% 
-  group_by(evolution, mpa_size, climate) %>% 
-  summarize(min_gen = min(generation))
+  filter(generation > 30) %>% 
+  filter(location_sum <= 100*2*.05*100*20) %>% 
+  group_by(evolution, mpa_size, climate) %>%
+  summarize(min_gen = min(generation)) %>% 
+  mutate(collapse_point = 100*2*.05*100*20)
+
+collapse_full = line_df_mpa_full %>% 
+  select(generation, evolution, mpa_size, climate, location_sum) %>% 
+  filter(generation > 30) %>% 
+  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
+  group_by(evolution, mpa_size, climate) %>%
+  summarize(min_gen = min(generation)) %>% 
+  mutate(collapse_point = case_when(
+    mpa_size == "Small" ~ 100*2*.05*3*3,
+    mpa_size == "Medium" ~ 100*2*.05*6*6,
+    mpa_size == "Large" ~ 100*2*.05*10*10
+  ))
 ```
 
 ### Derivative
@@ -71,6 +135,26 @@ mean_change = change %>%
   group_by(lat, lon, climate, evolution, mpa_size) %>% 
   summarize(mean_change = mean(rate, na.rm = TRUE))
 ```
+
+### Temp of max aa
+
+```{r}
+aa_geno = line_df_geno %>% 
+  filter(genotype == "aa") %>% 
+  filter(climate %in% c("Mean Shift", "Shocks with Mean Shift", "El Nino/La Nina")) %>% 
+  filter(!is.na(freq_avg)) %>% 
+  select(-evolution, -genotype) %>% 
+  mutate(average_survival = sum(max_survival, min_survival)/2,
+         average_temp = sum(max_temp, min_temp)/2)
+
+aa_sum = aa_geno %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(freq_avg = max(freq_avg))
+
+aa = left_join(aa_sum, aa_geno)
+           
+```
+
 
 # Old
 
