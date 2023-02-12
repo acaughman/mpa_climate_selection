@@ -167,14 +167,15 @@ p1 = ggplot(line_df, aes(generation, location_sum)) +
   labs(
     x = "Year",
     y = "Population Density",
-    color = "Evolution?"
+    linetype = "Evolution?",
+    color = "Climate"
   ) +
   theme(panel.grid.minor = element_blank(),
         strip.text = element_text(face = "bold"),
         strip.background = element_rect(fill = "white"),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
-  scale_color_viridis_d() 
+  scale_color_manual(values = c("#440154", "#3b528b", "#21918c", "#5ec962", "#fde725")) 
 
 ggsave(p1, file = paste0("decline_full.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
@@ -212,22 +213,22 @@ ggsave(p1, file = paste0("decline_full.pdf"), path = here::here("04_figs"), heig
 #   filter(climate == "Null") %>% 
 #   filter(lat == 10 | lat == 90 | lat == 50)
 
-p3 = ggplot(line_df_lat, aes(generation, location_sum)) +
-  geom_line(aes(group = location, color = mpa)) +
-  ggh4x::facet_grid2(climate ~ mpa_size, scales = 'free_y', independent = "y") +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = ""
-  ) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white")) +
-  scale_color_viridis_d()
-
-ggsave(p3, file = paste0("mpa_benefit_summary.pdf"), path = here::here("04_figs"), height = 10, width = 15)
+# p3 = ggplot(line_df_lat, aes(generation, location_sum)) +
+#   geom_line(aes(group = location, color = mpa)) +
+#   ggh4x::facet_grid2(climate ~ mpa_size, scales = 'free_y', independent = "y") +
+#   theme_bw() +
+#   labs(
+#     x = "Year",
+#     y = "Population Density",
+#     color = ""
+#   ) +
+#   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#   theme(panel.grid.minor = element_blank(),
+#         strip.text = element_text(face = "bold"),
+#         strip.background = element_rect(fill = "white")) +
+#   scale_color_viridis_d()
+# 
+# ggsave(p3, file = paste0("mpa_benefit_summary.pdf"), path = here::here("04_figs"), height = 10, width = 15)
 ```
 
 ```{r}
@@ -275,7 +276,7 @@ p5 = ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
   facet_grid(genotype~climate, scales = "free_y") +
   theme_bw() +
   labs(
-    x = "",
+    x = "Year",
     y = "Allele Frequency",
     color = "Latitude",
     linetype = "MPA size"
@@ -318,39 +319,39 @@ mpa_boundaries = data.frame(mpa_size = c("Small", "Medium", "Large"),
 ```
 
 ```{r}
-p6 = ggplot(mean_change, aes(lat, mean_change)) +
-  geom_vline(data = mpa_boundaries, aes(xintercept = r_bound), alpha = 0.3, linetype = "dashed") +
-  geom_vline(data = mpa_boundaries, aes(xintercept = l_bound), alpha = 0.3, linetype = "dashed") +
-  geom_line(aes(color = evolution)) +
-  theme_bw() +
-  ggh4x::facet_grid2(mpa_size ~ climate) + 
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        # axis.text.y = element_blank(),
-        # axis.ticks.y = element_blank(),
-        axis.text.x = element_text(angle = 60, hjust=1)) +
-  scale_color_viridis_d() +
-  labs(
-    x = "Latitude",
-    y = "Mean Rate of Change",
-    color = "Evolution?"
-  ) +
-  coord_flip()
-
-ggsave(p6, file = paste0("rate_lat.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+# p6 = ggplot(mean_change, aes(lat, mean_change)) +
+#   geom_vline(data = mpa_boundaries, aes(xintercept = r_bound), alpha = 0.3, linetype = "dashed") +
+#   geom_vline(data = mpa_boundaries, aes(xintercept = l_bound), alpha = 0.3, linetype = "dashed") +
+#   geom_line(aes(color = evolution)) +
+#   theme_bw() +
+#   ggh4x::facet_grid2(mpa_size ~ climate) + 
+#   theme(panel.grid.minor = element_blank(),
+#         strip.text = element_text(face = "bold"),
+#         strip.background = element_rect(fill = "white"),
+#         # axis.text.y = element_blank(),
+#         # axis.ticks.y = element_blank(),
+#         axis.text.x = element_text(angle = 60, hjust=1)) +
+#   scale_color_viridis_d() +
+#   labs(
+#     x = "Latitude",
+#     y = "Mean Rate of Change",
+#     color = "Evolution?"
+#   ) +
+#   coord_flip()
+# 
+# ggsave(p6, file = paste0("rate_lat.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
 ```{r}
 p7 = ggplot(collapse_full, aes(min_gen, mpa_size)) +
   geom_jitter(aes(color = climate, shape = evolution), height = 0.2, size = 3) +
   theme_bw() +
-  scale_color_viridis_d() +
+  scale_color_manual(values = c("#5ec962", "#fde725", "#3b528b", "#440154")) +
   labs(
-    x = "Time",
+    x = "Year",
     y = "MPA Size",
-    color = "Climate Scenario",
-    shape = "Movement Evolution?"
+    color = "Climate",
+    shape = "Evolution?"
   ) + 
   theme(panel.grid.minor = element_blank(),
         axis.text.x = element_blank(),
@@ -375,7 +376,8 @@ p8 = ggplot(line_df_mpa, aes(generation, pop_mean)) +
         strip.background = element_rect(fill = "white"),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
-  scale_color_viridis_d() + scale_fill_viridis_d() +
+  scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
+  scale_fill_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
   guides(fill="none")
   
 ggsave(p8, file = paste0("decline_mpa.pdf"), path = here::here("04_figs"), height = 8, width = 15)
@@ -388,9 +390,16 @@ p9 = ggplot(mean_change2, aes(generation, mean_change)) +
   theme_bw() +
   labs(
     x = "Year",
-    y = "Rate of Change"
+    y = "Rate of Population Change",
+    linetype = "Evolution?",
+    color = "Climate"
   )+
-  scale_color_viridis_d()
+  scale_color_viridis_d() +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
 
 ggsave(p9, file = paste0("rate.pdf"), path = here::here("04_figs"), height = 10, width = 15)
 ```
@@ -426,14 +435,15 @@ p11 = ggplot(line_df, aes(generation, log(location_sum))) +
   labs(
     x = "Year",
     y = "Population Density",
-    color = "Evolution?"
+    color = "Climate",
+    linetype = "Evolution?"
   ) +
   theme(panel.grid.minor = element_blank(),
         strip.text = element_text(face = "bold"),
         strip.background = element_rect(fill = "white"),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
-  scale_color_viridis_d() 
+  scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154"))
 
 ggsave(p11, file = paste0("decline_full_sim_log.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
@@ -521,7 +531,6 @@ geno_lat_rate = line_df_geno_lat_rate %>%
   mutate(location = as.factor(location)) %>% 
   mutate(mpa_size = as.factor(mpa_size)) %>% 
   mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA"))) %>% 
-  filter(genotype == "aa") %>% 
   filter(mpa_size != "Non-MPA")
 
 collapse_full_rate = line_df_mpa_full_rate %>% 
@@ -547,14 +556,14 @@ p12 = ggplot(line_df_mpa_full_rate, aes(generation, location_sum)) +
   labs(
     x = "Year",
     y = "Population Density",
-    color = "Climate", fill = "", linetype = "Evolution?"
+    color = "Climate Increase Per Year", linetype = "Evolution?"
   ) +
   theme(panel.grid.minor = element_blank(),
         strip.text = element_text(face = "bold"),
         strip.background = element_rect(fill = "white"),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
-  scale_color_viridis_d() + scale_fill_viridis_d() +
+  scale_color_manual(values = c("#5ec962", "#440154")) 
   guides(fill="none")
   
 ggsave(p12, file = paste0("decline_mpa_climate_rate.pdf"), path = here::here("04_figs"), height = 8, width = 15)
@@ -562,23 +571,29 @@ ggsave(p12, file = paste0("decline_mpa_climate_rate.pdf"), path = here::here("04
 
 ```{r}
 p13 = ggplot(geno_lat_rate, aes(generation, mpa_mean_freq)) +
-  geom_line(aes(color = as.factor(climate_rate))) +
-  facet_grid(mpa_size~climate, scales = "free_y") +
+  geom_line(aes(color = as.factor(climate_rate), linetype = mpa_size, alpha = as.factor(climate_rate))) +
+  facet_grid(genotype~climate, scales = "free_y") +
   theme_bw() +
   labs(
-    x = "",
+    x = "Year",
     y = "Allele Frequency",
-    color = "Latitude",
-    linetype = "MPA size"
+    color = "Climate Increase Per Year",
+    linetype = "MPA size",
+    alpha = ""
   ) +
   theme() +
-  scale_color_viridis_d() +
+  scale_color_manual(values = c("#5ec962", "#440154")) +
   theme(panel.grid.minor = element_blank(),
         strip.text = element_text(face = "bold"),
         strip.background = element_rect(fill = "white"),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
-  scale_linetype_manual(values = c("solid", "dashed", "dotted", "solid"))
+  scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
+  scale_alpha_manual(values = c(1, 0.3), guide = 'none')
+
+p_cr = p12 + p13 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
+
+ggsave(p_cr, file = paste0("climate_rate.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 
 ggsave(p13, file = paste0("genotype_summary_rate.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
@@ -588,10 +603,25 @@ ggsave(p13, file = paste0("genotype_summary_rate.pdf"), path = here::here("04_fi
 ```{r}
 data_fp <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_fishing_pressure.csv")) %>%
   mutate(generation = as.numeric(generation)) %>% 
-  mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
+  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
 ```
 
 ```{r}
+line_df_fp <- data_fp %>%
+  filter(generation > 25) %>%
+  group_by(generation, mpa_size, climate, fishing_pressure) %>%
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>% 
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  select(-max_m, -min_m)
+
 line_df_mpa_full_fp <- data_fp %>%
   filter(generation > 25) %>%
   filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
@@ -638,16 +668,25 @@ line_lat_mpa_combo_fp = line_df_geno_lat_fp %>%
     lat == 10 ~ "Low Latitude", 
     lat == 90 ~ "High Latitude"
   )) %>% 
-  mutate(mpa_size = "Non-MPA")
+  mutate(mpa_size = "Non-MPA") %>% 
+  filter(mpa_size != "Non-MPA")
 
 geno_lat_fp = line_df_geno_lat_fp %>% 
   filter(lat == 50) %>% 
   mutate(location = "MPA") %>% 
   mutate(mpa_mean_freq = freq_avg) %>% 
-  full_join(line_lat_mpa_combo) %>% 
+  full_join(line_lat_mpa_combo_fp) %>% 
   mutate(location = as.factor(location)) %>% 
   mutate(mpa_size = as.factor(mpa_size)) %>% 
   mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA")))
+
+collapse_fp = line_df_fp %>% 
+  select(generation, mpa_size, climate, location_sum, fishing_pressure) %>% 
+  filter(generation > 30) %>% 
+  filter(location_sum <= 100*2*.05*100*20) %>% 
+  group_by(mpa_size, climate, fishing_pressure) %>%
+  summarize(min_gen = min(generation)) %>% 
+  mutate(collapse_point = 100*2*.05*100*20)
 
 collapse_full_fp = line_df_mpa_full_fp %>% 
   select(generation, evolution, mpa_size, climate, location_sum, fishing_pressure) %>% 
@@ -663,48 +702,76 @@ collapse_full_fp = line_df_mpa_full_fp %>%
 ```
 
 ```{r}
-p14 = ggplot(line_df_mpa_full_fp, aes(generation, location_sum)) +
-  geom_vline(data = collapse_full_fp, aes(xintercept = min_gen, color = fishing_pressure, linetype = evolution), alpha = 0.8) +
-  geom_hline(data = collapse_full_fp, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
-  geom_line(aes(color = climate, linetype = evolution)) +
-  facet_wrap(climate ~ mpa_size, scales = 'free', nrow = 3) +
+p14 = ggplot(line_df_fp, aes(generation, location_sum)) +
+  geom_vline(data = collapse_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure)), alpha = 0.8) +
+  geom_hline(data = collapse_fp, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
+  geom_line(aes(color = as.factor(fishing_pressure))) +
+  ggh4x::facet_grid2(mpa_size ~ climate, scales = 'free_y', independent = "y") +
   theme_bw() +
   labs(
     x = "Year",
     y = "Population Density",
-    color = "Climate", fill = "", linetype = "Evolution?"
+    color = "Fishing Pressure", linetype = "Evolution?"
   ) +
   theme(panel.grid.minor = element_blank(),
         strip.text = element_text(face = "bold"),
         strip.background = element_rect(fill = "white"),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
-  scale_color_viridis_d() + scale_fill_viridis_d() +
-  guides(fill="none")
+  scale_color_manual(values = c("#5ec962", "#440154")) 
   
-ggsave(p14, file = paste0("decline_mpa_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+ggsave(p14, file = paste0("decline_sim_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
 
 ```{r}
 p15 = ggplot(geno_lat_fp, aes(generation, mpa_mean_freq)) +
-  geom_line(aes(color = as.factor(fishing_pressure))) +
-  facet_grid(mpa_size~climate, scales = "free_y") +
+  geom_line(aes(color = as.factor(fishing_pressure), linetype = mpa_size, alpha = as.factor(fishing_pressure))) +
+  facet_grid(genotype~climate, scales = "free_y") +
   theme_bw() +
   labs(
-    x = "",
+    x = "Year",
     y = "Allele Frequency",
-    color = "Latitude",
-    linetype = "MPA size"
+    color = "Fishing Pressure",
+    linetype = "MPA size",
+    alpha = ""
   ) +
   theme() +
-  scale_color_viridis_d() +
+  scale_color_manual(values = c("#5ec962", "#440154")) +
   theme(panel.grid.minor = element_blank(),
         strip.text = element_text(face = "bold"),
         strip.background = element_rect(fill = "white"),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
-  scale_linetype_manual(values = c("solid", "dashed", "dotted", "solid"))
+  scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
+  scale_alpha_manual(values = c(1, 0.3), guide = 'none')
+
+p_fp = p14 + p15 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
+
+ggsave(p_fp, file = paste0("fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 
 ggsave(p15, file = paste0("genotype_summary_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+```
+
+```{r}
+p16 = ggplot(line_df_mpa_full_fp, aes(generation, location_sum)) +
+  geom_vline(data = collapse_full_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure)), alpha = 0.8) +
+  geom_hline(data = collapse_full_fp, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
+  geom_line(aes(color = as.factor(fishing_pressure))) +
+  ggh4x::facet_grid2(mpa_size ~ climate, scales = 'free_y', independent = "y") +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Population Density",
+    color = "Fishing Pressure", linetype = "Evolution?"
+  ) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_color_manual(values = c("#5ec962", "#440154")) 
+  guides(fill="none")
+  
+ggsave(p16, file = paste0("decline_mpa_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
