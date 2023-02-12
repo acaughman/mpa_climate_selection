@@ -1,6 +1,26 @@
 # MPA Climate Selection
 
-## Full Runs
+## Sensitivity 2 replicates
+
+### Movement Rate 
+
+Redo large 2/1? 
+
+### Density Dependence - Done need check
+
+### Fishing Pressure - Done need check
+
+### Movement Pattern
+
+### Initial SST
+
+### Climate Rate
+
+### Thermal Breadth
+
+### Maturation Age
+
+## Full Runs 100 replicates
 
 ### Climate Scenarios
 
@@ -22,12 +42,4 @@
 1. Low Movement Evolution
 2. No Low Movement Evolution
 
-### Movement Distances
 
-1. 2-3 grids
-2. 4-6 grids
-3. 9-12 grids
-
-### Simulations
-
-10 replicates 
