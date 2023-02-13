@@ -10,9 +10,9 @@ Redo large 2/1?
 
 ### Fishing Pressure - Done need check
 
-### Movement Pattern
+### Movement Pattern - Done need check
 
-### Initial SST
+### Initial SST - Done need check
 
 ### Climate Rate
 
