@@ -702,25 +702,25 @@ collapse_full_fp = line_df_mpa_full_fp %>%
 ```
 
 ```{r}
-p14 = ggplot(line_df_fp, aes(generation, location_sum)) +
-  geom_vline(data = collapse_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure), linetype = evolution), alpha = 0.8) +
-  geom_hline(data = collapse_fp, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
-  geom_line(aes(color = as.factor(fishing_pressure), linetype = evolution)) +
-  ggh4x::facet_grid2(mpa_size ~ climate, scales = 'free_y', independent = "y") +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Fishing Pressure", linetype = "Evolution?"
-  ) +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank()) +
-  scale_color_manual(values = c("#5ec962", "#440154")) 
-  
-ggsave(p14, file = paste0("decline_sim_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+# p14 = ggplot(line_df_fp, aes(generation, location_sum)) +
+#   geom_vline(data = collapse_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure), linetype = evolution), alpha = 0.8) +
+#   geom_hline(data = collapse_fp, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
+#   geom_line(aes(color = as.factor(fishing_pressure), linetype = evolution)) +
+#   ggh4x::facet_grid2(mpa_size ~ climate, scales = 'free_y', independent = "y") +
+#   theme_bw() +
+#   labs(
+#     x = "Year",
+#     y = "Population Density",
+#     color = "Fishing Pressure", linetype = "Evolution?"
+#   ) +
+#   theme(panel.grid.minor = element_blank(),
+#         strip.text = element_text(face = "bold"),
+#         strip.background = element_rect(fill = "white"),
+#         axis.text.x = element_blank(),
+#         axis.ticks.x = element_blank()) +
+#   scale_color_manual(values = c("#5ec962", "#440154")) 
+#   
+# ggsave(p14, file = paste0("decline_sim_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
 
@@ -746,10 +746,6 @@ p15 = ggplot(geno_lat_fp, aes(generation, mpa_mean_freq)) +
   scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
   scale_alpha_manual(values = c(1, 0.3), guide = 'none')
 
-p_fp = p14 + p15 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
-
-ggsave(p_fp, file = paste0("fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-
 ggsave(p15, file = paste0("genotype_summary_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
@@ -772,6 +768,10 @@ p16 = ggplot(line_df_mpa_full_fp, aes(generation, location_sum)) +
         axis.ticks.x = element_blank()) +
   scale_color_manual(values = c("#5ec962", "#440154")) 
   guides(fill="none")
+  
+p_fp = p16 + p15 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
+
+ggsave(p_fp, file = paste0("fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
   
 ggsave(p16, file = paste0("decline_mpa_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
