@@ -2,9 +2,7 @@
 
 ## Sensitivity 2 replicates
 
-### Movement Rate 
-
-Redo large 2/1? 
+### Movement Rate 2/1 needs added
 
 ### Density Dependence - Done need check
 
@@ -16,9 +14,9 @@ Redo large 2/1?
 
 ### Climate Rate - Done need check
 
-### Thermal Breadth
+### Thermal Breadth - Done need check
 
-### Maturation Age
+### Maturation Age - Done need check
 
 ## Full Runs 100 replicates
 
