@@ -2,7 +2,7 @@
 
 ## Sensitivity 2 replicates
 
-### Movement Rate 2/1 needs added
+### Movement Rate - 2/1 needs added
 
 ### Density Dependence - Done need check
 
@@ -18,7 +18,12 @@
 
 ### Maturation Age - Done need check
 
+
 ## Full Runs 100 replicates
+
+## 0.3 FP runs 100 replicates
+
+## Refugia Runs 100 replicates
 
 ### Climate Scenarios
 
