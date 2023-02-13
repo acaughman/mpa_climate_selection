@@ -16,87 +16,99 @@ library(tidyverse)
 ```{r}
 df_list = read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>%
   filter(climate %in% c("Mean Shift", "El Nino/La Nina", "Shocks with Mean Shift")) %>% 
-  filter(evolution == "Yes") %>% 
   mutate(fishing_pressure = 0.7)
 ```
 
 ```{r}
-# df4 = read_csv(here::here("03_generated_data", "summary_data", "summary_m3_3.csv")) %>%
-#   mutate(evolution = "Yes") %>% 
-#   mutate(mpa_size = "Small") %>% 
-#   mutate(climate = "Null") %>% 
-#   mutate(fishing_pressure = 0.3)
-# df6 = read_csv(here::here("03_generated_data", "summary_data", "summary_m5_3.csv")) %>%
-#   mutate(evolution = "Yes") %>% 
-#   mutate(mpa_size = "Medium") %>% 
-#   mutate(climate = "Null") %>% 
-#   mutate(fishing_pressure = 0.3)
-# df8 = read_csv(here::here("03_generated_data", "summary_data", "summary_m7_3.csv")) %>%
-#   mutate(evolution = "Yes") %>% 
-#   mutate(mpa_size = "Large") %>% 
-#   mutate(climate = "Null") %>% 
-#   mutate(fishing_pressure = 0.3)
-
-df12 = read_csv(here::here("03_generated_data", "summary_data", "summary_m11_3.csv")) %>%
+df11 = read_csv(here::here("03_generated_data", "summary_data", "summary_m11_3.csv")) %>%
   mutate(evolution = "Yes") %>% 
   mutate(mpa_size = "Small") %>% 
   mutate(climate = "Mean Shift") %>% 
   mutate(fishing_pressure = 0.3)
-df14 = read_csv(here::here("03_generated_data", "summary_data", "summary_m13_3.csv")) %>%
+df13 = read_csv(here::here("03_generated_data", "summary_data", "summary_m13_3.csv")) %>%
   mutate(evolution = "Yes") %>% 
   mutate(mpa_size = "Medium") %>% 
   mutate(climate = "Mean Shift") %>% 
   mutate(fishing_pressure = 0.3)
-df16 = read_csv(here::here("03_generated_data", "summary_data", "summary_m15_3.csv")) %>%
+df15 = read_csv(here::here("03_generated_data", "summary_data", "summary_m15_3.csv")) %>%
   mutate(evolution = "Yes") %>% 
   mutate(mpa_size = "Large") %>% 
   mutate(climate = "Mean Shift") %>% 
   mutate(fishing_pressure = 0.3)
+df12 = read_csv(here::here("03_generated_data", "summary_data", "summary_m12_3.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Small") %>% 
+  mutate(climate = "Mean Shift") %>% 
+  mutate(fishing_pressure = 0.3)
+df14 = read_csv(here::here("03_generated_data", "summary_data", "summary_m14_3.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Medium") %>% 
+  mutate(climate = "Mean Shift") %>% 
+  mutate(fishing_pressure = 0.3)
+df16 = read_csv(here::here("03_generated_data", "summary_data", "summary_m16_3.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Large") %>% 
+  mutate(climate = "Mean Shift") %>% 
+  mutate(fishing_pressure = 0.3)
 
-df20 = read_csv(here::here("03_generated_data", "summary_data", "summary_m19_3.csv")) %>%
+df19 = read_csv(here::here("03_generated_data", "summary_data", "summary_m19_3.csv")) %>%
   mutate(evolution = "Yes") %>% 
   mutate(mpa_size = "Small") %>% 
   mutate(climate = "El Nino/La Nina") %>% 
   mutate(fishing_pressure = 0.3)
-df22 = read_csv(here::here("03_generated_data", "summary_data", "summary_m21_3.csv")) %>%
+df21 = read_csv(here::here("03_generated_data", "summary_data", "summary_m21_3.csv")) %>%
   mutate(evolution = "Yes") %>% 
   mutate(mpa_size = "Medium") %>% 
   mutate(climate = "El Nino/La Nina") %>% 
   mutate(fishing_pressure = 0.3)
-df24 = read_csv(here::here("03_generated_data", "summary_data", "summary_m23_3.csv")) %>%
+df23 = read_csv(here::here("03_generated_data", "summary_data", "summary_m23_3.csv")) %>%
   mutate(evolution = "Yes") %>% 
   mutate(mpa_size = "Large") %>% 
   mutate(climate = "El Nino/La Nina") %>% 
   mutate(fishing_pressure = 0.3)
+df20 = read_csv(here::here("03_generated_data", "summary_data", "summary_m20_3.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Small") %>% 
+  mutate(climate = "El Nino/La Nina") %>% 
+  mutate(fishing_pressure = 0.3)
+df22 = read_csv(here::here("03_generated_data", "summary_data", "summary_m22_3.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Medium") %>% 
+  mutate(climate = "El Nino/La Nina") %>% 
+  mutate(fishing_pressure = 0.3)
+df24 = read_csv(here::here("03_generated_data", "summary_data", "summary_m24_3.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Large") %>% 
+  mutate(climate = "El Nino/La Nina") %>% 
+  mutate(fishing_pressure = 0.3)
 
-# df28 = read_csv(here::here("03_generated_data", "summary_data", "summary_m27_3.csv")) %>%
-#   mutate(evolution = "Yes") %>% 
-#   mutate(mpa_size = "Small") %>% 
-#   mutate(climate = "Shocks") %>% 
-#   mutate(fishing_pressure = 0.3)
-# df30 = read_csv(here::here("03_generated_data", "summary_data", "summary_m29_3.csv")) %>%
-#   mutate(evolution = "Yes") %>% 
-#   mutate(mpa_size = "Medium") %>% 
-#   mutate(climate = "Shocks") %>% 
-#   mutate(fishing_pressure = 0.3)
-# df32 = read_csv(here::here("03_generated_data", "summary_data", "summary_m31_3.csv")) %>%
-#   mutate(evolution = "Yes") %>% 
-#   mutate(mpa_size = "Large") %>% 
-#   mutate(climate = "Shocks") %>% 
-#   mutate(fishing_pressure = 0.3)
-
-df36 = read_csv(here::here("03_generated_data", "summary_data", "summary_m35_3.csv")) %>%
+df35 = read_csv(here::here("03_generated_data", "summary_data", "summary_m35_3.csv")) %>%
   mutate(evolution = "Yes") %>% 
   mutate(mpa_size = "Small") %>% 
   mutate(climate = "Shocks with Mean Shift") %>% 
   mutate(fishing_pressure = 0.3)
-df38 = read_csv(here::here("03_generated_data", "summary_data", "summary_m37_3.csv")) %>%
+df37 = read_csv(here::here("03_generated_data", "summary_data", "summary_m37_3.csv")) %>%
   mutate(evolution = "Yes") %>% 
   mutate(mpa_size = "Medium") %>% 
   mutate(climate = "Shocks with Mean Shift") %>% 
   mutate(fishing_pressure = 0.3)
-df40 = read_csv(here::here("03_generated_data", "summary_data", "summary_m39_3.csv")) %>%
+df39 = read_csv(here::here("03_generated_data", "summary_data", "summary_m39_3.csv")) %>%
   mutate(evolution = "Yes") %>% 
+  mutate(mpa_size = "Large") %>% 
+  mutate(climate = "Shocks with Mean Shift") %>% 
+  mutate(fishing_pressure = 0.3)
+df36 = read_csv(here::here("03_generated_data", "summary_data", "summary_m36_3.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Small") %>% 
+  mutate(climate = "Shocks with Mean Shift") %>% 
+  mutate(fishing_pressure = 0.3)
+df38 = read_csv(here::here("03_generated_data", "summary_data", "summary_m38_3.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Medium") %>% 
+  mutate(climate = "Shocks with Mean Shift") %>% 
+  mutate(fishing_pressure = 0.3)
+df40 = read_csv(here::here("03_generated_data", "summary_data", "summary_m40_3.csv")) %>%
+  mutate(evolution = "No") %>% 
   mutate(mpa_size = "Large") %>% 
   mutate(climate = "Shocks with Mean Shift") %>% 
   mutate(fishing_pressure = 0.3)
@@ -105,15 +117,18 @@ df40 = read_csv(here::here("03_generated_data", "summary_data", "summary_m39_3.c
 
 ```{r}
 df_list2 = list(df12, df14, df16, df20, 
-               df22, df24, df36, df38, df40) %>% 
+               df22, df24, df36, df38, df40, df11, df13, df15, df19, 
+               df21, df23, df35, df37, df39) %>% 
   reduce(full_join)
+
+write_csv(df_list2, here::here("sum_fishing_pressure.csv"))
 
 rm(df3, df4, df5, df6, df7, df8,  
                df11, df12, df13, df14, df15, df16, df19, df20, 
                df21, df22, df23, df24, df27, df28, df29, df30, 
      df31, df32, df35, df36, df37, df38, df39, df40)
 
-dfs = full_join(df_list, df_list2)
+dfs = rbind(df_list, df_list2)
 
 rm(df_list, df_list2)
 

@@ -609,7 +609,7 @@ data_fp <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_fi
 ```{r}
 line_df_fp <- data_fp %>%
   filter(generation > 25) %>%
-  group_by(generation, mpa_size, climate, fishing_pressure) %>%
+  group_by(generation, mpa_size, climate, fishing_pressure, evolution) %>%
   summarise(
     location_sum = sum(pop_mean, na.rm = TRUE),
     max_temp = max(max_temp),
@@ -662,14 +662,13 @@ line_df_geno_lat_fp = line_df_geno_lat_fp %>%
 
 line_lat_mpa_combo_fp = line_df_geno_lat_fp %>% 
   filter(lat != 50) %>% 
-  group_by(generation, climate, genotype, lat, fishing_pressure) %>% 
+  group_by(generation, climate, genotype, lat, fishing_pressure, evolution) %>% 
   summarize(mpa_mean_freq = mean(freq_avg, na.rm = TRUE)) %>% 
   mutate(location = case_when(
     lat == 10 ~ "Low Latitude", 
     lat == 90 ~ "High Latitude"
   )) %>% 
-  mutate(mpa_size = "Non-MPA") %>% 
-  filter(mpa_size != "Non-MPA")
+  mutate(mpa_size = "Non-MPA") 
 
 geno_lat_fp = line_df_geno_lat_fp %>% 
   filter(lat == 50) %>% 
@@ -678,13 +677,14 @@ geno_lat_fp = line_df_geno_lat_fp %>%
   full_join(line_lat_mpa_combo_fp) %>% 
   mutate(location = as.factor(location)) %>% 
   mutate(mpa_size = as.factor(mpa_size)) %>% 
-  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA")))
+  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA"))) %>% 
+  filter(mpa_size != "Non-MPA")
 
 collapse_fp = line_df_fp %>% 
-  select(generation, mpa_size, climate, location_sum, fishing_pressure) %>% 
+  select(generation, mpa_size, climate, location_sum, fishing_pressure, evolution) %>% 
   filter(generation > 30) %>% 
   filter(location_sum <= 100*2*.05*100*20) %>% 
-  group_by(mpa_size, climate, fishing_pressure) %>%
+  group_by(mpa_size, climate, fishing_pressure, evolution) %>%
   summarize(min_gen = min(generation)) %>% 
   mutate(collapse_point = 100*2*.05*100*20)
 
@@ -703,9 +703,9 @@ collapse_full_fp = line_df_mpa_full_fp %>%
 
 ```{r}
 p14 = ggplot(line_df_fp, aes(generation, location_sum)) +
-  geom_vline(data = collapse_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure)), alpha = 0.8) +
+  geom_vline(data = collapse_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure), linetype = evolution), alpha = 0.8) +
   geom_hline(data = collapse_fp, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
-  geom_line(aes(color = as.factor(fishing_pressure))) +
+  geom_line(aes(color = as.factor(fishing_pressure), linetype = evolution)) +
   ggh4x::facet_grid2(mpa_size ~ climate, scales = 'free_y', independent = "y") +
   theme_bw() +
   labs(
@@ -755,9 +755,9 @@ ggsave(p15, file = paste0("genotype_summary_fishing_pressure.pdf"), path = here:
 
 ```{r}
 p16 = ggplot(line_df_mpa_full_fp, aes(generation, location_sum)) +
-  geom_vline(data = collapse_full_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure)), alpha = 0.8) +
+  geom_vline(data = collapse_full_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure), linetype = evolution), alpha = 0.8) +
   geom_hline(data = collapse_full_fp, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
-  geom_line(aes(color = as.factor(fishing_pressure))) +
+  geom_line(aes(color = as.factor(fishing_pressure), linetype = evolution)) +
   ggh4x::facet_grid2(mpa_size ~ climate, scales = 'free_y', independent = "y") +
   theme_bw() +
   labs(
