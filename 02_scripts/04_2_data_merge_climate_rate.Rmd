@@ -14,13 +14,6 @@ library(tidyverse)
 ### Read in CSV
 
 ```{r}
-df_list = read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>%
-  filter(climate %in% c("Mean Shift", "El Nino/La Nina", "Shocks with Mean Shift")) %>% 
-  filter(evolution == "Yes") %>% 
-  mutate(climate_rate = 0.033)
-```
-
-```{r}
 df11_2 = read_csv(here::here("03_generated_data", "summary_data", "summary_m11_2.csv")) %>%
   mutate(evolution = "Yes") %>% 
   mutate(mpa_size = "Small") %>% 
@@ -117,16 +110,33 @@ df40_2 = read_csv(here::here("03_generated_data", "summary_data", "summary_m40_2
 
 ```{r}
 df_list2 = list(df11_2, df12_2, df13_2, df14_2, df15_2, df16_2, df19_2, df20_2, 
-               df21_2, df22_2, df23_2, df24_2, df35_2, df36_2, df37_2, df38_2, df39_2, df40_2) %>% 
+               df21_2) %>% 
   reduce(full_join)
 
 rm(df11_2, df12_2, df13_2, df14_2, df15_2, df16_2, df19_2, df20_2, 
-               df21_2, df22_2, df23_2, df24_2, df35_2, df36_2, df37_2, df38_2, df39_2, df40_2)
+               df21_2) 
+               
+df_list3 = list(df22_2, df23_2, df24_2, df35_2, df36_2, df37_2, df38_2, df39_2, df40_2) %>% 
+  reduce(full_join)
 
+rm(df22_2, df23_2, df24_2, df35_2, df36_2, df37_2, df38_2, df39_2, df40_2)
+
+df_list2 = rbind(df_list2, df_list3)
+
+rm(df_list3)
+```
+
+```{r}
+df_list = read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>%
+  filter(climate %in% c("Mean Shift", "El Nino/La Nina", "Shocks with Mean Shift")) %>% 
+  mutate(climate_rate = 0.033)
+```
+
+```{r}
 dfs = rbind(df_list, df_list2)
 
 rm(df_list, df_list2)
 
-write_csv(dfs, here::here("03_generated_data", "summary_data", "full_sum_climate_rate.csv"))
+write_csv(df_list, here::here("03_generated_data", "summary_data", "full_sum_climate_rate.csv"))
 ```
 

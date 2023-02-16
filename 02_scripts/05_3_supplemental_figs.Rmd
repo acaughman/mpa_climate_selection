@@ -21,42 +21,9 @@ data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")
   mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
 ```
 
-```{r}
-data_change <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>%
-  mutate(generation = as.numeric(generation)) %>% 
-  filter(mpa_size != "None") %>%
-  mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
-```
+### Data Manipulation 
 
 ```{r}
-line_df <- data %>%
-  filter(generation > 25) %>%
-  group_by(generation, evolution, mpa_size, climate) %>%
-  summarise(
-    location_sum = sum(pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp),
-    freq_avg = mean(freq, na.rm = TRUE)) %>% 
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m)
-
-line_df_mpa <- data %>%
-  filter(generation > 25) %>%
-  filter(lat == 50) %>% 
-  filter((lon == 10)) %>% 
-  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
-  distinct() %>% 
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m)
-
 line_df_mpa_full <- data %>%
   filter(generation > 25) %>%
   filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
@@ -70,9 +37,37 @@ line_df_mpa_full <- data %>%
     min_temp = min(min_temp)) %>% 
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m)
+
+line_df <- data %>%
+  filter(generation > 25) %>%
+  group_by(generation, evolution, mpa_size, climate) %>%
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>% 
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m)
+
+line_df_mpa <- data %>%
+  filter(generation > 25) %>%
+  filter(lat == 50) %>% 
+  filter((lon == 10)) %>% 
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
+  distinct() %>% 
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
   select(-max_m, -min_m)
 
 line_df_geno <- data %>%
@@ -84,9 +79,9 @@ line_df_geno <- data %>%
     freq_avg = mean(freq, na.rm = TRUE)) %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
   select(-max_m, -min_m) %>% 
   filter(evolution == "Yes")
 
@@ -101,9 +96,9 @@ line_df_lat <- data %>%
     freq_avg = mean(freq, na.rm = TRUE)) %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
   select(-max_m, -min_m) %>% 
   mutate(lat = as.factor(lat)) %>% 
   mutate(max_temp = as.factor(max_temp)) %>% 
@@ -126,23 +121,38 @@ line_df_geno_lat <- data %>%
     freq_avg = mean(freq, na.rm = TRUE)) %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
   select(-max_m, -min_m) %>% 
   filter(evolution == "Yes") %>% 
   mutate(lat = as.factor(lat)) %>% 
   mutate(max_temp = as.factor(max_temp))
+
+change = data %>% 
+  select(-genotype, -geno_pop_mean, -freq, -fished_mean) %>% 
+  distinct() %>% 
+  group_by(climate, evolution, mpa_size, lat, lon) %>% 
+  mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation))
 ```
 
 ```{r}
-collapse = line_df %>% 
-  select(generation, evolution, mpa_size, climate, location_sum) %>% 
-  filter(generation > 30) %>% 
-  filter(location_sum <= 100*2*.05*100*20) %>% 
-  group_by(evolution, mpa_size, climate) %>%
-  summarize(min_gen = min(generation)) %>% 
-  mutate(collapse_point = 100*2*.05*100*20)
+mean_change = change %>% 
+  filter(generation >= 35) %>% 
+  group_by(lat, climate, evolution, mpa_size) %>% 
+  summarize(mean_change = mean(rate, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  filter(lat %in% c(30:70)) %>% 
+  mutate(lat = as.numeric(lat))
+
+mean_change2 = change %>% 
+  filter(generation >= 35) %>% 
+  group_by(generation, climate, evolution, mpa_size) %>% 
+  summarize(mean_change = mean(rate, na.rm = TRUE))
+
+mpa_boundaries = data.frame(mpa_size = c("Small", "Medium", "Large"),
+                            r_bound = c(49, 47, 46),
+                            l_bound = c(51, 52, 55))
 
 collapse_full = line_df_mpa_full %>% 
   select(generation, evolution, mpa_size, climate, location_sum) %>% 
@@ -155,10 +165,42 @@ collapse_full = line_df_mpa_full %>%
     mpa_size == "Medium" ~ 100*2*.05*6*6,
     mpa_size == "Large" ~ 100*2*.05*10*10
   ))
+
+collapse = line_df %>% 
+  select(generation, evolution, mpa_size, climate, location_sum) %>% 
+  filter(generation > 30) %>% 
+  filter(location_sum <= 100*2*.05*100*20) %>% 
+  group_by(evolution, mpa_size, climate) %>%
+  summarize(min_gen = min(generation)) %>% 
+  mutate(collapse_point = 100*2*.05*100*20)
+
+line_df_geno_lat = line_df_geno_lat %>%
+  filter(lat == 10 | lat == 90 | lat == 50)
+
+line_lat_mpa_combo = line_df_geno_lat %>% 
+  filter(lat != 50) %>% 
+  group_by(generation, climate, genotype, lat) %>% 
+  summarize(mpa_mean_freq = mean(freq_avg, na.rm = TRUE)) %>% 
+  mutate(location = case_when(
+    lat == 10 ~ "Low Latitude", 
+    lat == 90 ~ "High Latitude"
+  )) %>% 
+  mutate(mpa_size = "Non-MPA")
+
+geno_lat = line_df_geno_lat %>% 
+  filter(lat == 50) %>% 
+  mutate(location = "MPA") %>% 
+  mutate(mpa_mean_freq = freq_avg) %>% 
+  full_join(line_lat_mpa_combo) %>% 
+  mutate(location = as.factor(location)) %>% 
+  mutate(mpa_size = as.factor(mpa_size)) %>% 
+  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA")))
 ```
 
+### Supplemental Figures
+
 ```{r}
-p1 = ggplot(line_df, aes(generation, location_sum)) +
+s1 = ggplot(line_df, aes(generation, location_sum)) +
   geom_vline(data = collapse, aes(xintercept = min_gen, color = climate, linetype = evolution)) +
     geom_hline(data = collapse, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
   geom_line(aes(color = climate, linetype = evolution)) +
@@ -177,8 +219,379 @@ p1 = ggplot(line_df, aes(generation, location_sum)) +
         axis.ticks.x = element_blank()) +
   scale_color_manual(values = c("#440154", "#3b528b", "#21918c", "#5ec962", "#fde725")) 
 
-ggsave(p1, file = paste0("decline_full.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+ggsave(s1, file = paste0("decline_full.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
 ```
+
+```{r}
+s2 = ggplot(line_df_mpa, aes(generation, pop_mean)) +
+  geom_line(aes(color = climate, linetype = evolution)) +
+  geom_ribbon(aes(ymin = pop_mean - pop_se, ymax = pop_mean + pop_se, fill = climate, linetype = evolution), alpha = .2) +
+  facet_wrap(~ mpa_size, scales = 'free', nrow = 3) +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Population Density",
+    color = "Climate", fill = "", linetype = "Evolution?"
+  ) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
+  scale_fill_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
+  guides(fill="none")
+  
+ggsave(s2, file = paste0("decline_mpa.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+```
+
+```{r}
+s3 = ggplot(mean_change2, aes(generation, mean_change)) +
+  geom_line(aes(color = mpa_size, linetype = evolution)) +
+  facet_wrap(~ climate, ncol = 1,scales = "free_y") +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Rate of Population Change",
+    linetype = "Evolution?",
+    color = "Climate"
+  )+
+  scale_color_viridis_d() +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggsave(s3, file = paste0("rate.pdf"), path = here::here("04_figs", "supp"), height = 10, width = 15)
+```
+
+```{r}
+s4 = ggplot(line_df_mpa_full, aes(generation, location_sum)) +
+  geom_vline(data = collapse_full, aes(xintercept = min_gen, color = climate, linetype = evolution), alpha = 0.8) +
+  geom_hline(data = collapse_full, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
+  geom_line(aes(color = climate, linetype = evolution)) +
+  facet_wrap(~ mpa_size, scales = 'free', nrow = 3) +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Population Density",
+    color = "Climate", fill = "", linetype = "Evolution?"
+  ) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_color_viridis_d() + scale_fill_viridis_d() +
+  guides(fill="none")
+  
+ggsave(s4, file = paste0("decline_mpa_full.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+```
+
+```{r}
+s5 = ggplot(line_df, aes(generation, log(location_sum))) +
+  geom_line(aes(color = climate, linetype = evolution)) +
+  facet_wrap(~ mpa_size, nrow = 3) +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Population Density",
+    color = "Climate",
+    linetype = "Evolution?"
+  ) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154"))
+
+ggsave(s5, file = paste0("decline_full_sim_log.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+```
+
+
+### Climate Rate Figures
+
+```{r}
+data_rate <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_climate_rate.csv")) %>%
+  mutate(generation = as.numeric(generation)) %>% 
+  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
+```
+
+```{r}
+line_df_mpa_full_rate <- data_rate %>%
+  filter(generation > 25) %>%
+  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
+  distinct() 
+
+line_df_geno_lat_rate <- data_rate %>%
+  filter(lat == 10 | lat == 90 | lat == 50)
+
+line_df_mpa_full_rate = line_df_mpa_full_rate %>% 
+  group_by(generation, evolution, mpa_size, climate, climate_rate) %>%
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp)) %>% 
+  mutate(generation = as.numeric(generation))
+
+line_df_geno_lat_rate = line_df_geno_lat_rate %>% 
+  group_by(generation, evolution, mpa_size, climate, genotype, lat, climate_rate) %>% 
+  summarise(
+    location_sum = sum(geno_pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  filter(evolution == "Yes") %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(max_temp = as.factor(max_temp))
+
+line_lat_mpa_combo_rate = line_df_geno_lat_rate %>% 
+  filter(lat != 50) %>% 
+  group_by(generation, climate, genotype, lat, climate_rate) %>% 
+  summarize(mpa_mean_freq = mean(freq_avg, na.rm = TRUE)) %>% 
+  mutate(location = case_when(
+    lat == 10 ~ "Low Latitude", 
+    lat == 90 ~ "High Latitude"
+  )) %>% 
+  mutate(mpa_size = "Non-MPA")
+
+geno_lat_rate = line_df_geno_lat_rate %>% 
+  filter(lat == 50) %>% 
+  mutate(location = "MPA") %>% 
+  mutate(mpa_mean_freq = freq_avg) %>% 
+  full_join(line_lat_mpa_combo_rate) %>% 
+  mutate(location = as.factor(location)) %>% 
+  mutate(mpa_size = as.factor(mpa_size)) %>% 
+  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA"))) %>% 
+  filter(mpa_size != "Non-MPA")
+
+collapse_full_rate = line_df_mpa_full_rate %>% 
+  select(generation, evolution, mpa_size, climate, location_sum, climate_rate) %>% 
+  filter(generation > 30) %>% 
+  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
+  group_by(evolution, mpa_size, climate, climate_rate) %>%
+  summarize(min_gen = min(generation)) %>% 
+  mutate(collapse_point = case_when(
+    mpa_size == "Small" ~ 100*2*.05*3*3,
+    mpa_size == "Medium" ~ 100*2*.05*6*6,
+    mpa_size == "Large" ~ 100*2*.05*10*10
+  ))
+```
+
+```{r}
+s6 = ggplot(line_df_mpa_full_rate, aes(generation, location_sum)) +
+  geom_vline(data = collapse_full_rate, aes(xintercept = min_gen, color = as.factor(climate_rate), linetype = evolution), alpha = 0.8) +
+  geom_hline(data = collapse_full_rate, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
+  geom_line(aes(color = as.factor(climate_rate), linetype = evolution)) +
+  ggh4x::facet_grid2(mpa_size ~ climate, scales = 'free_y', independent = "y") +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Population Density",
+    color = "Climate Increase Per Year", linetype = "Evolution?"
+  ) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_color_manual(values = c("#5ec962", "#440154")) +
+  guides(fill="none")
+  
+ggsave(s6, file = paste0("decline_mpa_climate_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+```
+
+```{r}
+s7 = ggplot(geno_lat_rate, aes(generation, mpa_mean_freq)) +
+  geom_line(aes(color = as.factor(climate_rate), linetype = mpa_size, alpha = as.factor(climate_rate))) +
+  facet_grid(genotype~climate, scales = "free_y") +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Allele Frequency",
+    color = "Climate Increase Per Year",
+    linetype = "MPA size",
+    alpha = ""
+  ) +
+  theme() +
+  scale_color_manual(values = c("#5ec962", "#440154")) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
+  scale_alpha_manual(values = c(1, 0.3), guide = 'none')
+
+s8 = s6 + s7 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
+
+ggsave(s8, file = paste0("climate_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+
+ggsave(s7, file = paste0("genotype_summary_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+```
+
+### Fishing Pressure Figures
+
+```{r}
+data_fp <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_fishing_pressure.csv")) %>%
+  mutate(generation = as.numeric(generation)) %>% 
+  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
+```
+
+```{r}
+line_df_fp <- data_fp %>%
+  filter(generation > 25) %>%
+  group_by(generation, mpa_size, climate, fishing_pressure, evolution) %>%
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>% 
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m)
+
+line_df_mpa_full_fp <- data_fp %>%
+  filter(generation > 25) %>%
+  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
+  distinct() %>% 
+  group_by(generation, evolution, mpa_size, climate, fishing_pressure) %>%
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp)) %>% 
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m)
+
+line_df_geno_lat_fp <- data_fp %>%
+  group_by(generation, evolution, mpa_size, climate, genotype, lat, fishing_pressure) %>% 
+  summarise(
+    location_sum = sum(geno_pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m) %>% 
+  filter(evolution == "Yes") %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(max_temp = as.factor(max_temp))
+
+line_df_geno_lat_fp = line_df_geno_lat_fp %>%
+  filter(lat == 10 | lat == 90 | lat == 50)
+
+line_lat_mpa_combo_fp = line_df_geno_lat_fp %>% 
+  filter(lat != 50) %>% 
+  group_by(generation, climate, genotype, lat, fishing_pressure, evolution) %>% 
+  summarize(mpa_mean_freq = mean(freq_avg, na.rm = TRUE)) %>% 
+  mutate(location = case_when(
+    lat == 10 ~ "Low Latitude", 
+    lat == 90 ~ "High Latitude"
+  )) %>% 
+  mutate(mpa_size = "Non-MPA") 
+
+geno_lat_fp = line_df_geno_lat_fp %>% 
+  filter(lat == 50) %>% 
+  mutate(location = "MPA") %>% 
+  mutate(mpa_mean_freq = freq_avg) %>% 
+  full_join(line_lat_mpa_combo_fp) %>% 
+  mutate(location = as.factor(location)) %>% 
+  mutate(mpa_size = as.factor(mpa_size)) %>% 
+  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA"))) %>% 
+  filter(mpa_size != "Non-MPA")
+
+collapse_fp = line_df_fp %>% 
+  select(generation, mpa_size, climate, location_sum, fishing_pressure, evolution) %>% 
+  filter(generation > 30) %>% 
+  filter(location_sum <= 100*2*.05*100*20) %>% 
+  group_by(mpa_size, climate, fishing_pressure, evolution) %>%
+  summarize(min_gen = min(generation)) %>% 
+  mutate(collapse_point = 100*2*.05*100*20)
+
+collapse_full_fp = line_df_mpa_full_fp %>% 
+  select(generation, evolution, mpa_size, climate, location_sum, fishing_pressure) %>% 
+  filter(generation > 30) %>% 
+  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
+  group_by(evolution, mpa_size, climate, fishing_pressure) %>%
+  summarize(min_gen = min(generation)) %>% 
+  mutate(collapse_point = case_when(
+    mpa_size == "Small" ~ 100*2*.05*3*3,
+    mpa_size == "Medium" ~ 100*2*.05*6*6,
+    mpa_size == "Large" ~ 100*2*.05*10*10
+  ))
+```
+
+
+```{r}
+s9 = ggplot(geno_lat_fp, aes(generation, mpa_mean_freq)) +
+  geom_line(aes(color = as.factor(fishing_pressure), linetype = mpa_size, alpha = as.factor(fishing_pressure))) +
+  facet_grid(genotype~climate, scales = "free_y") +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Allele Frequency",
+    color = "Fishing Pressure",
+    linetype = "MPA size",
+    alpha = ""
+  ) +
+  theme() +
+  scale_color_manual(values = c("#5ec962", "#440154")) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
+  scale_alpha_manual(values = c(1, 0.3), guide = 'none')
+
+ggsave(s9, file = paste0("genotype_summary_fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+```
+
+```{r}
+s10 = ggplot(line_df_mpa_full_fp, aes(generation, location_sum)) +
+  geom_vline(data = collapse_full_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure), linetype = evolution), alpha = 0.8) +
+  geom_hline(data = collapse_full_fp, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
+  geom_line(aes(color = as.factor(fishing_pressure), linetype = evolution)) +
+  ggh4x::facet_grid2(mpa_size ~ climate, scales = 'free_y', independent = "y") +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Population Density",
+    color = "Fishing Pressure", linetype = "Evolution?"
+  ) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_color_manual(values = c("#5ec962", "#440154")) 
+  guides(fill="none")
+  
+s11 = s9 + s10 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
+
+ggsave(p_fp, file = paste0("fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+  
+ggsave(s10, file = paste0("decline_mpa_fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+```
+
+# Old
 
 ```{r}
 # p2 = ggplot(line_df_geno, aes(generation, freq_avg)) +
@@ -232,29 +645,6 @@ ggsave(p1, file = paste0("decline_full.pdf"), path = here::here("04_figs"), heig
 ```
 
 ```{r}
-line_df_geno_lat = line_df_geno_lat %>%
-  filter(lat == 10 | lat == 90 | lat == 50)
-
-line_lat_mpa_combo = line_df_geno_lat %>% 
-  filter(lat != 50) %>% 
-  group_by(generation, climate, genotype, lat) %>% 
-  summarize(mpa_mean_freq = mean(freq_avg, na.rm = TRUE)) %>% 
-  mutate(location = case_when(
-    lat == 10 ~ "Low Latitude", 
-    lat == 90 ~ "High Latitude"
-  )) %>% 
-  mutate(mpa_size = "Non-MPA")
-
-geno_lat = line_df_geno_lat %>% 
-  filter(lat == 50) %>% 
-  mutate(location = "MPA") %>% 
-  mutate(mpa_mean_freq = freq_avg) %>% 
-  full_join(line_lat_mpa_combo) %>% 
-  mutate(location = as.factor(location)) %>% 
-  mutate(mpa_size = as.factor(mpa_size)) %>% 
-  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA")))
-
-# 
 # p4 = ggplot(line_df_geno_lat, aes(generation, freq_avg)) +
 #   geom_line(aes(color = lat, linetype = climate)) +
 #   facet_wrap(genotype~mpa_size, scales = 'free') +
@@ -270,52 +660,6 @@ geno_lat = line_df_geno_lat %>%
 #   scale_color_viridis_d()
 # 
 # ggsave(p4, file = paste0("sum_lat_geno_clim.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-
-p5 = ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
-  geom_line(aes(color = location, linetype = mpa_size)) +
-  facet_grid(genotype~climate, scales = "free_y") +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Allele Frequency",
-    color = "Latitude",
-    linetype = "MPA size"
-  ) +
-  theme() +
-  scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank()) +
-  scale_linetype_manual(values = c("solid", "dashed", "dotted", "solid"))
-
-ggsave(p5, file = paste0("genotype_summary.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-```
-
-```{r}
-change = data_change %>% 
-  select(-genotype, -geno_pop_mean, -freq, -fished_mean) %>% 
-  distinct() %>% 
-  group_by(climate, evolution, mpa_size, lat, lon) %>% 
-  mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation))
-
-mean_change = change %>% 
-  filter(generation >= 35) %>% 
-  group_by(lat, climate, evolution, mpa_size) %>% 
-  summarize(mean_change = mean(rate, na.rm = TRUE)) %>% 
-  ungroup() %>% 
-  filter(lat %in% c(30:70)) %>% 
-  mutate(lat = as.numeric(lat))
-
-mean_change2 = change %>% 
-  filter(generation >= 35) %>% 
-  group_by(generation, climate, evolution, mpa_size) %>% 
-  summarize(mean_change = mean(rate, na.rm = TRUE))
-
-mpa_boundaries = data.frame(mpa_size = c("Small", "Medium", "Large"),
-                            r_bound = c(49, 47, 46),
-                            l_bound = c(51, 52, 55))
 ```
 
 ```{r}
@@ -343,365 +687,6 @@ mpa_boundaries = data.frame(mpa_size = c("Small", "Medium", "Large"),
 ```
 
 ```{r}
-p7 = ggplot(collapse_full, aes(min_gen, mpa_size)) +
-  geom_jitter(aes(color = climate, shape = evolution), height = 0.2, size = 3) +
-  theme_bw() +
-  scale_color_manual(values = c("#5ec962", "#fde725", "#3b528b", "#440154")) +
-  labs(
-    x = "Year",
-    y = "MPA Size",
-    color = "Climate",
-    shape = "Evolution?"
-  ) + 
-  theme(panel.grid.minor = element_blank(),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())
-
-ggsave(p7, file = paste0("collapse_points.pdf"), path = here::here("04_figs"), height = 8, width = 8)
-```
-
-```{r}
-p8 = ggplot(line_df_mpa, aes(generation, pop_mean)) +
-  geom_line(aes(color = climate, linetype = evolution)) +
-  geom_ribbon(aes(ymin = pop_mean - pop_se, ymax = pop_mean + pop_se, fill = climate, linetype = evolution), alpha = .2) +
-  facet_wrap(~ mpa_size, scales = 'free', nrow = 3) +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Climate", fill = "", linetype = "Evolution?"
-  ) +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank()) +
-  scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
-  scale_fill_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
-  guides(fill="none")
-  
-ggsave(p8, file = paste0("decline_mpa.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-```
-
-```{r}
-p9 = ggplot(mean_change2, aes(generation, mean_change)) +
-  geom_line(aes(color = mpa_size, linetype = evolution)) +
-  facet_wrap(~ climate, ncol = 1,scales = "free_y") +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Rate of Population Change",
-    linetype = "Evolution?",
-    color = "Climate"
-  )+
-  scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())
-
-ggsave(p9, file = paste0("rate.pdf"), path = here::here("04_figs"), height = 10, width = 15)
-```
-
-```{r}
-p10 = ggplot(line_df_mpa_full, aes(generation, location_sum)) +
-  geom_vline(data = collapse_full, aes(xintercept = min_gen, color = climate, linetype = evolution), alpha = 0.8) +
-  geom_hline(data = collapse_full, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
-  geom_line(aes(color = climate, linetype = evolution)) +
-  facet_wrap(~ mpa_size, scales = 'free', nrow = 3) +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Climate", fill = "", linetype = "Evolution?"
-  ) +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank()) +
-  scale_color_viridis_d() + scale_fill_viridis_d() +
-  guides(fill="none")
-  
-ggsave(p10, file = paste0("decline_mpa_full.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-```
-
-```{r}
-p11 = ggplot(line_df, aes(generation, log(location_sum))) +
-  geom_line(aes(color = climate, linetype = evolution)) +
-  facet_wrap(~ mpa_size, nrow = 3) +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Climate",
-    linetype = "Evolution?"
-  ) +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank()) +
-  scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154"))
-
-ggsave(p11, file = paste0("decline_full_sim_log.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-```
-
-```{r}
-large = line_df %>% 
-  filter(mpa_size == "Large") %>% 
-  pull(location_sum)
-
-medium = line_df %>% 
-  filter(mpa_size == "Medium") %>% 
-  pull(location_sum)
-
-small = line_df %>% 
-  filter(mpa_size == "Small") %>% 
-  pull(location_sum)
-
-mean(large - small)
-mean(large - medium)
-mean(medium - small)
-``` 
-
-### Read in Climate Rate Data
-
-```{r}
-data_rate <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_climate_rate.csv")) %>%
-  mutate(generation = as.numeric(generation)) %>% 
-  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
-```
-
-```{r}
-line_df_mpa_full_rate <- data_rate %>%
-  filter(generation > 25) %>%
-  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
-  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
-  distinct() %>% 
-  group_by(generation, evolution, mpa_size, climate, climate_rate) %>%
-  summarise(
-    location_sum = sum(pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp)) %>% 
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m)
-
-line_df_geno_lat_rate <- data_rate %>%
-  group_by(generation, evolution, mpa_size, climate, genotype, lat, climate_rate) %>% 
-  summarise(
-    location_sum = sum(geno_pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp),
-    freq_avg = mean(freq, na.rm = TRUE)) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m) %>% 
-  filter(evolution == "Yes") %>% 
-  mutate(lat = as.factor(lat)) %>% 
-  mutate(max_temp = as.factor(max_temp))
-
-line_df_geno_lat_rate = line_df_geno_lat_rate %>%
-  filter(lat == 10 | lat == 90 | lat == 50)
-
-line_lat_mpa_combo_rate = line_df_geno_lat_rate %>% 
-  filter(lat != 50) %>% 
-  group_by(generation, climate, genotype, lat, climate_rate) %>% 
-  summarize(mpa_mean_freq = mean(freq_avg, na.rm = TRUE)) %>% 
-  mutate(location = case_when(
-    lat == 10 ~ "Low Latitude", 
-    lat == 90 ~ "High Latitude"
-  )) %>% 
-  mutate(mpa_size = "Non-MPA")
-
-geno_lat_rate = line_df_geno_lat_rate %>% 
-  filter(lat == 50) %>% 
-  mutate(location = "MPA") %>% 
-  mutate(mpa_mean_freq = freq_avg) %>% 
-  full_join(line_lat_mpa_combo_rate) %>% 
-  mutate(location = as.factor(location)) %>% 
-  mutate(mpa_size = as.factor(mpa_size)) %>% 
-  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA"))) %>% 
-  filter(mpa_size != "Non-MPA")
-
-collapse_full_rate = line_df_mpa_full_rate %>% 
-  select(generation, evolution, mpa_size, climate, location_sum, climate_rate) %>% 
-  filter(generation > 30) %>% 
-  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
-  group_by(evolution, mpa_size, climate, climate_rate) %>%
-  summarize(min_gen = min(generation)) %>% 
-  mutate(collapse_point = case_when(
-    mpa_size == "Small" ~ 100*2*.05*3*3,
-    mpa_size == "Medium" ~ 100*2*.05*6*6,
-    mpa_size == "Large" ~ 100*2*.05*10*10
-  ))
-```
-
-```{r}
-p12 = ggplot(line_df_mpa_full_rate, aes(generation, location_sum)) +
-  geom_vline(data = collapse_full_rate, aes(xintercept = min_gen, color = as.factor(climate_rate), linetype = evolution), alpha = 0.8) +
-  geom_hline(data = collapse_full_rate, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
-  geom_line(aes(color = as.factor(climate_rate), linetype = evolution)) +
-  ggh4x::facet_grid2(mpa_size ~ climate, scales = 'free_y', independent = "y") +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Climate Increase Per Year", linetype = "Evolution?"
-  ) +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank()) +
-  scale_color_manual(values = c("#5ec962", "#440154")) 
-  guides(fill="none")
-  
-ggsave(p12, file = paste0("decline_mpa_climate_rate.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-```
-
-```{r}
-p13 = ggplot(geno_lat_rate, aes(generation, mpa_mean_freq)) +
-  geom_line(aes(color = as.factor(climate_rate), linetype = mpa_size, alpha = as.factor(climate_rate))) +
-  facet_grid(genotype~climate, scales = "free_y") +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Allele Frequency",
-    color = "Climate Increase Per Year",
-    linetype = "MPA size",
-    alpha = ""
-  ) +
-  theme() +
-  scale_color_manual(values = c("#5ec962", "#440154")) +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank()) +
-  scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
-  scale_alpha_manual(values = c(1, 0.3), guide = 'none')
-
-p_cr = p12 + p13 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
-
-ggsave(p_cr, file = paste0("climate_rate.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-
-ggsave(p13, file = paste0("genotype_summary_rate.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-```
-
-### Read in Fishing Pressure Data
-
-```{r}
-data_fp <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_fishing_pressure.csv")) %>%
-  mutate(generation = as.numeric(generation)) %>% 
-  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
-```
-
-```{r}
-line_df_fp <- data_fp %>%
-  filter(generation > 25) %>%
-  group_by(generation, mpa_size, climate, fishing_pressure, evolution) %>%
-  summarise(
-    location_sum = sum(pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp),
-    freq_avg = mean(freq, na.rm = TRUE)) %>% 
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m)
-
-line_df_mpa_full_fp <- data_fp %>%
-  filter(generation > 25) %>%
-  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
-  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
-  distinct() %>% 
-  group_by(generation, evolution, mpa_size, climate, fishing_pressure) %>%
-  summarise(
-    location_sum = sum(pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp)) %>% 
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m)
-
-line_df_geno_lat_fp <- data_fp %>%
-  group_by(generation, evolution, mpa_size, climate, genotype, lat, fishing_pressure) %>% 
-  summarise(
-    location_sum = sum(geno_pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp),
-    freq_avg = mean(freq, na.rm = TRUE)) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m) %>% 
-  filter(evolution == "Yes") %>% 
-  mutate(lat = as.factor(lat)) %>% 
-  mutate(max_temp = as.factor(max_temp))
-
-line_df_geno_lat_fp = line_df_geno_lat_fp %>%
-  filter(lat == 10 | lat == 90 | lat == 50)
-
-line_lat_mpa_combo_fp = line_df_geno_lat_fp %>% 
-  filter(lat != 50) %>% 
-  group_by(generation, climate, genotype, lat, fishing_pressure, evolution) %>% 
-  summarize(mpa_mean_freq = mean(freq_avg, na.rm = TRUE)) %>% 
-  mutate(location = case_when(
-    lat == 10 ~ "Low Latitude", 
-    lat == 90 ~ "High Latitude"
-  )) %>% 
-  mutate(mpa_size = "Non-MPA") 
-
-geno_lat_fp = line_df_geno_lat_fp %>% 
-  filter(lat == 50) %>% 
-  mutate(location = "MPA") %>% 
-  mutate(mpa_mean_freq = freq_avg) %>% 
-  full_join(line_lat_mpa_combo_fp) %>% 
-  mutate(location = as.factor(location)) %>% 
-  mutate(mpa_size = as.factor(mpa_size)) %>% 
-  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA"))) %>% 
-  filter(mpa_size != "Non-MPA")
-
-collapse_fp = line_df_fp %>% 
-  select(generation, mpa_size, climate, location_sum, fishing_pressure, evolution) %>% 
-  filter(generation > 30) %>% 
-  filter(location_sum <= 100*2*.05*100*20) %>% 
-  group_by(mpa_size, climate, fishing_pressure, evolution) %>%
-  summarize(min_gen = min(generation)) %>% 
-  mutate(collapse_point = 100*2*.05*100*20)
-
-collapse_full_fp = line_df_mpa_full_fp %>% 
-  select(generation, evolution, mpa_size, climate, location_sum, fishing_pressure) %>% 
-  filter(generation > 30) %>% 
-  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
-  group_by(evolution, mpa_size, climate, fishing_pressure) %>%
-  summarize(min_gen = min(generation)) %>% 
-  mutate(collapse_point = case_when(
-    mpa_size == "Small" ~ 100*2*.05*3*3,
-    mpa_size == "Medium" ~ 100*2*.05*6*6,
-    mpa_size == "Large" ~ 100*2*.05*10*10
-  ))
-```
-
-```{r}
 # p14 = ggplot(line_df_fp, aes(generation, location_sum)) +
 #   geom_vline(data = collapse_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure), linetype = evolution), alpha = 0.8) +
 #   geom_hline(data = collapse_fp, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
@@ -721,57 +706,4 @@ collapse_full_fp = line_df_mpa_full_fp %>%
 #   scale_color_manual(values = c("#5ec962", "#440154")) 
 #   
 # ggsave(p14, file = paste0("decline_sim_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-```
-
-
-```{r}
-p15 = ggplot(geno_lat_fp, aes(generation, mpa_mean_freq)) +
-  geom_line(aes(color = as.factor(fishing_pressure), linetype = mpa_size, alpha = as.factor(fishing_pressure))) +
-  facet_grid(genotype~climate, scales = "free_y") +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Allele Frequency",
-    color = "Fishing Pressure",
-    linetype = "MPA size",
-    alpha = ""
-  ) +
-  theme() +
-  scale_color_manual(values = c("#5ec962", "#440154")) +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank()) +
-  scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
-  scale_alpha_manual(values = c(1, 0.3), guide = 'none')
-
-ggsave(p15, file = paste0("genotype_summary_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-```
-
-```{r}
-p16 = ggplot(line_df_mpa_full_fp, aes(generation, location_sum)) +
-  geom_vline(data = collapse_full_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure), linetype = evolution), alpha = 0.8) +
-  geom_hline(data = collapse_full_fp, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
-  geom_line(aes(color = as.factor(fishing_pressure), linetype = evolution)) +
-  ggh4x::facet_grid2(mpa_size ~ climate, scales = 'free_y', independent = "y") +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Fishing Pressure", linetype = "Evolution?"
-  ) +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank()) +
-  scale_color_manual(values = c("#5ec962", "#440154")) 
-  guides(fill="none")
-  
-p_fp = p16 + p15 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
-
-ggsave(p_fp, file = paste0("fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
-  
-ggsave(p16, file = paste0("decline_mpa_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```

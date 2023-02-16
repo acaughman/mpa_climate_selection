@@ -17,22 +17,13 @@ library(effectsize)
 
 ```{r}
 # read in data
-data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv"))
+data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>% 
   mutate(generation = as.numeric(generation)) %>% 
-  filter(mpa_size != "None")
+  filter(mpa_size != "None") %>%
+  mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
 ```
 
-### manipulate data
-
-```{r}
-sum <- data %>%
-  group_by(generation, climate, evolution, mpa_size) %>%
-  summarise(pop_mean = mean(pop_mean)) 
-
-# write_csv(sum_climate, here::here("03_generated_data", "summary_data", "test_null_sum.csv"))
-```
-
-### Collapse Point
+### Manipulate Data
 
 ```{r}
 line_df <- data %>%
@@ -49,6 +40,26 @@ line_df <- data %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m)
+
+shock_df = line_df %>% 
+  filter(climate %in% c("Shocks")) %>% 
+  ungroup() %>% 
+  select(generation, climate, max_temp, mpa_size, evolution) %>% 
+  distinct() %>% 
+  filter(max_temp > 27)
+
+small_shock_years = shock_df %>% 
+  filter(mpa_size == "Small") %>% 
+  mutate(shock_year = "Yes") %>% 
+  select(generation, shock_year, mpa_size, evolution, climate)
+medium_shock_years = shock_df %>% 
+  filter(mpa_size == "Medium") %>% 
+  mutate(shock_year = "Yes") %>% 
+  select(generation, shock_year, mpa_size, evolution, climate)
+large_shock_years = shock_df %>% 
+  filter(mpa_size == "Large") %>% 
+  mutate(shock_year = "Yes") %>% 
+  select(generation, shock_year, mpa_size, evolution, climate)
 
 line_df_mpa_full <- data %>%
   filter(generation > 25) %>%
@@ -100,15 +111,34 @@ line_df_geno_lat <- data %>%
   mutate(lat = as.factor(lat)) %>% 
   mutate(max_temp = as.factor(max_temp))
 
-collapse = line_df %>% 
+line_df_lat <- data %>%
+  filter(generation > 25) %>% 
+  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  group_by(generation, mpa_size, climate, lat, lon, evolution) %>%
+  summarise(
+    location_sum = sum(geno_pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(max_temp = as.factor(max_temp))
+```
+
+### Collapse Point
+
+```{r}
+collapse_full = line_df %>% 
   select(generation, evolution, mpa_size, climate, location_sum) %>% 
   filter(generation > 30) %>% 
   filter(location_sum <= 100*2*.05*100*20) %>% 
   group_by(evolution, mpa_size, climate) %>%
   summarize(min_gen = min(generation)) %>% 
-  mutate(collapse_point = 100*2*.05*100*20)
+  mutate(collapse_point = 100*2*.05*100*20) %>% 
+  mutate(area = "full sim")
 
-collapse_full = line_df_mpa_full %>% 
+collapse_mpa = line_df_mpa_full %>% 
   select(generation, evolution, mpa_size, climate, location_sum) %>% 
   filter(generation > 30) %>% 
   filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
@@ -118,22 +148,47 @@ collapse_full = line_df_mpa_full %>%
     mpa_size == "Small" ~ 100*2*.05*3*3,
     mpa_size == "Medium" ~ 100*2*.05*6*6,
     mpa_size == "Large" ~ 100*2*.05*10*10
-  ))
+  )) %>% 
+  mutate(area = "mpa only")
+
+collapse = full_join(collapse_full, collapse_mpa) 
+
+write_csv(collapse, here::here("03_generated_data", "results", "collapse_points.csv"))
 ```
 
 ### Derivative
 
 ```{r}
 change = data %>% 
-  select(-genotype, -geno_pop_mean, -freq, -fished_mean) %>% 
+  select(-genotype, -geno_pop_mean, -freq, -fished_mean, -geno_pop_sd, -geno_pop_se) %>% 
   distinct() %>% 
   group_by(climate, evolution, mpa_size) %>% 
   mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) %>% 
   ungroup()
 
-mean_change = change %>% 
-  group_by(lat, lon, climate, evolution, mpa_size) %>% 
+change_mpa = change %>% 
+  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large"))
+
+mean_change_mpa = change_mpa %>% 
+  group_by(lat, lon, generation, climate, evolution, mpa_size) %>% 
   summarize(mean_change = mean(rate, na.rm = TRUE))
+
+mean_change = mean_change_mpa %>% 
+  group_by(generation, climate, evolution, mpa_size) %>% 
+  summarize(mean_change = mean(mean_change, na.rm = TRUE))
+
+write_csv(mean_change, here::here("03_generated_data", "results", "rate_change_mpa.csv"))
+```
+
+```{r}
+shock_change = mean_change %>% 
+  filter(climate == "Shocks")
+
+shock_change = list(shock_change, small_shock_years, medium_shock_years, large_shock_years) %>% 
+  reduce(left_join)
+
+write_csv(shock_change, here::here("03_generated_data", "results", "shock_change.csv"))
 ```
 
 ### Temp of max aa
@@ -152,7 +207,31 @@ aa_sum = aa_geno %>%
   summarize(freq_avg = max(freq_avg))
 
 aa = left_join(aa_sum, aa_geno)
-           
+
+temps = aa %>% 
+  select(mpa_size, climate, freq_avg, average_temp, generation)
+
+write_csv(temps, here::here("03_generated_data", "results", "aa_peak.csv"))
+```
+
+### Other
+
+```{r}
+large = line_df %>% 
+  filter(mpa_size == "Large") %>% 
+  pull(location_sum)
+
+medium = line_df %>% 
+  filter(mpa_size == "Medium") %>% 
+  pull(location_sum)
+
+small = line_df %>% 
+  filter(mpa_size == "Small") %>% 
+  pull(location_sum)
+
+mean(large - small)
+mean(large - medium)
+mean(medium - small)
 ```
 
 
@@ -179,4 +258,38 @@ cohens_f_squared(anova_mod_sum, partial = TRUE)
 #investigate options
 ```
 
-### 
+### ANOVA At Points
+
+```{r}
+point1 = line_df_lat %>% 
+  mutate(location = paste(as.character(lat), as.character(lon))) %>%
+  filter(generation == 50)
+anova_mod1 <- aov(formula = location_sum ~ mpa_size*evolution*climate + Error(location), data = point1)
+TukeyHSD(anova_mod1, "evolution")
+
+point2 = line_df_lat %>% 
+  mutate(location = paste(as.character(lat), as.character(lon))) %>%
+  filter(generation == 75)
+anova_mod2 <- aov(formula = location_sum ~ mpa_size*evolution*climate + Error(location), data = point2)
+
+point3 = line_df_lat %>% 
+  mutate(location = paste(as.character(lat), as.character(lon))) %>%
+  filter(generation == 100)
+anova_mod3 <- aov(formula = location_sum ~ mpa_size*evolution*climate + Error(location), data = point3)
+
+point4 = line_df_lat %>% 
+  mutate(location = paste(as.character(lat), as.character(lon))) %>%
+  filter(generation == 150)
+anova_mod4 <- aov(formula = location_sum ~ mpa_size*evolution*climate + Error(location), data = point4)
+
+```
+
+### manipulate data
+
+```{r}
+sum <- data %>%
+  group_by(generation, climate, evolution, mpa_size) %>%
+  summarise(pop_mean = mean(pop_mean)) 
+
+# write_csv(sum_climate, here::here("03_generated_data", "summary_data", "test_null_sum.csv"))
+```
