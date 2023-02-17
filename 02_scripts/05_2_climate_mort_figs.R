@@ -168,6 +168,123 @@ SSTdf_mean <- output_df_mean %>%
   )) %>%
   mutate(year = as.numeric(year))
 
+for (b in 1:years) {
+  SSTdf_enso <- SST.patches.enso[, , b] %>%
+    as.data.frame()
+  
+  SSTdf_enso$lat <- c(1:NS.patches)
+  SSTdf_enso$year <- paste0(b)
+  
+  output_df_enso <- bind_rows(output_df_enso, SSTdf_enso)
+}
+
+SSTdf_enso <- output_df_enso %>%
+  pivot_longer(V1:V20,
+               names_to = "lon",
+               values_to = "sst"
+  ) %>%
+  mutate(lon = case_when(
+    lon == "V1" ~ 1,
+    lon == "V2" ~ 2,
+    lon == "V3" ~ 3,
+    lon == "V4" ~ 4,
+    lon == "V5" ~ 5,
+    lon == "V6" ~ 6,
+    lon == "V7" ~ 7,
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
+  )) %>%
+  mutate(year = as.numeric(year))
+
+for (b in 1:years) {
+  SSTdf_shock <- SST.patches.shock[, , b] %>%
+    as.data.frame()
+  
+  SSTdf_shock$lat <- c(1:NS.patches)
+  SSTdf_shock$year <- paste0(b)
+  
+  output_df_shock <- bind_rows(output_df_shock, SSTdf_shock)
+}
+
+SSTdf_shock <- output_df_shock %>%
+  pivot_longer(V1:V20,
+               names_to = "lon",
+               values_to = "sst"
+  ) %>%
+  mutate(lon = case_when(
+    lon == "V1" ~ 1,
+    lon == "V2" ~ 2,
+    lon == "V3" ~ 3,
+    lon == "V4" ~ 4,
+    lon == "V5" ~ 5,
+    lon == "V6" ~ 6,
+    lon == "V7" ~ 7,
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
+  )) %>%
+  mutate(year = as.numeric(year))
+
+for (b in 1:years) {
+  SSTdf_mean_shock <- SST.patches.mean.shock[, , b] %>%
+    as.data.frame()
+  
+  SSTdf_mean_shock$lat <- c(1:NS.patches)
+  SSTdf_mean_shock$year <- paste0(b)
+  
+  output_df_mean_shock <- bind_rows(output_df_mean_shock, SSTdf_mean_shock)
+}
+
+SSTdf_mean_shock <- output_df_mean_shock %>%
+  pivot_longer(V1:V20,
+               names_to = "lon",
+               values_to = "sst"
+  ) %>%
+  mutate(lon = case_when(
+    lon == "V1" ~ 1,
+    lon == "V2" ~ 2,
+    lon == "V3" ~ 3,
+    lon == "V4" ~ 4,
+    lon == "V5" ~ 5,
+    lon == "V6" ~ 6,
+    lon == "V7" ~ 7,
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
+  )) %>%
+  mutate(year = as.numeric(year))
+
 SSTdf_mean <- SSTdf_mean %>%
   mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
   mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>% 
@@ -178,249 +295,83 @@ SSTdf_mean <- SSTdf_mean %>%
     lat == 1 ~ "Lowest Latitude",
     lat == 100 ~ "Highest Latitude",
     lat == 50 ~ "Within MPA"
-  )) %>% filter(lat == "Within MPA")
-
-
-ggplot(SSTdf_mean) +
-  geom_line(aes(year, sst), color = "blue") +
-  geom_line(aes(year, survival * 40), color = "red") +
-  labs(x = "Year", y = "SST") +
-  theme_bw() +
-  ylim(20, 35) +
-  scale_y_continuous("SST", sec.axis = sec_axis(~ ./40, name = "Natural Mortaility")) +
-  geom_hline(aes(yintercept = 25), alpha = 0.2) +
-  scale_color_viridis_d() +
-  theme(
-    panel.grid = element_blank(),
-    axis.text.x = element_blank(),
-    axis.text.y.left = element_blank(),
-    axis.ticks = element_blank()
-  )
-
-smm <- ggplot(SSTdf_mean, aes(lon, lat, fill = survival)) +
-  geom_tile() +
-  labs(x = "Longitude", y = "Latitude", fill = "s") +
-  theme_bw() +
-  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .3) +
-  facet_wrap(~year) +
-  theme(
-    strip.background = element_blank(),
-    strip.text.x = element_blank()
-  )
-
-# ENSO --------------------------------------------------------------------
-
-for (b in 1:years) {
-  SSTdf_enso <- SST.patches.enso[, , b] %>%
-    as.data.frame()
-
-  SSTdf_enso$lat <- c(1:NS.patches)
-  SSTdf_enso$year <- paste0(b)
-
-  output_df_enso <- bind_rows(output_df_enso, SSTdf_enso)
-}
-
-SSTdf_enso <- output_df_enso %>%
-  pivot_longer(V1:V20,
-    names_to = "lon",
-    values_to = "sst"
-  ) %>%
-  mutate(lon = case_when(
-    lon == "V1" ~ 1,
-    lon == "V2" ~ 2,
-    lon == "V3" ~ 3,
-    lon == "V4" ~ 4,
-    lon == "V5" ~ 5,
-    lon == "V6" ~ 6,
-    lon == "V7" ~ 7,
-    lon == "V8" ~ 8,
-    lon == "V9" ~ 9,
-    lon == "V10" ~ 10,
-    lon == "V11" ~ 11,
-    lon == "V12" ~ 12,
-    lon == "V13" ~ 13,
-    lon == "V14" ~ 14,
-    lon == "V15" ~ 15,
-    lon == "V16" ~ 16,
-    lon == "V17" ~ 17,
-    lon == "V18" ~ 18,
-    lon == "V19" ~ 19,
-    lon == "V20" ~ 20
-  )) %>%
-  mutate(year = as.numeric(year))
-
-et <- ggplot(SSTdf_enso, aes(lon, lat, fill = sst)) +
-  geom_tile() +
-  labs(x = "Longitude", y = "Latitude", fill = "SST") +
-  theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 29) +
-  facet_wrap(~year) +
-  theme(
-    strip.background = element_blank(),
-    strip.text.x = element_blank()
-  )
+  )) %>% filter(lat == "Within MPA") %>% 
+  mutate(climate = "Mean Shift")
 
 SSTdf_enso <- SSTdf_enso %>%
   mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
   mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>% 
   filter(lat %in% c(1,50,100)) %>% 
-  filter(lon == 10)
-
-em <- ggplot(SSTdf_enso, aes(lon, lat, fill = survival)) +
-  geom_tile() +
-  labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
-  theme_bw() +
-  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .3) +
-  facet_wrap(~year) +
-  theme(
-    strip.background = element_blank(),
-    strip.text.x = element_blank()
-  )
-
-# shock -------------------------------------------------------------------
-
-for (b in 1:years) {
-  SSTdf_shock <- SST.patches.shock[, , b] %>%
-    as.data.frame()
-
-  SSTdf_shock$lat <- c(1:NS.patches)
-  SSTdf_shock$year <- paste0(b)
-
-  output_df_shock <- bind_rows(output_df_shock, SSTdf_shock)
-}
-
-SSTdf_shock <- output_df_shock %>%
-  pivot_longer(V1:V20,
-    names_to = "lon",
-    values_to = "sst"
-  ) %>%
-  mutate(lon = case_when(
-    lon == "V1" ~ 1,
-    lon == "V2" ~ 2,
-    lon == "V3" ~ 3,
-    lon == "V4" ~ 4,
-    lon == "V5" ~ 5,
-    lon == "V6" ~ 6,
-    lon == "V7" ~ 7,
-    lon == "V8" ~ 8,
-    lon == "V9" ~ 9,
-    lon == "V10" ~ 10,
-    lon == "V11" ~ 11,
-    lon == "V12" ~ 12,
-    lon == "V13" ~ 13,
-    lon == "V14" ~ 14,
-    lon == "V15" ~ 15,
-    lon == "V16" ~ 16,
-    lon == "V17" ~ 17,
-    lon == "V18" ~ 18,
-    lon == "V19" ~ 19,
-    lon == "V20" ~ 20
-  )) %>%
-  mutate(year = as.numeric(year))
-
-st <- ggplot(SSTdf_shock, aes(lon, lat, fill = sst)) +
-  geom_tile() +
-  labs(x = "Longitude", y = "Latitude", fill = "SST") +
-  theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 29) +
-  facet_wrap(~year) +
-  theme(
-    strip.background = element_blank(),
-    strip.text.x = element_blank()
-  )
+  filter(lon == 10) %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(lat = case_when(
+    lat == 1 ~ "Lowest Latitude",
+    lat == 100 ~ "Highest Latitude",
+    lat == 50 ~ "Within MPA"
+  )) %>% filter(lat == "Within MPA") %>% 
+  mutate(climate = "El Nino/ La Nina")
 
 SSTdf_shock <- SSTdf_shock %>%
   mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
   mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>% 
   filter(lat %in% c(1,50,100)) %>% 
-  filter(lon == 10)
-
-sm <- ggplot(SSTdf_shock, aes(lon, lat, fill = survival)) +
-  geom_tile() +
-  labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
-  theme_bw() +
-  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .3) +
-  facet_wrap(~year) +
-  theme(
-    strip.background = element_blank(),
-    strip.text.x = element_blank()
-  )
-
-
-# Mean Shock --------------------------------------------------------------
-for (b in 1:years) {
-  SSTdf_mean_shock <- SST.patches.mean.shock[, , b] %>%
-    as.data.frame()
-
-  SSTdf_mean_shock$lat <- c(1:NS.patches)
-  SSTdf_mean_shock$year <- paste0(b)
-
-  output_df_mean_shock <- bind_rows(output_df_mean_shock, SSTdf_mean_shock)
-}
-
-SSTdf_mean_shock <- output_df_mean_shock %>%
-  pivot_longer(V1:V20,
-    names_to = "lon",
-    values_to = "sst"
-  ) %>%
-  mutate(lon = case_when(
-    lon == "V1" ~ 1,
-    lon == "V2" ~ 2,
-    lon == "V3" ~ 3,
-    lon == "V4" ~ 4,
-    lon == "V5" ~ 5,
-    lon == "V6" ~ 6,
-    lon == "V7" ~ 7,
-    lon == "V8" ~ 8,
-    lon == "V9" ~ 9,
-    lon == "V10" ~ 10,
-    lon == "V11" ~ 11,
-    lon == "V12" ~ 12,
-    lon == "V13" ~ 13,
-    lon == "V14" ~ 14,
-    lon == "V15" ~ 15,
-    lon == "V16" ~ 16,
-    lon == "V17" ~ 17,
-    lon == "V18" ~ 18,
-    lon == "V19" ~ 19,
-    lon == "V20" ~ 20
-  )) %>%
-  mutate(year = as.numeric(year))
-
-mst <- ggplot(SSTdf_mean_shock, aes(lon, lat, fill = sst)) +
-  geom_tile() +
-  labs(x = "Longitude", y = "Latitude", fill = "SST") +
-  theme_bw() +
-  scale_fill_gradient2(low = "white", high = "midnightblue", mid = "lightskyblue", midpoint = 29) +
-  facet_wrap(~year) +
-  theme(
-    strip.background = element_blank(),
-    strip.text.x = element_blank()
-  )
+  filter(lon == 10) %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(lat = case_when(
+    lat == 1 ~ "Lowest Latitude",
+    lat == 100 ~ "Highest Latitude",
+    lat == 50 ~ "Within MPA"
+  )) %>% filter(lat == "Within MPA") %>% 
+  mutate(climate = "Shocks")
 
 SSTdf_mean_shock <- SSTdf_mean_shock %>%
   mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
   mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>% 
   filter(lat %in% c(1,50,100)) %>% 
-  filter(lon == 10)
+  filter(lon == 10) %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(lat = case_when(
+    lat == 1 ~ "Lowest Latitude",
+    lat == 100 ~ "Highest Latitude",
+    lat == 50 ~ "Within MPA"
+  )) %>% filter(lat == "Within MPA") %>% 
+  mutate(climate = "Shocks with Mean Shift")
 
-msm <- ggplot(SSTdf_mean_shock, aes(lon, lat, fill = survival)) +
-  geom_tile() +
-  labs(x = "Longitude", y = "Latitude", fill = "Natural Survival Rate") +
+SSTdf = list(SSTdf_enso, SSTdf_mean, SSTdf_mean_shock, SSTdf_shock) %>% 
+  reduce(full_join)
+
+temp = ggplot(SSTdf) +
+  geom_line(aes(year, sst), color = "blue") +
+  facet_wrap(~ climate) +
+  labs(x = "Year", y = "SST") +
   theme_bw() +
-  scale_fill_gradient2(low = "black", high = "red", mid = "pink", midpoint = .3) +
-  facet_wrap(~year) +
+  scale_color_viridis_d() +
   theme(
-    strip.background = element_blank(),
-    strip.text.x = element_blank()
+    panel.grid = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y.left = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold"),
+    strip.background = element_rect(fill = "white")
+  )
+
+survive = ggplot(SSTdf) +
+  geom_line(aes(year, survival), color = "red") +
+  facet_wrap(~ climate) +
+  labs(x = "Year", y = "SST") +
+  theme_bw() +
+  scale_color_viridis_d() +
+  theme(
+    panel.grid = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y.left = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold"),
+    strip.background = element_rect(fill = "white")
   )
 
 
-ggsave(mt, file = paste0("mean_temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
-ggsave(mm, file = paste0("mean_mortality.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
-ggsave(et, file = paste0("enso_temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
-ggsave(em, file = paste0("enso_mortality.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
-ggsave(st, file = paste0("shock_temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
-ggsave(sm, file = paste0("shock_mortality.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
-ggsave(mst, file = paste0("mean_shock_temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
-ggsave(msm, file = paste0("mean_shock_mortality.pdf"), path = here("04_figs", "climate"), height = 10, width = 15)
+ggsave(temp, file = paste0("temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
+ggsave(survive, file = paste0("mortality.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
