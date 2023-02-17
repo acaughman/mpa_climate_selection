@@ -403,7 +403,7 @@ s6 = ggplot(line_df_mpa_full_rate, aes(generation, location_sum)) +
   scale_color_manual(values = c("#5ec962", "#440154")) +
   guides(fill="none")
   
-ggsave(s6, file = paste0("decline_mpa_climate_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+#ggsave(s6, file = paste0("decline_mpa_climate_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -432,7 +432,7 @@ s8 = s6 + s7 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect
 
 ggsave(s8, file = paste0("climate_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
 
-ggsave(s7, file = paste0("genotype_summary_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+#ggsave(s7, file = paste0("genotype_summary_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
 ```
 
 ### Fishing Pressure Figures
@@ -561,7 +561,7 @@ s9 = ggplot(geno_lat_fp, aes(generation, mpa_mean_freq)) +
   scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
   scale_alpha_manual(values = c(1, 0.3), guide = 'none')
 
-ggsave(s9, file = paste0("genotype_summary_fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+#ggsave(s9, file = paste0("genotype_summary_fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -584,11 +584,11 @@ s10 = ggplot(line_df_mpa_full_fp, aes(generation, location_sum)) +
   scale_color_manual(values = c("#5ec962", "#440154")) 
   guides(fill="none")
   
-s11 = s9 + s10 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
+s11 = s10 + s9 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
 
-ggsave(p_fp, file = paste0("fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+ggsave(s11, file = paste0("fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
   
-ggsave(s10, file = paste0("decline_mpa_fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+#ggsave(s10, file = paste0("decline_mpa_fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
 ```
 
 # Old
