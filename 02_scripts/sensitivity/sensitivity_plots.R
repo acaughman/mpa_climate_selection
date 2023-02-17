@@ -53,7 +53,9 @@ p <- ggplot(data, aes(generation, location_sum)) +
   scale_x_continuous(breaks = c(16, 26), labels = c("fishing starts", "MPA establishment")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank()) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white")) +
   ylim(c(0, 10000))
 
 #ggsave(reposition_legend(p, 'center', panel='panel-3-2'), file = paste0("med.pdf"), path = here::here("sensitivity_analysis", "climate_rate"), height = 8, width = 15)
@@ -74,8 +76,10 @@ p <- ggplot(data, aes(generation, freq_avg)) +
   geom_vline(xintercept = 26, alpha = 0.3) +
   # geom_vline(xintercept = c(136,66,124,79,35,143,130,71,82,90,25,73,80,103,51,34,142,40,86,141,97,137,113,144,122,132,149,129), alpha = 0.3, color= "red") +
   scale_x_continuous(breaks = c(16, 26), labels = c("fishing starts", "MPA establishment")) +
-  theme(axis.text.x = element_text(angle = 0, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank())
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"))
 
-ggsave(p, file = paste0("med.pdf"), path = here::here("sensitivity_analysis", "climate_rate"), height = 8, width = 15)
+ggsave(p, file = paste0("med_geno.pdf"), path = here::here("sensitivity_analysis", "climate_rate"), height = 8, width = 15)

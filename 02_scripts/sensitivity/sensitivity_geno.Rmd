@@ -15,7 +15,8 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "climate_rate", "med_mean_shock_013.csv"))
+df1 <- read_csv(here::here("sensitivity_analysis", "climate_rate", "med_mean_shock_033.csv")) %>% 
+  filter(rep == 1)
 
 df2 <- read_csv(here::here("sensitivity_analysis", "climate_rate", "mean_shock_med_sum_geno.csv")) 
 ```
@@ -75,7 +76,7 @@ mpa_df1 <- output_sum1 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>% 
-  mutate(dd = 0.013)
+  mutate(dd = 0.033)
 
 ```
 
