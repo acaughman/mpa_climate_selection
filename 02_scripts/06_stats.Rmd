@@ -13,6 +13,8 @@ library(effsize)
 library(effectsize)
 ```
 
+# Data 
+
 ### Load in Data
 
 ```{r}
@@ -40,26 +42,6 @@ line_df <- data %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m)
-
-shock_df = line_df %>% 
-  filter(climate %in% c("Shocks")) %>% 
-  ungroup() %>% 
-  select(generation, climate, max_temp, mpa_size, evolution) %>% 
-  distinct() %>% 
-  filter(max_temp > 27)
-
-small_shock_years = shock_df %>% 
-  filter(mpa_size == "Small") %>% 
-  mutate(shock_year = "Yes") %>% 
-  select(generation, shock_year, mpa_size, evolution, climate)
-medium_shock_years = shock_df %>% 
-  filter(mpa_size == "Medium") %>% 
-  mutate(shock_year = "Yes") %>% 
-  select(generation, shock_year, mpa_size, evolution, climate)
-large_shock_years = shock_df %>% 
-  filter(mpa_size == "Large") %>% 
-  mutate(shock_year = "Yes") %>% 
-  select(generation, shock_year, mpa_size, evolution, climate)
 
 line_df_mpa_full <- data %>%
   filter(generation > 25) %>%
@@ -126,6 +108,61 @@ line_df_lat <- data %>%
   mutate(max_temp = as.factor(max_temp))
 ```
 
+# Population Density
+
+### Evo No Evo Compare
+
+```{r}
+point_n = line_df_lat %>% 
+  filter(evolution == "No") %>%
+  rename(no = location_sum) %>% 
+  select(-freq_avg, -evolution, -max_temp, -min_temp)
+point_y = line_df_lat %>% 
+  filter(evolution == "Yes") %>% 
+  rename(yes = location_sum) %>% 
+  select(-freq_avg, -evolution, -max_temp, -min_temp)
+point = full_join(point_y, point_n) %>% 
+  mutate(diff = yes - no) 
+
+point1 = point %>% 
+  filter(generation == 50) %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(avg_diff = mean(diff, na.rm=TRUE)) %>% 
+  mutate(generation = 50)
+
+point2 = point %>% 
+  filter(generation == 75) %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(avg_diff = mean(diff, na.rm=TRUE)) %>% 
+  mutate(generation = 75)
+
+point3 = point %>% 
+  filter(generation == 100) %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(avg_diff = mean(diff, na.rm=TRUE)) %>% 
+  mutate(generation = 100)
+
+point4 = point %>% 
+  filter(generation == 125) %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(avg_diff = mean(diff, na.rm=TRUE)) %>% 
+  mutate(generation = 125)
+
+point5 = point %>% 
+  filter(generation == 150) %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(avg_diff = mean(diff, na.rm=TRUE)) %>% 
+  mutate(generation = 150)
+
+point_sum = list(point1, point2, point3, point4, point5) %>% 
+  reduce(full_join) %>% 
+  filter(mpa_size == "Medium")
+
+write_csv(point, here::here("03_generated_data", "results", "evo_diff.csv"))
+write_csv(point_sum, here::here("03_generated_data", "results", "evo_diff_sum.csv"))
+```
+
+
 ### Collapse Point
 
 ```{r}
@@ -171,17 +208,35 @@ change_mpa = change %>%
   filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large"))
 
 mean_change_mpa = change_mpa %>% 
-  group_by(lat, lon, generation, climate, evolution, mpa_size) %>% 
+  group_by(generation, climate, evolution, mpa_size) %>% 
   summarize(mean_change = mean(rate, na.rm = TRUE))
 
-mean_change = mean_change_mpa %>% 
-  group_by(generation, climate, evolution, mpa_size) %>% 
-  summarize(mean_change = mean(mean_change, na.rm = TRUE))
-
-write_csv(mean_change, here::here("03_generated_data", "results", "rate_change_mpa.csv"))
+write_csv(mean_change_mpa, here::here("03_generated_data", "results", "rate_change_mpa.csv"))
 ```
 
+### Heatwave Recovery
+
 ```{r}
+shock_df = line_df %>% 
+  filter(climate %in% c("Shocks")) %>% 
+  ungroup() %>% 
+  select(generation, climate, max_temp, mpa_size, evolution) %>% 
+  distinct() %>% 
+  filter(max_temp > 27)
+
+small_shock_years = shock_df %>% 
+  filter(mpa_size == "Small") %>% 
+  mutate(shock_year = "Yes") %>% 
+  select(generation, shock_year, mpa_size, evolution, climate)
+medium_shock_years = shock_df %>% 
+  filter(mpa_size == "Medium") %>% 
+  mutate(shock_year = "Yes") %>% 
+  select(generation, shock_year, mpa_size, evolution, climate)
+large_shock_years = shock_df %>% 
+  filter(mpa_size == "Large") %>% 
+  mutate(shock_year = "Yes") %>% 
+  select(generation, shock_year, mpa_size, evolution, climate)
+
 shock_change = mean_change %>% 
   filter(climate == "Shocks")
 
@@ -232,6 +287,31 @@ small = line_df %>%
 mean(large - small)
 mean(large - medium)
 mean(medium - small)
+```
+
+### Fishing Pressure
+
+```{r}
+data_fp <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_fishing_pressure.csv")) %>%
+  mutate(generation = as.numeric(generation)) %>% 
+  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
+```
+
+```{r}
+
+```
+
+
+### Climate Rate
+
+```{r}
+data_rate <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_climate_rate.csv")) %>%
+  mutate(generation = as.numeric(generation)) %>% 
+  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
+```
+
+```{r}
+
 ```
 
 

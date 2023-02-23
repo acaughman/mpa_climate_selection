@@ -74,11 +74,11 @@ gc()
 output_sum2 = output_sum2 %>%
   distinct() %>% 
   mutate(freq = geno_pop_mean / pop_mean,
-         mpa_size = "Small",
-         climate = "Null",
+         mpa_size = "Medium",
+         climate = "Shocks with Mean Shift",
          evolution = "No")
 
-write_csv(output_sum2, here::here("03_generated_data", "summary_data", "summary_m31.csv"))
+write_csv(output_sum2, here::here("03_generated_data", "summary_data", "summary_m38_3.csv"))
 
 rm(list=ls())
 
