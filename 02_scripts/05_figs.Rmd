@@ -12,6 +12,218 @@ library(tidyverse)
 library(patchwork)
 ```
 
+# Paper Figures 
+
+### Read in Data
+
+```{r}
+data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>%
+  mutate(generation = as.numeric(generation)) %>% 
+  filter(mpa_size != "None") %>%
+  mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
+```
+
+### Data Manipulation
+
+```{r}
+line_df_mpa_full <- data %>%
+  filter(generation > 25) %>%
+  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
+  distinct() %>% 
+  group_by(generation, evolution, mpa_size, climate) %>%
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp)) %>% 
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m)
+
+line_df_geno_lat <- data %>%
+  group_by(generation, evolution, mpa_size, climate, genotype, lat) %>% 
+  summarise(
+    location_sum = sum(geno_pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m) %>% 
+  filter(evolution == "Yes") %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(max_temp = as.factor(max_temp))
+
+line_df_geno_lat = line_df_geno_lat %>%
+  filter(lat == 10 | lat == 90 | lat == 50)
+
+line_lat_mpa_combo = line_df_geno_lat %>% 
+  filter(lat != 50) %>% 
+  group_by(generation, climate, genotype, lat) %>% 
+  summarize(mpa_mean_freq = mean(freq_avg, na.rm = TRUE)) %>% 
+  mutate(location = case_when(
+    lat == 10 ~ "Low Latitude", 
+    lat == 90 ~ "High Latitude"
+  )) %>% 
+  mutate(mpa_size = "Non-MPA")
+
+geno_lat = line_df_geno_lat %>% 
+  filter(lat == 50) %>% 
+  mutate(location = "MPA") %>% 
+  mutate(mpa_mean_freq = freq_avg) %>% 
+  full_join(line_lat_mpa_combo) %>% 
+  mutate(location = as.factor(location)) %>% 
+  mutate(mpa_size = as.factor(mpa_size)) %>% 
+  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA")))
+
+mpa_medium = line_df_mpa_full %>% 
+  filter(mpa_size == "Medium")
+
+collapse_full = line_df_mpa_full %>% 
+  select(generation, evolution, mpa_size, climate, location_sum) %>% 
+  filter(generation > 30) %>% 
+  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
+  group_by(evolution, mpa_size, climate) %>%
+  summarize(min_gen = min(generation)) %>% 
+  mutate(collapse_point = case_when(
+    mpa_size == "Small" ~ 100*2*.05*3*3,
+    mpa_size == "Medium" ~ 100*2*.05*6*6,
+    mpa_size == "Large" ~ 100*2*.05*10*10
+  )) %>% 
+  filter(climate %in% c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))
+
+point_n = line_df_lat %>% 
+  filter(evolution == "No") %>%
+  rename(no = location_sum) %>% 
+  select(-freq_avg, -evolution, -max_temp, -min_temp)
+point_y = line_df_lat %>% 
+  filter(evolution == "Yes") %>% 
+  rename(yes = location_sum) %>% 
+  select(-freq_avg, -evolution, -max_temp, -min_temp)
+point = full_join(point_y, point_n) %>% 
+  mutate(diff = yes - no) 
+
+point1 = point %>% 
+  filter(generation == 50) %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(avg_diff = mean(diff, na.rm=TRUE)) %>% 
+  mutate(generation = 50)
+
+point2 = point %>% 
+  filter(generation == 75) %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(avg_diff = mean(diff, na.rm=TRUE)) %>% 
+  mutate(generation = 75)
+
+point3 = point %>% 
+  filter(generation == 100) %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(avg_diff = mean(diff, na.rm=TRUE)) %>% 
+  mutate(generation = 100)
+
+point4 = point %>% 
+  filter(generation == 125) %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(avg_diff = mean(diff, na.rm=TRUE)) %>% 
+  mutate(generation = 125)
+
+point5 = point %>% 
+  filter(generation == 150) %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(avg_diff = mean(diff, na.rm=TRUE)) %>% 
+  mutate(generation = 150)
+
+point_sum = list(point1, point2, point3, point4, point5) %>% 
+  reduce(full_join) %>% 
+  filter(mpa_size == "Medium")
+```
+
+### Paper Figures
+
+```{r}
+f2 = ggplot(mpa_medium, aes(generation, location_sum)) +
+  geom_line(aes(linetype = evolution)) +
+  theme_bw(base_size = 12) +
+  facet_wrap(~ climate, ncol = 1) +
+  labs(
+    x = "Year",
+    y = "Population Density",
+    color = "Climate Scenario", 
+    linetype = "Evolution?"
+  ) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) 
+  
+ggsave(f2, file = paste0("decline_mpa.pdf"), path = here::here("04_figs"), height = 10, width = 12)
+```
+
+```{r}
+f3 = ggplot(collapse_full, aes(min_gen, mpa_size)) +
+  geom_point(aes(color = climate, shape = evolution), size = 3) +
+  theme_bw(base_size = 12) +
+  scale_color_manual(values = c("#fde725", "#3b528b", "#440154")) +
+  labs(
+    x = "Year",
+    y = "MPA Size",
+    color = "Climate Scenario",
+    shape = "Evolution?"
+  ) + 
+  theme(panel.grid.minor = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggsave(f3, file = paste0("collapse_points.pdf"), path = here::here("04_figs"), height = 8, width = 10)
+```
+
+```{r}
+f4 = ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
+  geom_line(aes(color = location, linetype = mpa_size)) +
+  facet_grid(genotype~climate, scales = "free_y") +
+  theme_bw(base_size = 12) +
+  labs(
+    x = "Year",
+    y = "Allele Frequency",
+    color = "Location",
+    linetype = "MPA Size"
+  ) +
+  theme() +
+  scale_color_viridis_d() +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_linetype_manual(values = c("solid", "dashed", "dotted", "solid"), labels = c("Large", "Medium", "Small", ""))
+
+ggsave(f4, file = paste0("genotype_summary.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+```
+
+```{r}
+f = ggplot(point_sum, aes(generation, avg_diff)) +
+  geom_line(aes(color = climate), linewidth = 1) +
+  geom_point() +
+  theme_bw() +
+  scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
+  scale_linetype_manual(values = c("solid", "dashed", "dotted"))
+
+ggsave(f, file = paste0("evo_diff.pdf"), path = here::here("04_figs"), height = 8, width = 10)
+```
+
+# Supplemental Figures
+
+## Main Figures
+
 ### Read in Data
 
 ```{r}
@@ -311,7 +523,7 @@ ggsave(s5, file = paste0("decline_full_sim_log.pdf"), path = here::here("04_figs
 ```
 
 
-### Climate Rate Figures
+## Climate Rate Figures
 
 ```{r}
 data_rate <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_climate_rate.csv")) %>%
@@ -435,7 +647,7 @@ ggsave(s8, file = paste0("climate_rate.pdf"), path = here::here("04_figs", "supp
 #ggsave(s7, file = paste0("genotype_summary_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
 ```
 
-### Fishing Pressure Figures
+## Fishing Pressure Figures
 
 ```{r}
 data_fp <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_fishing_pressure.csv")) %>%
@@ -582,13 +794,446 @@ s10 = ggplot(line_df_mpa_full_fp, aes(generation, location_sum)) +
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
   scale_color_manual(values = c("#5ec962", "#440154")) 
-  guides(fill="none")
   
 s11 = s10 + s9 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
 
 ggsave(s11, file = paste0("fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
   
 #ggsave(s10, file = paste0("decline_mpa_fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+```
+
+## Climate Figures
+
+```{r}
+years <- 175
+NS.patches <- 100
+EW.patches <- 20
+opt.temp <- 25
+
+calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
+  nat.m <- array(0, c(nrow(SST), ncol(SST)))
+  m <- 1 - exp((-(SST[, ] - opt.temp)^2) / (temp.range^2)) # temperature based mortality function from Walsworth et al.
+  m <- 1 - m
+  nat.m <- ifelse(m > s, s, m)
+  return(nat.m)
+}
+
+### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
+SST.patches.mean <- array(opt.temp, c(NS.patches, EW.patches, years))
+start_SST <- (opt.temp) + NS.patches * 0.02
+
+for (i in 1:25) {
+  SST <- start_SST
+  for (lat in 1:NS.patches) {
+    SST.patches.mean[lat, , i] <- SST
+    SST <- SST - 0.02
+  }
+}
+
+for (i in 26:years) {
+  SST <- start_SST
+  for (lat in 1:NS.patches) {
+    SST.patches.mean[lat, , i] <- SST
+    SST <- SST - 0.02
+  }
+  start_SST <- start_SST + 0.033
+}
+
+### UNCOMMENT FOR ENSO VARIABLE MEAN SST
+SST.patches.enso <- array(opt.temp, c(NS.patches, EW.patches, years))
+start_SST <- (opt.temp) + NS.patches * 0.02
+
+for (i in 1:25) {
+  SST <- start_SST
+  for (lat in 1:NS.patches) {
+    SST.patches.enso[lat, , i] <- SST
+    SST <- SST - 0.02
+  }
+}
+
+t <- seq(1, years - 25, 1)
+b <- array(0, 25)
+change <- 0.5 * sin(t) + 0.033
+enso.value <- c(b, change)
+
+for (i in 26:years) {
+  SST <- start_SST
+  for (lat in 1:NS.patches) {
+    SST.patches.enso[lat, , i] <- SST
+    SST <- SST - 0.02
+  }
+  start_SST <- start_SST + enso.value[i]
+}
+
+### UNCOMMENT FOR SHOCK SST CHANGES
+SST.patches.shock <- array(opt.temp, c(NS.patches, EW.patches, years))
+start_SST <- (opt.temp) + NS.patches * 0.02
+
+for (i in 1:25) {
+  SST <- start_SST
+  for (lat in 1:NS.patches) {
+    SST.patches.shock[lat, , i] <- SST
+    SST <- SST - 0.02
+  }
+}
+
+for (i in 26:years) {
+  SST <- start_SST
+  heat_prob <- runif(1, 0, 1)
+  if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+    intensity <- runif(1, 1, 4)
+    SST <- start_SST + intensity
+  } else {
+    SST <- start_SST
+  }
+  for (lat in 1:NS.patches) {
+    SST.patches.shock[lat, , i] <- SST
+    SST <- SST - 0.02
+  }
+}
+
+### MEAN SHOCK
+SST.patches.mean.shock <- array(opt.temp, c(NS.patches, EW.patches, years))
+start_SST <- (opt.temp) + NS.patches * 0.02
+
+for (i in 1:25) {
+  SST <- start_SST
+  for (lat in 1:NS.patches) {
+    SST.patches.mean.shock[lat, , i] <- SST
+    SST <- SST - 0.02
+  }
+}
+
+for (i in 26:years) {
+  heat_prob <- runif(1, 0, 1)
+  if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
+    intensity <- runif(1, 1, 4)
+    SST <- start_SST + intensity
+  } else {
+    SST <- start_SST
+  }
+  for (lat in 1:NS.patches) {
+    SST.patches.mean.shock[lat, , i] <- SST
+    SST <- SST - 0.02
+  }
+  start_SST <- start_SST + 0.033
+}
+
+output_df_mean <- data.frame() # create dataframe to hold results
+output_df_enso <- data.frame()
+output_df_shock <- data.frame()
+output_df_mean_shock <- data.frame()
+
+
+# Mean --------------------------------------------------------------------
+
+for (b in 1:years) {
+  SSTdf_mean <- SST.patches.mean[, , b] %>%
+    as.data.frame()
+
+  SSTdf_mean$lat <- c(1:NS.patches)
+  SSTdf_mean$year <- paste0(b)
+
+  output_df_mean <- bind_rows(output_df_mean, SSTdf_mean)
+}
+
+SSTdf_mean <- output_df_mean %>%
+  pivot_longer(V1:V20,
+    names_to = "lon",
+    values_to = "sst"
+  ) %>%
+  mutate(lon = case_when(
+    lon == "V1" ~ 1,
+    lon == "V2" ~ 2,
+    lon == "V3" ~ 3,
+    lon == "V4" ~ 4,
+    lon == "V5" ~ 5,
+    lon == "V6" ~ 6,
+    lon == "V7" ~ 7,
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
+  )) %>%
+  mutate(year = as.numeric(year))
+
+for (b in 1:years) {
+  SSTdf_enso <- SST.patches.enso[, , b] %>%
+    as.data.frame()
+  
+  SSTdf_enso$lat <- c(1:NS.patches)
+  SSTdf_enso$year <- paste0(b)
+  
+  output_df_enso <- bind_rows(output_df_enso, SSTdf_enso)
+}
+
+SSTdf_enso <- output_df_enso %>%
+  pivot_longer(V1:V20,
+               names_to = "lon",
+               values_to = "sst"
+  ) %>%
+  mutate(lon = case_when(
+    lon == "V1" ~ 1,
+    lon == "V2" ~ 2,
+    lon == "V3" ~ 3,
+    lon == "V4" ~ 4,
+    lon == "V5" ~ 5,
+    lon == "V6" ~ 6,
+    lon == "V7" ~ 7,
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
+  )) %>%
+  mutate(year = as.numeric(year))
+
+for (b in 1:years) {
+  SSTdf_shock <- SST.patches.shock[, , b] %>%
+    as.data.frame()
+  
+  SSTdf_shock$lat <- c(1:NS.patches)
+  SSTdf_shock$year <- paste0(b)
+  
+  output_df_shock <- bind_rows(output_df_shock, SSTdf_shock)
+}
+
+SSTdf_shock <- output_df_shock %>%
+  pivot_longer(V1:V20,
+               names_to = "lon",
+               values_to = "sst"
+  ) %>%
+  mutate(lon = case_when(
+    lon == "V1" ~ 1,
+    lon == "V2" ~ 2,
+    lon == "V3" ~ 3,
+    lon == "V4" ~ 4,
+    lon == "V5" ~ 5,
+    lon == "V6" ~ 6,
+    lon == "V7" ~ 7,
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
+  )) %>%
+  mutate(year = as.numeric(year))
+
+for (b in 1:years) {
+  SSTdf_mean_shock <- SST.patches.mean.shock[, , b] %>%
+    as.data.frame()
+  
+  SSTdf_mean_shock$lat <- c(1:NS.patches)
+  SSTdf_mean_shock$year <- paste0(b)
+  
+  output_df_mean_shock <- bind_rows(output_df_mean_shock, SSTdf_mean_shock)
+}
+
+SSTdf_mean_shock <- output_df_mean_shock %>%
+  pivot_longer(V1:V20,
+               names_to = "lon",
+               values_to = "sst"
+  ) %>%
+  mutate(lon = case_when(
+    lon == "V1" ~ 1,
+    lon == "V2" ~ 2,
+    lon == "V3" ~ 3,
+    lon == "V4" ~ 4,
+    lon == "V5" ~ 5,
+    lon == "V6" ~ 6,
+    lon == "V7" ~ 7,
+    lon == "V8" ~ 8,
+    lon == "V9" ~ 9,
+    lon == "V10" ~ 10,
+    lon == "V11" ~ 11,
+    lon == "V12" ~ 12,
+    lon == "V13" ~ 13,
+    lon == "V14" ~ 14,
+    lon == "V15" ~ 15,
+    lon == "V16" ~ 16,
+    lon == "V17" ~ 17,
+    lon == "V18" ~ 18,
+    lon == "V19" ~ 19,
+    lon == "V20" ~ 20
+  )) %>%
+  mutate(year = as.numeric(year))
+
+SSTdf_mean <- SSTdf_mean %>%
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
+  mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>% 
+  filter(lat %in% c(1,50,100)) %>% 
+  filter(lon == 10) %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(lat = case_when(
+    lat == 1 ~ "Lowest Latitude",
+    lat == 100 ~ "Highest Latitude",
+    lat == 50 ~ "Within MPA"
+  )) %>% filter(lat == "Within MPA") %>% 
+  mutate(climate = "Mean Shift")
+
+SSTdf_enso <- SSTdf_enso %>%
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
+  mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>% 
+  filter(lat %in% c(1,50,100)) %>% 
+  filter(lon == 10) %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(lat = case_when(
+    lat == 1 ~ "Lowest Latitude",
+    lat == 100 ~ "Highest Latitude",
+    lat == 50 ~ "Within MPA"
+  )) %>% filter(lat == "Within MPA") %>% 
+  mutate(climate = "El Nino/ La Nina")
+
+SSTdf_shock <- SSTdf_shock %>%
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
+  mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>% 
+  filter(lat %in% c(1,50,100)) %>% 
+  filter(lon == 10) %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(lat = case_when(
+    lat == 1 ~ "Lowest Latitude",
+    lat == 100 ~ "Highest Latitude",
+    lat == 50 ~ "Within MPA"
+  )) %>% filter(lat == "Within MPA") %>% 
+  mutate(climate = "Shocks")
+
+SSTdf_mean_shock <- SSTdf_mean_shock %>%
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
+  mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>% 
+  filter(lat %in% c(1,50,100)) %>% 
+  filter(lon == 10) %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(lat = case_when(
+    lat == 1 ~ "Lowest Latitude",
+    lat == 100 ~ "Highest Latitude",
+    lat == 50 ~ "Within MPA"
+  )) %>% filter(lat == "Within MPA") %>% 
+  mutate(climate = "Shocks with Mean Shift")
+
+SSTdf = list(SSTdf_enso, SSTdf_mean, SSTdf_mean_shock, SSTdf_shock) %>% 
+  reduce(full_join)
+
+temp = ggplot(SSTdf) +
+  geom_line(aes(year, sst), color = "blue") +
+  facet_wrap(~ climate) +
+  labs(x = "Year", y = "SST") +
+  theme_bw() +
+  scale_color_viridis_d() +
+  theme(
+    panel.grid = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y.left = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold"),
+    strip.background = element_rect(fill = "white")
+  )
+
+survive = ggplot(SSTdf) +
+  geom_line(aes(year, survival), color = "red") +
+  facet_wrap(~ climate) +
+  labs(x = "Year", y = "SST") +
+  theme_bw() +
+  scale_color_viridis_d() +
+  theme(
+    panel.grid = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y.left = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold"),
+    strip.background = element_rect(fill = "white")
+  )
+
+
+ggsave(temp, file = paste0("temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
+ggsave(survive, file = paste0("mortality.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
+```
+
+
+# Presentation Figures
+
+```{r}
+mpa_medium_pres = mpa_medium %>% 
+  filter(climate %in% c("Null", "Mean Shift")) %>% 
+  mutate(climate = case_when(
+    climate == "Null" ~ "No Climate Change",
+    climate == "Mean Shift" ~ "Mean Change Per Year"
+  ))
+
+p1 = ggplot(mpa_medium_pres, aes(generation, location_sum)) +
+  geom_line(aes(color = climate, linetype = evolution), linewidth = 2) +
+  theme_bw(base_size = 20) +
+  labs(
+    x = "Year",
+    y = "Population Density",
+    color = "Climate Scenario", 
+    linetype = "Evolution?"
+  ) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_color_manual(values = c("#5ec962", "#440154")) +
+  scale_linetype_manual(values = c("solid", "dashed"))
+  
+ggsave(p1, file = paste0("decline_mpa_pres.pdf"), path = here::here("04_figs", "presentation"), height = 10, width = 18)
+```
+
+```{r}
+geno_lat_pres = geno_lat %>% 
+  filter(location == "MPA") %>% 
+  filter(climate %in% c("Null", "Mean Shift")) %>% 
+  mutate(climate = case_when(
+    climate == "Null" ~ "No Climate Change",
+    climate == "Mean Shift" ~ "Mean Change Per Year"
+  )) %>% 
+  filter(mpa_size == "Medium")
+
+p2 = ggplot(geno_lat_pres, aes(generation, mpa_mean_freq)) +
+  geom_line(aes(color = mpa_size), linewidth = 2) +
+  facet_grid(genotype~climate, scales = "free_y") +
+  theme_bw(base_size = 20) +
+  labs(
+    x = "Year",
+    y = "Allele Frequency",
+    color = "MPA Size"
+  ) +
+  theme() +
+  scale_color_viridis_d() +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggsave(p2, file = paste0("genotype_summary_pres.pdf"), path = here::here("04_figs", "presentation"), height = 8, width = 15)
 ```
 
 # Old
