@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+library(here)
 library(patchwork)
 ```
 
@@ -652,7 +653,8 @@ ggsave(s8, file = paste0("climate_rate.pdf"), path = here::here("04_figs", "supp
 ```{r}
 data_fp <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_fishing_pressure.csv")) %>%
   mutate(generation = as.numeric(generation)) %>% 
-  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
+  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>% 
+  filter(generation <= 150)
 ```
 
 ```{r}
@@ -1173,6 +1175,87 @@ survive = ggplot(SSTdf) +
 
 ggsave(temp, file = paste0("temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
 ggsave(survive, file = paste0("mortality.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
+```
+
+```{r}
+# Model Parameter set up --------------------------------------------------
+
+SST <- seq(10, 40) # sea surface temperatures to model
+
+opt.temp <- 25 # optimal temperature ranges
+
+temp.range <- 4 # thermal performance range, w
+
+
+# Mortality Function ------------------------------------------------------
+
+calc_mortality <- function(SST, opt.temp, temp.range) {
+  nat.m <- 1 - exp((-(SST - opt.temp)^2) / (temp.range^2)) # temperature based mortality function from Walsworth et al.
+  return(1 - nat.m)
+}
+
+
+# Simulate Mortality Rates Function -----------------------------------------------
+
+simulate_mortality <- function(SST, opt.temp, temp.range) {
+  results <- matrix(NaN, nrow = length(SST), ncol = 1) # empty matrix to hold results
+
+
+  for (i in 1:length(SST)) {
+    for (j in 1:length(opt.temp)) {
+      mort <- calc_mortality(SST[i], opt.temp, temp.range)
+      results[i][j] <- mort
+    }
+  }
+
+  results_plot <- as.data.frame(results) %>%
+    rename(survival = V1) %>%
+    mutate(survival.prop = case_when(
+      survival > .7 ~ .7,
+      survival < .7 ~ survival
+    ))
+
+  results_plot$SST <- SST
+  results_plot$opt.temp <- opt.temp
+  results_plot$range <- temp.range
+
+  return(results_plot)
+}
+
+
+
+# Simulate multiple optimal temperatures ----------------------------------
+
+simulation_results <- data.frame()
+
+for (k in 1:length(opt.temp)) {
+  sub_result <- simulate_mortality(SST, opt.temp[k], temp.range)
+  simulation_results <- bind_rows(sub_result, simulation_results)
+}
+
+simulation_results <- simulation_results %>%
+  mutate(opt.temp = as.factor(opt.temp))
+
+mort_curve = ggplot(simulation_results, aes(SST, survival.prop)) +
+  geom_line(linewidth = 1) +
+  geom_vline(aes(xintercept = 25), linetype = "dashed", alpha = 0.5, color = "blue") +
+  geom_vline(aes(xintercept = 27), linetype = "dotted", color = "blue") +
+  geom_vline(aes(xintercept = 23), linetype = "dotted", color = "blue") +
+  geom_vline(aes(xintercept = 34.19259), linetype = "longdash", alpha = 0.3, color = "red") +
+  geom_vline(aes(xintercept = 31.84384), linetype = "longdash", alpha = 0.3, color = "red") +
+  geom_vline(aes(xintercept = 30.93700), linetype = "longdash", alpha = 0.3, color = "red") +
+  geom_vline(aes(xintercept = 29.66092), linetype = "longdash", alpha = 0.3, color = "red") +
+  theme_bw()+
+  labs(
+    x = "Sea Surface Temperature",
+    y = "Survival Probability"
+  ) +
+  theme(panel.grid.minor = element_blank(),
+        legend.position = "none",
+        axis.text.x = element_text(angle = 25,  hjust=1)) +
+  scale_x_continuous(breaks = c(23, 25, 27, 29.66092, 30.93700, 31.84384, 34.19259), labels = c("Thermal Min", "Thermal Optimum", "Thermal Max", "Shocks Max", "Mean Shift Max", "El Nino/ La Nina Max", "Shocks with Mean Shift Max"))
+
+ggsave(mort_curve, file = paste0("mort_curve.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
 ```
 
 

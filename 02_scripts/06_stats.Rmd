@@ -9,8 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
-library(effsize)
-library(effectsize)
 ```
 
 # Data 
@@ -269,26 +267,6 @@ temps = aa %>%
 write_csv(temps, here::here("03_generated_data", "results", "aa_peak.csv"))
 ```
 
-### Other
-
-```{r}
-large = line_df %>% 
-  filter(mpa_size == "Large") %>% 
-  pull(location_sum)
-
-medium = line_df %>% 
-  filter(mpa_size == "Medium") %>% 
-  pull(location_sum)
-
-small = line_df %>% 
-  filter(mpa_size == "Small") %>% 
-  pull(location_sum)
-
-mean(large - small)
-mean(large - medium)
-mean(medium - small)
-```
-
 ### Fishing Pressure
 
 ```{r}
@@ -298,9 +276,56 @@ data_fp <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_fi
 ```
 
 ```{r}
+line_df_mpa_full_fp <- data_fp %>%
+  filter(generation > 25) %>%
+  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
+  distinct() %>% 
+  group_by(generation, evolution, mpa_size, climate, fishing_pressure) %>%
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp)) %>% 
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  select(-max_m, -min_m)
 
+collapse_mpa_fp = line_df_mpa_full_fp %>% 
+  select(generation, evolution, mpa_size, climate, location_sum, fishing_pressure) %>% 
+  filter(generation > 30) %>% 
+  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
+  group_by(evolution, mpa_size, climate) %>%
+  summarize(min_gen = min(generation)) %>% 
+  mutate(collapse_point = case_when(
+    mpa_size == "Small" ~ 100*2*.05*3*3,
+    mpa_size == "Medium" ~ 100*2*.05*6*6,
+    mpa_size == "Large" ~ 100*2*.05*10*10
+  )) %>% 
+  mutate(area = "mpa only")
+
+write_csv(collapse_mpa_fp, here::here("03_generated_data", "results", "collapse_fishing_pressure.csv"))
+
+change_fp = data_fp %>% 
+  select(-genotype, -geno_pop_mean, -freq, -fished_mean, -geno_pop_sd, -geno_pop_se) %>% 
+  distinct() %>% 
+  group_by(climate, evolution, mpa_size, fishing_pressure) %>% 
+  mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) %>% 
+  ungroup()
+
+change_mpa_fp = change_fp %>% 
+  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large"))
+
+mean_change_mpa_fp = change_mpa_fp %>% 
+  group_by(generation, climate, evolution, mpa_size) %>% 
+  summarize(mean_change = mean(rate, na.rm = TRUE))
+
+write_csv(mean_change_mpa_fp, here::here("03_generated_data", "results", "fishing_pressure_change_mpa.csv"))
 ```
-
 
 ### Climate Rate
 
@@ -311,7 +336,55 @@ data_rate <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_
 ```
 
 ```{r}
+line_df_mpa_full_rate <- data_rate %>%
+  filter(generation > 25) %>%
+  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
+  distinct() %>% 
+  group_by(generation, evolution, mpa_size, climate, climate_rate) %>%
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp)) %>% 
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  select(-max_m, -min_m)
 
+collapse_mpa_rate = line_df_mpa_full_rate %>% 
+  select(generation, evolution, mpa_size, climate, location_sum, climate_rate) %>% 
+  filter(generation > 30) %>% 
+  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
+  group_by(evolution, mpa_size, climate) %>%
+  summarize(min_gen = min(generation)) %>% 
+  mutate(collapse_point = case_when(
+    mpa_size == "Small" ~ 100*2*.05*3*3,
+    mpa_size == "Medium" ~ 100*2*.05*6*6,
+    mpa_size == "Large" ~ 100*2*.05*10*10
+  )) %>% 
+  mutate(area = "mpa only")
+
+write_csv(collapse_mpa_rate, here::here("03_generated_data", "results", "collapse_climate_rate.csv"))
+
+change_rate = data_rate %>% 
+  select(-genotype, -geno_pop_mean, -freq, -fished_mean, -geno_pop_sd, -geno_pop_se) %>% 
+  distinct() %>% 
+  group_by(climate, evolution, mpa_size, climate_rate) %>% 
+  mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) %>% 
+  ungroup()
+
+change_mpa_rate = change_rate %>% 
+  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large"))
+
+mean_change_mpa_rate = change_mpa_rate %>% 
+  group_by(generation, climate, evolution, mpa_size) %>% 
+  summarize(mean_change = mean(rate, na.rm = TRUE))
+
+write_csv(mean_change_mpa_rate, here::here("03_generated_data", "results", "climate_rate_change_mpa.csv"))
 ```
 
 
@@ -372,4 +445,24 @@ sum <- data %>%
   summarise(pop_mean = mean(pop_mean)) 
 
 # write_csv(sum_climate, here::here("03_generated_data", "summary_data", "test_null_sum.csv"))
+```
+
+### Other
+
+```{r}
+large = line_df %>% 
+  filter(mpa_size == "Large") %>% 
+  pull(location_sum)
+
+medium = line_df %>% 
+  filter(mpa_size == "Medium") %>% 
+  pull(location_sum)
+
+small = line_df %>% 
+  filter(mpa_size == "Small") %>% 
+  pull(location_sum)
+
+mean(large - small)
+mean(large - medium)
+mean(medium - small)
 ```
