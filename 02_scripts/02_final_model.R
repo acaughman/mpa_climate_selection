@@ -501,13 +501,13 @@ gens <- pre.fishing.gens + pre.reserve.gens + post.reserve.gens
 
 output.array <- array(0, c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
 fished.array <- array(0, c(NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
+SST.patches <- init_SST(years, "null") # null, mean, enso, shock, or mean shock
+# save(SST.patches, file = here::here("03_generated_data","climate_layer", "mean_shock.rda"))
 
 start_time <- Sys.time()
 
 for (rep in 1:reps) {
   print(rep)
-  SST.patches <- init_SST(years, "null") # null, mean, enso, shock, or mean shock
-  # save(SST.patches, file = here::here("03_generated_data","climate_layer", "mean_shock.rda"))
   pop <- init()
   for (t in 1:gens) {
     output.array[, , , , , t, rep] <- pop

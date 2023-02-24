@@ -62,6 +62,20 @@ line_df_geno_lat <- data %>%
   mutate(lat = as.factor(lat)) %>% 
   mutate(max_temp = as.factor(max_temp))
 
+line_df_lat <- data %>%
+  filter(generation > 25) %>% 
+  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  group_by(generation, mpa_size, climate, lat, lon, evolution) %>%
+  summarise(
+    location_sum = sum(geno_pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(max_temp = as.factor(max_temp))
+
 line_df_geno_lat = line_df_geno_lat %>%
   filter(lat == 10 | lat == 90 | lat == 50)
 
@@ -215,8 +229,14 @@ f = ggplot(point_sum, aes(generation, avg_diff)) +
   geom_line(aes(color = climate), linewidth = 1) +
   geom_point() +
   theme_bw() +
+  labs(
+    x = "Year",
+    y = "Average Population Difference Between Evolution and No Evolution",
+    color = "Climate") +
   scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
-  scale_linetype_manual(values = c("solid", "dashed", "dotted"))
+  scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
 
 ggsave(f, file = paste0("evo_diff.pdf"), path = here::here("04_figs"), height = 8, width = 10)
 ```
@@ -231,7 +251,7 @@ ggsave(f, file = paste0("evo_diff.pdf"), path = here::here("04_figs"), height = 
 data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>%
   mutate(generation = as.numeric(generation)) %>% 
   filter(mpa_size != "None") %>%
-  mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
+  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
 ```
 
 ### Data Manipulation 
@@ -297,33 +317,6 @@ line_df_geno <- data %>%
   mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
   select(-max_m, -min_m) %>% 
   filter(evolution == "Yes")
-
-line_df_lat <- data %>%
-  filter(generation > 25) %>%
-  filter(evolution == "Yes") %>% 
-  group_by(generation, mpa_size, climate, lat, lon) %>%
-  summarise(
-    location_sum = sum(geno_pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp),
-    freq_avg = mean(freq, na.rm = TRUE)) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
-  select(-max_m, -min_m) %>% 
-  mutate(lat = as.factor(lat)) %>% 
-  mutate(max_temp = as.factor(max_temp)) %>% 
-  mutate(mpa = case_when(
-    mpa_size == "Small" & lat %in% c(49:51) & lon %in% c(9:11) ~ "MPA",
-    mpa_size == "Medium" & lat %in% c(47:52) & lon %in% c(9:14) ~ "MPA",
-    mpa_size == "Large" & lat %in% c(46:55) & lon %in% c(5:14) ~ "MPA",
-    lat %in% c(1:10) ~ "Low Latitude",
-    lat %in% c(90:100) ~ "High Latitude",
-    TRUE ~ "Other"
-  )) %>% 
-  mutate(location = paste(as.character(lat), as.character(lon)))
 
 line_df_geno_lat <- data %>%
   group_by(generation, evolution, mpa_size, climate, genotype, lat) %>% 
@@ -1142,39 +1135,38 @@ SSTdf = list(SSTdf_enso, SSTdf_mean, SSTdf_mean_shock, SSTdf_shock) %>%
 
 temp = ggplot(SSTdf) +
   geom_line(aes(year, sst), color = "blue") +
+  geom_hline(aes(yintercept = 25), alpha = 0.5, linetype = "dashed") + 
+  geom_hline(aes(yintercept = 27), alpha = 0.5, linetype = "dashed", color = "red") + 
   facet_wrap(~ climate) +
   labs(x = "Year", y = "SST") +
   theme_bw() +
   scale_color_viridis_d() +
   theme(
     panel.grid = element_blank(),
-    axis.text.x = element_blank(),
-    axis.text.y.left = element_blank(),
-    axis.ticks = element_blank(),
     panel.grid.minor = element_blank(),
     strip.text = element_text(face = "bold"),
+    axis.ticks.y = element_blank(),
+    axis.text.y = element_blank(),
     strip.background = element_rect(fill = "white")
   )
 
-survive = ggplot(SSTdf) +
-  geom_line(aes(year, survival), color = "red") +
-  facet_wrap(~ climate) +
-  labs(x = "Year", y = "SST") +
-  theme_bw() +
-  scale_color_viridis_d() +
-  theme(
-    panel.grid = element_blank(),
-    axis.text.x = element_blank(),
-    axis.text.y.left = element_blank(),
-    axis.ticks = element_blank(),
-    panel.grid.minor = element_blank(),
-    strip.text = element_text(face = "bold"),
-    strip.background = element_rect(fill = "white")
-  )
+# temp = ggplot(SSTdf_mean_shock) +
+#   geom_line(aes(year, sst), color = "blue", linewidth = 2) +
+#   facet_wrap(~ climate) +
+#   labs(x = "Year", y = "SST") +
+#   theme_bw(base_size= 20) +
+#   scale_color_viridis_d() +
+#   theme(
+#     panel.grid = element_blank(),
+#     panel.grid.minor = element_blank(),
+#     strip.text = element_text(face = "bold"),
+#     axis.ticks = element_blank(),
+#     axis.text = element_blank(),
+#     strip.background = element_rect(fill = "white")
+#   )
 
 
 ggsave(temp, file = paste0("temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
-ggsave(survive, file = paste0("mortality.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
 ```
 
 ```{r}

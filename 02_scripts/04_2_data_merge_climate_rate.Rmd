@@ -14,6 +14,112 @@ library(tidyverse)
 ### Read in CSV
 
 ```{r}
+df11 = read_csv(here::here("03_generated_data", "summary_data", "summary_m11.csv")) %>%
+  mutate(evolution = "Yes") %>% 
+  mutate(mpa_size = "Small") %>% 
+  mutate(climate = "Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+df12 = read_csv(here::here("03_generated_data", "summary_data", "summary_m12.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Small") %>% 
+  mutate(climate = "Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+df13 = read_csv(here::here("03_generated_data", "summary_data", "summary_m13.csv")) %>%
+  mutate(evolution = "Yes") %>% 
+  mutate(mpa_size = "Medium") %>% 
+  mutate(climate = "Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+df14 = read_csv(here::here("03_generated_data", "summary_data", "summary_m14.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Medium") %>% 
+  mutate(climate = "Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+df15 = read_csv(here::here("03_generated_data", "summary_data", "summary_m15.csv")) %>%
+  mutate(evolution = "Yes") %>% 
+  mutate(mpa_size = "Large") %>% 
+  mutate(climate = "Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+df16 = read_csv(here::here("03_generated_data", "summary_data", "summary_m16.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Large") %>% 
+  mutate(climate = "Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+
+df19 = read_csv(here::here("03_generated_data", "summary_data", "summary_m19.csv")) %>%
+  mutate(evolution = "Yes") %>% 
+  mutate(mpa_size = "Small") %>% 
+  mutate(climate = "El Nino/La Nina") %>% 
+  mutate(climate_rate = 0.033)
+df20 = read_csv(here::here("03_generated_data", "summary_data", "summary_m20.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Small") %>% 
+  mutate(climate = "El Nino/La Nina") %>% 
+  mutate(climate_rate = 0.033)
+df21 = read_csv(here::here("03_generated_data", "summary_data", "summary_m21.csv")) %>%
+  mutate(evolution = "Yes") %>% 
+  mutate(mpa_size = "Medium") %>% 
+  mutate(climate = "El Nino/La Nina") %>% 
+  mutate(climate_rate = 0.033)
+df22 = read_csv(here::here("03_generated_data", "summary_data", "summary_m22.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Medium") %>% 
+  mutate(climate = "El Nino/La Nina") %>% 
+  mutate(climate_rate = 0.033)
+df23 = read_csv(here::here("03_generated_data", "summary_data", "summary_m23.csv")) %>%
+  mutate(evolution = "Yes") %>% 
+  mutate(mpa_size = "Large") %>% 
+  mutate(climate = "El Nino/La Nina") %>% 
+  mutate(climate_rate = 0.033)
+df24 = read_csv(here::here("03_generated_data", "summary_data", "summary_m24.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Large") %>% 
+  mutate(climate = "El Nino/La Nina") %>% 
+  mutate(climate_rate = 0.033)
+
+df35 = read_csv(here::here("03_generated_data", "summary_data", "summary_m35.csv")) %>%
+  mutate(evolution = "Yes") %>% 
+  mutate(mpa_size = "Small") %>% 
+  mutate(climate = "Shocks with Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+df36 = read_csv(here::here("03_generated_data", "summary_data", "summary_m36.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Small") %>% 
+  mutate(climate = "Shocks with Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+df37 = read_csv(here::here("03_generated_data", "summary_data", "summary_m37.csv")) %>%
+  mutate(evolution = "Yes") %>% 
+  mutate(mpa_size = "Medium") %>% 
+  mutate(climate = "Shocks with Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+df38 = read_csv(here::here("03_generated_data", "summary_data", "summary_m38.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Medium") %>% 
+  mutate(climate = "Shocks with Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+df39 = read_csv(here::here("03_generated_data", "summary_data", "summary_m39.csv")) %>%
+  mutate(evolution = "Yes") %>% 
+  mutate(mpa_size = "Large") %>% 
+  mutate(climate = "Shocks with Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+df40 = read_csv(here::here("03_generated_data", "summary_data", "summary_m40.csv")) %>%
+  mutate(evolution = "No") %>% 
+  mutate(mpa_size = "Large") %>% 
+  mutate(climate = "Shocks with Mean Shift") %>% 
+  mutate(climate_rate = 0.033)
+```
+
+```{r}
+df_list = list(df11, df12, df13, df14, df15, df16, 
+               df19, df20, df21, df22, df23, df24, 
+               df35, df36, df37, df38, df39, df40) %>% 
+  reduce(full_join)
+
+rm(df11, df12, df13, df14, df15, df16, 
+               df19, df20, df21, df22, df23, df24, 
+               df35, df36, df37, df38, df39, df40)
+```
+
+```{r}
 df11_2 = read_csv(here::here("03_generated_data", "summary_data", "summary_m11_2.csv")) %>%
   mutate(evolution = "Yes") %>% 
   mutate(mpa_size = "Small") %>% 
@@ -121,15 +227,9 @@ df_list3 = list(df22_2, df23_2, df24_2, df35_2, df36_2, df37_2, df38_2, df39_2, 
 
 rm(df22_2, df23_2, df24_2, df35_2, df36_2, df37_2, df38_2, df39_2, df40_2)
 
-df_list2 = rbind(df_list2, df_list3)
+df_list2 = rbind(df_list2, df_list3) 
 
 rm(df_list3)
-```
-
-```{r}
-df_list = read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>%
-  filter(climate %in% c("Mean Shift", "El Nino/La Nina", "Shocks with Mean Shift")) %>% 
-  mutate(climate_rate = 0.033)
 ```
 
 ```{r}

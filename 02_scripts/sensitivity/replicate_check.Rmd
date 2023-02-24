@@ -34,8 +34,14 @@ pop_sum2 <- output_df %>%
   summarise(pop_sum = sum(pop, na.rm = TRUE), 
             max_temp = max_temp, 
             min_temp = min_temp,
-            fished_sum = sum(fished))
+            fished_sum = sum(fished),
+            pop_sd = sd(pop_sum, na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(pop_se = pop_sd / sqrt(10)) %>% 
+  mutate(pop_var = pop_sd^2)
+```
 
+```{r}
 rm(output_df)
 
 output_sum2 <- full_join(geno_sum2, pop_sum2) %>%
@@ -44,7 +50,7 @@ output_sum2 <- full_join(geno_sum2, pop_sum2) %>%
 
 rm(pop_sum2, geno_sum2)
 
-write_csv(output_sum2, here::here("sensitivity_analysis", "replicate_check", "summary_m40_rep.csv"))
+#write_csv(output_sum2, here::here("sensitivity_analysis", "replicate_check", "summary_m40_rep.csv"))
 
 gc()
 
