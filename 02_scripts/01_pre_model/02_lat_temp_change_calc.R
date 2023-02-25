@@ -6,8 +6,8 @@ library(tidyverse)
 
 # Raster Data (cds.climate.copernicus.eu) -------------------------------------------------------------
 
-r1 <- raster(here::here("raw_data", "climate_data", "20161201120000-ESACCI-L4_GHRSST-SSTdepth-OSTIA-GLOB_CDR2.1-v02.0-fv01.0.nc"))
-r2 <- raster(here::here("raw_data", "climate_data", "20160701120000-ESACCI-L4_GHRSST-SSTdepth-OSTIA-GLOB_CDR2.1-v02.0-fv01.0.nc"))
+r1 <- raster(here::here("01_raw_data", "climate_data", "20160701120000-ESACCI-L4_GHRSST-SSTdepth-OSTIA-GLOB_CDR2.1-v02.0-fv01.0.nc"))
+r2 <- raster(here::here("01_raw_data", "climate_data", "20161201120000-ESACCI-L4_GHRSST-SSTdepth-OSTIA-GLOB_CDR2.1-v02.0-fv01.0.nc"))
 
 df1 <- rasterToPoints(r1) %>%
   as.data.frame() %>%
@@ -49,7 +49,7 @@ slope2.2 <- abs(coef2.2$.[2])
 dkm <- 111.12
 dt <- median(c(slope1.1, slope1.2, slope2.1, slope2.2))
 
-temp_per_km <- dt / dkm # 0.007611381
+temp_per_km <- dt / dkm # 0.006747071
 temp_per_100m <- temp_per_km / 1000 * 100 # 0.0007611381
 
 ggplot(sample_n(df1, size = 1000), aes(y, temp)) +

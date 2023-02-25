@@ -20,8 +20,8 @@ library(patchwork)
 ```{r}
 data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>%
   mutate(generation = as.numeric(generation)) %>% 
-  filter(mpa_size != "None") %>%
-  mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
+  mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>% 
+  mutate(mpa_size = fct_relevel(mpa_size, c("1 x 1", "3 x 3", "6 x 6", "10 x 10")))
 ```
 
 ### Data Manipulation
@@ -29,8 +29,8 @@ data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")
 ```{r}
 line_df_mpa_full <- data %>%
   filter(generation > 25) %>%
-  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
   select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
   distinct() %>% 
   group_by(generation, evolution, mpa_size, climate) %>%
@@ -64,8 +64,8 @@ line_df_geno_lat <- data %>%
 
 line_df_lat <- data %>%
   filter(generation > 25) %>% 
-  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lat %in% c(10) & mpa_size == "1 x 1")) %>% 
   group_by(generation, mpa_size, climate, lat, lon, evolution) %>%
   summarise(
     location_sum = sum(geno_pop_mean, na.rm = TRUE),
@@ -96,21 +96,22 @@ geno_lat = line_df_geno_lat %>%
   full_join(line_lat_mpa_combo) %>% 
   mutate(location = as.factor(location)) %>% 
   mutate(mpa_size = as.factor(mpa_size)) %>% 
-  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA")))
+  mutate(mpa_size = fct_relevel(mpa_size, c("10 x 10", "6 x 6", "3 x 3", "Non-MPA")))
 
 mpa_medium = line_df_mpa_full %>% 
-  filter(mpa_size == "Medium")
+  filter(mpa_size == "6 x 6")
 
 collapse_full = line_df_mpa_full %>% 
   select(generation, evolution, mpa_size, climate, location_sum) %>% 
   filter(generation > 30) %>% 
-  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
+  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "3 x 3") | (location_sum <= (100*2*.05*6*6) & mpa_size == "6 x 6") | (location_sum <= (100*2*.05*10*10) & mpa_size == "10 x 10") | (location_sum <= (100*2*.05) & mpa_size == "1 x 1")) %>% 
   group_by(evolution, mpa_size, climate) %>%
   summarize(min_gen = min(generation)) %>% 
   mutate(collapse_point = case_when(
-    mpa_size == "Small" ~ 100*2*.05*3*3,
-    mpa_size == "Medium" ~ 100*2*.05*6*6,
-    mpa_size == "Large" ~ 100*2*.05*10*10
+    mpa_size == "1 x 1" ~ 100*2*.05,
+    mpa_size == "3 x 3" ~ 100*2*.05*3*3,
+    mpa_size == "6 x 6" ~ 100*2*.05*6*6,
+    mpa_size == "10 x 10" ~ 100*2*.05*10*10
   )) %>% 
   filter(climate %in% c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))
 
@@ -157,7 +158,7 @@ point5 = point %>%
 
 point_sum = list(point1, point2, point3, point4, point5) %>% 
   reduce(full_join) %>% 
-  filter(mpa_size == "Medium")
+  filter(mpa_size == "6 x 6")
 ```
 
 ### Paper Figures
@@ -180,7 +181,7 @@ f2 = ggplot(mpa_medium, aes(generation, location_sum)) +
         axis.ticks.x = element_blank()) +
   scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) 
   
-ggsave(f2, file = paste0("decline_mpa.pdf"), path = here::here("04_figs"), height = 10, width = 12)
+ggsave(f2, file = paste0("fig2.pdf"), path = here::here("04_figs"), height = 10, width = 12)
 ```
 
 ```{r}
@@ -198,7 +199,7 @@ f3 = ggplot(collapse_full, aes(min_gen, mpa_size)) +
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggsave(f3, file = paste0("collapse_points.pdf"), path = here::here("04_figs"), height = 8, width = 10)
+ggsave(f3, file = paste0("fig3.pdf"), path = here::here("04_figs"), height = 8, width = 10)
 ```
 
 ```{r}
@@ -219,9 +220,9 @@ f4 = ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
         strip.background = element_rect(fill = "white"),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
-  scale_linetype_manual(values = c("solid", "dashed", "dotted", "solid"), labels = c("Large", "Medium", "Small", ""))
+  scale_linetype_manual(values = c("solid", "dashed", "dotted", "solid", "longdash"), labels = c("10 x 10", "6 x 6", "3 x 3", "1 x 1", ""))
 
-ggsave(f4, file = paste0("genotype_summary.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+ggsave(f4, file = paste0("fig4.pdf"), path = here::here("04_figs"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -238,7 +239,7 @@ f = ggplot(point_sum, aes(generation, avg_diff)) +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggsave(f, file = paste0("evo_diff.pdf"), path = here::here("04_figs"), height = 8, width = 10)
+ggsave(f, file = paste0("figX.pdf"), path = here::here("04_figs"), height = 8, width = 10)
 ```
 
 # Supplemental Figures
@@ -250,8 +251,8 @@ ggsave(f, file = paste0("evo_diff.pdf"), path = here::here("04_figs"), height = 
 ```{r}
 data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>%
   mutate(generation = as.numeric(generation)) %>% 
-  filter(mpa_size != "None") %>%
-  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
+  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))  %>% 
+  mutate(mpa_size = fct_relevel(mpa_size, c("1 x 1", "3 x 3", "6 x 6", "10 x 10")))
 ```
 
 ### Data Manipulation 
@@ -259,8 +260,8 @@ data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")
 ```{r}
 line_df_mpa_full <- data %>%
   filter(generation > 25) %>%
-  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
   select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
   distinct() %>% 
   group_by(generation, evolution, mpa_size, climate) %>%
@@ -356,20 +357,21 @@ mean_change2 = change %>%
   group_by(generation, climate, evolution, mpa_size) %>% 
   summarize(mean_change = mean(rate, na.rm = TRUE))
 
-mpa_boundaries = data.frame(mpa_size = c("Small", "Medium", "Large"),
-                            r_bound = c(49, 47, 46),
-                            l_bound = c(51, 52, 55))
+mpa_boundaries = data.frame(mpa_size = c("1 x 1", "3 x 3", "6 x 6", "10 x 10"),
+                            r_bound = c(50, 49, 47, 46),
+                            l_bound = c(50, 51, 52, 55))
 
 collapse_full = line_df_mpa_full %>% 
   select(generation, evolution, mpa_size, climate, location_sum) %>% 
   filter(generation > 30) %>% 
-  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
+  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "3 x 3") | (location_sum <= (100*2*.05*6*6) & mpa_size == "6 x 6") | (location_sum <= (100*2*.05*10*10) & mpa_size == "10 x 10") | (location_sum <= (100*2*.05) & mpa_size == "1 x 1")) %>% 
   group_by(evolution, mpa_size, climate) %>%
   summarize(min_gen = min(generation)) %>% 
   mutate(collapse_point = case_when(
-    mpa_size == "Small" ~ 100*2*.05*3*3,
-    mpa_size == "Medium" ~ 100*2*.05*6*6,
-    mpa_size == "Large" ~ 100*2*.05*10*10
+    mpa_size == "1 x 1" ~ 100*2*0.05,
+    mpa_size == "3 x 3" ~ 100*2*.05*3*3,
+    mpa_size == "6 x 6" ~ 100*2*.05*6*6,
+    mpa_size == "10 x 10" ~ 100*2*.05*10*10
   ))
 
 collapse = line_df %>% 
@@ -400,7 +402,7 @@ geno_lat = line_df_geno_lat %>%
   full_join(line_lat_mpa_combo) %>% 
   mutate(location = as.factor(location)) %>% 
   mutate(mpa_size = as.factor(mpa_size)) %>% 
-  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA")))
+  mutate(mpa_size = fct_relevel(mpa_size, c("10 x 10", "6 x 6", "3 x 3", "Non-MPA")))
 ```
 
 ### Supplemental Figures
@@ -410,7 +412,7 @@ s1 = ggplot(line_df, aes(generation, location_sum)) +
   geom_vline(data = collapse, aes(xintercept = min_gen, color = climate, linetype = evolution)) +
     geom_hline(data = collapse, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
   geom_line(aes(color = climate, linetype = evolution)) +
-  facet_wrap(~ mpa_size, scales = "free_y", nrow = 3) +
+  facet_wrap(~ mpa_size, scales = "free_y", ncol = 1) +
   theme_bw() +
   labs(
     x = "Year",
@@ -432,7 +434,7 @@ ggsave(s1, file = paste0("decline_full.pdf"), path = here::here("04_figs", "supp
 s2 = ggplot(line_df_mpa, aes(generation, pop_mean)) +
   geom_line(aes(color = climate, linetype = evolution)) +
   geom_ribbon(aes(ymin = pop_mean - pop_se, ymax = pop_mean + pop_se, fill = climate, linetype = evolution), alpha = .2) +
-  facet_wrap(~ mpa_size, scales = 'free', nrow = 3) +
+  facet_wrap(~ mpa_size, scales = 'free', ncol = 1) +
   theme_bw() +
   labs(
     x = "Year",
@@ -477,7 +479,7 @@ s4 = ggplot(line_df_mpa_full, aes(generation, location_sum)) +
   geom_vline(data = collapse_full, aes(xintercept = min_gen, color = climate, linetype = evolution), alpha = 0.8) +
   geom_hline(data = collapse_full, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
   geom_line(aes(color = climate, linetype = evolution)) +
-  facet_wrap(~ mpa_size, scales = 'free', nrow = 3) +
+  facet_wrap(~ mpa_size, scales = 'free', ncol = 1) +
   theme_bw() +
   labs(
     x = "Year",
@@ -498,7 +500,7 @@ ggsave(s4, file = paste0("decline_mpa_full.pdf"), path = here::here("04_figs", "
 ```{r}
 s5 = ggplot(line_df, aes(generation, log(location_sum))) +
   geom_line(aes(color = climate, linetype = evolution)) +
-  facet_wrap(~ mpa_size, nrow = 3) +
+  facet_wrap(~ mpa_size, ncol = 1) +
   theme_bw() +
   labs(
     x = "Year",
@@ -522,14 +524,19 @@ ggsave(s5, file = paste0("decline_full_sim_log.pdf"), path = here::here("04_figs
 ```{r}
 data_rate <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_climate_rate.csv")) %>%
   mutate(generation = as.numeric(generation)) %>% 
-  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")))
+  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>% 
+  mutate(mpa_size = case_when(
+    mpa_size == "Small" ~ "3 x 3",
+    mpa_size == "Medium" ~ "6 x 6",
+    mpa_size == "Large" ~ "10 x 10"
+  ))
 ```
 
 ```{r}
 line_df_mpa_full_rate <- data_rate %>%
   filter(generation > 25) %>%
-  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(10) & mpa_size == "10 x 10")) %>% 
   select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
   distinct() 
 
@@ -573,19 +580,19 @@ geno_lat_rate = line_df_geno_lat_rate %>%
   full_join(line_lat_mpa_combo_rate) %>% 
   mutate(location = as.factor(location)) %>% 
   mutate(mpa_size = as.factor(mpa_size)) %>% 
-  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA"))) %>% 
+  mutate(mpa_size = fct_relevel(mpa_size, c("10 x 10", "6 x 6", "3 x 3", "Non-MPA"))) %>% 
   filter(mpa_size != "Non-MPA")
 
 collapse_full_rate = line_df_mpa_full_rate %>% 
   select(generation, evolution, mpa_size, climate, location_sum, climate_rate) %>% 
   filter(generation > 30) %>% 
-  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
-  group_by(evolution, mpa_size, climate, climate_rate) %>%
+  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "3 x 3") | (location_sum <= (100*2*.05*6*6) & mpa_size == "6 x 6") | (location_sum <= (100*2*.05*10*10) & mpa_size == "10 x 10") | (location_sum <= (100*2*.05) & mpa_size == "1 x 1")) %>% 
   summarize(min_gen = min(generation)) %>% 
   mutate(collapse_point = case_when(
-    mpa_size == "Small" ~ 100*2*.05*3*3,
-    mpa_size == "Medium" ~ 100*2*.05*6*6,
-    mpa_size == "Large" ~ 100*2*.05*10*10
+    mpa_size == "1 x 1" ~ 100*2*0.05
+    mpa_size == "3 x 3" ~ 100*2*.05*3*3,
+    mpa_size == "6 x 6" ~ 100*2*.05*6*6,
+    mpa_size == "10 x 10" ~ 100*2*.05*10*10
   ))
 ```
 
@@ -647,7 +654,12 @@ ggsave(s8, file = paste0("climate_rate.pdf"), path = here::here("04_figs", "supp
 data_fp <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_fishing_pressure.csv")) %>%
   mutate(generation = as.numeric(generation)) %>% 
   mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>% 
-  filter(generation <= 150)
+  filter(generation <= 150) %>% 
+  mutate(mpa_size = case_when(
+    mpa_size == "Small" ~ "3 x 3",
+    mpa_size == "Medium" ~ "6 x 6",
+    mpa_size == "Large" ~ "10 x 10"
+  ))
 ```
 
 ```{r}
@@ -668,8 +680,8 @@ line_df_fp <- data_fp %>%
 
 line_df_mpa_full_fp <- data_fp %>%
   filter(generation > 25) %>%
-  filter((lat %in% c(49:51) & mpa_size == "Small") | (lat %in% c(47:52) & mpa_size == "Medium") | (lat %in% c(46:55) & mpa_size == "Large")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "Small") | (lon %in% c(9:14) & mpa_size == "Medium") | (lon %in% c(5:14) & mpa_size == "Large")) %>% 
+  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(10) & mpa_size == "10 x 10")) %>% 
   select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
   distinct() %>% 
   group_by(generation, evolution, mpa_size, climate, fishing_pressure) %>%
@@ -721,7 +733,7 @@ geno_lat_fp = line_df_geno_lat_fp %>%
   full_join(line_lat_mpa_combo_fp) %>% 
   mutate(location = as.factor(location)) %>% 
   mutate(mpa_size = as.factor(mpa_size)) %>% 
-  mutate(mpa_size = fct_relevel(mpa_size, c("Large", "Medium", "Small", "Non-MPA"))) %>% 
+  mutate(mpa_size = fct_relevel(mpa_size, c("10 x 10", "6 x 6", "3 x 3", "Non-MPA"))) %>% 
   filter(mpa_size != "Non-MPA")
 
 collapse_fp = line_df_fp %>% 
@@ -735,13 +747,14 @@ collapse_fp = line_df_fp %>%
 collapse_full_fp = line_df_mpa_full_fp %>% 
   select(generation, evolution, mpa_size, climate, location_sum, fishing_pressure) %>% 
   filter(generation > 30) %>% 
-  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "Small") | (location_sum <= (100*2*.05*6*6) & mpa_size == "Medium") | (location_sum <= (100*2*.05*10*10) & mpa_size == "Large")) %>% 
+  filter((location_sum <= (100*2*.05*3*3) & mpa_size == "3 x 3") | (location_sum <= (100*2*.05*6*6) & mpa_size == "6 x 6") | (location_sum <= (100*2*.05*10*10) & mpa_size == "10 x 10") | (location_sum <= (100*2*.05) & mpa_size == "1 x 1")) %>% 
   group_by(evolution, mpa_size, climate, fishing_pressure) %>%
   summarize(min_gen = min(generation)) %>% 
   mutate(collapse_point = case_when(
-    mpa_size == "Small" ~ 100*2*.05*3*3,
-    mpa_size == "Medium" ~ 100*2*.05*6*6,
-    mpa_size == "Large" ~ 100*2*.05*10*10
+    mpa_size == "1 x 1" ~ 100*2*.05
+    mpa_size == "3 x 3" ~ 100*2*.05*3*3,
+    mpa_size == "6 x 6" ~ 100*2*.05*6*6,
+    mpa_size == "10 x 10" ~ 100*2*.05*10*10
   ))
 ```
 
@@ -1150,11 +1163,10 @@ temp = ggplot(SSTdf) +
     strip.background = element_rect(fill = "white")
   )
 
-# temp = ggplot(SSTdf_mean_shock) +
-#   geom_line(aes(year, sst), color = "blue", linewidth = 2) +
-#   facet_wrap(~ climate) +
+# temp = ggplot(SSTdf_enso) +
+#   geom_line(aes(year, sst), color = "blue", linewidth = .2) +
 #   labs(x = "Year", y = "SST") +
-#   theme_bw(base_size= 20) +
+#   theme_bw(base_size= 5) +
 #   scale_color_viridis_d() +
 #   theme(
 #     panel.grid = element_blank(),
@@ -1163,7 +1175,8 @@ temp = ggplot(SSTdf) +
 #     axis.ticks = element_blank(),
 #     axis.text = element_blank(),
 #     strip.background = element_rect(fill = "white")
-#   )
+#   ) + 
+#   ylim(c(26,33))
 
 
 ggsave(temp, file = paste0("temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
@@ -1281,37 +1294,39 @@ p1 = ggplot(mpa_medium_pres, aes(generation, location_sum)) +
 ggsave(p1, file = paste0("decline_mpa_pres.pdf"), path = here::here("04_figs", "presentation"), height = 10, width = 18)
 ```
 
-```{r}
-geno_lat_pres = geno_lat %>% 
-  filter(location == "MPA") %>% 
-  filter(climate %in% c("Null", "Mean Shift")) %>% 
-  mutate(climate = case_when(
-    climate == "Null" ~ "No Climate Change",
-    climate == "Mean Shift" ~ "Mean Change Per Year"
-  )) %>% 
-  filter(mpa_size == "Medium")
 
-p2 = ggplot(geno_lat_pres, aes(generation, mpa_mean_freq)) +
-  geom_line(aes(color = mpa_size), linewidth = 2) +
-  facet_grid(genotype~climate, scales = "free_y") +
-  theme_bw(base_size = 20) +
-  labs(
-    x = "Year",
-    y = "Allele Frequency",
-    color = "MPA Size"
-  ) +
-  theme() +
-  scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())
-
-ggsave(p2, file = paste0("genotype_summary_pres.pdf"), path = here::here("04_figs", "presentation"), height = 8, width = 15)
-```
 
 # Old
+
+```{r}
+# geno_lat_pres = geno_lat %>% 
+#   filter(location == "MPA") %>% 
+#   filter(climate %in% c("Null", "Mean Shift")) %>% 
+#   mutate(climate = case_when(
+#     climate == "Null" ~ "No Climate Change",
+#     climate == "Mean Shift" ~ "Mean Change Per Year"
+#   )) %>% 
+#   filter(mpa_size == "6 x 6")
+# 
+# p2 = ggplot(geno_lat_pres, aes(generation, mpa_mean_freq)) +
+#   geom_line(aes(color = mpa_size), linewidth = 2) +
+#   facet_grid(genotype~climate, scales = "free_y") +
+#   theme_bw(base_size = 20) +
+#   labs(
+#     x = "Year",
+#     y = "Allele Frequency",
+#     color = "MPA Size"
+#   ) +
+#   theme() +
+#   scale_color_viridis_d() +
+#   theme(panel.grid.minor = element_blank(),
+#         strip.text = element_text(face = "bold"),
+#         strip.background = element_rect(fill = "white"),
+#         axis.text.x = element_blank(),
+#         axis.ticks.x = element_blank())
+# 
+# ggsave(p2, file = paste0("genotype_summary_pres.pdf"), path = here::here("04_figs", "presentation"), height = 8, width = 15)
+```
 
 ```{r}
 # p2 = ggplot(line_df_geno, aes(generation, freq_avg)) +

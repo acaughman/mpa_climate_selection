@@ -237,6 +237,6 @@ dfs = rbind(df_list, df_list2)
 
 rm(df_list, df_list2)
 
-write_csv(df_list, here::here("03_generated_data", "summary_data", "full_sum_climate_rate.csv"))
+write_csv(dfs, here::here("03_generated_data", "summary_data", "full_sum_climate_rate.csv"))
 ```
 
