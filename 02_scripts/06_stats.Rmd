@@ -413,7 +413,7 @@ change_rate = data_rate %>%
 
 change_mpa_rate = change_rate %>% 
   filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10"))
 
 mean_change_mpa_rate = change_mpa_rate %>% 
   group_by(generation, climate, evolution, mpa_size) %>% 
