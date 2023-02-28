@@ -1233,14 +1233,20 @@ ggsave(mort_curve, file = paste0("mort_curve.pdf"), path = here("04_figs", "clim
 # Presentation Figures
 
 ```{r}
-mpa_medium_pres = mpa_medium %>% 
+mpa_medium_null = mpa_medium %>% 
+  filter(climate %in% c("Null")) %>% 
+  mutate(climate = case_when(
+    climate == "Null" ~ "No Climate Change"
+  ))
+
+mpa_medium_null_mean = mpa_medium %>% 
   filter(climate %in% c("Null", "Mean Shift")) %>% 
   mutate(climate = case_when(
     climate == "Null" ~ "No Climate Change",
     climate == "Mean Shift" ~ "Mean Change Per Year"
   ))
 
-p1 = ggplot(mpa_medium_pres, aes(generation, location_sum)) +
+p1 = ggplot(mpa_medium_null, aes(generation, location_sum)) +
   geom_line(aes(color = climate, linetype = evolution), linewidth = 2) +
   theme_bw(base_size = 20) +
   labs(
@@ -1257,7 +1263,26 @@ p1 = ggplot(mpa_medium_pres, aes(generation, location_sum)) +
   scale_color_manual(values = c("#5ec962", "#440154")) +
   scale_linetype_manual(values = c("solid", "dashed"))
   
-ggsave(p1, file = paste0("decline_mpa_pres.pdf"), path = here::here("04_figs", "presentation"), height = 10, width = 18)
+ggsave(p1, file = paste0("decline_mpa_pres_null.pdf"), path = here::here("04_figs", "presentation"), height = 10, width = 18)
+
+p2 = ggplot(mpa_medium_null_mean, aes(generation, location_sum)) +
+  geom_line(aes(color = climate, linetype = evolution), linewidth = 2) +
+  theme_bw(base_size = 20) +
+  labs(
+    x = "Year",
+    y = "Population Density",
+    color = "Climate Scenario", 
+    linetype = "Evolution?"
+  ) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  scale_color_manual(values = c("#5ec962", "#440154")) +
+  scale_linetype_manual(values = c("solid", "dashed"))
+  
+ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("04_figs", "presentation"), height = 10, width = 18)
 ```
 
 
