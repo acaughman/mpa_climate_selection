@@ -1239,12 +1239,12 @@ mpa_medium_null = mpa_medium %>%
     climate == "Null" ~ "No Climate Change"
   ))
 
-mpa_medium_null_mean = mpa_medium %>% 
-  filter(climate %in% c("Null", "Mean Shift")) %>% 
+mpa_medium_mean = mpa_medium %>% 
+  filter(climate %in% c("Mean Shift")) %>% 
   mutate(climate = case_when(
-    climate == "Null" ~ "No Climate Change",
     climate == "Mean Shift" ~ "Mean Change Per Year"
-  ))
+  )) 
+  
 
 p1 = ggplot(mpa_medium_null, aes(generation, location_sum)) +
   geom_line(aes(color = climate, linetype = evolution), linewidth = 2) +
@@ -1260,13 +1260,14 @@ p1 = ggplot(mpa_medium_null, aes(generation, location_sum)) +
         strip.background = element_rect(fill = "white"),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
-  scale_color_manual(values = c("#5ec962", "#440154")) +
+  scale_color_manual(values = c("#5ec962")) +
   scale_linetype_manual(values = c("solid", "dashed"))
   
 ggsave(p1, file = paste0("decline_mpa_pres_null.pdf"), path = here::here("04_figs", "presentation"), height = 10, width = 18)
 
-p2 = ggplot(mpa_medium_null_mean, aes(generation, location_sum)) +
-  geom_line(aes(color = climate, linetype = evolution), linewidth = 2) +
+p2 = ggplot() +
+  geom_line(data = mpa_medium_null, aes(generation, location_sum, linetype = evolution, color = climate), linewidth = 2) +
+  geom_line(data = mpa_medium_mean, aes(generation, location_sum, linetype = evolution, color = climate), linewidth = 3) +
   theme_bw(base_size = 20) +
   labs(
     x = "Year",
@@ -1279,7 +1280,7 @@ p2 = ggplot(mpa_medium_null_mean, aes(generation, location_sum)) +
         strip.background = element_rect(fill = "white"),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
-  scale_color_manual(values = c("#5ec962", "#440154")) +
+  scale_color_manual(values = c("#440154", "#5ec962")) +
   scale_linetype_manual(values = c("solid", "dashed"))
   
 ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("04_figs", "presentation"), height = 10, width = 18)
