@@ -15,10 +15,10 @@ library(patchwork)
 ### Read in CSV
 
 ```{r}
-df1 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "med_enso.csv")) %>% 
+df1 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "med_null_06.csv")) %>% 
   filter(rep == 1)
 
-df2 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "enso_med_sum.csv")) 
+df2 <- read_csv(here::here("sensitivity_analysis", "fishing_pressure", "null_med_sum.csv")) 
 ```
 
 ### Manipulate data
@@ -76,7 +76,7 @@ mpa_df1 <- output_sum1 %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
   mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
   select(-max_m, -min_m) %>% 
-  mutate(dd = 0.7)
+  mutate(dd = 0.6)
 
 ```
 
@@ -85,5 +85,5 @@ mpa_df1 <- output_sum1 %>%
 data = full_join(mpa_df1, df2) %>% 
   mutate(dd = as.factor(dd))
 
-write_csv(data, here::here("sensitivity_analysis", "fishing_pressure", "enso_med_sum.csv"))
+write_csv(data, here::here("sensitivity_analysis", "fishing_pressure", "null_med_sum.csv"))
 ```
