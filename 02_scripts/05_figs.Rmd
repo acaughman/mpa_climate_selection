@@ -427,7 +427,7 @@ s3 = ggplot(mean_change2, aes(generation, mean_change)) +
     x = "Year",
     y = "Rate of Population Change",
     linetype = "Evolution?",
-    color = "Climate"
+    color = "MPA Size"
   )+
   scale_color_viridis_d() +
   theme(panel.grid.minor = element_blank(),
@@ -483,6 +483,43 @@ s5 = ggplot(line_df, aes(generation, log(location_sum))) +
 ggsave(s5, file = paste0("decline_full_sim_log.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
 ```
 
+```{r}
+shock_df = line_df %>% 
+  filter(climate %in% c("Shocks")) %>% 
+  ungroup() %>% 
+  select(generation, climate, max_temp, mpa_size, evolution) %>% 
+  distinct() %>% 
+  filter(max_temp > 27)
+
+shock_years = shock_df %>% 
+  filter(mpa_size == "3 x 3") %>% 
+  mutate(shock_year = "Yes") %>% 
+  select(generation, shock_year) %>% 
+  distinct()
+
+shock_change = mean_change2 %>% 
+  filter(climate == "Shocks") 
+
+s6 = ggplot() +
+  geom_vline(data = shock_years, aes(xintercept = generation), linetype = "dotted", alpha = 0.3) +
+  geom_line(data = shock_change, aes(generation, mean_change, color = mpa_size, linetype = evolution)) +
+  theme_bw() +
+  labs(
+    x = "Year",
+    y = "Rate of Population Change",
+    linetype = "Evolution?",
+    color = "MPA size"
+  )+
+  scale_color_viridis_d() +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold"),
+        strip.background = element_rect(fill = "white"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  ylim(c(-0.05, 0.5))
+
+ggsave(s6, file = paste0("shocks_rate.pdf"), path = here::here("04_figs", "supp"), height = 6, width = 15)
+```
 
 ## Climate Rate Figures
 
