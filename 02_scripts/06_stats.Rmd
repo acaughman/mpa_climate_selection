@@ -110,6 +110,16 @@ line_df_lat <- data %>%
 
 # Population Density
 
+### Population Max
+
+```{r}
+pop_max = line_df_mpa_full %>% 
+  group_by(evolution, mpa_size, climate) %>% 
+  summarize(max_pop = max(location_sum))
+
+write_csv(pop_max, here::here("03_generated_data", "results", "pop_max.csv"))
+```
+
 ### Evo No Evo Compare
 
 ```{r}

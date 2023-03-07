@@ -185,7 +185,7 @@ ggsave(f2, file = paste0("fig2.pdf"), path = here::here("04_figs"), height = 10,
 ```
 
 ```{r}
-f3 = ggplot(collapse_full, aes(min_gen, mpa_size)) +
+f3.1 = ggplot(collapse_full, aes(min_gen, mpa_size)) +
   geom_point(aes(color = climate, shape = evolution), size = 3) +
   theme_bw(base_size = 12) +
   scale_color_manual(values = c("#fde725", "#3b528b", "#440154")) +
@@ -199,7 +199,7 @@ f3 = ggplot(collapse_full, aes(min_gen, mpa_size)) +
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggsave(f3, file = paste0("fig3.pdf"), path = here::here("04_figs"), height = 8, width = 10)
+ggsave(f3.1, file = paste0("fig3.1.pdf"), path = here::here("04_figs"), height = 8, width = 10)
 ```
 
 ```{r}
@@ -226,20 +226,24 @@ ggsave(f4, file = paste0("fig4.pdf"), path = here::here("04_figs"), height = 8, 
 ```
 
 ```{r}
-f = ggplot(point_sum, aes(generation, avg_diff)) +
+f3.2 = ggplot(point_sum, aes(generation, avg_diff)) +
   geom_line(aes(color = climate), linewidth = 1) +
   geom_point() +
   theme_bw() +
   labs(
     x = "Year",
     y = "Average Population Difference Between Evolution and No Evolution",
-    color = "Climate") +
+    color = "Climate Scenario") +
   scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
   scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggsave(f, file = paste0("figX.pdf"), path = here::here("04_figs"), height = 8, width = 10)
+f3 = f3.2 + f3.1 + plot_annotation(tag_levels = "A") + plot_layout(guides = "collect")
+
+ggsave(f3, file = paste0("fig3.pdf"), path = here::here("04_figs"), height = 8, width = 10)
+
+ggsave(f3.2, file = paste0("fig3.2.pdf"), path = here::here("04_figs"), height = 8, width = 10)
 ```
 
 # Supplemental Figures
