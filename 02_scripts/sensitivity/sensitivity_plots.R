@@ -45,7 +45,7 @@ p <- ggplot(data, aes(generation, location_sum)) +
   labs(
     x = "Year",
     y = "Population Density",
-    color = "Maturation Age"
+    color = "Rate of Climate Increase Per Year"
   ) +
   geom_vline(xintercept = 16, alpha = 0.3) +
   geom_vline(xintercept = 26, alpha = 0.3) +

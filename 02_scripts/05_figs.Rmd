@@ -341,16 +341,19 @@ line_df_geno_lat <- data %>%
   mutate(max_temp = as.factor(max_temp))
 
 change = data %>% 
-  select(-genotype, -geno_pop_mean, -freq, -fished_mean) %>% 
+  select(-genotype, -geno_pop_mean, -freq, -fished_mean, -geno_pop_sd, -geno_pop_se) %>% 
   distinct() %>% 
   group_by(climate, evolution, mpa_size, lat, lon) %>% 
-  mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation))
+  mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) %>% 
+  ungroup()
 ```
 
 ```{r}
 mean_change2 = change %>% 
-  filter(generation >= 35) %>% 
-  group_by(generation, climate, evolution, mpa_size) %>% 
+  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
+  filter(generation >= 35) %>%
+  group_by(generation, climate, evolution, mpa_size) %>%
   summarize(mean_change = mean(rate, na.rm = TRUE))
 
 collapse_full = line_df_mpa_full %>% 
@@ -485,44 +488,6 @@ s5 = ggplot(line_df, aes(generation, log(location_sum))) +
   scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154"))
 
 ggsave(s5, file = paste0("decline_full_sim_log.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
-```
-
-```{r}
-shock_df = line_df %>% 
-  filter(climate %in% c("Shocks")) %>% 
-  ungroup() %>% 
-  select(generation, climate, max_temp, mpa_size, evolution) %>% 
-  distinct() %>% 
-  filter(max_temp > 27)
-
-shock_years = shock_df %>% 
-  filter(mpa_size == "3 x 3") %>% 
-  mutate(shock_year = "Yes") %>% 
-  select(generation, shock_year) %>% 
-  distinct()
-
-shock_change = mean_change2 %>% 
-  filter(climate == "Shocks") 
-
-s6 = ggplot() +
-  geom_vline(data = shock_years, aes(xintercept = generation), linetype = "dotted", alpha = 0.3) +
-  geom_line(data = shock_change, aes(generation, mean_change, color = mpa_size, linetype = evolution)) +
-  theme_bw() +
-  labs(
-    x = "Year",
-    y = "Rate of Population Change",
-    linetype = "Evolution?",
-    color = "MPA size"
-  )+
-  scale_color_viridis_d() +
-  theme(panel.grid.minor = element_blank(),
-        strip.text = element_text(face = "bold"),
-        strip.background = element_rect(fill = "white"),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank()) +
-  ylim(c(-0.05, 0.5))
-
-ggsave(s6, file = paste0("shocks_rate.pdf"), path = here::here("04_figs", "supp"), height = 6, width = 15)
 ```
 
 ## Climate Rate Figures

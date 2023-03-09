@@ -106,6 +106,45 @@ line_df_lat <- data %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(lat = as.factor(lat)) %>% 
   mutate(max_temp = as.factor(max_temp))
+
+line_df_geno_lat <- data %>%
+  group_by(generation, evolution, mpa_size, climate, genotype, lat) %>% 
+  summarise(
+    location_sum = sum(geno_pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m) %>% 
+  filter(evolution == "Yes") %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(max_temp = as.factor(max_temp))
+
+line_df_geno_lat = line_df_geno_lat %>%
+  filter(lat == 10 | lat == 90 | lat == 50)
+
+line_lat_mpa_combo = line_df_geno_lat %>% 
+  filter(lat != 50) %>% 
+  group_by(generation, climate, genotype, lat) %>% 
+  summarize(mpa_mean_freq = mean(freq_avg, na.rm = TRUE)) %>% 
+  mutate(location = case_when(
+    lat == 10 ~ "Low Latitude", 
+    lat == 90 ~ "High Latitude"
+  )) %>% 
+  mutate(mpa_size = "Non-MPA")
+
+geno_lat = line_df_geno_lat %>% 
+  filter(lat == 50) %>% 
+  mutate(location = "MPA") %>% 
+  mutate(mpa_mean_freq = freq_avg) %>% 
+  full_join(line_lat_mpa_combo) %>% 
+  mutate(location = as.factor(location)) %>% 
+  mutate(mpa_size = as.factor(mpa_size)) %>% 
+  mutate(mpa_size = fct_relevel(mpa_size, c("10 x 10", "6 x 6", "3 x 3", "1 x 1", "Non-MPA")))
 ```
 
 # Population Density
@@ -171,8 +210,7 @@ point6 = point %>%
   mutate(generation = 175)
 
 point_sum = list(point1, point2, point3, point4, point5, point6) %>% 
-  reduce(full_join) %>% 
-  filter(mpa_size == "6 x 6")
+  reduce(full_join)
 
 write_csv(point, here::here("03_generated_data", "results", "evo_diff.csv"))
 write_csv(point_sum, here::here("03_generated_data", "results", "evo_diff_sum.csv"))
@@ -216,19 +254,31 @@ write_csv(collapse, here::here("03_generated_data", "results", "collapse_points.
 change = data %>% 
   select(-genotype, -geno_pop_mean, -freq, -fished_mean, -geno_pop_sd, -geno_pop_se) %>% 
   distinct() %>% 
-  group_by(climate, evolution, mpa_size) %>% 
+  group_by(climate, evolution, mpa_size, lat, lon) %>% 
   mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) %>% 
+  mutate(relative_rate = (pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) / pop_mean) %>% 
   ungroup()
 
-change_mpa = change %>% 
+mean_change2 = change %>%
+  filter(generation >= 50) %>%
   filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1"))
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
+  filter(!is.infinite(relative_rate)) %>% 
+  group_by(climate, evolution, mpa_size) %>%
+  summarize(mean_change = mean(rate, na.rm = TRUE),
+            relative_mean_change = mean(relative_rate, na.rm=TRUE))
 
-mean_change_mpa = change_mpa %>% 
-  group_by(generation, climate, evolution, mpa_size) %>% 
-  summarize(mean_change = mean(rate2, na.rm = TRUE))
+mean_change = change %>%
+  filter(generation >= 35) %>%
+  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
+  filter(!is.infinite(relative_rate)) %>% 
+  group_by(generation, climate, evolution, mpa_size) %>%
+  summarize(mean_change = mean(rate, na.rm = TRUE),
+            relative_mean_change = mean(relative_rate, na.rm=TRUE))
 
-write_csv(mean_change_mpa, here::here("03_generated_data", "results", "rate_change_mpa.csv"))
+write_csv(mean_change, here::here("03_generated_data", "results", "rate_change_mpa.csv"))
+write_csv(mean_change2, here::here("03_generated_data", "results", "rate_change_mpa_sum.csv"))
 ```
 
 ### Heatwave Recovery
@@ -246,7 +296,7 @@ shock_years = shock_df %>%
   mutate(shock_year = "Yes") %>% 
   select(generation, shock_year)
 
-shock_change = mean_change_mpa %>% 
+shock_change = mean_change %>% 
   filter(climate == "Shocks")
 
 shock_change = list(shock_change, shock_years) %>% 
@@ -254,12 +304,6 @@ shock_change = list(shock_change, shock_years) %>%
 
 years = shock_years %>% 
   select(generation)
-
-ggplot(shock_change, aes(generation, mean_change)) +
-  geom_vline(data = years, aes(xintercept = generation), alpha = 0.3, linetype = "dotted") + 
-  geom_line(aes(linetype = evolution)) +
-  facet_wrap(~ mpa_size, scales = "free_y") +
-  theme_bw()
 
 write_csv(shock_change, here::here("03_generated_data", "results", "shock_change.csv"))
 ```
@@ -282,9 +326,23 @@ aa_sum = aa_geno %>%
 aa = left_join(aa_sum, aa_geno)
 
 temps = aa %>% 
-  select(mpa_size, climate, freq_avg, average_temp, generation)
+  select(mpa_size, climate, freq_avg, average_temp, generation, average_survival)
 
 write_csv(temps, here::here("03_generated_data", "results", "aa_peak.csv"))
+
+aa_geno2 = line_df_geno_lat %>% 
+  filter(genotype == "aa") %>% 
+  ungroup() %>% 
+  select(-evolution, -genotype) %>% 
+  filter(lat %in% c(10,90)) %>% 
+  filter(climate %in% c("Mean Shift", "Shocks with Mean Shift", "El Nino/La Nina")) %>% 
+  filter(!is.na(freq_avg)) 
+
+aa_sum2 = aa_geno2 %>% 
+  group_by(mpa_size, climate) %>% 
+  summarize(freq_avg = max(freq_avg))
+
+aa2 = left_join(aa_sum2, aa_geno2)
 ```
 
 ### Temp aa decline
@@ -352,19 +410,54 @@ write_csv(collapse_mpa_fp, here::here("03_generated_data", "results", "collapse_
 change_fp = data_fp %>% 
   select(-genotype, -geno_pop_mean, -freq, -fished_mean, -geno_pop_sd, -geno_pop_se) %>% 
   distinct() %>% 
-  group_by(climate, evolution, mpa_size, fishing_pressure) %>% 
+  group_by(climate, evolution, mpa_size, fishing_pressure, lat, lon) %>% 
   mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) %>% 
   ungroup()
 
 change_mpa_fp = change_fp %>% 
+  filter(generation >= 50) %>%
   filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10"))
-
-mean_change_mpa_fp = change_mpa_fp %>% 
-  group_by(generation, climate, evolution, mpa_size) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10")) %>% 
+  group_by(climate, evolution, mpa_size, fishing_pressure) %>% 
   summarize(mean_change = mean(rate, na.rm = TRUE))
 
-write_csv(mean_change_mpa_fp, here::here("03_generated_data", "results", "fishing_pressure_change_mpa.csv"))
+write_csv(change_mpa_fp, here::here("03_generated_data", "results", "fishing_pressure_change_mpa.csv"))
+
+line_df_geno_fp <- data_fp %>%
+  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
+  group_by(generation, evolution, mpa_size, climate, genotype, fishing_pressure) %>% 
+  summarise(
+    location_sum = sum(geno_pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  select(-max_m, -min_m) %>% 
+  filter(evolution == "Yes")
+
+aa_geno_fp = line_df_geno_fp %>% 
+  filter(genotype == "aa") %>%
+  filter(climate %in% c("Mean Shift", "Shocks with Mean Shift", "El Nino/La Nina")) %>% 
+  filter(!is.na(freq_avg)) %>% 
+  select(-evolution, -genotype) %>% 
+  mutate(average_survival = sum(max_survival, min_survival)/2,
+         average_temp = sum(max_temp, min_temp)/2)
+
+aa_sum_fp = aa_geno_fp %>% 
+  group_by(mpa_size, climate, fishing_pressure) %>% 
+  summarize(freq_avg = max(freq_avg))
+
+aa_fp = left_join(aa_sum_fp, aa_geno_fp)
+
+temps_fp = aa_fp %>% 
+  select(mpa_size, climate, freq_avg, average_temp, generation, average_survival, fishing_pressure)
+
+write_csv(temps_fp, here::here("03_generated_data", "results", "aa_peak_fishing_pressure.csv"))
 ```
 
 ### Climate Rate
@@ -417,19 +510,57 @@ write_csv(collapse_mpa_rate, here::here("03_generated_data", "results", "collaps
 change_rate = data_rate %>% 
   select(-genotype, -geno_pop_mean, -freq, -fished_mean, -geno_pop_sd, -geno_pop_se) %>% 
   distinct() %>% 
-  group_by(climate, evolution, mpa_size, climate_rate) %>% 
+  group_by(climate, evolution, mpa_size, climate_rate, lat, lon) %>% 
   mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) %>% 
   ungroup()
 
 change_mpa_rate = change_rate %>% 
+  filter(generation >= 50) %>%
   filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10"))
-
-mean_change_mpa_rate = change_mpa_rate %>% 
-  group_by(generation, climate, evolution, mpa_size) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10")) %>% 
+  group_by(climate, evolution, mpa_size, climate_rate) %>% 
   summarize(mean_change = mean(rate, na.rm = TRUE))
 
-write_csv(mean_change_mpa_rate, here::here("03_generated_data", "results", "climate_rate_change_mpa.csv"))
+write_csv(change_mpa_rate, here::here("03_generated_data", "results", "climate_rate_change_mpa.csv"))
+
+line_df_geno_rate <- data_rate %>%
+  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
+  group_by(generation, evolution, mpa_size, climate, genotype, climate_rate) %>% 
+  summarise(
+    location_sum = sum(geno_pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  select(-max_m, -min_m) %>% 
+  filter(evolution == "Yes")
+
+aa_geno_rate = line_df_geno_rate %>% 
+  filter(genotype == "aa") %>%
+  filter(climate %in% c("Mean Shift", "Shocks with Mean Shift", "El Nino/La Nina")) %>% 
+  filter(!is.na(freq_avg)) %>% 
+  ungroup() %>% 
+  select(-evolution, -genotype) %>% 
+  mutate(average_survival = max_survival + min_survival,
+         average_temp = max_temp + min_temp) %>% 
+  mutate(average_survival = average_survival / 2,
+         average_temp = average_temp/2)
+
+aa_sum_rate = aa_geno_rate %>% 
+  group_by(mpa_size, climate, climate_rate) %>% 
+  summarize(freq_avg = max(freq_avg))
+
+aa_rate = left_join(aa_sum_rate, aa_geno_rate)
+
+temps_rate = aa_rate %>% 
+  select(mpa_size, climate, freq_avg, average_temp, generation, average_survival, climate_rate)
+
+write_csv(temps_rate, here::here("03_generated_data", "results", "aa_peak_climate_rate.csv"))
 ```
 
 
