@@ -2,10 +2,14 @@
 .Rhistory
 .RData
 .Ruserdata
-05_writing_drafts
+writing_drafts
 *.docx
-03_generated_data/full_csv
+generated_data/full_csv
+generated_data/model_outputs
+generated_data/results
+generated_data/summary_data
 climate_data
+figs/supp
 other
 *.csv
 tests
