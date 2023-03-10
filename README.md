@@ -1,6 +1,6 @@
 # Climate Change Reduces Population Benefits from Marine Protected Areas by Interfering with Movement Evolution
 
-This repository contains code used in the paper: Caughman, A.M., Bradley, D., Gaines (*In Prep*) Climate Change Reduces Population Benefits from Marine Protected Areas by Interfering with Movement Evolution
+This repository contains code used in the paper: Caughman, A.M., Gaines, S.D., Bradley, D. (*In Prep*) Climate Change Reduces Population Benefits from Marine Protected Areas by Interfering with Movement Evolution
 
 For any questions, comments, or concerns, please contact Alicia Caughman [acaughman@bren.ucsb.edu](acaughman@bren.ucsb.edu).
 
