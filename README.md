@@ -1,48 +1,47 @@
-# MPA Climate Selection
+# Climate Change Reduces Population Benefits from Marine Protected Areas by Interfering with Movement Evolution
 
-## Sensitivity 2 replicates
+This repository contains code used in the paper: Caughman, A.M., Bradley, D., Gaines (*In Prep*) Climate Change Reduces Population Benefits from Marine Protected Areas by Interfering with Movement Evolution
 
-### Movement Rate - 2/1 needs added
+For any questions, comments, or concerns, please contact Alicia Caughman [acaughman@bren.ucsb.edu](acaughman@bren.ucsb.edu).
 
-### Density Dependence - Done need check
+This repository will be citeable at Zenodo.
 
-### Fishing Pressure - Done need check
+<DOI>
 
-### Movement Pattern - Done need check
+# Instructions
 
-### Initial SST - Done need check
+The order of running scripts should be as follows: 
 
-### Climate Rate - Done need check
+1. The first script is the simulation model `01_final_model.R`. It will produce a CSV file with the model data.
+2. The next script to be run after all simulation models is called `02_data_merge.Rmd`. This script merge all simulation data into one CSV for additional analysis and plotting.
+3. The final script to be run is `03_analysis_figs.Rmd`. It contains all additional analysis and figure generation for the paper.
 
-### Thermal Breadth - Done need check
+# Repository Structure
 
-### Maturation Age - Done need check
+## Overview
 
+```
+scripts
+  |__ 01_final_model.R
+  |__ 02_data_merge.Rmd
+  |__ 03_analysis_figs.Rmd
+figs
+  |__ fig1.pdf
+  |__ fig2.pdf
+  |__ fig3.pdf
+  |__ fig.pdf
+```
 
-## Full Runs 100 replicates
+# R Version
 
-## 0.3 FP runs 100 replicates
+All code was run using R version 4.1.3
 
-## Refugia Runs 100 replicates
+## Required Libraries
 
-### Climate Scenarios
-
-1. No Climate - Control
-2. Mean shift
-3. ENSO
-4. Heat Waves
-5. Heat Waves w Mean Shift
-
-### MPA Scenarios
-
-1. Single Small 
-2. Single Medium
-3. Single Large
-4. No MPA - Control
-
-### Evolution Scenario
-
-1. Low Movement Evolution
-2. No Low Movement Evolution
-
-
++ Data Ingestion, Cleaning, Harmonization, and Organization
+  - `tidyverse` (version 1.3.2)
+  - `here` (version 1.0.1)
++ Simulation
+  - `pracma` (version 2.4.2)
++ Data Visualization
+  - `patchwork` (version 1.1.2)
