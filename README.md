@@ -16,12 +16,21 @@ The order of running scripts should be as follows:
 2. The next script to be run after all simulation models is called `02_data_merge.Rmd`. This script merge all simulation data into one CSV for additional analysis and plotting.
 3. The final script to be run is `03_analysis_figs.Rmd`. It contains all additional analysis and figure generation for the paper.
 
+the Data folder contains the RData (.rda) outputs from simulations used in the main text of Caughman et al. `model_list.xlsx` contains a list of parameters used in each model.
+
 # Repository Structure
 
 ## Overview
 
 ```
-scripts
+data
+  |__ model_list.xlsx
+  |__ model1.rda
+  .
+  .
+  .
+  |__ model40.rda
+  scripts
   |__ 01_final_model.R
   |__ 02_data_merge.Rmd
   |__ 03_analysis_figs.Rmd
