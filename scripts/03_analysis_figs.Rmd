@@ -18,7 +18,7 @@ library(patchwork)
 ### Read in Data
 
 ```{r}
-data <- read_csv(here::here("03_generated_data", "summary_data", "full_sum.csv")) %>%
+data <- read_csv(here::here("generated_data", "summary_data", "full_sum.csv")) %>%
   mutate(generation = as.numeric(generation)) %>% 
   mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>% 
   mutate(mpa_size = fct_relevel(mpa_size, c("1 x 1", "3 x 3", "6 x 6", "10 x 10")))
