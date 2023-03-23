@@ -315,6 +315,7 @@ aa_geno = line_df_geno %>%
   filter(genotype == "aa") %>%
   filter(climate %in% c("Mean Shift", "Shocks with Mean Shift", "El Nino/La Nina")) %>% 
   filter(!is.na(freq_avg)) %>% 
+  ungroup() %>% 
   select(-evolution, -genotype) %>% 
   mutate(average_survival = sum(max_survival, min_survival)/2,
          average_temp = sum(max_temp, min_temp)/2)
@@ -331,18 +332,20 @@ temps = aa %>%
 write_csv(temps, here::here("generated_data", "results", "aa_peak.csv"))
 
 aa_geno2 = line_df_geno_lat %>% 
-  filter(genotype == "aa") %>% 
   ungroup() %>% 
-  select(-evolution, -genotype) %>% 
-  filter(lat %in% c(10,90)) %>% 
+  filter(genotype == "aa") %>% 
+  filter(lat == 50) %>% 
   filter(climate %in% c("Mean Shift", "Shocks with Mean Shift", "El Nino/La Nina")) %>% 
-  filter(!is.na(freq_avg)) 
+  filter(!is.na(freq_avg)) %>% 
+  select(-evolution, -genotype) %>%  
+  mutate(average_survival = (max_survival + min_survival)/2)
 
-aa_sum2 = aa_geno2 %>% 
-  group_by(mpa_size, climate) %>% 
-  summarize(freq_avg = max(freq_avg))
-
-aa2 = left_join(aa_sum2, aa_geno2)
+aa_mean = aa_geno2 %>% 
+  filter(climate == "Mean Shift")
+aa_mean_shock = aa_geno2 %>% 
+  filter(climate == "Shocks with Mean Shift")
+aa_enso = aa_geno2 %>% 
+  filter(climate == "El Nino/La Nina")
 ```
 
 ### Temp aa decline
@@ -561,6 +564,39 @@ temps_rate = aa_rate %>%
   select(mpa_size, climate, freq_avg, average_temp, generation, average_survival, climate_rate)
 
 write_csv(temps_rate, here::here("generated_data", "results", "aa_peak_climate_rate.csv"))
+
+line_df_geno_lat_rate <- data_rate %>%
+  group_by(generation, evolution, mpa_size, climate, genotype, lat) %>% 
+  summarise(
+    location_sum = sum(geno_pop_mean, na.rm = TRUE),
+    max_temp = max(max_temp),
+    min_temp = min(min_temp),
+    freq_avg = mean(freq, na.rm = TRUE)) %>%
+  mutate(generation = as.numeric(generation)) %>%
+  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
+  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
+  select(-max_m, -min_m) %>% 
+  filter(evolution == "Yes") %>% 
+  mutate(lat = as.factor(lat)) %>% 
+  mutate(max_temp = as.factor(max_temp))
+
+aa_geno2_rate = line_df_geno_lat_rate %>% 
+  ungroup() %>% 
+  filter(genotype == "aa") %>% 
+  filter(lat == 50) %>% 
+  filter(climate %in% c("Mean Shift", "Shocks with Mean Shift", "El Nino/La Nina")) %>% 
+  filter(!is.na(freq_avg)) %>% 
+  select(-evolution, -genotype) %>%  
+  mutate(average_survival = (max_survival + min_survival)/2)
+
+aa_mean_rate = aa_geno2_rate %>% 
+  filter(climate == "Mean Shift")
+aa_mean_shock_rate = aa_geno2_rate %>% 
+  filter(climate == "Shocks with Mean Shift")
+aa_enso_rate = aa_geno2_rate %>% 
+  filter(climate == "El Nino/La Nina")
 ```
 
 
