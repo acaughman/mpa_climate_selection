@@ -181,7 +181,7 @@ f2 = ggplot(mpa_medium, aes(generation, location_sum)) +
         axis.ticks.x = element_blank()) +
   scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) 
   
-ggsave(f2, file = paste0("fig2.pdf"), path = here::here("04_figs"), height = 10, width = 12)
+ggsave(f2, file = paste0("fig2.pdf"), path = here::here("figs"), height = 10, width = 12)
 ```
 
 ```{r}
@@ -199,7 +199,7 @@ f3.1 = ggplot(collapse_full, aes(min_gen, mpa_size)) +
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggsave(f3.1, file = paste0("fig3.1.pdf"), path = here::here("04_figs"), height = 8, width = 10)
+ggsave(f3.1, file = paste0("fig3.1.pdf"), path = here::here("figs"), height = 8, width = 10)
 ```
 
 ```{r}
@@ -222,7 +222,7 @@ f4 = ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
         axis.ticks.x = element_blank()) +
   scale_linetype_manual(values = c("solid", "dashed", "dotted", "solid", "longdash"), labels = c("10 x 10", "6 x 6", "3 x 3", "1 x 1", ""))
 
-ggsave(f4, file = paste0("fig4.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+ggsave(f4, file = paste0("fig4.pdf"), path = here::here("figs"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -241,9 +241,9 @@ f3.2 = ggplot(point_sum, aes(generation, avg_diff)) +
 
 f3 = f3.2 + f3.1 + plot_annotation(tag_levels = "A") + plot_layout(guides = "collect")
 
-ggsave(f3, file = paste0("fig3.pdf"), path = here::here("04_figs"), height = 8, width = 10)
+ggsave(f3, file = paste0("fig3.pdf"), path = here::here("figs"), height = 8, width = 10)
 
-ggsave(f3.2, file = paste0("fig3.2.pdf"), path = here::here("04_figs"), height = 8, width = 10)
+ggsave(f3.2, file = paste0("fig3.2.pdf"), path = here::here("figs"), height = 8, width = 10)
 ```
 
 # Supplemental Figures
@@ -422,7 +422,7 @@ s1 = ggplot(line_df, aes(generation, location_sum)) +
         axis.ticks.x = element_blank()) +
   scale_color_manual(values = c("#440154", "#3b528b", "#21918c", "#5ec962", "#fde725")) 
 
-ggsave(s1, file = paste0("decline_full.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+ggsave(s1, file = paste0("decline_full.pdf"), path = here::here("figs", "supp"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -443,7 +443,7 @@ s3 = ggplot(mean_change2, aes(generation, mean_change)) +
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggsave(s3, file = paste0("rate.pdf"), path = here::here("04_figs", "supp"), height = 10, width = 15)
+ggsave(s3, file = paste0("rate.pdf"), path = here::here("figs", "supp"), height = 10, width = 15)
 ```
 
 ```{r}
@@ -466,7 +466,7 @@ s4 = ggplot(line_df_mpa_full, aes(generation, location_sum)) +
   scale_color_viridis_d() + scale_fill_viridis_d() +
   guides(fill="none")
   
-ggsave(s4, file = paste0("decline_mpa_full.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+ggsave(s4, file = paste0("decline_mpa_full.pdf"), path = here::here("figs", "supp"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -487,7 +487,7 @@ s5 = ggplot(line_df, aes(generation, log(location_sum))) +
         axis.ticks.x = element_blank()) +
   scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154"))
 
-ggsave(s5, file = paste0("decline_full_sim_log.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+ggsave(s5, file = paste0("decline_full_sim_log.pdf"), path = here::here("figs", "supp"), height = 8, width = 15)
 ```
 
 ## Climate Rate Figures
@@ -588,7 +588,7 @@ s6 = ggplot(line_df_mpa_full_rate, aes(generation, location_sum)) +
   scale_color_manual(values = c("#5ec962", "#440154")) +
   guides(fill="none")
   
-#ggsave(s6, file = paste0("decline_mpa_climate_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+#ggsave(s6, file = paste0("decline_mpa_climate_rate.pdf"), path = here::here("figs", "supp"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -615,9 +615,9 @@ s7 = ggplot(geno_lat_rate, aes(generation, mpa_mean_freq)) +
 
 s8 = s6 + s7 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
 
-ggsave(s8, file = paste0("climate_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+ggsave(s8, file = paste0("climate_rate.pdf"), path = here::here("figs", "supp"), height = 8, width = 15)
 
-#ggsave(s7, file = paste0("genotype_summary_rate.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+#ggsave(s7, file = paste0("genotype_summary_rate.pdf"), path = here::here("figs", "supp"), height = 8, width = 15)
 ```
 
 ## Fishing Pressure Figures
@@ -753,7 +753,7 @@ s9 = ggplot(geno_lat_fp, aes(generation, mpa_mean_freq)) +
   scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
   scale_alpha_manual(values = c(1, 0.3), guide = 'none')
 
-#ggsave(s9, file = paste0("genotype_summary_fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+#ggsave(s9, file = paste0("genotype_summary_fishing_pressure.pdf"), path = here::here("figs", "supp"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -777,9 +777,9 @@ s10 = ggplot(line_df_mpa_full_fp, aes(generation, location_sum)) +
   
 s11 = s10 + s9 + plot_annotation(tag_levels = 'A') + plot_layout(guides = "collect")
 
-ggsave(s11, file = paste0("fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+ggsave(s11, file = paste0("fishing_pressure.pdf"), path = here::here("figs", "supp"), height = 8, width = 15)
   
-#ggsave(s10, file = paste0("decline_mpa_fishing_pressure.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+#ggsave(s10, file = paste0("decline_mpa_fishing_pressure.pdf"), path = here::here("figs", "supp"), height = 8, width = 15)
 ```
 
 ## Climate Figures
@@ -1151,7 +1151,7 @@ temp = ggplot(SSTdf) +
 #   ylim(c(26,33))
 
 
-ggsave(temp, file = paste0("temp.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
+ggsave(temp, file = paste0("temp.pdf"), path = here("figs", "climate"), height = 10, width = 10)
 ```
 
 ```{r}
@@ -1232,7 +1232,7 @@ mort_curve = ggplot(simulation_results, aes(SST, survival.prop)) +
         axis.text.x = element_text(angle = 25,  hjust=1)) +
   scale_x_continuous(breaks = c(23, 25, 27, 29.66092, 30.93700, 31.84384, 34.19259), labels = c("Thermal Min", "Thermal Optimum", "Thermal Max", "Shocks Max", "Mean Shift Max", "El Nino/ La Nina Max", "Shocks with Mean Shift Max"))
 
-ggsave(mort_curve, file = paste0("mort_curve.pdf"), path = here("04_figs", "climate"), height = 10, width = 10)
+ggsave(mort_curve, file = paste0("mort_curve.pdf"), path = here("figs", "climate"), height = 10, width = 10)
 ```
 
 
@@ -1269,7 +1269,7 @@ p1 = ggplot(mpa_medium_null, aes(generation, location_sum)) +
   scale_color_manual(values = c("#5ec962")) +
   scale_linetype_manual(values = c("solid", "dashed"))
   
-ggsave(p1, file = paste0("decline_mpa_pres_null.pdf"), path = here::here("04_figs", "presentation"), height = 10, width = 18)
+ggsave(p1, file = paste0("decline_mpa_pres_null.pdf"), path = here::here("figs", "presentation"), height = 10, width = 18)
 
 p2 = ggplot() +
   geom_line(data = mpa_medium_null, aes(generation, location_sum, linetype = evolution, color = climate), linewidth = 2) +
@@ -1289,7 +1289,7 @@ p2 = ggplot() +
   scale_color_manual(values = c("#440154", "#5ec962")) +
   scale_linetype_manual(values = c("solid", "dashed"))
   
-ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("04_figs", "presentation"), height = 10, width = 18)
+ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("figs", "presentation"), height = 10, width = 18)
 ```
 
 
@@ -1323,7 +1323,7 @@ ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("04_fig
 #         axis.text.x = element_blank(),
 #         axis.ticks.x = element_blank())
 # 
-# ggsave(p2, file = paste0("genotype_summary_pres.pdf"), path = here::here("04_figs", "presentation"), height = 8, width = 15)
+# ggsave(p2, file = paste0("genotype_summary_pres.pdf"), path = here::here("figs", "presentation"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -1340,7 +1340,7 @@ ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("04_fig
 #   scale_color_viridis_d() +
 #   theme(panel.grid.minor = element_blank())
 # 
-# ggsave(p2, file = paste0("sum_geno.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+# ggsave(p2, file = paste0("sum_geno.pdf"), path = here::here("figs"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -1374,7 +1374,7 @@ ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("04_fig
 #         strip.background = element_rect(fill = "white")) +
 #   scale_color_viridis_d()
 # 
-# ggsave(p3, file = paste0("mpa_benefit_summary.pdf"), path = here::here("04_figs"), height = 10, width = 15)
+# ggsave(p3, file = paste0("mpa_benefit_summary.pdf"), path = here::here("figs"), height = 10, width = 15)
 ```
 
 ```{r}
@@ -1392,7 +1392,7 @@ ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("04_fig
 #   theme(panel.grid.minor = element_blank()) +
 #   scale_color_viridis_d()
 # 
-# ggsave(p4, file = paste0("sum_lat_geno_clim.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+# ggsave(p4, file = paste0("sum_lat_geno_clim.pdf"), path = here::here("figs"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -1416,7 +1416,7 @@ ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("04_fig
 #   ) +
 #   coord_flip()
 # 
-# ggsave(p6, file = paste0("rate_lat.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+# ggsave(p6, file = paste0("rate_lat.pdf"), path = here::here("figs"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -1438,7 +1438,7 @@ ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("04_fig
 #         axis.ticks.x = element_blank()) +
 #   scale_color_manual(values = c("#5ec962", "#440154")) 
 #   
-# ggsave(p14, file = paste0("decline_sim_fishing_pressure.pdf"), path = here::here("04_figs"), height = 8, width = 15)
+# ggsave(p14, file = paste0("decline_sim_fishing_pressure.pdf"), path = here::here("figs"), height = 8, width = 15)
 ```
 
 ```{r}
@@ -1461,5 +1461,5 @@ ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("04_fig
 #   scale_fill_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
 #   guides(fill="none")
 #   
-# ggsave(s2, file = paste0("decline_mpa.pdf"), path = here::here("04_figs", "supp"), height = 8, width = 15)
+# ggsave(s2, file = paste0("decline_mpa.pdf"), path = here::here("figs", "supp"), height = 8, width = 15)
 ```

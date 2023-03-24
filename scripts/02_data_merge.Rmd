@@ -185,14 +185,14 @@ beepr::beep(5)
 ```{r}
 df_list = list(df1, df2, df3, df4, df5, df6, df7, df8, df9, df10, 
                df11, df12, df13, df14, df15, df16, df17, df18, df19, df20) %>% 
-  reduce(full_join)
+  reduce(rbind)
 
 rm(df1, df2, df3, df4, df5, df6, df7, df8, df9, df10, 
                df11, df12, df13, df14, df15, df16, df17, df18, df19, df20)
 
 df_list2 = list(df21, df22, df23, df24, df25, df26, df27, df28, df29, df30, 
      df31, df32, df33, df34, df35, df36, df37, df38, df39, df40) %>% 
-  reduce(full_join)
+  reduce(rbind)
 
 rm(df21, df22, df23, df24, df25, df26, df27, df28, df29, df30, 
      df31, df32, df33, df34, df35, df36, df37, df38, df39, df40)

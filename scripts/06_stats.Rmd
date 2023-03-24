@@ -20,7 +20,7 @@ library(tidyverse)
 data <- read_csv(here::here("generated_data", "summary_data", "full_sum.csv")) %>% 
   mutate(generation = as.numeric(generation)) %>% 
   mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>% 
-  mutate(mpa_size = fct_relevel(mpa_size, c("1 x 1", "3 x 3", "6 x 6", "10 x 10")))
+  mutate(mpa_size = fct_relevel(mpa_size, c("1 x 1", "3 x 3", "6 x 6", "10 x 10"))) 
 ```
 
 ### Manipulate Data
@@ -216,7 +216,6 @@ write_csv(point, here::here("generated_data", "results", "evo_diff.csv"))
 write_csv(point_sum, here::here("generated_data", "results", "evo_diff_sum.csv"))
 ```
 
-
 ### Collapse Point
 
 ```{r}
@@ -346,19 +345,6 @@ aa_mean_shock = aa_geno2 %>%
   filter(climate == "Shocks with Mean Shift")
 aa_enso = aa_geno2 %>% 
   filter(climate == "El Nino/La Nina")
-```
-
-### Temp aa decline
-
-```{r}
-aa_geno_rate = aa_geno %>% 
-  select(evolution, generation, mpa_size, climate, freq_avg, average_temp, average_survival) %>% 
-  distinct() %>% 
-  group_by(climate, evolution, mpa_size) %>% 
-  mutate(rate = freq_avg - lag(freq_avg, default = first(freq_avg), order_by = generation)) %>% 
-  ungroup()
-
-write_csv(aa_geno_rate, here::here("generated_data", "results", "aa_rate.csv"))
 ```
 
 
@@ -599,8 +585,20 @@ aa_enso_rate = aa_geno2_rate %>%
   filter(climate == "El Nino/La Nina")
 ```
 
-
 # Old
+
+### Temp aa decline
+
+```{r}
+aa_geno_rate = aa_geno %>% 
+  select(evolution, generation, mpa_size, climate, freq_avg, average_temp, average_survival) %>% 
+  distinct() %>% 
+  group_by(climate, evolution, mpa_size) %>% 
+  mutate(rate = freq_avg - lag(freq_avg, default = first(freq_avg), order_by = generation)) %>% 
+  ungroup()
+
+write_csv(aa_geno_rate, here::here("generated_data", "results", "aa_rate.csv"))
+```
 
 ### Repeated measures ANOVA
 
