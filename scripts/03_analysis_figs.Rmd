@@ -640,7 +640,7 @@ ggsave(s5, file = paste0("decline_full_sim_log.pdf"), path = here::here("figs", 
 ### Climate Rate Figures
 
 ```{r}
-data_rate <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_climate_rate.csv")) %>%
+data_rate <- read_csv(here::here("generated_data", "summary_data", "full_sum_climate_rate.csv")) %>%
   mutate(generation = as.numeric(generation)) %>% 
   mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>% 
   mutate(mpa_size = case_when(
@@ -894,7 +894,7 @@ ggsave(s8, file = paste0("climate_rate.pdf"), path = here::here("figs", "supp"),
 ### Fishing Pressure Figures
 
 ```{r}
-data_fp <- read_csv(here::here("03_generated_data", "summary_data", "full_sum_fishing_pressure.csv")) %>%
+data_fp <- read_csv(here::here("generated_data", "summary_data", "full_sum_fishing_pressure.csv")) %>%
   mutate(generation = as.numeric(generation)) %>% 
   mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>% 
   filter(generation <= 150) %>% 
