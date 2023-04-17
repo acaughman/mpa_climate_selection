@@ -85,115 +85,121 @@ init <- function() {
 init_SST <- function(years, climate) {
   #for Null climate
   if (climate == "null") {
-    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
-    start_SST <- (opt.temp) + NS.patches * 0.02
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) #initiate array for SST
+    start_SST <- (opt.temp) + NS.patches * 0.02 #have the highest SST be 0.2 * NS.patches
     
-    for (i in 1:years) {
-      SST <- start_SST
+    for (i in 1:years) { #loop through years
+      SST <- start_SST 
       for (lat in 1:NS.patches) {
-        SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02
+        SST.patches[lat, , i] <- SST 
+        SST <- SST - 0.02 #subtract 0.02 for each latitude 
       }
     }
     #for Mean Shifts
   } else if (climate == "mean") {
-    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
-    start_SST <- (opt.temp) + NS.patches * 0.02
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) #initiate array for SST
+    start_SST <- (opt.temp) + NS.patches * 0.02 #have the highest SST be 0.2 * NS.patches
     
-    for (i in 1:25) {
+    for (i in 1:25) { #loop through pre MPA years
       SST <- start_SST
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02
+        SST <- SST - 0.02  #subtract 0.02 for each latitude 
       }
     }
     
-    for (i in 26:years) 
-    #for El Nino La Nina
+    for (i in 26:years) { #loop through MPA years
+      SST <- start_SST
+      for (lat in 1:NS.patches) {
+        SST.patches[lat, , i] <- SST
+        SST <- SST - 0.02  #subtract 0.02 for each latitude 
+      }
+      start_SST <- start_SST + 0.033 #add 0.033 degree C every year
+    }
+    
+  #for El Nino La Nina
   } else if (climate == "enso") {
-    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
-    start_SST <- (opt.temp) + NS.patches * 0.02
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) #initiate array for SST
+    start_SST <- (opt.temp) + NS.patches * 0.02 #have the highest SST be 0.2 * NS.patches
     
-    for (i in 1:25) {
+    for (i in 1:25) { #loop through pre MPA years
       SST <- start_SST
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02
+        SST <- SST - 0.02  #subtract 0.02 for each latitude 
       }
     }
     
-    t <- seq(1, years - 25, 1)
-    b <- array(0, 25)
-    change <- 0.5 * sin(t) + 0.033
-    enso.value <- c(b, change)
+    t <- seq(1, years - 25, 1) #set time array
+    b <- array(0, 25) #set pre MPA times
+    change <- 0.5 * sin(t) + 0.033 #calculate temp change per year based on sinusoidal equation
+    enso.value <- c(b, change) #append no change pre MPA years to ENSO years
     
-    for (i in 26:years) {
+    for (i in 26:years) { #loop through MPA years
       SST <- start_SST
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02
+        SST <- SST - 0.02  #subtract 0.02 for each latitude 
       }
-      start_SST <- start_SST + enso.value[i]
+      start_SST <- start_SST + enso.value[i] #add change in temp for each year based on ENSO
     }
     #for Shocks
   } else if (climate == "shock") {
-    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
-    start_SST <- (opt.temp) + NS.patches * 0.02
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) #initiate array for SST
+    start_SST <- (opt.temp) + NS.patches * 0.02 #have the highest SST be 0.2 * NS.patches
     
-    for (i in 1:25) {
+    for (i in 1:25) { #loop through pre MPA years
       SST <- start_SST
       for (lat in 1:NS.patches) {
-        SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02
+        SST.patches[lat, ,  i] <- SST
+        SST <- SST - 0.02  #subtract 0.02 for each latitude 
       }
     }
     
-    for (i in 26:years) {
-      heat_prob <- runif(1, 0, 1)
+    for (i in 26:years) { #loop through MPA years
+      heat_prob <- runif(1, 0, 1) #draw heatwave probability
       if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-        intensity <- runif(1, 1, 4)
-        SST <- start_SST + intensity
+        intensity <- runif(1, 1, 4) #if heatwave, draw intensity
+        SST <- start_SST + intensity #add intensity to SST
       } else {
         SST <- start_SST
       }
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02
+        SST <- SST - 0.02  #subtract 0.02 for each latitude 
       }
     }
     # for Shocks with Mean Shift
   } else if (climate == "mean shock") {
-    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
-    start_SST <- (opt.temp) + NS.patches * 0.02
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) #initiate array for SST
+    start_SST <- (opt.temp) + NS.patches * 0.02 #have the highest SST be 0.2 * NS.patches
     
-    for (i in 1:25) {
+    for (i in 1:25) { #loop through pre MPA years
       SST <- start_SST
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02
+        SST <- SST - 0.02  #subtract 0.02 for each latitude 
       }
     }
     
-    for (i in 26:years) {
+    for (i in 26:years) { #loop through MPA years
       SST <- start_SST
-      heat_prob <- runif(1, 0, 1)
+      heat_prob <- runif(1, 0, 1) #draw heatwave probability
       if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-        intensity <- runif(1, 1, 4)
-        SST <- start_SST + intensity
+        intensity <- runif(1, 1, 4) #if heatwave, draw intensity
+        SST <- start_SST + intensity #add intensity to SST
       } else {
         SST <- start_SST
       }
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02
+        SST <- SST - 0.02  #subtract 0.02 for each latitude 
       }
-      start_SST <- start_SST + 0.033
+      start_SST <- start_SST + 0.033 #add 0.033 degree C every year
     }
   }
   return(SST.patches)
 }
-
-
 
 ############################################################################
 ## This function creates an array to tell the simulation the reserve locations
