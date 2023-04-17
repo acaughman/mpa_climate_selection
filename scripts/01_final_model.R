@@ -34,13 +34,14 @@ s <- 0.70 # survival proportion
 dd <- 0.005 # density dependence of baby survival
 fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished <- 0.7
-buffer.fished <- 0.2 # buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
+fished <- 0.7 #base fishing pressure
+buffer.fished <- 0 # buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 
 reserves.at <- c(849, 949, 1049, 850, 950, 1050, 851, 951, 1051)
-# large_MPA c(446, 546, 646, 746, 846, 946, 1046, 1146, 1246, 1346, 447, 547, 647, 747, 847, 947, 1047, 1147, 1247, 1347, 448, 548, 648, 748, 848, 948, 1048, 1148, 1248, 1348, 449, 549, 649, 749, 849, 949, 1049, 1149, 1249, 1349, 450, 550, 650, 750, 850, 950, 1050, 1150, 1250, 1350, 451, 551, 651, 751, 851, 951, 1051, 1151, 1251, 1351, 452, 552, 652, 752, 852, 952, 1052, 1152, 1252, 1352, 453, 553, 653, 753, 853, 953, 1053, 1153, 1253, 1353, 454, 554, 654, 754, 854, 954, 1054, 1154, 1254, 1354, 455, 555, 655, 755, 855, 955, 1055, 1155, 1255, 1355)
-# med MPA c(847, 947, 1047, 1147, 1247, 1347, 848, 948, 1048, 1148, 1248, 1348, 849, 949, 1049, 1149, 1249, 1349, 850, 950, 1050, 1150, 1250, 1350, 851, 951, 1051, 1151, 1251, 1351, 852, 952, 1052, 1152, 1252, 1352)
-# small_MPA c(849, 949, 1049, 850, 950, 1050, 851, 951, 1051)
+# large MPA c(446, 546, 646, 746, 846, 946, 1046, 1146, 1246, 1346, 447, 547, 647, 747, 847, 947, 1047, 1147, 1247, 1347, 448, 548, 648, 748, 848, 948, 1048, 1148, 1248, 1348, 449, 549, 649, 749, 849, 949, 1049, 1149, 1249, 1349, 450, 550, 650, 750, 850, 950, 1050, 1150, 1250, 1350, 451, 551, 651, 751, 851, 951, 1051, 1151, 1251, 1351, 452, 552, 652, 752, 852, 952, 1052, 1152, 1252, 1352, 453, 553, 653, 753, 853, 953, 1053, 1153, 1253, 1353, 454, 554, 654, 754, 854, 954, 1054, 1154, 1254, 1354, 455, 555, 655, 755, 855, 955, 1055, 1155, 1255, 1355)
+# medium MPA c(847, 947, 1047, 1147, 1247, 1347, 848, 948, 1048, 1148, 1248, 1348, 849, 949, 1049, 1149, 1249, 1349, 850, 950, 1050, 1150, 1250, 1350, 851, 951, 1051, 1151, 1251, 1351, 852, 952, 1052, 1152, 1252, 1352)
+# small MPA c(849, 949, 1049, 850, 950, 1050, 851, 951, 1051)
+# tiny MPA
 dynamic.reserve <- FALSE
 
 
@@ -82,10 +83,11 @@ init <- function() {
 ## This function sets up the Sea surface temperature grid
 
 init_SST <- function(years, climate) {
+  #for Null climate
   if (climate == "null") {
     SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
     start_SST <- (opt.temp) + NS.patches * 0.02
-
+    
     for (i in 1:years) {
       SST <- start_SST
       for (lat in 1:NS.patches) {
@@ -93,10 +95,11 @@ init_SST <- function(years, climate) {
         SST <- SST - 0.02
       }
     }
+    #for Mean Shifts
   } else if (climate == "mean") {
     SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
     start_SST <- (opt.temp) + NS.patches * 0.02
-
+    
     for (i in 1:25) {
       SST <- start_SST
       for (lat in 1:NS.patches) {
@@ -104,19 +107,13 @@ init_SST <- function(years, climate) {
         SST <- SST - 0.02
       }
     }
-
-    for (i in 26:years) {
-      SST <- start_SST
-      for (lat in 1:NS.patches) {
-        SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02
-      }
-      start_SST <- start_SST + 0.033
-    }
+    
+    for (i in 26:years) 
+    #for El Nino La Nina
   } else if (climate == "enso") {
     SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
     start_SST <- (opt.temp) + NS.patches * 0.02
-
+    
     for (i in 1:25) {
       SST <- start_SST
       for (lat in 1:NS.patches) {
@@ -124,12 +121,12 @@ init_SST <- function(years, climate) {
         SST <- SST - 0.02
       }
     }
-
+    
     t <- seq(1, years - 25, 1)
     b <- array(0, 25)
     change <- 0.5 * sin(t) + 0.033
     enso.value <- c(b, change)
-
+    
     for (i in 26:years) {
       SST <- start_SST
       for (lat in 1:NS.patches) {
@@ -138,10 +135,11 @@ init_SST <- function(years, climate) {
       }
       start_SST <- start_SST + enso.value[i]
     }
+    #for Shocks
   } else if (climate == "shock") {
     SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
     start_SST <- (opt.temp) + NS.patches * 0.02
-
+    
     for (i in 1:25) {
       SST <- start_SST
       for (lat in 1:NS.patches) {
@@ -149,7 +147,7 @@ init_SST <- function(years, climate) {
         SST <- SST - 0.02
       }
     }
-
+    
     for (i in 26:years) {
       heat_prob <- runif(1, 0, 1)
       if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
@@ -163,10 +161,11 @@ init_SST <- function(years, climate) {
         SST <- SST - 0.02
       }
     }
+    # for Shocks with Mean Shift
   } else if (climate == "mean shock") {
     SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years))
     start_SST <- (opt.temp) + NS.patches * 0.02
-
+    
     for (i in 1:25) {
       SST <- start_SST
       for (lat in 1:NS.patches) {
@@ -174,7 +173,7 @@ init_SST <- function(years, climate) {
         SST <- SST - 0.02
       }
     }
-
+    
     for (i in 26:years) {
       SST <- start_SST
       heat_prob <- runif(1, 0, 1)
@@ -244,9 +243,9 @@ buffer.patches <- where.buffer(buffer.at)
 
 spawn <- function(pop) {
   fec <- fecundity
-
+  
   num.males <- rowSums(pop[, , 3, 2, ], dims = 2)
-
+  
   # All females produce the same mean number of eggs
   NUM.A.eggs <- Reshape(rpois(NS.patches * EW.patches, fec * pop[, , 3, 1, 1] + fec * pop[, , 3, 1, 2] / 2), NS.patches, EW.patches)
   NUM.a.eggs <- Reshape(rpois(NS.patches * EW.patches, fec * pop[, , 3, 1, 3] + fec * pop[, , 3, 1, 2] / 2), NS.patches, EW.patches)
@@ -414,9 +413,9 @@ move <- function(pop) {
   Hom.a.movers <- lazy.mover.distance # Individuals with aa genotype move this distance on average, in nautical miles
   Het.movers <- min(Hom.A.movers, Hom.a.movers) + h * abs(Hom.A.movers - Hom.a.movers)
   Herit <- Heritability.index # Influences heritability of movement. High numbers increase heritability by reducing the variance around the phenotypic mean. The phenotypic mean is determined by the genotype.
-
+  
   move.array <- world
-
+  
   for (lat in 1:NS.patches) {
     for (lon in 1:EW.patches) {
       for (i in 2:NUM.age.classes) {
@@ -501,10 +500,10 @@ gens <- pre.fishing.gens + pre.reserve.gens + post.reserve.gens
 
 output.array <- array(0, c(NS.patches, EW.patches, NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
 fished.array <- array(0, c(NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps))
-SST.patches <- init_SST(years, "null") # null, mean, enso, shock, or mean shock
-# save(SST.patches, file = here::here("03_generated_data","climate_layer", "mean_shock.rda"))
 
 start_time <- Sys.time()
+
+SST.patches <- init_SST(years, "null") # null, mean, enso, shock, or mean shock
 
 for (rep in 1:reps) {
   print(rep)
@@ -529,11 +528,8 @@ gc()
 end_time <- Sys.time()
 end_time - start_time
 
-beepr::beep(5)
-
-save(output.array, file = here::here("test.rda"))
-save(fished.array, file = here::here("test_fished.rda"))
-
+save(output.array, file = here::here("model1.rda"))
+save(fished.array, file = here::here("model1_fished.rda"))
 
 # Output results into a dataframe
 output_df <- data.frame() # create dataframe to hold results
@@ -552,6 +548,7 @@ for (a in 1:reps) {
           world_sub$age <- paste0(e)
           world_sub$lat <- c(1:NS.patches)
           world_sub$max_temp <- SST.patches[1, 1, b]
+          world_sub$mpa_temp <- SST.patches[50, 1, b]
           world_sub$min_temp <- SST.patches[100, 1, b]
           world_sub$fished <- fished.array[e, d, c, b, a]
           output_df <- bind_rows(output_df, world_sub)
@@ -612,8 +609,9 @@ output_df <- output_df %>%
   mutate(fished = as.numeric(fished)) %>%
   distinct()
 
-write_csv(output_df, here::here("test.csv"))
+write_csv(output_df, here::here("model1.csv"))
 
+# Summarize pop size and frequency by genotype
 geno_sum2 <- output_df %>%
   filter(age == "adult") %>% 
   group_by(lat, lon, generation, rep, genotype) %>%
@@ -648,6 +646,9 @@ output_sum2 <- full_join(geno_mean2, pop_mean2)
 
 output_sum2 = output_sum2 %>%
   distinct() %>% 
-  mutate(freq = geno_pop_mean / pop_mean)
+  mutate(freq = geno_pop_mean / pop_mean,
+         mpa_size = "Large",
+         climate = "Mean Shock",
+         evolution = "No")
 
-write_csv(output_sum2, here::here("test.csv"))
+write_csv(output_sum2, here::here("summary_m1.csv"))
