@@ -41,9 +41,7 @@ reserves.at <- c(849, 949, 1049, 850, 950, 1050, 851, 951, 1051)
 # large MPA c(446, 546, 646, 746, 846, 946, 1046, 1146, 1246, 1346, 447, 547, 647, 747, 847, 947, 1047, 1147, 1247, 1347, 448, 548, 648, 748, 848, 948, 1048, 1148, 1248, 1348, 449, 549, 649, 749, 849, 949, 1049, 1149, 1249, 1349, 450, 550, 650, 750, 850, 950, 1050, 1150, 1250, 1350, 451, 551, 651, 751, 851, 951, 1051, 1151, 1251, 1351, 452, 552, 652, 752, 852, 952, 1052, 1152, 1252, 1352, 453, 553, 653, 753, 853, 953, 1053, 1153, 1253, 1353, 454, 554, 654, 754, 854, 954, 1054, 1154, 1254, 1354, 455, 555, 655, 755, 855, 955, 1055, 1155, 1255, 1355)
 # medium MPA c(847, 947, 1047, 1147, 1247, 1347, 848, 948, 1048, 1148, 1248, 1348, 849, 949, 1049, 1149, 1249, 1349, 850, 950, 1050, 1150, 1250, 1350, 851, 951, 1051, 1151, 1251, 1351, 852, 952, 1052, 1152, 1252, 1352)
 # small MPA c(849, 949, 1049, 850, 950, 1050, 851, 951, 1051)
-# tiny MPA
-dynamic.reserve <- FALSE
-
+# tiny MPA c(950)
 
 buffer.at <- c()
 
@@ -205,43 +203,29 @@ init_SST <- function(years, climate) {
 ## This function creates an array to tell the simulation the reserve locations
 
 where.reserves <- function(reserves.at) {
-  if (dynamic.reserve) {
-    reserve.patches <- array(0, c(NS.patches, EW.patches, years))
-    for (j in 1:years) {
-      for (i in 1:length(reserves.at)) {
-        x <- ((reserves.at[i] - 1) %/% NS.patches) + 1
-        y <- ((reserves.at[i] - 1) %% NS.patches) + 1
-        reserve.patches[y, x, j] <- 1
-      }
-      if (((j %% 3) == 0) & (j >= 40) & (j < 120)) {
-        reserves.at <- reserves.at + 3
-      }
-    }
-  } else {
-    reserve.patches <- array(0, c(NS.patches, EW.patches, years))
-    for (i in 1:length(reserves.at)) {
-      x <- ((reserves.at[i] - 1) %/% NS.patches) + 1
-      y <- ((reserves.at[i] - 1) %% NS.patches) + 1
-      reserve.patches[y, x, ] <- 1
-    }
+  reserve.patches <- array(0, c(NS.patches, EW.patches, years)) #get numbers for reserve
+  for (i in 1:length(reserves.at)) {
+    x <- ((reserves.at[i] - 1) %/% NS.patches) + 1 #get corresponding x values
+    y <- ((reserves.at[i] - 1) %% NS.patches) + 1 #get corresponding y values
+    reserve.patches[y, x, ] <- 1 #assign 1 to indicate reserve
   }
   return(reserve.patches)
 }
-reserve.patches <- where.reserves(reserves.at)
+reserve.patches <- where.reserves(reserves.at) #initiate reserves
 
 ############################################################################
 ## This function creates an array to tell the simulation the buffer/fishing the line locations
 
 where.buffer <- function(buffer.at) {
-  buffer.patches <- array(0, c(NS.patches, EW.patches))
+  buffer.patches <- array(0, c(NS.patches, EW.patches)) #get numbers for buffer
   for (i in 1:length(buffer.at)) {
-    x <- ((buffer.at[i] - 1) %/% NS.patches) + 1
-    y <- ((buffer.at[i] - 1) %% NS.patches) + 1
-    buffer.patches[y, x] <- 1
+    x <- ((buffer.at[i] - 1) %/% NS.patches) + 1 #get corresponding x values
+    y <- ((buffer.at[i] - 1) %% NS.patches) + 1 #get corresponding y values
+    buffer.patches[y, x] <- 1 #assign 1 to indicate buffer
   }
   return(buffer.patches)
 }
-buffer.patches <- where.buffer(buffer.at)
+buffer.patches <- where.buffer(buffer.at) #initiate buffer
 
 ############################################################################
 ## This function causes adults to reproduce in spawning areas
