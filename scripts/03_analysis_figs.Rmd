@@ -36,35 +36,25 @@ line_df <- data %>%
     max_temp = max(max_temp),
     min_temp = min(min_temp),
     freq_avg = mean(freq, na.rm = TRUE)) %>% 
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
-  select(-max_m, -min_m)
+  mutate(generation = as.numeric(generation)) 
 
-line_df_mpa_full <- data %>%
-  filter(generation > 25) %>%
+mpa_df = data %>%
   filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
-  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1"))
+
+line_df_mpa_full <- mpa_df %>%
+  filter(generation > 25) %>%
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>% 
   distinct() %>% 
   group_by(generation, evolution, mpa_size, climate) %>%
   summarise(
     location_sum = sum(pop_mean, na.rm = TRUE),
     max_temp = max(max_temp),
     min_temp = min(min_temp)) %>% 
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
-  select(-max_m, -min_m)
+  mutate(generation = as.numeric(generation))
   
-line_df_lat <- data %>%
-  filter(generation > 25) %>% 
-  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
+line_df_lat <- mpa_df %>%
+  filter(generation > 25) %>%
   group_by(generation, mpa_size, climate, lat, lon, evolution) %>%
   summarise(
     location_sum = sum(geno_pop_mean, na.rm = TRUE),
@@ -83,9 +73,7 @@ change = data %>%
   mutate(relative_rate = (pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) / pop_mean) %>% 
   ungroup()
 
-line_df_geno <- data %>%
-  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>% 
-  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
+line_df_geno <- mpa_df %>%
   group_by(generation, evolution, mpa_size, climate, genotype) %>% 
   summarise(
     location_sum = sum(geno_pop_mean, na.rm = TRUE),
@@ -108,11 +96,6 @@ line_df_geno_lat <- data %>%
     min_temp = min(min_temp),
     freq_avg = mean(freq, na.rm = TRUE)) %>%
   mutate(generation = as.numeric(generation)) %>%
-  mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.70, 0.70, min_m)) %>%
-  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.70, 0.70, max_m)) %>%
-  select(-max_m, -min_m) %>% 
   filter(evolution == "Yes") %>% 
   mutate(lat = as.factor(lat)) %>% 
   mutate(max_temp = as.factor(max_temp))
