@@ -18,81 +18,90 @@ library(plotrix)
 ### Read in Data
 
 ```{r}
+# read in data
 data <- read_csv(here::here("generated_data", "summary_data", "full_sum.csv")) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>%
-  mutate(mpa_size = fct_relevel(mpa_size, c("1 x 1", "3 x 3", "6 x 6", "10 x 10")))
+  mutate(generation = as.numeric(generation)) %>% # make generation a factor
+  mutate(climate = fct_relevel(climate, c("Null", "Shocks", "Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>% # relevel climate
+  mutate(mpa_size = fct_relevel(mpa_size, c("1 x 1", "3 x 3", "6 x 6", "10 x 10"))) # relevel MPA sizes
 ```
 
 ### Data Manipulation
 
 ```{r}
+# summarizes data within the full simulation
 line_df <- data %>%
-  filter(generation > 25) %>%
+  filter(generation > 25) %>% # filter generations when MPA is implemented
   group_by(generation, evolution, mpa_size, climate) %>%
   summarise(
-    location_sum = sum(pop_mean, na.rm = TRUE),
+    location_sum = sum(pop_mean, na.rm = TRUE), # sum across locations
     max_temp = max(max_temp),
     min_temp = min(min_temp),
-    freq_avg = mean(freq, na.rm = TRUE)
+    freq_avg = mean(freq, na.rm = TRUE) # average frequency
   ) %>%
-  mutate(generation = as.numeric(generation))
+  mutate(generation = as.numeric(generation)) # make generation numeric here
 
+# calculates rate of change at each location
 change <- data %>%
-  select(-genotype, -geno_pop_mean, -freq, -fished_mean, -geno_pop_sd, -geno_pop_se) %>%
+  select(-genotype, -geno_pop_mean, -freq, -fished_mean, -geno_pop_sd, -geno_pop_se) %>% # remove genotype columns
   distinct() %>%
   group_by(climate, evolution, mpa_size, lat, lon) %>%
-  mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) %>%
-  mutate(relative_rate = (pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) / pop_mean) %>%
+  mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) %>% # calculate fist derivative
+  mutate(relative_rate = (pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) / pop_mean) %>% # calculate relative rate of decline
   ungroup()
 
+# summarizes data within the MPA only
 line_df_mpa_full <- data %>%
-  filter(generation > 25) %>%
+  filter(generation > 25) %>% # filter generations when MPA is implemented
+  # filter only MPA grids
   filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>%
   filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>%
-  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>%
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>% # remove genotype columns
   distinct() %>%
   group_by(generation, evolution, mpa_size, climate) %>%
   summarise(
-    location_sum = sum(pop_mean, na.rm = TRUE),
+    location_sum = sum(pop_mean, na.rm = TRUE), # sum across location
     max_temp = max(max_temp),
     min_temp = min(min_temp)
   ) %>%
-  mutate(generation = as.numeric(generation))
+  mutate(generation = as.numeric(generation)) # make generation numeric
 ```
 
 ```{r}
+# calculates mean rate of change within the MPA
 mean_change2 <- change %>%
-  filter(generation >= 35) %>%
+  filter(generation >= 35) %>% # filter generations when climate change causes declines
+  # filter only MPA grids
   filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>%
   filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>%
-  filter(!is.infinite(relative_rate)) %>%
+  filter(!is.infinite(relative_rate)) %>% # remove relative rate where population went to 0
   group_by(generation, climate, evolution, mpa_size) %>%
   summarize(
-    mean_change = mean(rate, na.rm = TRUE),
-    relative_mean_change = mean(relative_rate, na.rm = TRUE)
+    mean_change = mean(rate, na.rm = TRUE), # get mean rate of change in MPA
+    relative_mean_change = mean(relative_rate, na.rm = TRUE) # get relative rate of change in MPA
   )
 
+# calculates collapse points in full simulation
 collapse <- line_df %>%
   select(generation, evolution, mpa_size, climate, location_sum) %>%
-  filter(generation > 30) %>%
-  filter(location_sum <= 100 * 2 * .05 * 100 * 20) %>%
+  filter(generation > 30) %>% # filter generations when climate change causes declines
+  filter(location_sum <= 100 * 2 * .05 * 100 * 20) %>% # filter pop to expected collapse level
   group_by(evolution, mpa_size, climate) %>%
-  summarize(min_gen = min(generation)) %>%
-  mutate(collapse_point = 100 * 2 * .05 * 100 * 20)
+  summarize(min_gen = min(generation)) %>% # find the first generation below collapse point
+  mutate(collapse_point = 100 * 2 * .05 * 100 * 20) # add collapse point size to column
 
+# calculates collapse points within the MPA only
 collapse_full <- line_df_mpa_full %>%
   select(generation, evolution, mpa_size, climate, location_sum) %>%
-  filter(generation > 30) %>%
-  filter((location_sum <= (100 * 2 * .05 * 3 * 3) & mpa_size == "3 x 3") | (location_sum <= (100 * 2 * .05 * 6 * 6) & mpa_size == "6 x 6") | (location_sum <= (100 * 2 * .05 * 10 * 10) & mpa_size == "10 x 10") | (location_sum <= (100 * 2 * .05) & mpa_size == "1 x 1")) %>%
+  filter(generation > 30) %>% # filter generations when climate change causes declines
+  filter((location_sum <= (100 * 2 * .05 * 3 * 3) & mpa_size == "3 x 3") | (location_sum <= (100 * 2 * .05 * 6 * 6) & mpa_size == "6 x 6") | (location_sum <= (100 * 2 * .05 * 10 * 10) & mpa_size == "10 x 10") | (location_sum <= (100 * 2 * .05) & mpa_size == "1 x 1")) %>% # calculate collapse rates in different MPAs
   group_by(evolution, mpa_size, climate) %>%
-  summarize(min_gen = min(generation)) %>%
+  summarize(min_gen = min(generation)) %>% # find the first generation below collapse point
   mutate(collapse_point = case_when(
     mpa_size == "1 x 1" ~ 100 * 2 * 0.05,
     mpa_size == "3 x 3" ~ 100 * 2 * .05 * 3 * 3,
     mpa_size == "6 x 6" ~ 100 * 2 * .05 * 6 * 6,
     mpa_size == "10 x 10" ~ 100 * 2 * .05 * 10 * 10
-  ))
+  )) # add column with collapse point size
 ```
 
 ## Supplemental Figures
@@ -100,6 +109,7 @@ collapse_full <- line_df_mpa_full %>%
 ### Main Supplemental Figures
 
 ```{r}
+# plot popluation through time in full simulation with collapse points
 s1 <- ggplot(line_df, aes(generation, location_sum)) +
   geom_vline(data = collapse, aes(xintercept = min_gen, color = climate, linetype = evolution)) +
   geom_hline(data = collapse, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
@@ -126,6 +136,7 @@ ggsave(s1, file = paste0("decline_full.pdf"), path = here::here("figs", "supp"),
 ```
 
 ```{r}
+# plot rate of change within the MPA
 s3 <- ggplot(mean_change2, aes(generation, mean_change)) +
   geom_line(aes(color = mpa_size, linetype = evolution), linewidth = 0.7) +
   facet_wrap(~climate, ncol = 1, scales = "free_y") +
@@ -150,6 +161,7 @@ ggsave(s3, file = paste0("rate.pdf"), path = here::here("figs", "supp"), height 
 ```
 
 ```{r}
+# plot population through time within the MPA with collapse points
 s4 <- ggplot(line_df_mpa_full, aes(generation, location_sum)) +
   geom_vline(data = collapse_full, aes(xintercept = min_gen, color = climate, linetype = evolution), alpha = 0.8) +
   geom_hline(data = collapse_full, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
@@ -177,6 +189,7 @@ ggsave(s4, file = paste0("decline_mpa_full.pdf"), path = here::here("figs", "sup
 ```
 
 ```{r}
+# plot the natural log of population within the full simulation
 s5 <- ggplot(line_df, aes(generation, log(location_sum))) +
   geom_line(aes(color = climate, linetype = evolution), linewidth = 0.7) +
   facet_wrap(~mpa_size, ncol = 1) +
@@ -203,17 +216,22 @@ ggsave(s5, file = paste0("decline_full_sim_log.pdf"), path = here::here("figs", 
 ### Climate Rate Figures
 
 ```{r}
+# read in data that compares different climate rates (data not in github, but simulations can be run and merged similarly to regular data)
+
 data_rate <- read_csv(here::here("generated_data", "summary_data", "full_sum_climate_rate.csv")) %>%
-  mutate(generation = as.numeric(generation)) %>%
-  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>%
+  mutate(generation = as.numeric(generation)) %>% # generation as numeric
+  mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>% # relevel climate
   mutate(mpa_size = case_when(
     mpa_size == "Small" ~ "3 x 3",
     mpa_size == "Medium" ~ "6 x 6",
     mpa_size == "Large" ~ "10 x 10"
-  ))
+  )) %>%
+  mutate(mpa_size = fct_relevel(mpa_size, c("1 x 1", "3 x 3", "6 x 6", "10 x 10"))) # relevel MPA sizes
 ```
 
 ```{r}
+# functions preform the same functions seen in 03_analysis_figs.Rmd for analyses the main text data
+
 line_df_mpa_full_rate <- data_rate %>%
   filter(generation > 25) %>%
   filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10")) %>%
@@ -271,9 +289,9 @@ line_df_geno_rate <- data_rate %>%
   ) %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>%
-  mutate(min_survival = ifelse(min_m > 0.59, 0.59, min_m)) %>%
+  mutate(min_survival = ifelse(min_m > 0.7, 0.7, min_m)) %>%
   mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
-  mutate(max_survival = ifelse(max_m > 0.59, 0.59, max_m)) %>%
+  mutate(max_survival = ifelse(max_m > 0.7, 0.7, max_m)) %>%
   select(-max_m, -min_m) %>%
   filter(evolution == "Yes")
 
@@ -402,6 +420,7 @@ collapse_full_rate <- line_df_mpa_full_rate %>%
 ```
 
 ```{r}
+# plot population size through time with collapse points
 s6 <- ggplot(line_df_mpa_full_rate, aes(generation, location_sum)) +
   geom_vline(data = collapse_full_rate, aes(xintercept = min_gen, color = as.factor(climate_rate), linetype = evolution), alpha = 0.8) +
   geom_hline(data = collapse_full_rate, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
@@ -427,6 +446,7 @@ s6 <- ggplot(line_df_mpa_full_rate, aes(generation, location_sum)) +
 ```
 
 ```{r}
+# plot genotype frequencies through time
 s7 <- ggplot(geno_lat_rate, aes(generation, mpa_mean_freq)) +
   geom_line(aes(color = as.factor(climate_rate), linetype = mpa_size, alpha = as.factor(climate_rate))) +
   facet_grid(genotype ~ climate, scales = "free_y") +
@@ -460,6 +480,8 @@ ggsave(s8, file = paste0("climate_rate.pdf"), path = here::here("figs", "supp"),
 ### Fishing Pressure Figures
 
 ```{r}
+# read in data that compares different fishing pressures (data not in github, but simulations can be run and merged similarly to regular data)
+
 data_fp <- read_csv(here::here("generated_data", "summary_data", "full_sum_fishing_pressure.csv")) %>%
   mutate(generation = as.numeric(generation)) %>%
   mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>%
@@ -468,10 +490,13 @@ data_fp <- read_csv(here::here("generated_data", "summary_data", "full_sum_fishi
     mpa_size == "Small" ~ "3 x 3",
     mpa_size == "Medium" ~ "6 x 6",
     mpa_size == "Large" ~ "10 x 10"
-  ))
+  )) %>%
+  mutate(mpa_size = fct_relevel(mpa_size, c("1 x 1", "3 x 3", "6 x 6", "10 x 10"))) # relevel MPA sizes
 ```
 
 ```{r}
+# functions preform the same functions seen in 03_analysis_figs.Rmd for analyses the main text data
+
 line_df_mpa_full_fp <- data_fp %>%
   filter(generation > 25) %>%
   filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10")) %>%
@@ -622,6 +647,7 @@ collapse_full_fp <- line_df_mpa_full_fp %>%
 
 
 ```{r}
+# plot genotype frequencies through time
 s9 <- ggplot(geno_lat_fp, aes(generation, mpa_mean_freq)) +
   geom_line(aes(color = as.factor(fishing_pressure), linetype = mpa_size, alpha = as.factor(fishing_pressure))) +
   facet_grid(genotype ~ climate, scales = "free_y") +
@@ -649,6 +675,7 @@ s9 <- ggplot(geno_lat_fp, aes(generation, mpa_mean_freq)) +
 ```
 
 ```{r}
+# plot population size through time with collapse points
 s10 <- ggplot(line_df_mpa_full_fp, aes(generation, location_sum)) +
   geom_vline(data = collapse_full_fp, aes(xintercept = min_gen, color = as.factor(fishing_pressure), linetype = evolution), alpha = 0.8) +
   geom_hline(data = collapse_full_fp, aes(yintercept = collapse_point), alpha = 1, color = "darkgrey") +
