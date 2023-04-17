@@ -1,5 +1,5 @@
 ---
-title: "Figs"
+title: "Main Text Figures and Analysis"
 author: "Allie Caughman"
 date: "2022-08-11"
 output: html_document
