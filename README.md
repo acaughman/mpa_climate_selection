@@ -4,10 +4,6 @@ This repository contains code used in the paper: Caughman, A.M., Gaines, S.D., B
 
 For any questions, comments, or concerns, please contact Alicia Caughman [acaughman@bren.ucsb.edu](acaughman@bren.ucsb.edu).
 
-This repository will be citeable at Zenodo.
-
-[10.5281/zenodo.7834837]
-
 # Instructions
 
 The order of running scripts should be as follows: 
