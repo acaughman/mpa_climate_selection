@@ -230,7 +230,6 @@ buffer.patches <- where.buffer(buffer.at) #initiate buffer
 ############################################################################
 ## This function causes adults to reproduce in spawning areas
 
-
 spawn <- function(pop) {
   fec <- fecundity
   
@@ -268,10 +267,10 @@ spawn <- function(pop) {
 ## This function calculates temperature based mortality based on sea surface temperature, temperature range and optimal temperature of species
 
 calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
-  nat.m <- array(0, c(nrow(SST), ncol(SST)))
-  m <- 1 - exp((-(SST[, ] - opt.temp)^2) / (temp.range^2)) # temperature based mortality function from Walsworth et al.
-  m <- 1 - m
-  nat.m <- ifelse(m > s, s, m)
+  nat.m <- array(0, c(nrow(SST), ncol(SST))) #create temp array
+  m <- 1 - exp((-(SST[, ] - opt.temp)^2) / (temp.range^2)) # temperature based survival function from Norberg et al.
+  m <- 1 - m #calculate mortality
+  nat.m <- ifelse(m > s, s, m) #take natural mortality if it is less than temp based mortality
   return(nat.m)
 }
 
@@ -279,7 +278,7 @@ calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
 ## This function determines density dependent survival proportion for babies
 
 survival_b <- function(num, SST) {
-  s <- calc_temp_mortality(SST, opt.temp, temp.range, sb)
+  s <- calc_temp_mortality(SST, opt.temp, temp.range, sb) #calculate temperature based mortality
   dd <- dd # density dependence of survival
   result <- s / (1 + dd * num)
   return(result)
@@ -289,7 +288,7 @@ survival_b <- function(num, SST) {
 ## This function determines density dependent survival proportion for juveniles and adults
 
 survival <- function(SST) {
-  result <- calc_temp_mortality(SST, opt.temp, temp.range, s)
+  result <- calc_temp_mortality(SST, opt.temp, temp.range, s) #calculate temperature based mortality
   return(result)
 }
 
@@ -450,21 +449,21 @@ move <- function(pop) {
               # y = ifelse((y_bool == FALSE) & (y > patch.size*(NS.patches-lat)+patch.size/2),(y - (patch.size * NS.patches)),y)
               # y = ifelse((y_bool == FALSE) & (y < patch.size/2-lat*patch.size),(y + (patch.size * NS.patches)),y)
               # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
-              x <- round(x) / patch.size
-              y <- round(y) / patch.size
-              xy <- as.data.frame(cbind(x, y))
+              x <- round(x) / patch.size #get number of patches
+              y <- round(y) / patch.size #get number of patches
+              xy <- as.data.frame(cbind(x, y)) #bind x and y together
               xy$count <- 1
-              freq <- aggregate(count ~ x + y, data = xy, FUN = sum)
-              freq2D <- as.data.frame(array(0, c(length(unique(xy$y)), length(unique(xy$x)))))
+              freq <- aggregate(count ~ x + y, data = xy, FUN = sum) #find number of fish that move each number of grids
+              freq2D <- as.data.frame(array(0, c(length(unique(xy$y)), length(unique(xy$x))))) 
               names(freq2D) <- sort(unique(xy$x))
-              row.names(freq2D) <- sort(unique(xy$y))
+              row.names(freq2D) <- sort(unique(xy$y)) #re frame data frame
               for (row in 1:length(freq$x)) {
-                freq2D[as.character(freq$y[row]), as.character(freq$x[row])] <- freq$count[row]
+                freq2D[as.character(freq$y[row]), as.character(freq$x[row])] <- freq$count[row] #assign frequencies to movement distance 
               }
               # populate the move.array with movers (and stayers)
               for (xx in 1:length(unique(xy$x))) {
                 for (yy in 1:length(unique(xy$y))) {
-                  move.array[lat + as.numeric(row.names(freq2D)[yy]), lon + as.numeric(names(freq2D)[xx]), i, j, k] <- move.array[lat + as.numeric(row.names(freq2D)[yy]), lon + as.numeric(names(freq2D)[xx]), i, j, k] + freq2D[yy, xx]
+                  move.array[lat + as.numeric(row.names(freq2D)[yy]), lon + as.numeric(names(freq2D)[xx]), i, j, k] <- move.array[lat + as.numeric(row.names(freq2D)[yy]), lon + as.numeric(names(freq2D)[xx]), i, j, k] + freq2D[yy, xx] #move fish to new locations based on distances in movement dataframe
                 }
               }
             }
@@ -493,7 +492,7 @@ fished.array <- array(0, c(NUM.age.classes, NUM.sexes, NUM.genotypes, gens, reps
 
 start_time <- Sys.time()
 
-SST.patches <- init_SST(years, "null") # null, mean, enso, shock, or mean shock
+SST.patches <- init_SST(years, "null") # assign either null, mean, enso, shock, or mean shock
 
 for (rep in 1:reps) {
   print(rep)
@@ -518,12 +517,13 @@ gc()
 end_time <- Sys.time()
 end_time - start_time
 
+#output array
 save(output.array, file = here::here("model1.rda"))
-save(fished.array, file = here::here("model1_fished.rda"))
 
 # Output results into a dataframe
 output_df <- data.frame() # create dataframe to hold results
 
+#creates dataframe from array data
 for (a in 1:reps) {
   for (b in 1:gens) {
     for (c in 1:NUM.genotypes) {
@@ -576,69 +576,74 @@ output_df <- output_df %>%
     lon == "V19" ~ 19,
     lon == "V20" ~ 20
   )) %>%
-  mutate(genotype = case_when(
+  mutate(genotype = case_when( #assign real values to genotype
     genotype == 1 ~ "AA",
     genotype == 2 ~ "Aa",
     genotype == 3 ~ "aa"
   )) %>%
-  mutate(genotype = as.factor(genotype)) %>%
-  mutate(sex = case_when(
+  mutate(genotype = as.factor(genotype)) %>% #turn genotype into factor
+  mutate(sex = case_when( #assign real values to sex
     sex == 1 ~ "female",
     sex == 2 ~ "male"
   )) %>%
-  mutate(sex = as.factor(sex)) %>%
-  mutate(age = case_when(
+  mutate(sex = as.factor(sex)) %>% #turn sex into factor
+  mutate(age = case_when( #assign real values to age
     age == 1 ~ "baby",
     age == 2 ~ "juvenile",
     age == 3 ~ "adult"
   )) %>%
-  mutate(age = as.factor(age)) %>%
-  mutate(lat = as.numeric(lat)) %>%
+  mutate(age = as.factor(age)) %>% #age as factor
+  mutate(lat = as.numeric(lat)) %>% 
   mutate(lon = as.numeric(lon)) %>%
   mutate(rep = as.numeric(rep)) %>%
   mutate(fished = as.numeric(fished)) %>%
   distinct()
 
+#output CSV
 write_csv(output_df, here::here("model1.csv"))
 
-# Summarize pop size and frequency by genotype
+# Sum adults in population by location, generation, and genotype for each replicate
 geno_sum2 <- output_df %>%
   filter(age == "adult") %>% 
   group_by(lat, lon, generation, rep, genotype) %>%
   summarise(geno_pop_sum = sum(pop, na.rm = TRUE))
 
+# average population across replicates
 geno_mean2 <- geno_sum2 %>% 
   group_by(lat, lon, generation, genotype) %>%
   summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE),
             geno_pop_sd = sd(geno_pop_sum, na.rm=TRUE)) %>% 
-  ungroup() %>% 
-  mutate(geno_pop_se = geno_pop_sd / sqrt(10))
+  ungroup() 
 
+#sum adults in population by location and generation for each replicate
 pop_sum2 <- output_df %>%
   filter(age == "adult") %>% 
   group_by(lat, lon, generation, rep) %>%
   summarise(pop_sum = sum(pop, na.rm = TRUE), 
-            max_temp = max_temp, 
-            min_temp = min_temp,
+            max_temp = max_temp, #get min temperature
+            min_temp = min_temp, #get max temperature
+            mpa_temp = mpa_temp, #get temperature within MPA
             fished_sum = sum(fished))
 
+#average population across replicates
 pop_mean2 <- pop_sum2 %>%
   group_by(lat, lon, generation) %>%
   summarise(pop_mean = mean(pop_sum, na.rm = TRUE), 
             pop_sd = sd(pop_sum, na.rm = TRUE),
             max_temp = max_temp, 
             min_temp = min_temp,
+            mpa_temp = mpa_temp,
             fished_mean = mean(fished_sum, na.rm=TRUE)) %>% 
-  ungroup() %>% 
-  mutate(pop_se = pop_sd / sqrt(10))
+  ungroup() 
 
-output_sum2 <- full_join(geno_mean2, pop_mean2)
+output_sum2 <- full_join(geno_mean2, pop_mean2) #join genotype based sum with full sum
 
 output_sum2 = output_sum2 %>%
   distinct() %>% 
-  mutate(freq = geno_pop_mean / pop_mean,
-         mpa_size = "Large",
-         climate = "Mean Shock",
-         evolution = "No")
+  mutate(freq = geno_pop_mean / pop_mean, #calculate freqency of each genotype
+         mpa_size = "Large", #assign MPA size based on model_list.xlsx
+         climate = "Mean Shock", #assign climate
+         evolution = "Yes") #assign evolution or not
 
+#output summary data for use in 03_analysis_figs.R
 write_csv(output_sum2, here::here("summary_m1.csv"))
