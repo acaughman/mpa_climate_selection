@@ -14,6 +14,8 @@ library(tidyverse)
 ### Read in CSV
 
 ```{r}
+#load all csvs, assigning the correct evolution scenario, climate scenario, and MPA size listed (see model_list.xlsx for details)
+
 df1 = read_csv(here::here("generated_data", "summary_data", "summary_m1.csv")) %>%
   mutate(evolution = "Yes") %>% 
   mutate(mpa_size = "1 x 1") %>% 
@@ -183,24 +185,13 @@ beepr::beep(5)
 ```
 
 ```{r}
+#bind the data together with rbind (can do in groups to conserve memory)
 df_list = list(df1, df2, df3, df4, df5, df6, df7, df8, df9, df10, 
-               df11, df12, df13, df14, df15, df16, df17, df18, df19, df20) %>% 
+               df11, df12, df13, df14, df15, df16, df17, df18, df19, df20,
+               df21, df22, df23, df24, df25, df26, df27, df28, df29, df30, 
+               df31, df32, df33, df34, df35, df36, df37, df38, df39, df40) %>% 
   reduce(rbind)
 
-rm(df1, df2, df3, df4, df5, df6, df7, df8, df9, df10, 
-               df11, df12, df13, df14, df15, df16, df17, df18, df19, df20)
-
-df_list2 = list(df21, df22, df23, df24, df25, df26, df27, df28, df29, df30, 
-     df31, df32, df33, df34, df35, df36, df37, df38, df39, df40) %>% 
-  reduce(rbind)
-
-rm(df21, df22, df23, df24, df25, df26, df27, df28, df29, df30, 
-     df31, df32, df33, df34, df35, df36, df37, df38, df39, df40)
-
-dfs = rbind(df_list, df_list2)
-
-rm(df_list, df_list2)
-
-write_csv(dfs, here::here("generated_data", "summary_data", "full_sum.csv"))
+#output full summarized data for use in 03_analysis_figs.Rmd
+write_csv(df_list, here::here("generated_data", "summary_data", "full_sum.csv"))
 ```
-

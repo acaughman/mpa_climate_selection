@@ -658,5 +658,5 @@ output_sum2 <- output_sum2 %>%
     evolution = "Yes"
   ) # assign evolution or not
 
-# output summary data for use in 03_analysis_figs.R
+# output summary data to merge in 02_data_merge.Rmd
 write_csv(output_sum2, here::here("summary_m1.csv"))
