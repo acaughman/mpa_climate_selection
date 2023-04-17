@@ -226,7 +226,7 @@ data_rate <- read_csv(here::here("generated_data", "summary_data", "full_sum_cli
     mpa_size == "Medium" ~ "6 x 6",
     mpa_size == "Large" ~ "10 x 10"
   )) %>%
-  mutate(mpa_size = fct_relevel(mpa_size, c("1 x 1", "3 x 3", "6 x 6", "10 x 10"))) # relevel MPA sizes
+  mutate(mpa_size = fct_relevel(mpa_size, c("3 x 3", "6 x 6", "10 x 10"))) # relevel MPA sizes
 ```
 
 ```{r}
@@ -486,12 +486,7 @@ data_fp <- read_csv(here::here("generated_data", "summary_data", "full_sum_fishi
   mutate(generation = as.numeric(generation)) %>%
   mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>%
   filter(generation <= 150) %>%
-  mutate(mpa_size = case_when(
-    mpa_size == "Small" ~ "3 x 3",
-    mpa_size == "Medium" ~ "6 x 6",
-    mpa_size == "Large" ~ "10 x 10"
-  )) %>%
-  mutate(mpa_size = fct_relevel(mpa_size, c("1 x 1", "3 x 3", "6 x 6", "10 x 10"))) # relevel MPA sizes
+  mutate(mpa_size = fct_relevel(mpa_size, c("3 x 3", "6 x 6", "10 x 10"))) # relevel MPA sizes
 ```
 
 ```{r}
@@ -711,6 +706,7 @@ NS.patches <- 100
 EW.patches <- 20
 opt.temp <- 25
 
+# same function from 01_final_model.R
 calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
   nat.m <- array(0, c(nrow(SST), ncol(SST)))
   m <- 1 - exp((-(SST[, ] - opt.temp)^2) / (temp.range^2)) # temperature based mortality function from Walsworth et al.
@@ -719,7 +715,7 @@ calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
   return(nat.m)
 }
 
-### UNCOMMENT FOR CONSTANT MEAN SHIFT SST
+# set up the same as in 01_final_model.R
 SST.patches.mean <- array(opt.temp, c(NS.patches, EW.patches, years))
 start_SST <- (opt.temp) + NS.patches * 0.02
 
@@ -740,7 +736,6 @@ for (i in 26:years) {
   start_SST <- start_SST + 0.033
 }
 
-### UNCOMMENT FOR ENSO VARIABLE MEAN SST
 SST.patches.enso <- array(opt.temp, c(NS.patches, EW.patches, years))
 start_SST <- (opt.temp) + NS.patches * 0.02
 
@@ -766,7 +761,6 @@ for (i in 26:years) {
   start_SST <- start_SST + enso.value[i]
 }
 
-### UNCOMMENT FOR SHOCK SST CHANGES
 SST.patches.shock <- array(opt.temp, c(NS.patches, EW.patches, years))
 start_SST <- (opt.temp) + NS.patches * 0.02
 
@@ -793,7 +787,6 @@ for (i in 26:years) {
   }
 }
 
-### MEAN SHOCK
 SST.patches.mean.shock <- array(opt.temp, c(NS.patches, EW.patches, years))
 start_SST <- (opt.temp) + NS.patches * 0.02
 
@@ -820,12 +813,14 @@ for (i in 26:years) {
   start_SST <- start_SST + 0.033
 }
 
-output_df_mean <- data.frame() # create dataframe to hold results
+# create dataframes to hold results
+output_df_mean <- data.frame()
 output_df_enso <- data.frame()
 output_df_shock <- data.frame()
 output_df_mean_shock <- data.frame()
 
 
+### Convert into dataframes
 # Mean --------------------------------------------------------------------
 
 for (b in 1:years) {
@@ -984,8 +979,9 @@ SSTdf_mean_shock <- output_df_mean_shock %>%
   )) %>%
   mutate(year = as.numeric(year))
 
+
 SSTdf_mean <- SSTdf_mean %>%
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>% # caclulate mortaility and survival
   mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>%
   filter(lat %in% c(1, 50, 100)) %>%
   filter(lon == 10) %>%
@@ -994,12 +990,12 @@ SSTdf_mean <- SSTdf_mean %>%
     lat == 1 ~ "Lowest Latitude",
     lat == 100 ~ "Highest Latitude",
     lat == 50 ~ "Within MPA"
-  )) %>%
-  filter(lat == "Within MPA") %>%
-  mutate(climate = "Mean Shift")
+  )) %>% # rename latitutes
+  filter(lat == "Within MPA") %>% # filter just 50
+  mutate(climate = "Mean Shift") # name climate
 
 SSTdf_enso <- SSTdf_enso %>%
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>% # caclulate mortaility and survival
   mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>%
   filter(lat %in% c(1, 50, 100)) %>%
   filter(lon == 10) %>%
@@ -1008,12 +1004,12 @@ SSTdf_enso <- SSTdf_enso %>%
     lat == 1 ~ "Lowest Latitude",
     lat == 100 ~ "Highest Latitude",
     lat == 50 ~ "Within MPA"
-  )) %>%
-  filter(lat == "Within MPA") %>%
+  )) %>% # rename latitutes
+  filter(lat == "Within MPA") %>% # filter just 50
   mutate(climate = "El Nino/ La Nina")
 
 SSTdf_shock <- SSTdf_shock %>%
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>% # caclulate mortaility and survival
   mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>%
   filter(lat %in% c(1, 50, 100)) %>%
   filter(lon == 10) %>%
@@ -1022,12 +1018,12 @@ SSTdf_shock <- SSTdf_shock %>%
     lat == 1 ~ "Lowest Latitude",
     lat == 100 ~ "Highest Latitude",
     lat == 50 ~ "Within MPA"
-  )) %>%
-  filter(lat == "Within MPA") %>%
+  )) %>% # rename latitutes
+  filter(lat == "Within MPA") %>% # filter just 50
   mutate(climate = "Shocks")
 
 SSTdf_mean_shock <- SSTdf_mean_shock %>%
-  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>%
+  mutate(mortality = 1 - (1 - exp((-(sst - 25)^2) / (4^2)))) %>% # caclulate mortaility and survival
   mutate(survival = ifelse(mortality > 0.7, 0.7, mortality)) %>%
   filter(lat %in% c(1, 50, 100)) %>%
   filter(lon == 10) %>%
@@ -1036,12 +1032,12 @@ SSTdf_mean_shock <- SSTdf_mean_shock %>%
     lat == 1 ~ "Lowest Latitude",
     lat == 100 ~ "Highest Latitude",
     lat == 50 ~ "Within MPA"
-  )) %>%
-  filter(lat == "Within MPA") %>%
+  )) %>% # rename latitutes
+  filter(lat == "Within MPA") %>% # filter just 50
   mutate(climate = "Shocks with Mean Shift")
 
 SSTdf <- list(SSTdf_enso, SSTdf_mean, SSTdf_mean_shock, SSTdf_shock) %>%
-  reduce(full_join)
+  reduce(full_join) # combine all dataframes
 
 temp <- ggplot(SSTdf) +
   geom_line(aes(year, sst), color = "blue") +
@@ -1058,7 +1054,7 @@ temp <- ggplot(SSTdf) +
     axis.ticks.y = element_blank(),
     axis.text.y = element_blank(),
     strip.background = element_rect(fill = "white")
-  )
+  ) # plot temperatures
 
 ggsave(temp, file = paste0("temp.pdf"), path = here("figs", "climate"), height = 10, width = 10)
 ```
@@ -1099,7 +1095,7 @@ simulate_mortality <- function(SST, opt.temp, temp.range) {
     mutate(survival.prop = case_when(
       survival > .7 ~ .7,
       survival < .7 ~ survival
-    ))
+    )) # caclulate mortality versus min ot temperature based and natural mortailtiy
 
   results_plot$SST <- SST
   results_plot$opt.temp <- opt.temp
@@ -1115,11 +1111,12 @@ simulation_results <- data.frame()
 for (k in 1:length(opt.temp)) {
   sub_result <- simulate_mortality(SST, opt.temp[k], temp.range)
   simulation_results <- bind_rows(sub_result, simulation_results)
-}
+} # simulate across different optimum temperatures
 
 simulation_results <- simulation_results %>%
-  mutate(opt.temp = as.factor(opt.temp))
+  mutate(opt.temp = as.factor(opt.temp)) # make opt.temp a factor
 
+# plot the mortality curve results
 mort_curve <- ggplot(simulation_results, aes(SST, survival.prop)) +
   geom_line(linewidth = 1) +
   geom_vline(aes(xintercept = 25), linetype = "dashed", alpha = 0.5, color = "blue") +
@@ -1142,64 +1139,4 @@ mort_curve <- ggplot(simulation_results, aes(SST, survival.prop)) +
   scale_x_continuous(breaks = c(23, 25, 27, 29.66092, 30.93700, 31.84384, 34.19259), labels = c("Thermal Min", "Thermal Optimum", "Thermal Max", "Shocks Max", "Mean Shift Max", "El Nino/ La Nina Max", "Shocks with Mean Shift Max"))
 
 ggsave(mort_curve, file = paste0("mort_curve.pdf"), path = here("figs", "climate"), height = 10, width = 10)
-```
-
-# Presentation Figures
-
-```{r}
-mpa_medium_null <- mpa_medium %>%
-  filter(climate %in% c("Null")) %>%
-  mutate(climate = case_when(
-    climate == "Null" ~ "No Climate Change"
-  ))
-
-mpa_medium_mean <- mpa_medium %>%
-  filter(climate %in% c("Mean Shift")) %>%
-  mutate(climate = case_when(
-    climate == "Mean Shift" ~ "Mean Change Per Year"
-  ))
-
-
-p1 <- ggplot(mpa_medium_null, aes(generation, location_sum)) +
-  geom_line(aes(color = climate, linetype = evolution), linewidth = 2) +
-  theme_bw(base_size = 20) +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Climate Scenario",
-    linetype = "Evolution?"
-  ) +
-  theme(
-    panel.grid.minor = element_blank(),
-    strip.text = element_text(face = "bold"),
-    strip.background = element_rect(fill = "white"),
-    axis.text.x = element_blank(),
-    axis.ticks.x = element_blank()
-  ) +
-  scale_color_manual(values = c("#5ec962")) +
-  scale_linetype_manual(values = c("solid", "dashed"))
-
-ggsave(p1, file = paste0("decline_mpa_pres_null.pdf"), path = here::here("figs", "presentation"), height = 10, width = 18)
-
-p2 <- ggplot() +
-  geom_line(data = mpa_medium_null, aes(generation, location_sum, linetype = evolution, color = climate), linewidth = 2) +
-  geom_line(data = mpa_medium_mean, aes(generation, location_sum, linetype = evolution, color = climate), linewidth = 3) +
-  theme_bw(base_size = 20) +
-  labs(
-    x = "Year",
-    y = "Population Density",
-    color = "Climate Scenario",
-    linetype = "Evolution?"
-  ) +
-  theme(
-    panel.grid.minor = element_blank(),
-    strip.text = element_text(face = "bold"),
-    strip.background = element_rect(fill = "white"),
-    axis.text.x = element_blank(),
-    axis.ticks.x = element_blank()
-  ) +
-  scale_color_manual(values = c("#440154", "#5ec962")) +
-  scale_linetype_manual(values = c("solid", "dashed"))
-
-ggsave(p2, file = paste0("decline_mpa_pres_mean.pdf"), path = here::here("figs", "presentation"), height = 10, width = 18)
 ```
