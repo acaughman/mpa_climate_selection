@@ -428,10 +428,12 @@ move <- function(pop) {
               dist <- ifelse(dist > EW.patches, EW.patches, dist)
               # determine the direction of each move
               theta <- runif(pop[lat, lon, i, j, k], 0, 2 * pi)
+              
               #### bias this movement in the north-south direction (along coasts) if this is a great white shark simulation (otherwise, comment out the next three lines):
               # f.adj <- function(x, u) x-cos(x)*sin(x) - u
               # my.uniroot <- function(x) uniroot(f.adj, c(0, 2*pi), tol = 0.0001, u = x)$root
               # theta <- vapply(theta, my.uniroot, numeric(1))
+              
               # convert direction and distance into a distance in the x-direction (longitude)
               x <- cos(theta) * dist
               # bounce off edges
@@ -440,14 +442,17 @@ move <- function(pop) {
               x <- ifelse((x_bool == FALSE) & (x < patch.size / 2 - lon * patch.size), (-(x - 2 * (patch.size / 2 - lon * patch.size))), x)
               # convert direction and distance into a distance in the y-direction (latitude)
               y <- sin(theta) * dist
+              
               #### bounce off edges
               y_bool <- ifelse((y <= patch.size * (NS.patches - lat) + patch.size / 2) & (y >= patch.size / 2 - lat * patch.size), TRUE, FALSE)
               y <- ifelse((y_bool == FALSE) & (y > patch.size * (NS.patches - lat) + patch.size / 2), (-(y - 2 * (patch.size * (NS.patches - lat) + patch.size / 2))), y)
               y <- ifelse((y_bool == FALSE) & (y < patch.size / 2 - lat * patch.size), (-(y - 2 * (patch.size / 2 - lat * patch.size))), y)
+              
               #### Loop North/South
               # y_bool = ifelse((y <= patch.size*(NS.patches-lat)+patch.size/2) & (y >= patch.size/2-lat*patch.size), TRUE, FALSE)
               # y = ifelse((y_bool == FALSE) & (y > patch.size*(NS.patches-lat)+patch.size/2),(y - (patch.size * NS.patches)),y)
               # y = ifelse((y_bool == FALSE) & (y < patch.size/2-lat*patch.size),(y + (patch.size * NS.patches)),y)
+              
               # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
               x <- round(x) / patch.size # get number of patches
               y <- round(y) / patch.size # get number of patches
@@ -647,7 +652,7 @@ output_sum2 <- full_join(geno_mean2, pop_mean2) # join genotype based sum with f
 output_sum2 <- output_sum2 %>%
   distinct() %>%
   mutate(
-    freq = geno_pop_mean / pop_mean, # calculate freqency of each genotype
+    freq = geno_pop_mean / pop_mean, # calculate frequency of each genotype
     mpa_size = "Large", # assign MPA size based on model_list.xlsx
     climate = "Mean Shock", # assign climate
     evolution = "Yes"
