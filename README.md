@@ -6,7 +6,7 @@ For any questions, comments, or concerns, please contact Alicia Caughman [acaugh
 
 This repository will be citeable at Zenodo.
 
-<10.5281/zenodo.7834837>
+[10.5281/zenodo.7834837]
 
 # Instructions
 
