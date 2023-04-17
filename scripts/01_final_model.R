@@ -334,62 +334,62 @@ recruit <- function(pop) {
 ## This function determines fishing mortality within each grid cell, depending whether the cell is a reserve.
 
 fishing <- function(pop, gen) {
-  fished.num <- array(0, c(NUM.age.classes, NUM.sexes, NUM.genotypes))
-  if (gen <= pre.reserve.gens + pre.fishing.gens) {
-    each.patch.pop <- array(0, c(NS.patches, EW.patches))
+  fished.num <- array(0, c(NUM.age.classes, NUM.sexes, NUM.genotypes)) #create fishing array
+  if (gen <= pre.reserve.gens + pre.fishing.gens) { #determine if fishing takes place, but no MPA
+    each.patch.pop <- array(0, c(NS.patches, EW.patches)) #create storage array
     for (i in 2:NUM.age.classes) {
       for (j in 1:NUM.sexes) {
         for (k in 1:NUM.genotypes) {
-          each.patch.pop[, ] <- each.patch.pop[, ] + pop[, , i, j, k]
+          each.patch.pop[, ] <- each.patch.pop[, ] + pop[, , i, j, k] #add population to storage array
         }
       }
-    }
-    mean.per.patch.pop <- mean(each.patch.pop)
-    ff <- mean.per.patch.pop * (1 / fished - 1)
-    patch.pop <- rowSums(pop[, , c(2, 3), , ], dims = 2)
-    f <- patch.pop / (ff + patch.pop)
+    } 
+    mean.per.patch.pop <- mean(each.patch.pop) #calculate mean patch population
+    ff <- mean.per.patch.pop * (1 / fished - 1) #distribute fishing pressure based on population in each patch
+    patch.pop <- rowSums(pop[, , c(2, 3), , ], dims = 2) #get sum of rows in patch pop
+    f <- patch.pop / (ff + patch.pop) #calculate patch fishing pressure
     for (i in 2:NUM.age.classes) {
       for (j in 1:NUM.sexes) {
         for (k in 1:NUM.genotypes) {
-          survived <- Reshape(rbinom(NS.patches * EW.patches, pop[, , i, j, k], (1 - f)), NS.patches, EW.patches)
+          survived <- Reshape(rbinom(NS.patches * EW.patches, pop[, , i, j, k], (1 - f)), NS.patches, EW.patches) #determine number of fish surviving fishing
           pop[, , i, j, k] <- survived
-          fished.num[i, j, k] <- sum(each.patch.pop[, ]) - sum(survived)
+          fished.num[i, j, k] <- sum(each.patch.pop[, ]) - sum(survived) #save survivers in fished array
         }
       }
     }
   }
-  if (gen > pre.reserve.gens + pre.fishing.gens) {
-    reserve.area <- sum(reserve.patches[, , gen]) / (NS.patches * EW.patches)
-    buffer.area <- sum(buffer.patches) / (NS.patches * EW.patches)
-    fished.adj <- (fished - (buffer.area * buffer.fished)) * 1 / (1 - (reserve.area + buffer.area))
-    each.patch.pop <- array(0, c(NS.patches, EW.patches))
+  if (gen > pre.reserve.gens + pre.fishing.gens) { #determine if there is an MPA
+    reserve.area <- sum(reserve.patches[, , gen]) / (NS.patches * EW.patches) #calculate area of reserve
+    buffer.area <- sum(buffer.patches) / (NS.patches * EW.patches) #calculate area of buffer region
+    fished.adj <- (fished - (buffer.area * buffer.fished)) * 1 / (1 - (reserve.area + buffer.area)) #redistribute fishing pressure around reserve
+    each.patch.pop <- array(0, c(NS.patches, EW.patches)) #create storage array
     for (i in 2:NUM.age.classes) {
       for (j in 1:NUM.sexes) {
         for (k in 1:NUM.genotypes) {
-          each.patch.pop[, ] <- each.patch.pop[, ] + pop[, , i, j, k]
+          each.patch.pop[, ] <- each.patch.pop[, ] + pop[, , i, j, k] #add population to storage array
         }
       }
     }
-    each.patch.pop <- ifelse(reserve.patches[, , gen] == 1 | buffer.patches == 1, NaN, each.patch.pop)
-    mean.per.patch.pop <- mean(each.patch.pop, na.rm = TRUE)
-    ff <- mean.per.patch.pop * (1 / fished.adj - 1)
-    patch.pop <- rowSums(pop[, , c(2, 3), , ], dims = 2)
-    patch.pop <- ifelse(reserve.patches[, , gen] == 1 | buffer.patches == 1, NaN, patch.pop)
-    f <- patch.pop / (ff + patch.pop)
+    each.patch.pop <- ifelse(reserve.patches[, , gen] == 1 | buffer.patches == 1, NaN, each.patch.pop) #remove population in reserve and buffer from average calculation
+    mean.per.patch.pop <- mean(each.patch.pop, na.rm = TRUE) #calculate mean patch population
+    ff <- mean.per.patch.pop * (1 / fished.adj - 1) #distribute fishing pressure based on population in each patch
+    patch.pop <- rowSums(pop[, , c(2, 3), , ], dims = 2) #get sum of rows in patch pop
+    patch.pop <- ifelse(reserve.patches[, , gen] == 1 | buffer.patches == 1, NaN, patch.pop) #remove fishing pressure from reserve and buffer
+    f <- patch.pop / (ff + patch.pop) #calculate patch fishing pressure
     if (buffer.fished != 0) {
-      f <- ifelse(buffer.patches == 1, buffer.fished, f)
+      f <- ifelse(buffer.patches == 1, buffer.fished, f) #if a buffer exists, remove fising from buffer
     }
     for (i in 2:NUM.age.classes) {
       for (j in 1:NUM.sexes) {
         for (k in 1:NUM.genotypes) {
-          fished.array <- Reshape(rbinom(NS.patches * EW.patches, pop[, , i, j, k], (1 - f)), NS.patches, EW.patches)
+          fished.array <- Reshape(rbinom(NS.patches * EW.patches, pop[, , i, j, k], (1 - f)), NS.patches, EW.patches) #determine number of fish surviving fishing
           pop[, , i, j, k] <- ifelse(is.na(fished.array[, ]), pop[, , i, j, k], fished.array[, ])
-          fished.num[i, j, k] <- sum(each.patch.pop[, ], na.rm = TRUE) - sum(fished.array, na.rm = TRUE)
+          fished.num[i, j, k] <- sum(each.patch.pop[, ], na.rm = TRUE) - sum(fished.array, na.rm = TRUE) #save survivers in fished array
         }
       }
     }
   }
-  fished.list <- list("pop" = pop, "fish" = fished.num)
+  fished.list <- list("pop" = pop, "fish" = fished.num) #returned fish array with number of fish fished
   return(fished.list)
 }
 
