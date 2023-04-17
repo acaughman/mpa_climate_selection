@@ -34,7 +34,7 @@ s <- 0.70 # survival proportion
 dd <- 0.005 # density dependence of baby survival
 fecundity <- 20000 # The number of babies produced, on average, by each adult female each year.
 maturity.age <- 3 # The average age at which individuals mature (i.e., the age at which 50% of individuals are mature)
-fished <- 0.7 #base fishing pressure
+fished <- 0.7 # base fishing pressure
 buffer.fished <- 0 # buffer fishing pressure (lower than total = buffer zone, higher than total = fishing the line)
 
 reserves.at <- c(849, 949, 1049, 850, 950, 1050, 851, 951, 1051)
@@ -81,119 +81,119 @@ init <- function() {
 ## This function sets up the Sea surface temperature grid
 
 init_SST <- function(years, climate) {
-  #for Null climate
+  # for Null climate
   if (climate == "null") {
-    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) #initiate array for SST
-    start_SST <- (opt.temp) + NS.patches * 0.02 #have the highest SST be 0.2 * NS.patches
-    
-    for (i in 1:years) { #loop through years
-      SST <- start_SST 
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) # initiate array for SST
+    start_SST <- (opt.temp) + NS.patches * 0.02 # have the highest SST be 0.2 * NS.patches
+
+    for (i in 1:years) { # loop through years
+      SST <- start_SST
       for (lat in 1:NS.patches) {
-        SST.patches[lat, , i] <- SST 
-        SST <- SST - 0.02 #subtract 0.02 for each latitude 
+        SST.patches[lat, , i] <- SST
+        SST <- SST - 0.02 # subtract 0.02 for each latitude
       }
     }
-    #for Mean Shifts
+    # for Mean Shifts
   } else if (climate == "mean") {
-    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) #initiate array for SST
-    start_SST <- (opt.temp) + NS.patches * 0.02 #have the highest SST be 0.2 * NS.patches
-    
-    for (i in 1:25) { #loop through pre MPA years
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) # initiate array for SST
+    start_SST <- (opt.temp) + NS.patches * 0.02 # have the highest SST be 0.2 * NS.patches
+
+    for (i in 1:25) { # loop through pre MPA years
       SST <- start_SST
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02  #subtract 0.02 for each latitude 
+        SST <- SST - 0.02 # subtract 0.02 for each latitude
       }
     }
-    
-    for (i in 26:years) { #loop through MPA years
+
+    for (i in 26:years) { # loop through MPA years
       SST <- start_SST
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02  #subtract 0.02 for each latitude 
+        SST <- SST - 0.02 # subtract 0.02 for each latitude
       }
-      start_SST <- start_SST + 0.033 #add 0.033 degree C every year
+      start_SST <- start_SST + 0.033 # add 0.033 degree C every year
     }
-    
-  #for El Nino La Nina
+
+    # for El Nino La Nina
   } else if (climate == "enso") {
-    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) #initiate array for SST
-    start_SST <- (opt.temp) + NS.patches * 0.02 #have the highest SST be 0.2 * NS.patches
-    
-    for (i in 1:25) { #loop through pre MPA years
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) # initiate array for SST
+    start_SST <- (opt.temp) + NS.patches * 0.02 # have the highest SST be 0.2 * NS.patches
+
+    for (i in 1:25) { # loop through pre MPA years
       SST <- start_SST
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02  #subtract 0.02 for each latitude 
+        SST <- SST - 0.02 # subtract 0.02 for each latitude
       }
     }
-    
-    t <- seq(1, years - 25, 1) #set time array
-    b <- array(0, 25) #set pre MPA times
-    change <- 0.5 * sin(t) + 0.033 #calculate temp change per year based on sinusoidal equation
-    enso.value <- c(b, change) #append no change pre MPA years to ENSO years
-    
-    for (i in 26:years) { #loop through MPA years
+
+    t <- seq(1, years - 25, 1) # set time array
+    b <- array(0, 25) # set pre MPA times
+    change <- 0.5 * sin(t) + 0.033 # calculate temp change per year based on sinusoidal equation
+    enso.value <- c(b, change) # append no change pre MPA years to ENSO years
+
+    for (i in 26:years) { # loop through MPA years
       SST <- start_SST
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02  #subtract 0.02 for each latitude 
+        SST <- SST - 0.02 # subtract 0.02 for each latitude
       }
-      start_SST <- start_SST + enso.value[i] #add change in temp for each year based on ENSO
+      start_SST <- start_SST + enso.value[i] # add change in temp for each year based on ENSO
     }
-    #for Shocks
+    # for Shocks
   } else if (climate == "shock") {
-    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) #initiate array for SST
-    start_SST <- (opt.temp) + NS.patches * 0.02 #have the highest SST be 0.2 * NS.patches
-    
-    for (i in 1:25) { #loop through pre MPA years
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) # initiate array for SST
+    start_SST <- (opt.temp) + NS.patches * 0.02 # have the highest SST be 0.2 * NS.patches
+
+    for (i in 1:25) { # loop through pre MPA years
       SST <- start_SST
       for (lat in 1:NS.patches) {
-        SST.patches[lat, ,  i] <- SST
-        SST <- SST - 0.02  #subtract 0.02 for each latitude 
+        SST.patches[lat, , i] <- SST
+        SST <- SST - 0.02 # subtract 0.02 for each latitude
       }
     }
-    
-    for (i in 26:years) { #loop through MPA years
-      heat_prob <- runif(1, 0, 1) #draw heatwave probability
+
+    for (i in 26:years) { # loop through MPA years
+      heat_prob <- runif(1, 0, 1) # draw heatwave probability
       if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-        intensity <- runif(1, 1, 4) #if heatwave, draw intensity
-        SST <- start_SST + intensity #add intensity to SST
+        intensity <- runif(1, 1, 4) # if heatwave, draw intensity
+        SST <- start_SST + intensity # add intensity to SST
       } else {
         SST <- start_SST
       }
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02  #subtract 0.02 for each latitude 
+        SST <- SST - 0.02 # subtract 0.02 for each latitude
       }
     }
     # for Shocks with Mean Shift
   } else if (climate == "mean shock") {
-    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) #initiate array for SST
-    start_SST <- (opt.temp) + NS.patches * 0.02 #have the highest SST be 0.2 * NS.patches
-    
-    for (i in 1:25) { #loop through pre MPA years
+    SST.patches <- array(opt.temp, c(NS.patches, EW.patches, years)) # initiate array for SST
+    start_SST <- (opt.temp) + NS.patches * 0.02 # have the highest SST be 0.2 * NS.patches
+
+    for (i in 1:25) { # loop through pre MPA years
       SST <- start_SST
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02  #subtract 0.02 for each latitude 
+        SST <- SST - 0.02 # subtract 0.02 for each latitude
       }
     }
-    
-    for (i in 26:years) { #loop through MPA years
+
+    for (i in 26:years) { # loop through MPA years
       SST <- start_SST
-      heat_prob <- runif(1, 0, 1) #draw heatwave probability
+      heat_prob <- runif(1, 0, 1) # draw heatwave probability
       if ((i < 75 & heat_prob < 0.1) | (i >= 75 & heat_prob < 0.35)) {
-        intensity <- runif(1, 1, 4) #if heatwave, draw intensity
-        SST <- start_SST + intensity #add intensity to SST
+        intensity <- runif(1, 1, 4) # if heatwave, draw intensity
+        SST <- start_SST + intensity # add intensity to SST
       } else {
         SST <- start_SST
       }
       for (lat in 1:NS.patches) {
         SST.patches[lat, , i] <- SST
-        SST <- SST - 0.02  #subtract 0.02 for each latitude 
+        SST <- SST - 0.02 # subtract 0.02 for each latitude
       }
-      start_SST <- start_SST + 0.033 #add 0.033 degree C every year
+      start_SST <- start_SST + 0.033 # add 0.033 degree C every year
     }
   }
   return(SST.patches)
@@ -203,38 +203,38 @@ init_SST <- function(years, climate) {
 ## This function creates an array to tell the simulation the reserve locations
 
 where.reserves <- function(reserves.at) {
-  reserve.patches <- array(0, c(NS.patches, EW.patches, years)) #get numbers for reserve
+  reserve.patches <- array(0, c(NS.patches, EW.patches, years)) # get numbers for reserve
   for (i in 1:length(reserves.at)) {
-    x <- ((reserves.at[i] - 1) %/% NS.patches) + 1 #get corresponding x values
-    y <- ((reserves.at[i] - 1) %% NS.patches) + 1 #get corresponding y values
-    reserve.patches[y, x, ] <- 1 #assign 1 to indicate reserve
+    x <- ((reserves.at[i] - 1) %/% NS.patches) + 1 # get corresponding x values
+    y <- ((reserves.at[i] - 1) %% NS.patches) + 1 # get corresponding y values
+    reserve.patches[y, x, ] <- 1 # assign 1 to indicate reserve
   }
   return(reserve.patches)
 }
-reserve.patches <- where.reserves(reserves.at) #initiate reserves
+reserve.patches <- where.reserves(reserves.at) # initiate reserves
 
 ############################################################################
 ## This function creates an array to tell the simulation the buffer/fishing the line locations
 
 where.buffer <- function(buffer.at) {
-  buffer.patches <- array(0, c(NS.patches, EW.patches)) #get numbers for buffer
+  buffer.patches <- array(0, c(NS.patches, EW.patches)) # get numbers for buffer
   for (i in 1:length(buffer.at)) {
-    x <- ((buffer.at[i] - 1) %/% NS.patches) + 1 #get corresponding x values
-    y <- ((buffer.at[i] - 1) %% NS.patches) + 1 #get corresponding y values
-    buffer.patches[y, x] <- 1 #assign 1 to indicate buffer
+    x <- ((buffer.at[i] - 1) %/% NS.patches) + 1 # get corresponding x values
+    y <- ((buffer.at[i] - 1) %% NS.patches) + 1 # get corresponding y values
+    buffer.patches[y, x] <- 1 # assign 1 to indicate buffer
   }
   return(buffer.patches)
 }
-buffer.patches <- where.buffer(buffer.at) #initiate buffer
+buffer.patches <- where.buffer(buffer.at) # initiate buffer
 
 ############################################################################
 ## This function causes adults to reproduce in spawning areas
 
 spawn <- function(pop) {
   fec <- fecundity
-  
+
   num.males <- rowSums(pop[, , 3, 2, ], dims = 2)
-  
+
   # All females produce the same mean number of eggs
   NUM.A.eggs <- Reshape(rpois(NS.patches * EW.patches, fec * pop[, , 3, 1, 1] + fec * pop[, , 3, 1, 2] / 2), NS.patches, EW.patches)
   NUM.a.eggs <- Reshape(rpois(NS.patches * EW.patches, fec * pop[, , 3, 1, 3] + fec * pop[, , 3, 1, 2] / 2), NS.patches, EW.patches)
@@ -267,10 +267,10 @@ spawn <- function(pop) {
 ## This function calculates temperature based mortality based on sea surface temperature, temperature range and optimal temperature of species
 
 calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
-  nat.m <- array(0, c(nrow(SST), ncol(SST))) #create temp array
+  nat.m <- array(0, c(nrow(SST), ncol(SST))) # create temp array
   m <- 1 - exp((-(SST[, ] - opt.temp)^2) / (temp.range^2)) # temperature based survival function from Norberg et al.
-  m <- 1 - m #calculate mortality
-  nat.m <- ifelse(m > s, s, m) #take natural mortality if it is less than temp based mortality
+  m <- 1 - m # calculate mortality
+  nat.m <- ifelse(m > s, s, m) # take natural mortality if it is less than temp based mortality
   return(nat.m)
 }
 
@@ -278,7 +278,7 @@ calc_temp_mortality <- function(SST, opt.temp, temp.range, s) {
 ## This function determines density dependent survival proportion for babies
 
 survival_b <- function(num, SST) {
-  s <- calc_temp_mortality(SST, opt.temp, temp.range, sb) #calculate temperature based mortality
+  s <- calc_temp_mortality(SST, opt.temp, temp.range, sb) # calculate temperature based mortality
   dd <- dd # density dependence of survival
   result <- s / (1 + dd * num)
   return(result)
@@ -288,7 +288,7 @@ survival_b <- function(num, SST) {
 ## This function determines density dependent survival proportion for juveniles and adults
 
 survival <- function(SST) {
-  result <- calc_temp_mortality(SST, opt.temp, temp.range, s) #calculate temperature based mortality
+  result <- calc_temp_mortality(SST, opt.temp, temp.range, s) # calculate temperature based mortality
   return(result)
 }
 
@@ -334,62 +334,62 @@ recruit <- function(pop) {
 ## This function determines fishing mortality within each grid cell, depending whether the cell is a reserve.
 
 fishing <- function(pop, gen) {
-  fished.num <- array(0, c(NUM.age.classes, NUM.sexes, NUM.genotypes)) #create fishing array
-  if (gen <= pre.reserve.gens + pre.fishing.gens) { #determine if fishing takes place, but no MPA
-    each.patch.pop <- array(0, c(NS.patches, EW.patches)) #create storage array
+  fished.num <- array(0, c(NUM.age.classes, NUM.sexes, NUM.genotypes)) # create fishing array
+  if (gen <= pre.reserve.gens + pre.fishing.gens) { # determine if fishing takes place, but no MPA
+    each.patch.pop <- array(0, c(NS.patches, EW.patches)) # create storage array
     for (i in 2:NUM.age.classes) {
       for (j in 1:NUM.sexes) {
         for (k in 1:NUM.genotypes) {
-          each.patch.pop[, ] <- each.patch.pop[, ] + pop[, , i, j, k] #add population to storage array
+          each.patch.pop[, ] <- each.patch.pop[, ] + pop[, , i, j, k] # add population to storage array
         }
       }
-    } 
-    mean.per.patch.pop <- mean(each.patch.pop) #calculate mean patch population
-    ff <- mean.per.patch.pop * (1 / fished - 1) #distribute fishing pressure based on population in each patch
-    patch.pop <- rowSums(pop[, , c(2, 3), , ], dims = 2) #get sum of rows in patch pop
-    f <- patch.pop / (ff + patch.pop) #calculate patch fishing pressure
+    }
+    mean.per.patch.pop <- mean(each.patch.pop) # calculate mean patch population
+    ff <- mean.per.patch.pop * (1 / fished - 1) # distribute fishing pressure based on population in each patch
+    patch.pop <- rowSums(pop[, , c(2, 3), , ], dims = 2) # get sum of rows in patch pop
+    f <- patch.pop / (ff + patch.pop) # calculate patch fishing pressure
     for (i in 2:NUM.age.classes) {
       for (j in 1:NUM.sexes) {
         for (k in 1:NUM.genotypes) {
-          survived <- Reshape(rbinom(NS.patches * EW.patches, pop[, , i, j, k], (1 - f)), NS.patches, EW.patches) #determine number of fish surviving fishing
+          survived <- Reshape(rbinom(NS.patches * EW.patches, pop[, , i, j, k], (1 - f)), NS.patches, EW.patches) # determine number of fish surviving fishing
           pop[, , i, j, k] <- survived
-          fished.num[i, j, k] <- sum(each.patch.pop[, ]) - sum(survived) #save survivers in fished array
+          fished.num[i, j, k] <- sum(each.patch.pop[, ]) - sum(survived) # save survivers in fished array
         }
       }
     }
   }
-  if (gen > pre.reserve.gens + pre.fishing.gens) { #determine if there is an MPA
-    reserve.area <- sum(reserve.patches[, , gen]) / (NS.patches * EW.patches) #calculate area of reserve
-    buffer.area <- sum(buffer.patches) / (NS.patches * EW.patches) #calculate area of buffer region
-    fished.adj <- (fished - (buffer.area * buffer.fished)) * 1 / (1 - (reserve.area + buffer.area)) #redistribute fishing pressure around reserve
-    each.patch.pop <- array(0, c(NS.patches, EW.patches)) #create storage array
+  if (gen > pre.reserve.gens + pre.fishing.gens) { # determine if there is an MPA
+    reserve.area <- sum(reserve.patches[, , gen]) / (NS.patches * EW.patches) # calculate area of reserve
+    buffer.area <- sum(buffer.patches) / (NS.patches * EW.patches) # calculate area of buffer region
+    fished.adj <- (fished - (buffer.area * buffer.fished)) * 1 / (1 - (reserve.area + buffer.area)) # redistribute fishing pressure around reserve
+    each.patch.pop <- array(0, c(NS.patches, EW.patches)) # create storage array
     for (i in 2:NUM.age.classes) {
       for (j in 1:NUM.sexes) {
         for (k in 1:NUM.genotypes) {
-          each.patch.pop[, ] <- each.patch.pop[, ] + pop[, , i, j, k] #add population to storage array
+          each.patch.pop[, ] <- each.patch.pop[, ] + pop[, , i, j, k] # add population to storage array
         }
       }
     }
-    each.patch.pop <- ifelse(reserve.patches[, , gen] == 1 | buffer.patches == 1, NaN, each.patch.pop) #remove population in reserve and buffer from average calculation
-    mean.per.patch.pop <- mean(each.patch.pop, na.rm = TRUE) #calculate mean patch population
-    ff <- mean.per.patch.pop * (1 / fished.adj - 1) #distribute fishing pressure based on population in each patch
-    patch.pop <- rowSums(pop[, , c(2, 3), , ], dims = 2) #get sum of rows in patch pop
-    patch.pop <- ifelse(reserve.patches[, , gen] == 1 | buffer.patches == 1, NaN, patch.pop) #remove fishing pressure from reserve and buffer
-    f <- patch.pop / (ff + patch.pop) #calculate patch fishing pressure
+    each.patch.pop <- ifelse(reserve.patches[, , gen] == 1 | buffer.patches == 1, NaN, each.patch.pop) # remove population in reserve and buffer from average calculation
+    mean.per.patch.pop <- mean(each.patch.pop, na.rm = TRUE) # calculate mean patch population
+    ff <- mean.per.patch.pop * (1 / fished.adj - 1) # distribute fishing pressure based on population in each patch
+    patch.pop <- rowSums(pop[, , c(2, 3), , ], dims = 2) # get sum of rows in patch pop
+    patch.pop <- ifelse(reserve.patches[, , gen] == 1 | buffer.patches == 1, NaN, patch.pop) # remove fishing pressure from reserve and buffer
+    f <- patch.pop / (ff + patch.pop) # calculate patch fishing pressure
     if (buffer.fished != 0) {
-      f <- ifelse(buffer.patches == 1, buffer.fished, f) #if a buffer exists, remove fising from buffer
+      f <- ifelse(buffer.patches == 1, buffer.fished, f) # if a buffer exists, remove fising from buffer
     }
     for (i in 2:NUM.age.classes) {
       for (j in 1:NUM.sexes) {
         for (k in 1:NUM.genotypes) {
-          fished.array <- Reshape(rbinom(NS.patches * EW.patches, pop[, , i, j, k], (1 - f)), NS.patches, EW.patches) #determine number of fish surviving fishing
+          fished.array <- Reshape(rbinom(NS.patches * EW.patches, pop[, , i, j, k], (1 - f)), NS.patches, EW.patches) # determine number of fish surviving fishing
           pop[, , i, j, k] <- ifelse(is.na(fished.array[, ]), pop[, , i, j, k], fished.array[, ])
-          fished.num[i, j, k] <- sum(each.patch.pop[, ], na.rm = TRUE) - sum(fished.array, na.rm = TRUE) #save survivers in fished array
+          fished.num[i, j, k] <- sum(each.patch.pop[, ], na.rm = TRUE) - sum(fished.array, na.rm = TRUE) # save survivers in fished array
         }
       }
     }
   }
-  fished.list <- list("pop" = pop, "fish" = fished.num) #returned fish array with number of fish fished
+  fished.list <- list("pop" = pop, "fish" = fished.num) # returned fish array with number of fish fished
   return(fished.list)
 }
 
@@ -402,9 +402,9 @@ move <- function(pop) {
   Hom.a.movers <- lazy.mover.distance # Individuals with aa genotype move this distance on average, in nautical miles
   Het.movers <- min(Hom.A.movers, Hom.a.movers) + h * abs(Hom.A.movers - Hom.a.movers)
   Herit <- Heritability.index # Influences heritability of movement. High numbers increase heritability by reducing the variance around the phenotypic mean. The phenotypic mean is determined by the genotype.
-  
+
   move.array <- world
-  
+
   for (lat in 1:NS.patches) {
     for (lon in 1:EW.patches) {
       for (i in 2:NUM.age.classes) {
@@ -449,21 +449,21 @@ move <- function(pop) {
               # y = ifelse((y_bool == FALSE) & (y > patch.size*(NS.patches-lat)+patch.size/2),(y - (patch.size * NS.patches)),y)
               # y = ifelse((y_bool == FALSE) & (y < patch.size/2-lat*patch.size),(y + (patch.size * NS.patches)),y)
               # convert movement distances into numbers of grid cells (assume fish start in centre of cell):
-              x <- round(x) / patch.size #get number of patches
-              y <- round(y) / patch.size #get number of patches
-              xy <- as.data.frame(cbind(x, y)) #bind x and y together
+              x <- round(x) / patch.size # get number of patches
+              y <- round(y) / patch.size # get number of patches
+              xy <- as.data.frame(cbind(x, y)) # bind x and y together
               xy$count <- 1
-              freq <- aggregate(count ~ x + y, data = xy, FUN = sum) #find number of fish that move each number of grids
-              freq2D <- as.data.frame(array(0, c(length(unique(xy$y)), length(unique(xy$x))))) 
+              freq <- aggregate(count ~ x + y, data = xy, FUN = sum) # find number of fish that move each number of grids
+              freq2D <- as.data.frame(array(0, c(length(unique(xy$y)), length(unique(xy$x)))))
               names(freq2D) <- sort(unique(xy$x))
-              row.names(freq2D) <- sort(unique(xy$y)) #re frame data frame
+              row.names(freq2D) <- sort(unique(xy$y)) # re frame data frame
               for (row in 1:length(freq$x)) {
-                freq2D[as.character(freq$y[row]), as.character(freq$x[row])] <- freq$count[row] #assign frequencies to movement distance 
+                freq2D[as.character(freq$y[row]), as.character(freq$x[row])] <- freq$count[row] # assign frequencies to movement distance
               }
               # populate the move.array with movers (and stayers)
               for (xx in 1:length(unique(xy$x))) {
                 for (yy in 1:length(unique(xy$y))) {
-                  move.array[lat + as.numeric(row.names(freq2D)[yy]), lon + as.numeric(names(freq2D)[xx]), i, j, k] <- move.array[lat + as.numeric(row.names(freq2D)[yy]), lon + as.numeric(names(freq2D)[xx]), i, j, k] + freq2D[yy, xx] #move fish to new locations based on distances in movement dataframe
+                  move.array[lat + as.numeric(row.names(freq2D)[yy]), lon + as.numeric(names(freq2D)[xx]), i, j, k] <- move.array[lat + as.numeric(row.names(freq2D)[yy]), lon + as.numeric(names(freq2D)[xx]), i, j, k] + freq2D[yy, xx] # move fish to new locations based on distances in movement dataframe
                 }
               }
             }
@@ -517,13 +517,13 @@ gc()
 end_time <- Sys.time()
 end_time - start_time
 
-#output array
+# output array
 save(output.array, file = here::here("model1.rda"))
 
 # Output results into a dataframe
 output_df <- data.frame() # create dataframe to hold results
 
-#creates dataframe from array data
+# creates dataframe from array data
 for (a in 1:reps) {
   for (b in 1:gens) {
     for (c in 1:NUM.genotypes) {
@@ -551,8 +551,8 @@ for (a in 1:reps) {
 # Wrangle dataframe into plottable format
 output_df <- output_df %>%
   pivot_longer(V1:V20,
-               names_to = "lon",
-               values_to = "pop"
+    names_to = "lon",
+    values_to = "pop"
   ) %>%
   mutate(lon = case_when(
     lon == "V1" ~ 1,
@@ -576,74 +576,82 @@ output_df <- output_df %>%
     lon == "V19" ~ 19,
     lon == "V20" ~ 20
   )) %>%
-  mutate(genotype = case_when( #assign real values to genotype
+  mutate(genotype = case_when( # assign real values to genotype
     genotype == 1 ~ "AA",
     genotype == 2 ~ "Aa",
     genotype == 3 ~ "aa"
   )) %>%
-  mutate(genotype = as.factor(genotype)) %>% #turn genotype into factor
-  mutate(sex = case_when( #assign real values to sex
+  mutate(genotype = as.factor(genotype)) %>% # turn genotype into factor
+  mutate(sex = case_when( # assign real values to sex
     sex == 1 ~ "female",
     sex == 2 ~ "male"
   )) %>%
-  mutate(sex = as.factor(sex)) %>% #turn sex into factor
-  mutate(age = case_when( #assign real values to age
+  mutate(sex = as.factor(sex)) %>% # turn sex into factor
+  mutate(age = case_when( # assign real values to age
     age == 1 ~ "baby",
     age == 2 ~ "juvenile",
     age == 3 ~ "adult"
   )) %>%
-  mutate(age = as.factor(age)) %>% #age as factor
-  mutate(lat = as.numeric(lat)) %>% 
+  mutate(age = as.factor(age)) %>% # age as factor
+  mutate(lat = as.numeric(lat)) %>%
   mutate(lon = as.numeric(lon)) %>%
   mutate(rep = as.numeric(rep)) %>%
   mutate(fished = as.numeric(fished)) %>%
   distinct()
 
-#output CSV
+# output CSV
 write_csv(output_df, here::here("model1.csv"))
 
 # Sum adults in population by location, generation, and genotype for each replicate
 geno_sum2 <- output_df %>%
-  filter(age == "adult") %>% 
+  filter(age == "adult") %>%
   group_by(lat, lon, generation, rep, genotype) %>%
   summarise(geno_pop_sum = sum(pop, na.rm = TRUE))
 
 # average population across replicates
-geno_mean2 <- geno_sum2 %>% 
+geno_mean2 <- geno_sum2 %>%
   group_by(lat, lon, generation, genotype) %>%
-  summarise(geno_pop_mean = mean(geno_pop_sum, na.rm=TRUE),
-            geno_pop_sd = sd(geno_pop_sum, na.rm=TRUE)) %>% 
-  ungroup() 
+  summarise(
+    geno_pop_mean = mean(geno_pop_sum, na.rm = TRUE),
+    geno_pop_sd = sd(geno_pop_sum, na.rm = TRUE)
+  ) %>%
+  ungroup()
 
-#sum adults in population by location and generation for each replicate
+# sum adults in population by location and generation for each replicate
 pop_sum2 <- output_df %>%
-  filter(age == "adult") %>% 
+  filter(age == "adult") %>%
   group_by(lat, lon, generation, rep) %>%
-  summarise(pop_sum = sum(pop, na.rm = TRUE), 
-            max_temp = max_temp, #get min temperature
-            min_temp = min_temp, #get max temperature
-            mpa_temp = mpa_temp, #get temperature within MPA
-            fished_sum = sum(fished))
+  summarise(
+    pop_sum = sum(pop, na.rm = TRUE),
+    max_temp = max_temp, # get min temperature
+    min_temp = min_temp, # get max temperature
+    mpa_temp = mpa_temp, # get temperature within MPA
+    fished_sum = sum(fished)
+  )
 
-#average population across replicates
+# average population across replicates
 pop_mean2 <- pop_sum2 %>%
   group_by(lat, lon, generation) %>%
-  summarise(pop_mean = mean(pop_sum, na.rm = TRUE), 
-            pop_sd = sd(pop_sum, na.rm = TRUE),
-            max_temp = max_temp, 
-            min_temp = min_temp,
-            mpa_temp = mpa_temp,
-            fished_mean = mean(fished_sum, na.rm=TRUE)) %>% 
-  ungroup() 
+  summarise(
+    pop_mean = mean(pop_sum, na.rm = TRUE),
+    pop_sd = sd(pop_sum, na.rm = TRUE),
+    max_temp = max_temp,
+    min_temp = min_temp,
+    mpa_temp = mpa_temp,
+    fished_mean = mean(fished_sum, na.rm = TRUE)
+  ) %>%
+  ungroup()
 
-output_sum2 <- full_join(geno_mean2, pop_mean2) #join genotype based sum with full sum
+output_sum2 <- full_join(geno_mean2, pop_mean2) # join genotype based sum with full sum
 
-output_sum2 = output_sum2 %>%
-  distinct() %>% 
-  mutate(freq = geno_pop_mean / pop_mean, #calculate freqency of each genotype
-         mpa_size = "Large", #assign MPA size based on model_list.xlsx
-         climate = "Mean Shock", #assign climate
-         evolution = "Yes") #assign evolution or not
+output_sum2 <- output_sum2 %>%
+  distinct() %>%
+  mutate(
+    freq = geno_pop_mean / pop_mean, # calculate freqency of each genotype
+    mpa_size = "Large", # assign MPA size based on model_list.xlsx
+    climate = "Mean Shock", # assign climate
+    evolution = "Yes"
+  ) # assign evolution or not
 
-#output summary data for use in 03_analysis_figs.R
+# output summary data for use in 03_analysis_figs.R
 write_csv(output_sum2, here::here("summary_m1.csv"))
