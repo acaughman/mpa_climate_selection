@@ -117,8 +117,8 @@ s1 <- ggplot(line_df, aes(generation, location_sum)) +
   facet_wrap(~mpa_size, scales = "free_y", ncol = 1) +
   theme_bw() +
   labs(
-    x = "Year",
-    y = "Population Density",
+    x = "Time",
+    y = "Population Size",
     linetype = "Evolution?",
     color = "Climate"
   ) +
@@ -142,7 +142,7 @@ s3 <- ggplot(mean_change2, aes(generation, mean_change)) +
   facet_wrap(~climate, ncol = 1, scales = "free_y") +
   theme_bw() +
   labs(
-    x = "Year",
+    x = "Time",
     y = "Rate of Population Change",
     linetype = "Evolution?",
     color = "MPA Size"
@@ -169,8 +169,8 @@ s4 <- ggplot(line_df_mpa_full, aes(generation, location_sum)) +
   facet_wrap(~mpa_size, scales = "free", ncol = 1) +
   theme_bw() +
   labs(
-    x = "Year",
-    y = "Population Density",
+    x = "Time",
+    y = "Population Size",
     color = "Climate", fill = "", linetype = "Evolution?"
   ) +
   theme(
@@ -195,8 +195,8 @@ s5 <- ggplot(line_df, aes(generation, log(location_sum))) +
   facet_wrap(~mpa_size, ncol = 1) +
   theme_bw() +
   labs(
-    x = "Year",
-    y = "Population Density",
+    x = "Time",
+    y = "Population Size",
     color = "Climate",
     linetype = "Evolution?"
   ) +
@@ -340,8 +340,7 @@ aa_geno2_rate <- line_df_geno_lat_rate %>%
   filter(lat == 50) %>%
   filter(climate %in% c("Mean Shift", "Shocks with Mean Shift", "El Nino/La Nina")) %>%
   filter(!is.na(freq_avg)) %>%
-  select(-evolution, -genotype) %>%
-  mutate(average_survival = (max_survival + min_survival) / 2)
+  select(-evolution, -genotype)
 
 aa_mean_rate <- aa_geno2_rate %>%
   filter(climate == "Mean Shift") %>%
@@ -366,9 +365,7 @@ line_df_geno_lat_rate <- data_rate %>%
 line_df_mpa_full_rate <- line_df_mpa_full_rate %>%
   group_by(generation, evolution, mpa_size, climate, climate_rate) %>%
   summarise(
-    location_sum = sum(pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp)
+    location_sum = sum(pop_mean, na.rm = TRUE)
   ) %>%
   mutate(generation = as.numeric(generation))
 
@@ -376,14 +373,11 @@ line_df_geno_lat_rate <- line_df_geno_lat_rate %>%
   group_by(generation, evolution, mpa_size, climate, genotype, lat, climate_rate) %>%
   summarise(
     location_sum = sum(geno_pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp),
     freq_avg = mean(freq, na.rm = TRUE)
   ) %>%
   mutate(generation = as.numeric(generation)) %>%
   filter(evolution == "Yes") %>%
-  mutate(lat = as.factor(lat)) %>%
-  mutate(max_temp = as.factor(max_temp))
+  mutate(lat = as.factor(lat))
 
 line_lat_mpa_combo_rate <- line_df_geno_lat_rate %>%
   filter(lat != 50) %>%
@@ -428,8 +422,8 @@ s6 <- ggplot(line_df_mpa_full_rate, aes(generation, location_sum)) +
   ggh4x::facet_grid2(mpa_size ~ climate, scales = "free_y", independent = "y") +
   theme_bw() +
   labs(
-    x = "Year",
-    y = "Population Density",
+    x = "Time",
+    y = "Population Size",
     color = "Climate Increase Per Year", linetype = "Evolution?"
   ) +
   theme(
@@ -452,7 +446,7 @@ s7 <- ggplot(geno_lat_rate, aes(generation, mpa_mean_freq)) +
   facet_grid(genotype ~ climate, scales = "free_y") +
   theme_bw() +
   labs(
-    x = "Year",
+    x = "Time",
     y = "Allele Frequency",
     color = "Climate Increase Per Year",
     linetype = "MPA size",
@@ -500,9 +494,7 @@ line_df_mpa_full_fp <- data_fp %>%
   distinct() %>%
   group_by(generation, evolution, mpa_size, climate, fishing_pressure) %>%
   summarise(
-    location_sum = sum(pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp)
+    location_sum = sum(pop_mean, na.rm = TRUE)
   ) %>%
   mutate(generation = as.numeric(generation))
 
@@ -648,7 +640,7 @@ s9 <- ggplot(geno_lat_fp, aes(generation, mpa_mean_freq)) +
   facet_grid(genotype ~ climate, scales = "free_y") +
   theme_bw() +
   labs(
-    x = "Year",
+    x = "Time",
     y = "Allele Frequency",
     color = "Fishing Pressure",
     linetype = "MPA size",
@@ -678,8 +670,8 @@ s10 <- ggplot(line_df_mpa_full_fp, aes(generation, location_sum)) +
   ggh4x::facet_grid2(mpa_size ~ climate, scales = "free_y", independent = "y") +
   theme_bw() +
   labs(
-    x = "Year",
-    y = "Population Density",
+    x = "Time",
+    y = "Population Size",
     color = "Fishing Pressure", linetype = "Evolution?"
   ) +
   theme(
@@ -1044,7 +1036,7 @@ temp <- ggplot(SSTdf) +
   geom_hline(aes(yintercept = 25), alpha = 0.5, linetype = "dashed") +
   geom_hline(aes(yintercept = 27), alpha = 0.5, linetype = "dashed", color = "red") +
   facet_wrap(~climate) +
-  labs(x = "Year", y = "SST") +
+  labs(x = "Time", y = "SST") +
   theme_bw() +
   scale_color_viridis_d() +
   theme(
@@ -1056,7 +1048,7 @@ temp <- ggplot(SSTdf) +
     strip.background = element_rect(fill = "white")
   ) # plot temperatures
 
-ggsave(temp, file = paste0("temp.pdf"), path = here("figs", "climate"), height = 10, width = 10)
+ggsave(temp, file = paste0("climate_scenarios.pdf"), path = here::here("figs", "supp"), height = 10, width = 10)
 ```
 
 ```{r}
@@ -1138,5 +1130,5 @@ mort_curve <- ggplot(simulation_results, aes(SST, survival.prop)) +
   ) +
   scale_x_continuous(breaks = c(23, 25, 27, 29.66092, 30.93700, 31.84384, 34.19259), labels = c("Thermal Min", "Thermal Optimum", "Thermal Max", "Shocks Max", "Mean Shift Max", "El Nino/ La Nina Max", "Shocks with Mean Shift Max"))
 
-ggsave(mort_curve, file = paste0("mort_curve.pdf"), path = here("figs", "climate"), height = 10, width = 10)
+ggsave(mort_curve, file = paste0("mort_curve.pdf"), path = here::here("figs", "supp"), height = 10, width = 10)
 ```

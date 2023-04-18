@@ -69,7 +69,7 @@ line_df_lat <- mpa_df %>%
     freq_avg = mean(freq, na.rm = TRUE) # average frequencies
   ) %>%
   mutate(generation = as.numeric(generation)) %>% # make generation numeric
-  mutate(lat = as.factor(lat)) # make latitute a factor
+  mutate(lat = as.factor(lat)) # make latitude a factor
 
 # calculates rate of change at each location
 change <- data %>%
@@ -77,7 +77,7 @@ change <- data %>%
   distinct() %>%
   group_by(climate, evolution, mpa_size, lat, lon) %>%
   mutate(rate = pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) %>% # calculate fist derivative
-  mutate(relative_rate = (pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) / pop_mean) %>% # calculate relative rate of decline
+  mutate(relative_rate = (pop_mean - lag(pop_mean, default = first(pop_mean), order_by = generation)) / lag(pop_mean)) %>% # calculate relative rate of decline
   ungroup()
 
 # summarize across genotypes in full simulation
@@ -108,7 +108,12 @@ line_df_geno_lat <- data %>%
   ) %>%
   mutate(generation = as.numeric(generation)) %>% # make generation numeric
   filter(evolution == "Yes") %>% # filter for only evolution
-  mutate(lat = as.factor(lat)) # make latitude a factor
+  mutate(lat = as.factor(lat)) %>%  # make latitude a factor
+mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>% # calculate minimum moratilty based on moratilit curve
+  mutate(min_survival = ifelse(min_m > 0.7, 0.7, min_m)) %>%
+  mutate(max_m = 1 - (1 - exp((-(min_temp - 25)^2) / (4^2)))) %>%
+  mutate(max_survival = ifelse(max_m > 0.7, 0.7, max_m)) %>%
+  select(-max_m, -min_m)
 ```
 
 ```{r}
@@ -128,7 +133,7 @@ point <- full_join(point_y, point_n) %>% # join yes and no evolution data
     no = mean(no) # find average population in no
   ) %>%
   ungroup() %>%
-  mutate(diff = (yes - no) / no * 100) # determine percent population difference in yes than no
+  mutate(diff = 1 + ((yes - no) / no)) # determine percent population difference in yes than no
 
 # point 1 - point 6 determine the average different between evolution and no evolution at 6 specific time points
 point1 <- point %>%
@@ -201,7 +206,7 @@ point_sum <- list(point1, point2, point3, point4, point5, point6) %>%
   mutate(avg_diff = case_when(
     no < 1 ~ 0,
     no >= 1 ~ avg_diff, # remove population where no is less than 1 to avoid infinite in plotting
-  ))
+  )) 
 
 # calculates collapse points within the MPA only
 collapse_full <- line_df_mpa_full %>%
@@ -247,7 +252,7 @@ mpa_medium <- line_df_mpa_full %>%
   filter(mpa_size == "6 x 6") # filter for only medium MPA
 
 mean_change2 <- change %>%
-  filter(generation >= 35) %>% # filter generations when climate change causes declines
+  filter(generation >= 50) %>% # filter generations when climate change causes declines
   # filter only MPA grids
   filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>%
   filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>%
@@ -344,7 +349,7 @@ geno_lat <- line_df_geno_lat %>%
 
 ## Stats
 
-## Population Density
+## Population Size
 
 ### Population Max
 
@@ -412,8 +417,8 @@ f2 <- ggplot(mpa_medium, aes(generation, location_sum)) +
   theme_bw(base_size = 12) +
   facet_wrap(~climate, ncol = 1) +
   labs(
-    x = "Year",
-    y = "Population Density",
+    x = "Time",
+    y = "Population Size",
     color = "Climate Scenario",
     linetype = "Evolution?"
   ) +
@@ -434,22 +439,20 @@ ggsave(f2, file = paste0("fig2.pdf"), path = here::here("figs"), height = 10, wi
 # plot difference between evolution and no evolution at 6 time points
 f3.1 <- ggplot(point_sum, aes(generation, avg_diff)) +
   geom_line(aes(color = climate), linewidth = 1) +
-  # geom_ribbon(aes(ymin = avg_diff - se, ymax = avg_diff + se, fill = climate), alpha = .2) +
   geom_point() +
   theme_bw() +
   labs(
-    x = "Year",
-    y = "Mean % Population Change",
-    title = "Percent Change in Population Size in the MPA with and without movement evolution",
+    x = "Time",
+    y = "Increase in Population Size",
+    title = "Change in population size in the MPA when considering movement evolution",
     color = "Climate Scenario"
   ) +
   scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
-  # scale_fill_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
   scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
   theme(
     axis.text.x = element_blank(),
     axis.ticks.x = element_blank()
-  )
+  ) + scale_y_continuous(breaks = c(0, 0.5, 1, 1.5, 2), labels = c("0x", "0.5x", "1.0x", "1.5x", "2.0x"))
 
 ggsave(f3.1, file = paste0("fig3.1.pdf"), path = here::here("figs"), height = 8, width = 10)
 ```
@@ -461,11 +464,11 @@ f3.2 <- ggplot(collapse_full, aes(min_gen, mpa_size)) +
   theme_bw(base_size = 12) +
   scale_color_manual(values = c("#fde725", "#3b528b", "#440154")) +
   labs(
-    x = "Year",
+    x = "Time",
     y = "MPA Size",
     color = "Climate Scenario",
     shape = "Evolution?",
-    title = "Population Collapse Points within the MPA for all four MPA sizes"
+    title = "Population collapse points within the MPA for all four MPA sizes"
   ) +
   theme(
     panel.grid.minor = element_blank(),
@@ -490,7 +493,7 @@ f4 <- ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
   facet_grid(genotype ~ climate, scales = "free_y") +
   theme_bw(base_size = 12) +
   labs(
-    x = "Year",
+    x = "Time",
     y = "Allele Frequency",
     color = "Location",
     linetype = "MPA Size"
