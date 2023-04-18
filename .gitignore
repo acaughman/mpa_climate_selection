@@ -2,8 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-writing_drafts
-*.docx
+*.pdf
 *.png
 *.pptx
 scripts/presentation.Rmd
