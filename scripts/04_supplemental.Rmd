@@ -221,11 +221,6 @@ ggsave(s5, file = paste0("decline_full_sim_log.pdf"), path = here::here("figs", 
 data_rate <- read_csv(here::here("generated_data", "summary_data", "full_sum_climate_rate.csv")) %>%
   mutate(generation = as.numeric(generation)) %>% # generation as numeric
   mutate(climate = fct_relevel(climate, c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina"))) %>% # relevel climate
-  mutate(mpa_size = case_when(
-    mpa_size == "Small" ~ "3 x 3",
-    mpa_size == "Medium" ~ "6 x 6",
-    mpa_size == "Large" ~ "10 x 10"
-  )) %>%
   mutate(mpa_size = fct_relevel(mpa_size, c("3 x 3", "6 x 6", "10 x 10"))) # relevel MPA sizes
 ```
 
