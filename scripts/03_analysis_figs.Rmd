@@ -439,7 +439,7 @@ ggsave(f2, file = paste0("fig2.pdf"), path = here::here("figs"), height = 10, wi
 # plot difference between evolution and no evolution at 6 time points
 f3.1 <- ggplot(point_sum, aes(generation, avg_diff)) +
   geom_line(aes(color = climate), linewidth = 1) +
-  geom_point() +
+  geom_point(base_size = 12) +
   theme_bw() +
   labs(
     x = "Time",
@@ -494,11 +494,10 @@ f4 <- ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
   theme_bw(base_size = 12) +
   labs(
     x = "Time",
-    y = "Allele Frequency",
+    y = "Genotype Frequency",
     color = "Location",
     linetype = "MPA Size"
   ) +
-  theme() +
   scale_color_viridis_d() +
   theme(
     panel.grid.minor = element_blank(),
