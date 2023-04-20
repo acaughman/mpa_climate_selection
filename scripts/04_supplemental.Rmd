@@ -442,7 +442,7 @@ s7 <- ggplot(geno_lat_rate, aes(generation, mpa_mean_freq)) +
   theme_bw() +
   labs(
     x = "Time",
-    y = "Allele Frequency",
+    y = "Genotype Frequency",
     color = "Climate Increase Per Year",
     linetype = "MPA size",
     alpha = ""
@@ -636,7 +636,7 @@ s9 <- ggplot(geno_lat_fp, aes(generation, mpa_mean_freq)) +
   theme_bw() +
   labs(
     x = "Time",
-    y = "Allele Frequency",
+    y = "Genotype Frequency",
     color = "Fishing Pressure",
     linetype = "MPA size",
     alpha = ""
