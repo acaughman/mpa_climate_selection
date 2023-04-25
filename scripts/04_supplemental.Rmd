@@ -236,8 +236,6 @@ line_df_mpa_full_rate <- data_rate %>%
   group_by(generation, evolution, mpa_size, climate, climate_rate) %>%
   summarise(
     location_sum = sum(pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp)
   ) %>%
   mutate(generation = as.numeric(generation))
 
@@ -320,14 +318,11 @@ line_df_geno_lat_rate <- data_rate %>%
   group_by(generation, evolution, mpa_size, climate, genotype, lat) %>%
   summarise(
     location_sum = sum(geno_pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp),
     freq_avg = mean(freq, na.rm = TRUE)
   ) %>%
   mutate(generation = as.numeric(generation)) %>%
   filter(evolution == "Yes") %>%
-  mutate(lat = as.factor(lat)) %>%
-  mutate(max_temp = as.factor(max_temp))
+  mutate(lat = as.factor(lat)) 
 
 aa_geno2_rate <- line_df_geno_lat_rate %>%
   ungroup() %>%
@@ -530,8 +525,6 @@ line_df_geno_fp <- data_fp %>%
   group_by(generation, evolution, mpa_size, climate, genotype, fishing_pressure) %>%
   summarise(
     location_sum = sum(geno_pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp),
     freq_avg = mean(freq, na.rm = TRUE)
   ) %>%
   mutate(generation = as.numeric(generation)) %>%
@@ -541,11 +534,8 @@ aa_geno_fp <- line_df_geno_fp %>%
   filter(genotype == "aa") %>%
   filter(climate %in% c("Mean Shift", "Shocks with Mean Shift", "El Nino/La Nina")) %>%
   filter(!is.na(freq_avg)) %>%
-  select(-evolution, -genotype) %>%
-  mutate(
-    average_survival = sum(max_survival, min_survival) / 2,
-    average_temp = sum(max_temp, min_temp) / 2
-  )
+  ungroup() %>% 
+  select(-evolution, -genotype)
 
 aa_sum_fp <- aa_geno_fp %>%
   group_by(mpa_size, climate, fishing_pressure) %>%
@@ -554,7 +544,7 @@ aa_sum_fp <- aa_geno_fp %>%
 aa_fp <- left_join(aa_sum_fp, aa_geno_fp)
 
 temps_fp <- aa_fp %>%
-  select(mpa_size, climate, freq_avg, average_temp, generation, average_survival, fishing_pressure)
+  select(mpa_size, climate, freq_avg, generation, fishing_pressure)
 
 write_csv(temps_fp, here::here("generated_data", "results", "aa_peak_fishing_pressure.csv"))
 
@@ -563,8 +553,6 @@ line_df_fp <- data_fp %>%
   group_by(generation, mpa_size, climate, fishing_pressure, evolution) %>%
   summarise(
     location_sum = sum(pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp),
     freq_avg = mean(freq, na.rm = TRUE)
   ) %>%
   mutate(generation = as.numeric(generation))
@@ -573,14 +561,11 @@ line_df_geno_lat_fp <- data_fp %>%
   group_by(generation, evolution, mpa_size, climate, genotype, lat, fishing_pressure) %>%
   summarise(
     location_sum = sum(geno_pop_mean, na.rm = TRUE),
-    max_temp = max(max_temp),
-    min_temp = min(min_temp),
     freq_avg = mean(freq, na.rm = TRUE)
   ) %>%
   mutate(generation = as.numeric(generation)) %>%
   filter(evolution == "Yes") %>%
-  mutate(lat = as.factor(lat)) %>%
-  mutate(max_temp = as.factor(max_temp))
+  mutate(lat = as.factor(lat)) 
 
 line_df_geno_lat_fp <- line_df_geno_lat_fp %>%
   filter(lat == 10 | lat == 90 | lat == 50)
