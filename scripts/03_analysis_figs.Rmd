@@ -467,8 +467,8 @@ f3.2 <- ggplot(collapse_full, aes(min_gen, mpa_size)) +
     x = "Time",
     y = "MPA Size",
     color = "Climate Scenario",
-    shape = "Evolution?",
-    title = "Population collapse points within the MPA for all four MPA sizes"
+    title = "Population collapse points within the MPA for all four MPA sizes",
+    shape = "Evolution?"
   ) +
   theme(
     panel.grid.minor = element_blank(),
@@ -487,9 +487,11 @@ ggsave(f3, file = paste0("fig3.pdf"), path = here::here("figs"), height = 6, wid
 ```
 
 ```{r}
-# plot genotype freqencies through time
+# plot genotype frequencies through time
 f4 <- ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
   geom_line(aes(color = location, linetype = mpa_size)) +
+  geom_vline(aes(xintercept = 10), color = "darkgrey", alpha = 0.8) +
+  geom_vline(aes(xintercept = 25), color = "darkgrey", alpha = 0.8) +
   facet_grid(genotype ~ climate, scales = "free_y") +
   theme_bw(base_size = 12) +
   labs(
