@@ -45,12 +45,62 @@ mpa_df <- data %>%
   filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1")) %>%
   filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1"))
 
+outside_df <- data %>%
+  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1") | lat %in% c(10, 90)) %>%
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
+  mutate(loc = case_when(
+    lat == 10 ~ "high temperature",
+    lat == 90 ~ "low temperature",
+    TRUE ~ "MPA"
+  ))
+
+by_lat = data %>% 
+  filter(generation > 25) %>% # filter generations when MPA is implemented
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>% # remove genotype columns
+  distinct() %>% 
+  mutate(lat_group = case_when(
+    lat %in% c(1:10) ~ 1,
+    lat %in% c(11:20) ~ 2,
+    lat %in% c(21:30) ~ 3,
+    lat %in% c(31:40) ~ 4,
+    lat %in% c(41:50) ~ 5,
+    lat %in% c(51:60) ~ 6,
+    lat %in% c(61:70) ~ 7,
+    lat %in% c(71:80) ~ 8,
+    lat %in% c(81:90) ~ 9,
+    lat %in% c(91:100) ~ 10
+  )) %>%  # make generation numeric
+  mutate(loc = case_when(
+    lat_group %in% c(5,6) ~ "MPA",
+    !lat_group %in% c(5,6) ~ "non-MPA",
+  )) %>% 
+  group_by(generation, evolution, mpa_size, climate, lat_group) %>% 
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE), # sum across location
+    max_temp = max(max_temp),
+    min_temp = min(min_temp)
+  ) %>%
+  mutate(generation = as.numeric(generation))
+
 # summarizes data within the MPA only
 line_df_mpa_full <- mpa_df %>%
   filter(generation > 25) %>% # filter generations when MPA is implemented
   select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>% # remove genotype columns
   distinct() %>%
   group_by(generation, evolution, mpa_size, climate) %>%
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE), # sum across location
+    max_temp = max(max_temp),
+    min_temp = min(min_temp)
+  ) %>%
+  mutate(generation = as.numeric(generation)) # make generation numeric
+
+# summarizes data within the MPA only
+line_df_outside_full <- outside_df %>%
+  filter(generation > 25) %>% # filter generations when MPA is implemented
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>% # remove genotype columns
+  distinct() %>%
+  group_by(generation, evolution, mpa_size, climate, loc) %>%
   summarise(
     location_sum = sum(pop_mean, na.rm = TRUE), # sum across location
     max_temp = max(max_temp),
@@ -117,6 +167,9 @@ mutate(min_m = 1 - (1 - exp((-(max_temp - 25)^2) / (4^2)))) %>% # calculate mini
 ```
 
 ```{r}
+mpa_medium <- line_df_mpa_full %>%
+  filter(mpa_size == "6 x 6") # filter for only medium MPA
+
 point_n <- line_df_lat %>%
   filter(evolution == "No") %>% # filter for no evolution
   rename(no = location_sum) %>% # make column for no evolution
@@ -132,7 +185,10 @@ point <- full_join(point_y, point_n) %>% # join yes and no evolution data
     yes = mean(yes), # find average population in yes
     no = mean(no) # find average population in no
   ) %>%
-  ungroup() %>%
+  ungroup() %>% 
+  filter(no > 10) %>%
+  filter(generation >= 50) %>% 
+  filter(yes > 10) %>%
   mutate(diff = 1 + ((yes - no) / no)) # determine percent population difference in yes than no
 
 # point 1 - point 6 determine the average different between evolution and no evolution at 6 specific time points
@@ -199,27 +255,22 @@ point6 <- point %>%
 point_sum_all <- list(point1, point2, point3, point4, point5, point6) %>%
   reduce(full_join) # join all time points together
 
-point_sum <- list(point1, point2, point3, point4, point5, point6) %>%
-  reduce(full_join) %>% # join all time points together
+point_sum <- point %>% 
   filter(mpa_size == "6 x 6") %>% # filter for only medium MPA
-  ungroup() %>%
-  mutate(avg_diff = case_when(
-    no < 1 ~ 0,
-    no >= 1 ~ avg_diff, # remove population where no is less than 1 to avoid infinite in plotting
-  )) 
+  ungroup()
 
 # calculates collapse points within the MPA only
 collapse_full <- line_df_mpa_full %>%
   select(generation, evolution, mpa_size, climate, location_sum) %>%
   filter(generation > 30) %>% # filter generations when climate change causes declines
-  filter((location_sum <= (100 * 2 * .05 * 3 * 3) & mpa_size == "3 x 3") | (location_sum <= (100 * 2 * .05 * 6 * 6) & mpa_size == "6 x 6") | (location_sum <= (100 * 2 * .05 * 10 * 10) & mpa_size == "10 x 10") | (location_sum <= (100 * 2 * .05) & mpa_size == "1 x 1")) %>% # calculate collapse rates in different MPAs
+  filter((location_sum <= (100 * 2 * .01 * 3 * 3) & mpa_size == "3 x 3") | (location_sum <= (100 * 2 * .01 * 6 * 6) & mpa_size == "6 x 6") | (location_sum <= (100 * 2 * .01 * 10 * 10) & mpa_size == "10 x 10") | (location_sum <= (100 * 2 * .01) & mpa_size == "1 x 1")) %>% # calculate collapse rates in different MPAs
   group_by(evolution, mpa_size, climate) %>%
   summarize(min_gen = min(generation)) %>% # find the first generation below collapse point
   mutate(collapse_point = case_when(
-    mpa_size == "1 x 1" ~ 100 * 2 * 0.05,
-    mpa_size == "3 x 3" ~ 100 * 2 * .05 * 3 * 3,
-    mpa_size == "6 x 6" ~ 100 * 2 * .05 * 6 * 6,
-    mpa_size == "10 x 10" ~ 100 * 2 * .05 * 10 * 10
+    mpa_size == "1 x 1" ~ 100 * 2 * 0.01,
+    mpa_size == "3 x 3" ~ 100 * 2 * .01 * 3 * 3,
+    mpa_size == "6 x 6" ~ 100 * 2 * .01 * 6 * 6,
+    mpa_size == "10 x 10" ~ 100 * 2 * .01 * 10 * 10
   )) %>% # add column with collapse point size
   filter(climate %in% c("Shocks with Mean Shift", "Mean Shift", "El Nino/La Nina")) # filter for only climates with mean shift in temperature
 
@@ -246,10 +297,21 @@ collapse_mpa <- line_df_mpa_full %>%
   )) %>% # add column with collapse point size
   mutate(area = "mpa only") # add column for mpa only
 
-collapse_stat <- full_join(collapse_full_stat, collapse_mpa) # combine full sim and MPA only collapse points
+collapse_outside <- line_df_outside_full %>%
+  select(generation, evolution, mpa_size, climate, location_sum, loc) %>%
+  filter(generation > 30) %>% # filter generations when climate change causes declines
+  filter((location_sum <= (100 * 2 * .05) & loc == "MPA" & mpa_size == "1 x 1") |(location_sum <= (100 * 2 * .05 * 3 * 3) & loc == "MPA" & mpa_size == "3 x 3") |(location_sum <= (100 * 2 * .05 * 6 * 6) & loc == "MPA" & mpa_size == "6 x 6") |(location_sum <= (100 * 2 * .05 * 10 * 10) & loc == "MPA" & mpa_size == "10 x 10") | (location_sum <= (100 * 2 * .05) & loc != "MPA")) %>% # calculate collapse rates in different MPAs and filter population
+  group_by(evolution, mpa_size, climate, loc) %>%
+  summarize(min_gen = min(generation))
 
-mpa_medium <- line_df_mpa_full %>%
-  filter(mpa_size == "6 x 6") # filter for only medium MPA
+collapse_by_lat <- by_lat %>%
+  select(generation, evolution, mpa_size, climate, location_sum, lat_group) %>%
+  filter(generation > 30) %>% 
+  filter(location_sum <= 100 * 2 * 0.05 * 20) %>%  
+  group_by(evolution, mpa_size, climate, lat_group) %>%
+  summarize(min_gen = min(generation))
+
+collapse_stat <- full_join(collapse_full_stat, collapse_mpa) # combine full sim and MPA only collapse points
 
 mean_change2 <- change %>%
   filter(generation >= 50) %>% # filter generations when climate change causes declines
@@ -437,10 +499,10 @@ ggsave(f2, file = paste0("fig2.pdf"), path = here::here("figs"), height = 10, wi
 
 ```{r}
 # plot difference between evolution and no evolution at 6 time points
-f3.1 <- ggplot(point_sum, aes(generation, avg_diff)) +
-  geom_line(aes(color = climate), linewidth = 1) +
-  geom_point(base_size = 12) +
-  theme_bw() +
+f3.1 <- ggplot(point_sum, aes(generation, diff)) +
+  geom_smooth(aes(color = climate), se=FALSE, method = "loess") +
+  # geom_point() +
+  theme_bw(base_size = 12) +
   labs(
     x = "Time",
     y = "Increase in Population Size",
@@ -452,7 +514,7 @@ f3.1 <- ggplot(point_sum, aes(generation, avg_diff)) +
   theme(
     axis.text.x = element_blank(),
     axis.ticks.x = element_blank()
-  ) + scale_y_continuous(breaks = c(0, 0.5, 1, 1.5, 2), labels = c("0x", "0.5x", "1.0x", "1.5x", "2.0x"))
+  )  + scale_y_continuous(breaks = c(1.75, 1.8, 1.85, 1.90, 1.95, 2), labels = c("1.75x", "1.80x", "1.85x", "1.90x", "1.95x", "2.0x"))
 
 ggsave(f3.1, file = paste0("fig3.1.pdf"), path = here::here("figs"), height = 8, width = 10)
 ```
@@ -512,3 +574,108 @@ f4 <- ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
 
 ggsave(f4, file = paste0("fig4.pdf"), path = here::here("figs"), height = 8, width = 15)
 ```
+
+```{r}
+med = line_df_outside_full %>% 
+  filter(mpa_size == "6 x 6")
+
+# plot population through time in the Medium MPA
+f5 <- ggplot(med, aes(generation, location_sum)) +
+  geom_line(aes(linetype = evolution, color = evolution), linewidth = 0.7) +
+  theme_bw(base_size = 12) +
+  facet_wrap(climate~loc, ncol = 3, scales = "free_y") +
+  labs(
+    x = "Time",
+    y = "Population Size",
+    color = "Climate Scenario",
+    linetype = "Evolution?"
+  ) +
+  theme(
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold"),
+    strip.background = element_rect(fill = "white"),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  ) +
+  scale_color_manual(values = c("#21918c", "#440154")) +
+  scale_linetype_manual(values = c("dashed", "solid"))
+
+ggsave(f5, file = paste0("outside_pop.pdf"), path = here::here("figs"), height = 8, width = 15)
+```
+
+```{r}
+# plot the collapse points of the population
+f3.3 <- ggplot(collapse_outside, aes(min_gen, mpa_size)) +
+  geom_point(aes(color = climate, shape = evolution), size = 3) +
+  theme_bw(base_size = 12) +
+  scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
+  labs(
+    x = "Time",
+    y = "MPA Size",
+    color = "Climate Scenario",
+    shape = "Evolution?"
+  ) +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    strip.text = element_text(face = "bold"),
+    strip.background = element_rect(fill = "white")
+  ) +
+  facet_wrap(~loc, ncol = 1)
+
+ggsave(f3.3, file = paste0("outside_collapse.pdf"), path = here::here("figs"), height = 8, width = 10)
+```
+
+```{r}
+med2 = by_lat %>% 
+  filter(mpa_size == "6 x 6")
+
+# plot population through time in the Medium MPA
+f6 <- ggplot(med2, aes(generation, location_sum)) +
+  geom_line(aes(linetype = evolution, color = evolution), linewidth = 0.7) +
+  theme_bw(base_size = 12) +
+  ggh4x::facet_grid2(desc(lat_group)~climate, scales = "free_y", independent = "y") +
+  labs(
+    x = "Time",
+    y = "Population Size",
+    color = "Climate Scenario",
+    linetype = "Evolution?"
+  ) +
+  theme(
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold"),
+    strip.background = element_rect(fill = "white"),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  ) +
+  scale_color_manual(values = c("#21918c", "#440154")) +
+  scale_linetype_manual(values = c("dashed", "solid"))
+
+ggsave(f6, file = paste0("pop_by_lat.pdf"), path = here::here("figs"), height = 15, width = 25)
+```
+
+```{r}
+# plot the collapse points of the population
+f3.4 <- ggplot(collapse_by_lat, aes(min_gen, mpa_size)) +
+  geom_point(aes(color = climate, shape = evolution), size = 3) +
+  theme_bw(base_size = 12) +
+  scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
+  labs(
+    x = "Time",
+    y = "MPA Size",
+    color = "Climate Scenario",
+    shape = "Evolution?"
+  ) +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    strip.text = element_text(face = "bold"),
+    strip.background = element_rect(fill = "white")
+  ) +
+  facet_wrap(~lat_group, ncol = 1)
+
+ggsave(f3.4, file = paste0("by_lat_collapse.pdf"), path = here::here("figs"), height = 15, width = 10)
+```
+
