@@ -64,6 +64,34 @@ line_df_mpa_full <- data %>%
     min_temp = min(min_temp)
   ) %>%
   mutate(generation = as.numeric(generation)) # make generation numeric
+
+by_lat = data %>% 
+  filter(generation > 25) %>% # filter generations when MPA is implemented
+  select(-genotype, -geno_pop_mean, -geno_pop_sd, -geno_pop_se, -freq) %>% # remove genotype columns
+  distinct() %>% 
+  mutate(lat_group = case_when(
+    lat %in% c(1:10) ~ 1,
+    lat %in% c(11:20) ~ 2,
+    lat %in% c(21:30) ~ 3,
+    lat %in% c(31:40) ~ 4,
+    lat %in% c(41:50) ~ 5,
+    lat %in% c(51:60) ~ 6,
+    lat %in% c(61:70) ~ 7,
+    lat %in% c(71:80) ~ 8,
+    lat %in% c(81:90) ~ 9,
+    lat %in% c(91:100) ~ 10
+  )) %>%  # make generation numeric
+  mutate(loc = case_when(
+    lat_group %in% c(5,6) ~ "MPA",
+    !lat_group %in% c(5,6) ~ "non-MPA",
+  )) %>% 
+  group_by(generation, evolution, mpa_size, climate, lat_group) %>% 
+  summarise(
+    location_sum = sum(pop_mean, na.rm = TRUE), # sum across location
+    max_temp = max(max_temp),
+    min_temp = min(min_temp)
+  ) %>%
+  mutate(generation = as.numeric(generation))
 ```
 
 ```{r}
@@ -79,6 +107,13 @@ mean_change2 <- change %>%
     mean_change = mean(rate, na.rm = TRUE), # get mean rate of change in MPA
     relative_mean_change = mean(relative_rate, na.rm = TRUE) # get relative rate of change in MPA
   )
+
+collapse_by_lat <- by_lat %>%
+  select(generation, evolution, mpa_size, climate, location_sum, lat_group) %>%
+  filter(generation > 30) %>% 
+  filter(location_sum <= 100 * 2 * 0.05 * 20) %>%  
+  group_by(evolution, mpa_size, climate, lat_group) %>%
+  summarize(min_gen = min(generation))
 
 # calculates collapse points in full simulation
 collapse <- line_df %>%
@@ -212,6 +247,61 @@ s5 <- ggplot(line_df, aes(generation, log(location_sum))) +
 
 ggsave(s5, file = paste0("decline_full_sim_log.pdf"), path = here::here("figs", "supp"), height = 8, width = 15)
 ```
+
+
+```{r}
+med2 = by_lat %>% 
+  filter(mpa_size == "6 x 6")
+
+# plot population through time in the Medium MPA
+s6 <- ggplot(med2, aes(generation, location_sum)) +
+  geom_line(aes(linetype = evolution, color = evolution), linewidth = 0.7) +
+  theme_bw(base_size = 12) +
+  ggh4x::facet_grid2(desc(lat_group)~climate, scales = "free_y", independent = "y") +
+  labs(
+    x = "Time",
+    y = "Population Size",
+    color = "Climate Scenario",
+    linetype = "Evolution?"
+  ) +
+  theme(
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold"),
+    strip.background = element_rect(fill = "white"),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  ) +
+  scale_color_manual(values = c("#21918c", "#440154")) +
+  scale_linetype_manual(values = c("dashed", "solid"))
+
+ggsave(s6, file = paste0("pop_by_lat.pdf"), path = here::here("figs", "sup"), height = 15, width = 25)
+```
+
+```{r}
+# plot the collapse points of the population
+s7 <- ggplot(collapse_by_lat, aes(min_gen, mpa_size)) +
+  geom_point(aes(color = climate, shape = evolution), size = 3) +
+  theme_bw(base_size = 12) +
+  scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
+  labs(
+    x = "Time",
+    y = "MPA Size",
+    color = "Climate Scenario",
+    shape = "Evolution?"
+  ) +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    strip.text = element_text(face = "bold"),
+    strip.background = element_rect(fill = "white")
+  ) +
+  facet_wrap(~desc(lat_group), ncol = 1)
+
+ggsave(s7, file = paste0("by_lat_collapse.pdf"), path = here::here("figs", "sup"), height = 15, width = 10)
+```
+
+
 
 ### Climate Rate Figures
 
