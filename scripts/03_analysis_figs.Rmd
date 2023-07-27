@@ -46,13 +46,14 @@ mpa_df <- data %>%
   filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(9:14) & mpa_size == "None") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1"))
 
 outside_df <- data %>%
-  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(47:52) & mpa_size == "None")| (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1") | lat %in% c(10, 90)) %>%
-  filter((lon %in% c(9:11) & mpa_size == "3 x 3") | (lon %in% c(9:14) & mpa_size == "6 x 6") | (lon %in% c(9:14) & mpa_size == "None") | (lon %in% c(5:14) & mpa_size == "10 x 10") | (lon %in% c(10) & mpa_size == "1 x 1")) %>% 
+  filter((lat %in% c(49:51) & mpa_size == "3 x 3") | (lat %in% c(47:52) & mpa_size == "6 x 6") | (lat %in% c(47:52) & mpa_size == "None")| (lat %in% c(46:55) & mpa_size == "10 x 10") | (lat %in% c(50) & mpa_size == "1 x 1") | lat %in% c(10, 90)) %>% 
   mutate(loc = case_when(
-    lat == 10 ~ "high temperature",
-    lat == 90 ~ "low temperature",
+    lat == 10 ~ "High temperature",
+    lat == 90 ~ "Low temperature",
     TRUE ~ "MPA"
-  ))
+  )) %>% 
+  mutate(loc = fct_relevel(loc, c("High temperature", "MPA", "Low temperature"))) %>% 
+  filter((lon %in% c(9:11) & mpa_size == "3 x 3" & loc == "MPA") | (lon %in% c(9:14) & mpa_size == "6 x 6" & loc == "MPA") | (lon %in% c(9:14) & mpa_size == "None" & loc == "MPA") | (lon %in% c(5:14) & mpa_size == "10 x 10" & loc == "MPA") | (lon %in% c(10) & mpa_size == "1 x 1" & loc == "MPA") | (lon %in% c(1:20) & loc != "MPA"))
 
 # summarizes data within the MPA only
 line_df_mpa_full <- mpa_df %>%
@@ -74,7 +75,7 @@ line_df_outside_full <- outside_df %>%
   distinct() %>%
   group_by(generation, evolution, mpa_size, climate, loc) %>%
   summarise(
-    location_sum = sum(pop_mean, na.rm = TRUE), # sum across location
+    location_sum = mean(pop_mean, na.rm = TRUE), # sum across location
     max_temp = max(max_temp),
     min_temp = min(min_temp)
   ) %>%
@@ -272,9 +273,10 @@ collapse_mpa <- line_df_mpa_full %>%
   mutate(area = "mpa only") # add column for mpa only
 
 collapse_outside <- line_df_outside_full %>%
+  filter(climate != "Null") %>% 
   select(generation, evolution, mpa_size, climate, location_sum, loc) %>%
   filter(generation > 30) %>% # filter generations when climate change causes declines
-  filter((location_sum <= (100 * 2 * .05) & loc == "MPA" & mpa_size == "1 x 1") |(location_sum <= (100 * 2 * .05 * 3 * 3) & loc == "MPA" & mpa_size == "3 x 3") | (location_sum <= (100 * 2 * .05 * 6 * 6) & loc == "MPA" & mpa_size == "6 x 6") | (location_sum <= (100 * 2 * .05 * 6 * 6) & loc == "MPA" & mpa_size == "None") |(location_sum <= (100 * 2 * .05 * 10 * 10) & loc == "MPA" & mpa_size == "10 x 10") | (location_sum <= (100 * 2 * .05 * 10) & loc != "MPA")) %>% # calculate collapse rates in different MPAs and filter population
+  filter(location_sum <= 100 * 2 * 0.01) %>% 
   group_by(evolution, mpa_size, climate, loc) %>%
   summarize(min_gen = min(generation))
 
@@ -415,6 +417,7 @@ write_csv(point_sum_all, here::here("generated_data", "results", "evo_diff_sum.c
 
 ```{r}
 write_csv(collapse_stat, here::here("generated_data", "results", "collapse_points.csv"))
+write_csv(collapse_outside, here::here("generated_data", "results", "collapse_outside_mpa.csv"))
 ```
 
 ### Derivative
@@ -582,7 +585,8 @@ f6 <- ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
     axis.text.x = element_blank(),
     axis.ticks.x = element_blank()
   ) +
-  scale_linetype_manual(values = c("solid", "dashed", "dotted", "longdash", "solid", "solid"), labels = c("10 x 10", "6 x 6", "3 x 3", "1 x 1", "None", ""))
+  scale_linetype_manual(values = c("solid", "dashed", "longdash", "dotted", "solid", "solid"), labels = c("10 x 10", "6 x 6", "3 x 3", "1 x 1", "None", ""))
+f6
 
 ggsave(f6, file = paste0("fig6.pdf"), path = here::here("figs"), height = 8, width = 15)
 ```
