@@ -1113,10 +1113,9 @@ temp <- ggplot(SSTdf) +
     panel.grid = element_blank(),
     panel.grid.minor = element_blank(),
     strip.text = element_text(face = "bold"),
-    axis.ticks.y = element_blank(),
-    axis.text.y = element_blank(),
     strip.background = element_rect(fill = "white")
-  ) # plot temperatures
+  ) + # plot temperatures
+  scale_y_continuous(breaks = c(25, 27.5, 30, 32.5, 35), labels = c("0", "+ 2.5", "+ 5", "+ 7.5", "+ 10"))
 
 ggsave(temp, file = paste0("climate_scenarios.pdf"), path = here::here("figs", "supp"), height = 10, width = 10)
 ```
