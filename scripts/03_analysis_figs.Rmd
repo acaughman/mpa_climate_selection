@@ -472,8 +472,7 @@ f2 <- ggplot(mpa_medium, aes(generation, location_sum)) +
   labs(
     x = "Time",
     y = "Population Size",
-    color = "Climate Scenario",
-    linetype = "Evolution?"
+    color = "Evolution?",
   ) +
   theme(
     panel.grid.minor = element_blank(),
@@ -498,8 +497,7 @@ f3 <- ggplot(med_change, aes(generation, mean_change)) +
   labs(
     x = "Time",
     y = "Rate of Population Change",
-    linetype = "Evolution?",
-    color = "Climate Change"
+    color = "Evolution?"
   ) +
   scale_color_viridis_d() +
   theme(
