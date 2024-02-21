@@ -521,7 +521,7 @@ f4 <- ggplot(point_sum, aes(generation, diff)) +
   theme_bw(base_size = 12) +
   labs(
     x = "Time",
-    y = "Increase in Population Size",
+    y = "Relative Population Size due to Movement Evolution",
     color = "Climate Scenario"
   ) +
   scale_color_manual(values = c("#21918c", "#5ec962", "#fde725", "#3b528b", "#440154")) +
@@ -561,9 +561,13 @@ ggsave(f5, file = paste0("fig5.pdf"), path = here::here("figs"), height = 8, wid
 ```
 
 ```{r}
+geno_lat = geno_lat %>% 
+  filter(!is.na(location))%>% 
+  filter(!is.na(mpa_size))
+
 # plot genotype frequencies through time
 f6 <- ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
-  geom_line(aes(color = location, linetype = mpa_size)) +
+  geom_line(aes(color = mpa_size, linetype = location)) +
   geom_vline(aes(xintercept = 10), color = "darkgrey", alpha = 0.8) +
   geom_vline(aes(xintercept = 25), color = "darkgrey", alpha = 0.8) +
   facet_grid(genotype ~ climate, scales = "free_y") +
@@ -581,9 +585,8 @@ f6 <- ggplot(geno_lat, aes(generation, mpa_mean_freq)) +
     strip.background = element_rect(fill = "white"),
     axis.text.x = element_blank(),
     axis.ticks.x = element_blank()
-  ) +
-  scale_linetype_manual(values = c("solid", "dashed", "longdash", "dotted", "solid", "solid"), labels = c("10 x 10", "6 x 6", "3 x 3", "1 x 1", "None", ""))
+  ) 
 f6
 
-ggsave(f6, file = paste0("fig2.pdf"), path = here::here("figs"), height = 8, width = 15)
+ggsave(f6, file = paste0("fig2_review.pdf"), path = here::here("figs"), height = 8, width = 15)
 ```
