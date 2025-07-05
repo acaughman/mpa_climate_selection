@@ -1,6 +1,6 @@
 # Climate change reduces long-term population benefits from no-take marine protected areas through selective pressures on species movement
 
-This repository contains code used in the paper: Caughman, A.M., Gaines, S.D., Bradley, D. (2024). Climate change reduces long-term population benefits from no-take marine protected areas through selective pressures on species movement. Global Change Biology. in Press.
+This repository contains code used in the paper: Caughman, A.M., Gaines, S.D., Bradley, D. (2024). Climate change reduces long-term population benefits from no-take marine protected areas through selective pressures on species movement. Global Change Biology. 1.	30(3), e17240.
 
 The associated zenodo repository is located at https://doi.org/10.5281/zenodo.10778829
 
